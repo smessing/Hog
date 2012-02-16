@@ -8,27 +8,8 @@ Hadoop instance, and Hog will do the rest.
 
 # Team
 
-## Sam (Project Manager)
-
-* Find a good Java book for Paul.
-* Fill in __Readable__ section of white paper.
-
-## Paul (Language Guru)
-
-* Write `WordCount.hog`.
-* Fill in __High-Level__ section of white paper.
-* Think about writing a sketch of CFG.
-
-## Ben (System Architect)
-
-* Investigate Java build systems (e.g. Maven).
-* Fill in __Simple__ section of white paper.
-
-## Kurry (Testing/Validation)
-
-* Fill in __Data-oritented__ section of white paper.
-
-## Jason (System Integrator)
-
-* Investigate Java build systems (e.g. Maven)
-* Fill in __Distributed__ section of white paper.
+* Sam (Project Manager)
+* Paul (Language Guru)
+* Ben (System Architect)
+* Kurry (Testing/Validation)
+* Jason (System Integrator)
