@@ -1,0 +1,24 @@
+Goals:
+
+1. Decide on Target Language (Python vs. Java) --- JAVA
+2. Decide on Implementation Language (Python vs. Java) --- JAVA
+3. Decide on compiled vs. interpreted --- COMPILED
+
+
+Language Paper:
+
+1. Pick 5-7 attributes for our language paper (1-2)
+2. Decide on deadlines and clear responsibilities for white paper.
+    - first draft due Sunday 9PM EST
+    - BEN: Simple
+    - SAM: Readable
+    - JASON: Distributed
+    - PAUL: WordCount.hog, High-Level
+    - KURRY: Data-oriented
+
+Direction:
+
+Sys Arch + Sys Int: Maven (Java Build System)
+Language Guru: start of CFG
+PM:   find Java book for Paul, email notes to team
+ALL: Style guide issues     
