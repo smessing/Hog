@@ -10,10 +10,22 @@ Hadoop instance, and Hog will do the rest.
 
 ## Sam (Project Manager)
 
+### TODO
+
+* Find a good Java book for Paul.
+* Fill in __Readable__ section of white paper.
+
 ## Paul (Language Guru)
 
+* Write `WordCount.hog`.
+* Fill in __High-Level__ section of white paper.
+
 ## Ben (System Architect)
+
+* Investigate Java build systems (e.g. Maven)
 
 ## Kurry (Testing/Validation)
 
 ## Jason (System Integrator)
+
+* Investigate Java build systems (e.g. Maven)
