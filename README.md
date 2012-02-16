@@ -5,3 +5,15 @@ computation. It provides users with an intuitive interface designed to allow use
 done, and not _how_ to do them. Built on top of the Hadoop framework, Hog takes care of the low-level details required to run
 computation on Hadoop’s distributed network. All a user needs to do is run their Hog scripts on a computer with access to a valid
 Hadoop instance, and Hog will do the rest.
+
+# Team
+
+## Sam (Project Manager)
+
+## Paul (Language Guru)
+
+## Ben (System Architect)
+
+## Kurry (Testing/Validation)
+
+## Jason (System Integrator)
