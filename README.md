@@ -10,8 +10,6 @@ Hadoop instance, and Hog will do the rest.
 
 ## Sam (Project Manager)
 
-### TODO
-
 * Find a good Java book for Paul.
 * Fill in __Readable__ section of white paper.
 
@@ -19,13 +17,18 @@ Hadoop instance, and Hog will do the rest.
 
 * Write `WordCount.hog`.
 * Fill in __High-Level__ section of white paper.
+* Think about writing a sketch of CFG.
 
 ## Ben (System Architect)
 
-* Investigate Java build systems (e.g. Maven)
+* Investigate Java build systems (e.g. Maven).
+* Fill in __Simple__ section of white paper.
 
 ## Kurry (Testing/Validation)
+
+* Fill in __Data-oritented__ section of white paper.
 
 ## Jason (System Integrator)
 
 * Investigate Java build systems (e.g. Maven)
+* Fill in __Distributed__ section of white paper.
