@@ -6,53 +6,40 @@
 # 8983
 # 17
 # 18
-# 191
-# 12
 
-
+# function: merge 
 # takes 2 sorted lists of ints and merges them into a larger sorted list
 list<int> merge(list<int> sortedList1, list<int> sortedList2) {
-	# indices into next value of each sorted list
-	int ind1 = 0
-	int ind2 = 0
 	
 	list<int> mergedList = new list<int>()
 	
+	# pointers to next value of each sorted list
+	int ind1 = 0
+	int ind2 = 0
+	
 	# merge all values while neither list is empty
-	while( ind1 < sortedList1.size() && ind2 < sortedList2.size() ) {
+	while( ind1 < sortedList1.size && ind2 < sortedList2.size ) {
 		
 		# insert the smaller of the 2 values and update index pointers
-		smallest1 = sortedList.get(ind1)
-		smallest2 = sortedList.get(ind2)
-		
-		if(smallest1 < smallest2) {
-			mergedList.add(smallest1)
-			ind1++
-		}
-		else {
-			mergedList.add(smallest2)
-			ind2++
-		}
+		if(sortedList1.get(ind1) < sortedList2.get(ind2)) 
+			mergedList.add(sortedList1.get(ind1++))
+		else 
+			mergedList.add(sortedList2.get(ind2++))
 	}
 	
 	# insert any remaining elements from sortedList1
-	if ( ind1 < sortedList1.size() ) {
-		for (int i = ind1; i<sortedList1.size(); i++) {
-			mergedList.add(sortedList1.get(i))
-		}
-	}
+	while (ind1 < sortedList1.size) 
+		mergedList.add(sortedList1.get(ind1++)
+
 	# insert any remaining elements from sortedList2
-	else if (ind2 < sortedList2.size() ) {
-		for (int i = ind2; i<sortList2.size(); i++) {
-			mergedList.add(sortedList2.get(i))
-		}
-	}
+	while (ind2 < sortedList2.size) 
+		mergedList.add(sortedList2.get(ind2++)	
 	
 	return mergedList
 }
 
 
-
+# global variable to hold a dummy key
 string reduceKey = "reduceKey"
 
 map {
@@ -60,9 +47,8 @@ map {
   
 	# put every number from file into list
 	for each line in myFile {
-		for each number in tokenize(line) {
-			sortedInts.add(str2Int(number)) # we need to decide on how to implement this 
-		}
+		for each number in tokenize(line) 
+			sortedInts.add(str2Int(number)) 
 	}
 	
 	# sort list using builtin function for sorting list of primitives
@@ -73,18 +59,18 @@ map {
 }
 
 # reduce will get a list of sorted lists, and merge them 2 at a time
-reduce{
+reduce {
 	
 	# start with the first list as the fully sorted list
 	list<int> allSortedNums = values.getNext()
 	
-	# merge the allSortedNums with the next list in the values
+	# merge the allSortedNums with the next list in values
 	while(values.hasNext()) {
 		allSortedNums = merge(allSortedNums, values.getNext())
 	}
 	emit(reduceKey, allSortedNums)
 }
-
-	print(results.values)
-	store(results, "sortedNumbers.txt")
 	
+# this is the bottom where you can put any code...not sure of the syntax for this 
+print(results.values)
+store(results.values, “outfile.txt”)
