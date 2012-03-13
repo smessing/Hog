@@ -1,3 +1,6 @@
 # Latex:
 *.aux
 *.log
+
+#OSX:
+*.DS_Store
