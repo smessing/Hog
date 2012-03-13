@@ -1,0 +1,76 @@
+# This version assumes we have a builtin function to sort lists of primitives, which I think is a good idea and easy to implement with Collections.sort(List)
+
+#Assume we have multiple files filled with unsorted integers, like:
+
+# 102
+# 8983
+# 17
+# 18
+
+# function: merge 
+# takes 2 sorted lists of ints and merges them into a larger sorted list
+list<int> merge(list<int> sortedList1, list<int> sortedList2) {
+	
+	list<int> mergedList = new list<int>()
+	
+	# pointers to next value of each sorted list
+	int ind1 = 0
+	int ind2 = 0
+	
+	# merge all values while neither list is empty
+	while( ind1 < sortedList1.size && ind2 < sortedList2.size ) {
+		
+		# insert the smaller of the 2 values and update index pointers
+		if(sortedList1.get(ind1) < sortedList2.get(ind2)) 
+			mergedList.add(sortedList1.get(ind1++))
+		else 
+			mergedList.add(sortedList2.get(ind2++))
+	}
+	
+	# insert any remaining elements from sortedList1
+	while (ind1 < sortedList1.size) 
+		mergedList.add(sortedList1.get(ind1++)
+
+	# insert any remaining elements from sortedList2
+	while (ind2 < sortedList2.size) 
+		mergedList.add(sortedList2.get(ind2++)	
+	
+	return mergedList
+}
+
+
+# global variable to hold a dummy key
+string reduceKey = "reduceKey"
+
+map {
+	list<int> sortedInts = new list<int>()   # don't know syntax for this
+  
+	# put every number from file into list
+	for each line in myFile {
+		for each number in tokenize(line) 
+			sortedInts.add(str2Int(number)) 
+	}
+	
+	# sort list using builtin function for sorting list of primitives
+	sortedInts.sort()
+	
+	# for every input file, emit a list of sorted ints, with identical keys
+	emit (reduceKey, sortedInts)
+}
+
+# reduce will get a list of sorted lists, and merge them 2 at a time
+reduce {
+	
+	# start with the first list as the fully sorted list
+	list<int> allSortedNums = values.getNext()
+	
+	# merge the allSortedNums with the next list in values
+	while(values.hasNext()) {
+		allSortedNums = merge(allSortedNums, values.getNext())
+	}
+	emit(reduceKey, allSortedNums)
+}
+	
+# this is the bottom where you can put any code...not sure of the syntax for this 
+print(results.values)
+store(results.values, “outfile.txt”)

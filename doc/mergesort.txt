@@ -1,0 +1,109 @@
+Assume we have multiple files filled with unsorted integers, like
+
+102
+8983
+17
+18
+191
+12
+
+# FUNCTIONS TO BE USED IN MAP AND REDUCE ROUTINES
+
+# insertInOrder takes a list of sorted ints and a number to insert and inserts it at the proper index 
+# for listOfInts to remain sorted
+# args:  listOfInts is a sorted list
+#          numToInsert
+void insertInOrder(list<int> listOfInts, numToInsert) {
+
+# if it is larger than any number in the list, insert it at the end and return
+	if (numToInsert > listOfInts.get(listOfInts.size() - 1 )) {
+		listOfInts.add(numToInsert)
+		return
+	}
+
+	# else, find first element that is greater than the numToInsert and insert it in its place
+	int indexToInsertAt = 0;
+	for (int i=0; i<listOfInts.size(); i++) {
+		# if we find a larger number
+		if ( listOfInts.get(i) > numToInsert ) {
+			indexToInsertAt = i
+			break
+		}
+	}
+	
+# insert in the proper position		
+	listOfInts.insertAt(numToInsert, indexToInsertAt)
+	return
+}
+
+# takes 2 sorted lists of ints and merges them into a larger sorted list
+list<int> merge(list<int> sortedList1, list<int> sortedList2) {
+	# indices into next value of each sorted list
+	int ind1 = 0
+	int ind2 = 0
+	
+	list<int> mergedList = new list<int>()
+	
+	# merge all values while neither list is empty
+	while( ind1 < sortedList1.size() && ind2 < sortedList2.size() ) {
+		
+		# insert the smaller of the 2 values
+		smallest1 = sortedList.get(ind1)
+		smallest2 = sortedList.get(ind2)
+		
+		if(smallest1 < smallest2) {
+			mergedList.add(smallest1)
+			ind1++
+		}
+		else {
+			mergedList.add(smallest2)
+			ind2++
+		}
+	}
+	
+	# insert any remaining elements from sortedList1
+	if ( ind1 < sortedList1.size() ) {
+		for (int i = ind1; i<sortedList1.size(); i++) {
+			mergedList.add(sortedList1.get(i))
+		}
+	}
+	# insert any remaining elements from sortedList2
+	else if (ind2 < sortedList2.size() ) {
+		for (int i = ind2; i<sortList2.size(); i++) {
+			mergedList.add(sortedList2.get(i))
+		}
+	}
+	
+	return mergedList
+}
+
+string reduceKey = "reduceKey"
+
+map: 
+	list<int> sortedInts = new list<int>() // don't know syntax for this
+  
+	# perform insertion sort
+	for each line in myFile {
+		for each number in tokenize(line) {
+			int theNumber = str2Int(number) # we need to decide on how to implement this function
+			insertInOrder(sortedInts, theNumber)
+		}
+	}
+	
+	# for every input file, emit a list of sorted ints, with identical keys
+	emit (reduceKey, sortedInts)
+
+
+# reduce will get a list of sorted lists, and merge them 2 at a time
+reduce:
+	
+	# start with the first list as the fully sorted list
+	list<int> allSortedNums = values.getNext()
+	
+	# merge the allSortedNums with the next list in the values
+	while(values.hasNext()) {
+		allSortedNums = merge(allSortedNums, values.getNext())
+	}
+	emit(reduceKey, allSortedNums)
+	print(allSortedNums)
+	store(results, "sortedNumbers.txt")
