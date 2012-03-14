@@ -1,0 +1,61 @@
+/*-***
+ *
+ * This is a skeleton CUP file used to generate numeric values for the tokens
+ * recognized by the stand-alone lexer in pascal.flex.  This file has only
+ * terminal declarations, with no Pascal non-terminals or grammar rules yet.
+ * It will be further populated in the example for 330 Assignment 3.
+ *
+ * For CSC 330 Assignment 2, you can build a sym.java file using a skeletal cup
+ * file like this.  Or, you can build sym.java by hand, making sure that each
+ * token has a distinct numeric value.  The cup way is easier in the long run,
+ * but it requires that you download CUP and understand the basics of running
+ * it.
+ *
+ */
+
+import java_cup.runtime.*;
+
+terminal AND;
+terminal ARRAY;
+terminal BEGIN;
+terminal ELSE;
+terminal END;
+terminal IF;
+terminal OF;
+terminal OR;
+terminal PROGRAM;
+terminal PROCEDURE;
+terminal THEN;
+terminal TYPE;
+terminal VAR;
+terminal TIMES;
+terminal PLUS;
+terminal MINUS;
+terminal DIVIDE;
+terminal SEMI;
+terminal COMMA;
+terminal LEFT_PAREN;
+terminal RT_PAREN;
+terminal LEFT_BRKT;
+terminal RT_BRKT;
+terminal EQ;
+terminal GTR;
+terminal LESS;
+terminal LESS_EQ;
+terminal GTR_EQ;
+terminal NOT_EQ;
+terminal COLON;
+terminal ASSMNT;
+terminal DOT;
+terminal IDENT;
+terminal INT;
+terminal REAL;
+terminal CHAR;
+
+
+/*-*
+ * The following two lines define a dummy non-terminal and grammar rule.  CUP
+ * needs at least one rule to run without errors.
+ */
+non terminal dummy;
+dummy ::= ;
