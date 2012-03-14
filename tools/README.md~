@@ -4,17 +4,17 @@ Unix with tar archive:
 
 1. Download the tar archive
 
-   - curl -O http://jflex.de/jflex-1.4.3.tar.gz
+   curl -O http://jflex.de/jflex-1.4.3.tar.gz
 
 2. Decompress the archive into a directory of your choice with GNU tar,
 for example /usr/share:
 
-    - sudo tar -C /usr/share -xvzf jflex-1.4.3.tar.gz
+    sudo tar -C /usr/share -xvzf jflex-1.4.3.tar.gz
 
 3. Make a symbolic link from somewhere in your binary path to bin/jflex,
 for example:
     
-    - sudo ln -s /usr/share/jflex/bin/jflex /usr/bin/jflex
+    sudo ln -s /usr/share/jflex/bin/jflex /usr/bin/jflex
 
 
 Installing JavaCUP
@@ -23,12 +23,12 @@ Unix with tar archive:
 
 1. Download the tar archive
      
-    - curl -O http://www2.cs.tum.edu/projects/cup/java_cup_v10k.tar.gz
+     curl -O http://www2.cs.tum.edu/projects/cup/java_cup_v10k.tar.gz
 
 2. Decompress the archive into a directory of your choice with GNU tar,
 for example /usr/local:
 
-    - sudo tar -C /usr/share -xvzf java_cup_v10k.tar.gz
+   sudo tar -C /usr/share -xvzf java_cup_v10k.tar.gz
   
 Steps to use JavaCup
 
