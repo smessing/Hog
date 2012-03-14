@@ -1,0 +1,21 @@
+  "HADOOP_CLASSPATH=/usr/share/java/hadoop-lzo-0.4.14.jar:#{JARBASE}:job-jars/#{JOBJAR} " +
+    "hadoop jar #{JARBASE} -libjars job-jars/#{JOBJAR} -Dmapred.reduce.tasks=#{REDUCERS} #{JOB} --hdfs " +
+    ARGV.join(" ")
+end
+
+def jar_mode_command
+  "hadoop jar #{JARBASE} -Dmapred.reduce.tasks=#{REDUCERS} #{JOB} --hdfs " + ARGV.join(" ")
+end
+
+#Always sync the remote JARFILE
+rsync(JARPATH, JARBASE) if !is_local?
+if is_file?
+  build_job_jar if needs_rebuild?
+
+  if !is_local?
+    #Make sure the job-jars/ directory exists before rsyncing to it
+    system("ssh #{HOST} '[ ! -d job-jars/ ] && mkdir job-jars/'")
+    #rsync only acts if the file is out of date
+    rsync(JOBJARPATH, "job-jars/" + JOBJAR)
+  end
+end

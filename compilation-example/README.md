@@ -16,6 +16,13 @@ Folder Contents:
        
        - Makefile
 
-To build and run:
-   
-   $ make 
+To build and run JFLEX + CUP example:
+
+       $ make 
+
+To build and run JFLEX + CUP + Hadoop:
+
+       $ruby hog.rb
+
+Note: You Must Fix The Configuration For Hadoop Location
+
