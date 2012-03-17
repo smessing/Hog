@@ -1,0 +1,1151 @@
+\documentclass{book}
+\usepackage{fancyhdr, multicol}
+
+\title{\huge \textbf{Hog Language Reference}}
+\author{Jason Halpern\\ Samuel Messing\\ Kurry Tran \\ 
+        Benjamin Rapaport \\ Paul Tylkin}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\chapter{Introduction}
+\label{cha:introduction}
+
+As data sets have grown in size, so have the complexities of dealing with them.
+For instance, consider wanting to generate counts for all the words in \emph{War
+and Peace} by means of distributed computation. Writing in Java and using Hadoop
+MapReduce (TM), a simple solution takes over 50 lines of code, as the programmer
+is required to specify intermediate objects not directly related to the desired
+computation, but required simply to get Hadoop to function properly. Our goal is
+to produce a language that can express the same computation in about 10 lines.
+
+\section{The MapReduce Framework}
+\label{sec:mapreduce}
+
+With the explosion in the size of datasets that companies have had to manage in
+recent years there are many new challenges that they face. Many companies and
+organizations have to handle the processing of datasets that are terabytes or even
+petabytes in size. The first challenge in this large-scale processing is how to
+make sense of all this data. More importantly, how can they process and manipulate
+the data in a time efficient and reliable manner. The second challenge is how they
+handle this across their distributed systems. Writing distributed, fault tolerant
+programs requires a high level of expertise and knowledge of parallel systems.
+
+This was an obvious challenge to the company that has to process more data than any
+company on earth, Google. In response to this need, a group of engineers at Google
+developed their MapReduce framework in 2004. This high-level framework could be
+used for of a variety of tasks, including handling search queries, indexing crawled
+documents and processing logs. The software framework was developed to handle
+computations on massive datasets that are distributed across hundreds or even
+thousands of machines. The motivation behind MapReduce was to create a unified
+framework that abstracted away many of the low level details from programmers, so
+they would not have to be concerned with how the data is distributed, how the
+computation is parallelized and how all this is done in a fault tolerant manner.
+MapReduce provides fault tolerance in software rather than in hardware. MapReduce
+can handle both unstructured data (files) and structured data (databases), but is
+predominantly used with files.
+
+The framework partitions the data across different machines, so that the
+computations are initially performed on smaller sets of data distributed across the
+cluster. Each cluster has a master node that is responsible for coordinating the
+efforts among the slave nodes. Each slave node sends periodic heartbeats to the
+master node so it can be aware of progress and failure. In the case of failure, the
+master node can reassign tasks to other nodes in the cluster. In conjunction with
+the underlying MapReduce framework created at Google, the company also had to build
+the distributed Google File System (GFS). This file system ``allows programs to
+access files efficiently from any computer, so functions can be mapped
+everywhere.'' GFS was designed with the same goals as other distributed file
+systems, including ``performance, scalability, reliability and availability.''
+Another key aspect of the GFS design is fault tolerance and this is achieved by
+treating failures as normal and optimizing for ``huge files that are mostly
+appended to and then read.''
+
+Within the framework, a programmer is responsible for writing both Map and Reduce
+functions. The map function is applied to all of the input data ``in order to
+compute a set of intermediate key/value pairs.'' In the map step, the master node
+partitions the input data into smaller problems and distributes them across the
+worker nodes in the cluster. This step is applied in parallel to all of the input
+that has been partitioned across the cluster. Then, the reduce step is responsible
+for collecting all the processed data from the slave nodes and formatting the
+output. The reduce function is carried out over all the values that have the same
+key such that each key has a single value. which is the answer to the problem
+MapReduce is trying to solve. The output is done to files in the distributed file
+system.
+
+The use of ``a functional model with user-specified map and reduce operations
+allows (Google) to parallelize large computations easily and to use re-execution as
+the primary mechanism for fault tolerance.'' A programmer only has to specify the
+functions described above and the system handles the rest of the details. The
+following diagram illustrates the execution flow of a MapReduce program.
+
+\section{The Hog Language}
+\label{sec:hog_language}
+
+Hog is a \textbf{data-oriented}, \textbf{high-level}, scripting language for
+creating MapReduce programs. Used alongside Hadoop, Hog enables users to
+efficiently carry out \textbf{distributed} computation. Hadoop MapReduce is an
+open-source framework for carrying out distributed computation, which is especially
+useful for working with large data sets. While it is possible to write code to
+carry out computations with Hadoop directly, the framework requires users to
+specify low-level details that are often irrelevant to their desired goal.
+
+By building a scripting language on top of Hadoop, we aim to simplify the process.
+Built around a \textbf{simple} and highly \textbf{readable} syntax, Hog will let
+users focus on what computations they want done, and not how they want to do them.
+Hog takes care of all the low-level details required to run computations on
+Hadoop’s distributed network. All a user needs to do is tell Hog the location of
+their valid Hadoop instance, and Hog will do the rest.
+
+\textbf{TODO:  about restrictions of Hog}
+
+\subsection{Guiding Principles} % (fold)
+\label{sub:guiding_principles}
+
+The guiding principles of Hog are:
+
+\begin{itemize}
+  \item Anyone can MapReduce
+  \item Brevity over verbosity
+  \item Preference simplicity over complexity
+\end{itemize}
+
+
+% subsection guiding_princples (end)
+
+\chapter{Program Structure} % (fold)
+\label{cha:program_structure}
+
+\section{Overall Structure} % (fold)
+\label{sec:overall_structure}
+
+Every Hog program consists of a single source file with a ‘.hog’ extension. This
+source file must contain three sections: \tt @Map\rm, and \tt @Reduce\rm, and
+\tt @Main \rm and can also include an optional \tt @Functions \rm section. These
+sections must be included in the following order:
+
+\begin{verbatim}
+@Functions 
+.
+.
+.
+@Map <type signature>
+.
+.
+.
+@Reduce <type signature>
+.
+.
+.
+@Main
+\end{verbatim}
+
+% section overall_structure (end)
+
+\section{\tt @Functions\rm} % (fold)
+\label{sec:tt_functionsrm}
+
+At the top of every Hog program, the programmer has the option to define functions
+in a section called \tt @Functions\rm. Any function defined in this section can be
+called from any other section of the program, including \tt @Map\rm, and \tt
+@Reduce\rm, and can also be called from other functions defined in the \tt
+@Functions \rm section. The section containing the functions begins with the
+keyword \tt @Functions \rm on its own line, followed by the function definitions.
+
+Function definitions have the form:
+
+\begin{verbatim}
+@Functions
+return-type function-name(parameter-list) {
+  exprlist
+}
+\end{verbatim}
+
+The return-type can be any valid Hog type. The rules regarding legal function-names
+are identical to those regarding legal variable identifiers. Each parameter in the
+parameter-list consists of a valid Hog type followed by the name of the parameter,
+which must also follow the naming rules for identifiers. Parameters in the
+parameter-list are separated by commas. The @Functions section ends when the next
+Hog section begins.
+
+A complete example of an @Functions section:
+
+\begin{verbatim}
+@Functions
+int min(int a, int b) {
+  if (a < b) {
+    return a
+  }
+  else {
+    return b
+  }
+}
+
+list<int> reverseList(list<int> oldList) {
+  linst<int> newList()
+  for (int i = oldList.len()-1; i >= 0; i--) {
+    newList.append(oldList.get(i))
+  }
+  return newList
+}
+\end{verbatim}
+
+Function names can be overloaded as long as the function definitions have different
+signatures (i.e. parameter lists different in types and/or length). Additionally,
+user-defined functions can make reference to other user-defined functions.
+
+% section tt_functionsrm (end)
+
+\section{\tt @Map \rm} % (fold)
+\label{sec:tt_map_rm}
+
+The map function in a MapReduce program takes as input key-value pairs, performs
+the appropriate calculations and procedures, and emits intermediate key-value pairs
+as output. Any given input pair may map to zero, one, or multiple output pairs. The
+\tt @map \rm section defines the code for the map function.
+
+The \tt @map \rm header must be followed by the signature of the map function, and
+then the body of the map function as follows:
+
+\begin{verbatim}
+@Map (key-type key-name, value-type value-name) -> (key-type, value-type) {
+.
+.
+.
+}
+\end{verbatim}
+
+The first key-value pair defines the key and value types that form the input to the
+map function, and names these values so that they can be referred to in the body of
+the function. This is followed by an arrow and another key-value pair, defining the
+types of the output of the map function. Note that the output signature is
+\emph{unnamed}, as these pairs are only produces at the end of the map function
+(\textbf{@All: mention something about emit() being similar to return() in that all
+code after it is unreachable?}).
+
+The map function can include any number of calls to \tt emit()\rm, which outputs
+the resulting intermediate key-value pairs for use by the function defined in the
+\tt @reduce \rm section. The types of the values passed to the \tt emit() \rm
+function must agree with the signature of the output key-value pair as defined in
+the \tt @map \rm type signature. All output pairs from the map function are
+subsequently grouped by key by the framework, and passed as input to the \tt
+@reduce \rm function.
+
+Currently, the only configuration available is for a file to be passed into the map
+function one line at a time, with the line of text being the value, and the
+corresponding line number as the key. This requires that the input key/value pair
+to the map function is of type \tt (int key‐name,text value‐name)\rm. Extending
+this to allow for other input formats is a future goal of the Hog language.
+
+The following is an example of a complete \tt @Map \rm section for a program that
+counts the number of times each word appears in a set of files. The map function
+receives a single line of text, and for each word in the line (as delineated by
+whitespace), it emits the word as the key with a value of one. By emitting the word
+as the key, we can allow the framework to group by the word, thus calling the
+reduce function for every word.
+
+% section tt_map_rm (end)
+
+\section{\tt @Reduce \rm} % (fold)
+\label{sec:tt_reduce_rm}
+
+The reduce function in a MapReduce program takes a list of values that share the
+same key, as emitted by the map function, and outputs a smaller set of values to be
+associated with another key. The input and output keys do not have to match, though
+they often do.
+
+The setup for the reduce section is similar to the map section. However, the input
+value for any reduce function is always an iterator over the list of values
+associated with its key. The type of the key must be the same as the type of the
+key emitted by the map function. The iterator must be an iterator over the type of
+the values emitted by the map function.
+
+\begin{verbatim}
+
+@Reduce (key-type key-name, iter<value-type> value-name) -> (key-type, value-type)
+{
+.
+.
+.
+}
+\end{verbatim}
+
+As with the map function, the reduce function can emit as many key/value pairs as
+the user would like. Any key/value pair emitted by the reduce function is recorded
+in the output file.
+
+Below is a sample at \tt @Reduce \rm section, which continues the word count
+example, and follows the @mapsample introduce in the previous section.
+
+% section tt_reduce_rm (end)
+
+\section{\tt @Main \rm} % (fold)
+\label{sec:tt_main_rm}
+
+\textbf{Fill this in!} Hog.mapReduce()
+
+% section tt_main_rm (end)
+
+% chapter program_structure (end)
+
+\chapter{Lexical Conventions} % (fold)
+\label{cha:lexical_conventions}
+
+\section{Tokens} % (fold)
+\label{sec:tokens}
+
+% section tokens (end)
+
+\section{Comments} % (fold)
+\label{sec:comments}
+
+Block comments: 
+
+\begin{verbatim}
+#{ these are block
+   comments }#
+\end{verbatim}
+
+Single-line comments are defined to be strings of text included between a '\tt
+\#\rm' symbol on the left-hand side an a newline character ('\tt\textbackslash
+n\rm') on the right-hand side.
+
+% section comments (end)
+
+\section{Identifiers} % (fold)
+\label{sec:identifiers}
+
+% section identifiers (end)
+
+\section{Keywords} % (fold)
+\label{sec:keywords}
+
+The reserved words of Hog are a superset of the reserved words of Java, since
+Hadoop scripts compile into runnable Java code. The following words are reserved
+for use as keywords, and may not be redefined by a programmer:
+
+\begin{multicols}{4}
+\tt
+\begin{itemize}
+  \item[] abstract
+  \item[] assert
+  \item[] bool
+  \item[] boolean
+  \item[] break
+  \item[] byte
+  \item[] case
+  \item[] catch
+  \item[] char
+  \item[] class
+  \item[] const
+  \item[] continue
+  \item[] default
+  \item[] do
+  \item[] double
+  \item[] else
+  \item[] enum
+  \item[] extends
+  \item[] file
+  \item[] final
+  \item[] finally
+  \item[] float
+  \item[] for
+  \item[] goto
+  \item[] hadoop
+  \item[] if
+  \item[] implements
+  \item[] import
+  \item[] instanceof
+  \item[] int
+  \item[] interface
+  \item[] iter
+  \item[] list
+  \item[] long
+  \item[] map
+  \item[] native
+  \item[] new
+  \item[] package
+  \item[] private
+  \item[] protected
+  \item[] public
+  \item[] real
+  \item[] reduce
+  \item[] return
+  \item[] short
+  \item[] static
+  \item[] strictfp
+  \item[] super
+  \item[] switch
+  \item[] synchronized
+  \item[] text
+  \item[] this
+  \item[] throw
+  \item[] throws
+  \item[] transient
+  \item[] try
+  \item[] void
+  \item[] volatile
+  \item[] while
+\end{itemize}
+\rm
+\end{multicols}
+
+\textbf{@All: should we not say Java keywords are reserved, and instead rename any
+identifiers that could cause name conflicts? Feels weird to have a bunch of
+reserved words that are actually semantically meaningless for the language...}
+
+% section keywords (end)
+
+\section{Constants} % (fold)
+\label{sec:constants}
+
+% section constants (end)
+
+\section{String Literals} % (fold)
+\label{sec:string_literals}
+
+% section string_literals (end)
+
+\section{Variable Scope} % (fold)
+\label{sec:variable_scope}
+
+Hog implements what is generally referred to as lexical scoping or block scope. An
+identifier is valid within its enclosing block. The identifier is also value for
+any block nested within its enclosing block.
+
+% section variable_scope (end)
+
+% chapter lexical_conventions (end)
+
+\chapter{Syntax Notation} % (fold)
+\label{cha:syntax_notation}
+
+% chapter syntax_notation (end)
+
+\chapter{Types} % (fold)
+\label{cha:types}
+
+\section{Basic Types} % (fold)
+\label{sec:basic_types}
+
+The basic types of Hog include \tt int \rm (integer numbers, 64 bytes in size), \tt
+real \rm (floating point numbers, 64 bytes in size), \tt bool \rm(boolean values,
+true or false) and \tt text \rm (Strings, variable in size). Unlike most languages,
+Hog includes no basic character type. Instead, a programmer makes use of \tt
+text\rm s of size 1.
+
+\emph{Implementation details} Hog’s primitive types are not so primitive. They are
+in fact wrappers around Hadoop classes. For instance, Hog’s \tt int \rm type is a
+wrapper around Hadoop's \tt IntWritableclass\rm. The following lists for every
+primitive type in Hog the corresponding Hadoop class that the type is built on top
+of:
+
+\begin{center}
+\begin{tabular}{|c|c|}
+    \hline
+\textbf{Hog Type} & \textbf{Enclosed Hadoop Class} \\ \hline
+\tt int & \tt IntWritable \\ \hline
+\tt real & \tt DoubleWritable \\ \hline
+\t bool & \tt BooleanWrtiable \\ \hline
+\tt text & \tt text\textbf{???}\rm \\ \hline
+\end{tabular}
+\end{center}
+
+% section basic_types (end)
+
+\section{Derived Types (Collections)} % (fold)
+\label{sec:derived_types_collections_}
+
+Derived types include \tt list<T>\rm, \tt set<t>\rm, \tt multiset<t>\rm, and \tt
+iter<t>\rm. The \tt list<T> \rm type is an ordered collection of objects of the
+same type. The \tt set<T> \rm is an unordered collection of unique objects of the
+same type. The \tt multiset<T> \rm is an unordered collection of objects of the
+same type, with duplicates allowed. The \tt dict<K,V> \rm is a collection of
+key­value pairs, where keys are all of the same type, and values are all of the
+same type (keys and values can be of different types from one another). The only
+types currently allowed within collections are primitive types, preventing such
+constructs as a list of lists. All collections allow for null
+entries.\footnote{Note that for \tt set<T>\rm, only one \tt null \rm entry is
+allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is allowed.}
+
+% section derived_types_collections_ (end)
+
+\section{Conversions} % (fold)
+\label{sec:conversions}
+
+% section conversions (end)
+
+% chapter types (end)
+
+\chapter{Expressions} % (fold)
+\label{cha:expressions}
+
+\section{Operators} % (fold)
+\label{sec:operators}
+
+\subsection{Arithmetic Operators} % (fold)
+\label{sub:arithmetic_operators}
+
+Hog implements all of the standard arithmetic operators. \textbf{Need to say
+something about using arithmetic operators with two operands of different type, and
+about using them with null values}.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+
+\hline \textbf{Operator} & \textbf{Arity} & \textbf{Associativity} &
+\textbf{Precedence Level} & \textbf{Behavior} \\ \hline
+\tt + \rm & binary & left & 0 & addition \\ \hline
+\tt - \rm & binary & left & 0 & minus \\ \hline
+\tt * \rm & binary & left & 1 & multiplication \\ \hline
+\tt / \rm & binary & left & 1 & division \\ \hline
+\tt \% \rm & binary & left & 2 \textbf{??} & mod\footnote{Follows Java's 
+\tt \% \rm behavior: a modulus of a negative number is a negative number.} \\ 
+\hline
+\tt ++ \rm & unary & left & 3 & increment \\ \hline
+\tt -- \rm & unary & left & 3 & decrement \\ \hline
+\end{tabular}
+\end{center}
+
+% subsection arithmetic_operators (end)
+
+\subsection{Logical Operators} % (fold)
+\label{sub:logical_operators}
+
+The following are the logical operators implemented in Hog. Note that these
+operators only work with two operands of type \tt bool\rm. Attempting to use a
+logical operator with an object of any other type results in an internal run-time
+exception (see \S \ref{sec:internal_run_time_exceptions}). \textbf{@ALL: should
+this be a compile-time exception?}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+
+\hline \textbf{Operator} & \textbf{Arity} & \textbf{Associativity} &
+\textbf{Precedence Level} & \textbf{Behavior} \\ \hline
+\tt or \rm & binary & left & 0 & logical or \\ \hline
+\tt and \rm & binary & left & 1 & logical and \\ \hline
+\tt not \rm & unary & right & 2 & negation \\ \hline
+\end{tabular}
+\end{center}
+
+% subsection logical_operators (end)
+
+\subsection{Comparators} % (fold)
+\label{sub:comparators}
+
+The following are the comparators implemented in Hog (all are binary operations).
+\textbf{Need to say something about comparing two objects of different types, and
+null types}.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+
+\hline
+\tt < \rm & none & 0 & less than \\ \hline
+\tt <= \rm & none & 0 & less than or equal to \\ \hline
+\tt > \rm & none & 0 & greater than \\ \hline
+\tt >= \rm & none & 0 & greater than or equal to \\ \hline
+\tt == \rm & none & 0 & equal \\ \hline
+\tt != \rm & none & 0 & not equal \\ \hline
+
+\end{tabular}
+\end{center}
+
+% subsection comparators (end)
+
+\subsection{Assignment} % (fold)
+\label{sub:assignment}
+
+There is one single assignment operator, '\tt =\rm'. Expressions involving the
+assignment operator have the following form:
+
+\begin{verbatim}
+lvalue = expression | PRIMITIVE | DERIVED
+\end{verbatim}
+
+At compile-time, the compiler checks that both the result of the \tt expression \rm
+(or \tt PRIMITIVE \rm or \tt DERIVED\rm) and \tt lvalue \rm have the same type. If
+not, the compile throws a \tt TypeMistmatchException\rm. \textbf{@ALL: should this
+be a run-time exception?}
+
+% subsection assignment (end)
+
+% section operators (end)
+
+% chapter expressions (end)
+
+\chapter{Declarations} % (fold)
+\label{cha:declarations}
+
+While it is not specified in the grammar of Hog, like many other programming
+languages, a user is only allowed to use variables/functions after they have been
+declared. \textbf{Another sentence of introduction}.
+
+\section{Type Specifiers} % (fold)
+\label{sec:type_specifiers}
+
+Every variable, be it a \tt primitive-type \rm or a \tt derived-type \rm has to be
+assigned a type upon declaration, for instance,
+
+\begin{verbatim}
+list<int> myList
+\end{verbatim}
+
+Declares the variable \tt myList \rm to be a \tt list \rm of \tt int\rm s. And,
+
+\begin{verbatim}
+text myText
+\end{verbatim}
+
+Declares the variable \tt myText \rm to be of type \tt text\rm .
+
+% section type_specifiers (end)
+
+\section{Declarations} % (fold)
+\label{sec:declarations}
+
+\subsection{Null Declarations} % (fold)
+\label{sub:null_declarations}
+
+If a variable is declared but not initialized, the variable becomes a
+\textbf{\emph{null reference}}, which means it points to nothing, holds no data,
+and will fail any comparison (see \S \ref{sec:operators}) for a discussion of how
+\tt null \rm affects comparisons and elementary arithmetic and boolean operations).
+
+% subsection null_declarations (end)
+
+\subsection{Primitive-type Variable Declarations} % (fold)
+\label{sub:primitive_type_variable_declarations}
+
+Variables of one of the primitive types, including \tt int\rm, \tt real\rm, \tt
+text \rm or \tt bool \rm are declared using the following patterns:
+
+\begin{enumerate}
+  \item \tt variable-type variable-name \rm $\hfill$ (a null declaration)
+  \item \tt variable-type variable-name = primitive-expr \rm $\hfill$ (declaration 
+with initialization)
+\end{enumerate}
+
+When the first pattern is used, we say that the variable is
+\textbf{\emph{uninitialized}}, and has the value \tt null\rm. When the second
+pattern is used, we say that the variable is \textbf{\emph{initialized}}, and has
+the same value as the value of the result of the \tt
+primitive-assignment-expr\rm. The \tt primitive-assignment­expr \rm must return
+a value of the right type, or the compiler will fail citing a syntax error. The \tt
+primitive­assignment­expr \rm may contain an expression involving both other
+variables and unnamed raw primitives (e.g. 1 or 2), an expression involving only
+other variables or unnamed raw primitives, or a single variable, or a single
+unnamed raw primitive.
+
+% subsection primitive_type_variable_declarations (end)
+
+\subsection{Derived-Type Variable Declarations} % (fold)
+\label{sub:derived_type_variable_declarations}
+
+Derived-type variables are declared using the following patterns:
+
+\begin{enumerate}
+  \item \tt variable-type variable-name \rm
+  \item \tt variable-type variable-name = derived-expr \rm
+  \item \tt variable-type variable-name(parameter-list) \rm \\
+  \tt parameter-list -> parameter, parameter-list | parameter \rm
+\end{enumerate}
+
+The first two patterns operate in essentially the same way as for primitive­type
+variables. When the first pattern is used, we say that the variable is
+\textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user attempts to
+use any type­specific operations (for instance, \tt size(myList)) \rm on an
+uninitialized variable, the program will through a run­time exception (see \S
+\ref{cha:exception_handling} for a discussion of exceptions). When the second
+pattern is used, the variable is \textbf{\emph{initialized}} to the result of the
+\tt derived­expr\rm.
+
+Because derived­type variables often have additional structure that needs to be
+defined at initialization, a third pattern is provided. In this pattern, the user
+can specify a list of \textbf{\emph{parameters}} to initialize the object. For
+instance,
+
+\begin{verbatim}
+list<int> myList(5)
+\end{verbatim}
+
+Specifies that \tt myList \rm should be initialized with five \tt null \rm values.
+
+% subsection derived_type_variable_declarations (end)
+
+\subsection{Function Declarations} % (fold)
+\label{sub:function_declarations}
+
+See \S \ref{sec:tt_functionsrm}.
+
+% subsection function_declarations (end)
+
+% section declarations (end)
+
+\section{Initialization} % (fold)
+\label{sec:initialization}
+
+% section initialization (end)
+
+% chapter declarations (end)
+
+\chapter{Statements} % (fold)
+\label{cha:statements}
+
+\section{Expression Statement} % (fold)
+\label{sec:expression_statement}
+
+% section expression_statement (end)
+
+\section{Compound Statement} % (fold)
+\label{sec:compound_statement}
+
+% section compound_statement (end)
+
+\section{Flow-Of-Control Statements} % (fold)
+\label{sec:flow_of_control_statements}
+
+\textbf{@Paul: think about what you want here! Maybe include example for each?} The
+following are the \textbf{\emph{flow-of-control}} statements included in Hog:
+
+\begin{itemize}
+  \item[] \tt if (expression) statement \rm
+  \item[] \tt if (expression) statement else statement \rm
+  \item[] \tt if (expression) statement elif (expression statement) .. else 
+  statement \rm
+  \item[] \tt switch(expression) statement \rm
+\end{itemize}
+
+In the above statements, the ‘...’ signifies an unlimited number of elseif
+statements, since there is no limit on the number of elseif statements that can
+appear before the final else statement. In all forms of the if statement, the
+expression will be evaluated as a Boolean. If the expression is a number, then any
+non­zero number will be considered true and zero will be treated as false. In the
+second statement above, when the expression in the if statement evaluates to false,
+then the else statement will execute. In the third statement above with if, elseif
+and else statements, the statement will be executed that follows the first
+expression evaluating to true. If none of these expressions evaluate to true, then
+the else statement is executed.
+
+The switch statement causes control to transfer to a statement depending on the
+matching case label. There can be an unlimited number of case labels within the
+switch statement, so that the switch will operate as such:
+
+\begin{verbatim}
+switch(expression) {
+  case consant-expression : statment
+  default : statement
+}
+\end{verbatim}
+
+An expression is passed in to the switch statement and then the flow of control
+will fall through the switch and the expression will then be compared to the
+constant expression next to each case label. When the switch expression matches the
+expression next to a specific case, the statement for that case is executed. If the
+flow of control falls to the bottom of the switch without finding an equality, then
+the default statement will be executed. The case constants are converted to the
+switch expression type. There cannot be two case expressions with the same value
+after conversion. In addition, there can only be one default label within each
+switch.
+
+The above control statements can all be nested within each other.
+
+% section flow_of_control_statements (end)
+
+\section{Iteration Statements} % (fold)
+\label{sec:iteration_statements}
+
+Iteration statements signify looping and can appear in one of the two following
+forms:
+
+\begin{itemize}
+  \item[] \tt while ( expression ) statement-list \rm
+  \item[] \tt for (expression ; expression ; expression ) statement-list \rm
+  \item[] \tt foreach expression in iterable-object statement-list \rm
+\end{itemize}
+
+The following statement,
+
+\begin{verbatim}
+expression1
+while(expression2) {
+  statement
+  expression3
+}
+\end{verbatim}
+
+is equivalent to,
+
+\begin{verbatim}
+for (expression1; expression2; expression3) statement
+\end{verbatim}
+
+\textbf{@Ben: clean up the above, needs to be a specific example, because it's not
+always true in this generic a fashion}.
+
+In the above while statement, expression1 will typically represent the
+initialization of a variable, then at each iteration through the while loop, the
+current Boolean value of expression2 is evaluated. Expression2 will be a test or
+condition. If expression2 evaluates to true, then iteration will continue through
+the while loop. Expression3 normally represents an increment step and its value
+changes at each step through the while. Expression3 could be a part of the
+condition tested in expression2. The first time expression2 evaluates to false,
+iteration through the loop ends and drops to the code that comes after the closing
+bracket of the while statement.
+
+In the above for statement, expression1 is the initialization step, expression2 is
+the test or condition and expression3 is the increment step. At each step through
+the for loop, expression2 is evaluated. When expression2 evaluates to false,
+iteration through the loop ends.
+
+When the foreach starts to execute, the iteration starts at the first element in
+the array or list and the statement executes during every iteration. The iteration
+ends when the statement has been executed for each item in the array (or list) and
+there are no items left to iterate through.
+
+\subsection{Example 1} % (fold)
+\label{sub:example_1}
+
+\begin{verbatim}
+int i = 0
+while (i < 10) {
+  print(i)
+  i++
+}
+\end{verbatim}
+
+% subsection example_1 (end)
+
+\subsection{Example 2} % (fold)
+\label{sub:example_2}
+
+\begin{verbatim}
+for (int i = 0; i < 10; i++) {
+  print(i)
+}
+\end{verbatim}
+
+% subsection example_2 (end)
+
+\subsection{Example 3} % (fold)
+\label{sub:example_3}
+
+\begin{verbatim}
+list<int> iList()
+iList = [0,1,2,3,4,5,6,7,8,9]
+foreach i in iList {
+  print(i)
+}
+\end{verbatim}
+
+% subsection example_3 (end)
+
+% section iteration_statements (end)
+
+% chapter statements (end)
+
+\chapter{Built-in Functions} % (fold)
+\label{cha:built_in_functions}
+
+\textbf{Overview of built-in functions? How they are called on objects...}
+
+\section{System-level Built-ins} % (fold)
+\label{sec:system_level_built_ins}
+
+Hog includes a number of system­level built­in functions that can be called from
+various sections of a Hog program. The functions are:
+
+\begin{itemize} 
+
+\item[] \tt void emit(key, value) \rm \\
+
+This function can be called from the \tt @Map \rm and \tt @Reduce \rm sections in
+order to communicate the results of the map and reduce functions to the Hadoop
+platform. The types of the key/value pairs must match those defined as the output
+types in the header of each section.
+
+\item[] \tt void mapReduce() \rm \\
+
+This function can be called from the \tt @Main \rm section in order to initiate the
+mapreduce job, as definied in the \tt @Map \rm and \tt @Reduce \rm sections. Any
+Hog program that implements mapreduce will need to call this function in \tt
+@Main\rm.
+
+\item[] \tt void print(toPrint) \rm \\
+
+This function can be called from the \tt @Main \rm section in order to print to
+standard output. The argument must be a primitive type.
+
+\end{itemize}
+
+% section system_level_built_ins (end)
+
+\section{Object-level Built-ins} % (fold)
+\label{sec:object_level_built_ins}
+
+\textbf{@ALL:} introduction.
+
+\subsection{List} % (fold)
+\label{sub:list}
+
+\begin{itemize}
+
+\item \tt void sort() \rm \\
+
+Destructive?? function that sorts the items in the list in ascending order.
+
+\item \tt int len() \rm \\
+
+Returns an int with the number of elements in the list.
+
+\item \tt void append(itemToAppend) \rm \\
+
+Appends the object passed to the end of the list. The object must be of the same
+type as the list, or the operation will result in a \textbf{compile-time or
+run-time} exception.
+
+\item \tt <type> get(int index) \rm \\
+
+Returns the item from the list at the specified index.
+
+\end{itemize}
+
+
+% subsection list (end)
+
+\subsection{text} % (fold)
+\label{sub:text}
+
+The following function can be called on a \tt text \rm object:
+
+\begin{itemize}
+
+\item[] \tt list<text> tokenize(text fullText, text delimiter) \rm \\
+
+\tt tokenize() \rm can be called on a \tt text \rm object to tokenize it into a
+list of \tt text \rm objects based on the delimiter. The delimiter is not included
+in any of the \tt text \rm objects in the returned list.
+
+\end{itemize}
+
+% subsection text (end)
+
+% section object_level_built_ins (end)
+
+% chapter built_in_functions (end)
+
+\chapter{System Configuration} % (fold)
+\label{cha:system_configuration}
+
+\textbf{What facts about Hadoop instance does Hog need, and how to do you define
+them in a Hog program. Are there path variables that Hog depends on?}
+
+The user must set configuration variables in the \tt hog.rb \rm build script to
+allow the Hog compiler to link the Hog program with the necessary jar files to run
+the MapReduce job. The user must also specify the job name within the Hog source
+file.
+
+\begin{itemize}
+
+\item[] HADOOP\_HOME: absolute path of hadoop folder
+\item[] HADOOP\_VERSION: hadoop version number
+\item[] JAVA\_HOME: absolute path of java executable
+\item[] JAVAC\_HOME: absolute path of javac executable
+\item[] HOST: where to job is rsynced to and run
+\item[] LOCALMEM: how much memory for java to use when running in local mode 
+\item[] REDUCERS: the number of reduce tasks to run, set to zero for map­only jobs
+
+\end{itemize}
+
+% chapter system_configuration (end)
+
+\chapter{Parsing Tools} % (fold)
+\label{cha:parsing_tools}
+
+\textbf{INCLUDE GRAPHIC}
+
+JFlex is a lexical analyzer generator for Java, and written in Java. JFlex is
+designed to work together with the LALR parser generator CUP.
+
+% chapter parsing_tools (end)
+
+\chapter{Linkage and I/O} % (fold)
+\label{cha:linkage_and_i_o}
+
+\textbf{INCLUDE GRAPHIC}
+
+\section{Usage} % (fold)
+\label{sec:usage}
+
+% section usage (end)
+
+To build and run a Hog source file there is an executable Ruby script \tt hog.rb
+\rm that automates the compilation and linking steps for the user.
+
+Usage: \tt hog.rb [--hdfs|--local] job <job args> \rm
+\begin{itemize}
+  \item[] \tt --hdfs\rm: if job ends in '.hog' or '.java' and the file exists, link it against the hadoop JARFILE and then run it on HOST.
+  \item[] \tt --local\rm: run on local host.
+\end{itemize}
+
+\section{Example} % (fold)
+\label{sec:example}
+
+\tt hog.rb ­­local WordCountJob.hog ­­input someInputFile.txt ­­output
+./someOutputFile.tsv \rm
+
+This runs the \tt wordCount \rm job in \emph{local} mode (i.e. not on a Hadoop
+cluster).
+
+% section example (end)
+
+% chapter linkage_and_i_o (end)
+
+\chapter{Exception Handling} % (fold)
+\label{cha:exception_handling}
+
+Similar to other programming languages (Java, C++), Hog uses an exception model in
+which an exception is thrown and can be caught by a catch block. Code should be
+surrounded by a try block and then any exceptions occurring within the try block
+will subsequently be caught by the catch block. Each try block should be
+associated with at least one catch block. However, there can be multiple catch
+blocks to handle specific types of exceptions. In addition, an optional finally
+block can be added. The finally block will execute in all circumstances, whether
+or not an exception is thrown. The structure of exception handling should be
+similar to this, although there can be multiple catch blocks and the finally block
+is optional:
+
+\begin{verbatim}
+try {
+  statement-list
+} catch (exception) {
+  statement-list
+} finally {
+  statement-list
+}
+\end{verbatim}
+
+Because the proper behavior of a Hog program is dependent on resources outside of
+the language (i.e. the proper behavior of the user’s Hadoop software), there are
+more sources exceptions in Hog than most general purpose languages. These sources
+can be divided into three categories: \textbf{\emph{compile­time exceptions}},
+\textbf{\emph{internal run­time exceptions}} and \textbf{\emph{external run­time
+exceptions}}.
+
+\section{Compile-time Exceptions} % (fold)
+\label{sec:compile_time_exceptions}
+
+The primary cause of most compile­time exceptions in Hog are syntax errors. Such
+errors are unrecoverable because it is impossible for the compiler to properly
+interpret the user program. Some compilers for other languages offer a limited
+amount of compile­time error correction. Because Hog programs are often designed
+to process gigabytes or terabytes of data at a time, the standard Hog compiler
+offers no compile­time error correction. The assumption is that a user would
+rather re­tool their program than risk the chance of discovering, only after hours
+of processing, that the compilers has incorrectly assumed what the user meant. The
+following are Hog compile­time exceptions:
+
+\textbf{Add descriptions for each exception}
+
+\begin{itemize}
+  \item[] ProgramStructureException
+  \item[] NoSuchVariableException
+  \item[] NoSuchMethodException
+  \item[] UnsupportedOperationException
+  \item[] RedundantDeclarationException
+\end{itemize}
+
+% section compile_time_exceptions (end)
+
+\section{Internal Run-time Exceptions} % (fold)
+\label{sec:internal_run_time_exceptions}
+
+Internal run­time exceptions include such problems as I/O exceptions (i.e. a
+specified file is not found on either the user’s local file system or the
+associated Hadoop file system), type mismatch exceptions (i.e. a program attempts
+to place two elements of different types into the same list) and parsing
+exceptions. \textbf{Another sentence or two}. The following are Hog internal
+rum­time exceptions:
+
+\textbf{Add descriptions for each exception}
+
+\begin{itemize}
+  \item[] FileNotFoundException
+  \item[] FileLoadException
+  \item[] ArrayOutOfBoundsException
+  \item[] IncorrectArgumentException
+  \item[] TypeMismatchException
+  \item[] HogMapFunctionException
+  \item[] HogReduceFunctionException
+  \item[] NullPointerException
+  \item[] NumberFormatException
+  \item[] ArithmeticException
+  \item[] IOException
+  \item[] InterruptedException
+  \item[] ParseException
+\end{itemize}
+
+% section internal_run_time_exceptions (end)
+
+\section{External Run-time Exceptions} % (fold)
+\label{sec:external_run_time_exceptions}
+
+Hog programs are primarily meant to be run on a Hadoop cluster, and therefore a
+third source of exceptions for the language comes from errors associated with the
+cluster. If the cluster becomes corrupted in the middle of processing a Hog script
+(\textbf{can we say anything but ``the hog script dies?'' @Kurry­­­does Hadoop
+have a single point­of­failure? If so, we should say something about it here}).
+The following are external run­time exceptions (\textbf{@kurry, any input on
+these?}):
+
+\textbf{Add descriptions for each exception}
+
+\begin{itemize}
+  \item[] HadoopCompilationException
+  \item[] HadoopFailuerException
+  \item[] HadoopExecutionException
+  \item[] HadoopMapFunctionException
+  \item[] HadoopReduceFunctionException
+\end{itemize}
+
+% section external_run_time_exceptions (end)
+
+% chapter exception_handling (end)
+
+\chapter{Grammar} % (fold)
+\label{cha:grammar}
+
+\begin{verbatim}
+
+if ( expression ) statement
+if ( expression ) statement else statement
+if ( expression ) statement elseif ( expression ) statement... else statement
+
+switch ( expression ) statement if ( expression ) statement
+if ( expression ) statement else statement
+if ( expression ) statement elseif ( expression ) statement... else statement
+
+switch ( expression ) statement
+
+while ( expression ) statement
+for ( expression; expression; expression ) statement
+foreach ( expression in array or list) statement
+@Functions
+return­type function­name­1 (parameter­list) {
+exprlist }
+return­type function­name­2 (parameter­list) { exprlist
+}
+@Map: (type key­name, type value­name) ­> (type, type) {
+.
+.
+.
+}
+
+
+\end{verbatim}
+
+% chapter grammar (end)
+
+
+\end{document}
