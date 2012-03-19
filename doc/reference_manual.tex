@@ -1028,7 +1028,14 @@ object, then \tt 0 \rm is returned.
 \item[] \tt list<T> entry\_set() \rm \\
 
 This function returns a list of all entries in the multiset, with duplicates removed.
+Please note: objects are added to the list in an arbitrary order, since \tt multiset
+\rm objects are inherently unordered. Do not ever rely on \tt entry\_set() \rm 
+providing a consistent ordering of objects.
 
+\item[] \tt iter<T> iter() \rm \\
+
+This function returns an iterator for the entries of the objects in this list,
+with duplicates removed. Again, the order of the objects is arbitrary. 
 
 \end{itemize}
 
