@@ -886,34 +886,42 @@ standard output. The argument must be a primitive type.
 
 \textbf{@ALL:} introduction.
 
-Set Methods
+\subsection{Set} % (fold)                                                      
+\label{sub:set}
 
-bool add(element)
+\begin{itemize}
+
+\item \tt bool add(element) \rm \\
 -returns true if the element was added to the set
 
-void clear()
+\item \tt void clear()\rm \\
 -removes all elements from the set so it is now empty
 
-bool contains(element)
+\item \tt bool contains(element) \rm \\
 -returns true if the set contains this element
 
-bool isEmpty()
+\item \tt bool isEmpty() \rm \\
 -returns true if there are no elements in this set
 
-iter iterator()
+\item \tt iter iterator() \rm \\
 - returns an iterator over the elements in the set
 
-bool remove(element)
+\item \tt bool remove(element) \rm \\
 -returns true if the element was removed from the set
 
-int size()
+\item \tt int size() \rm \\
 -returns the number of elements in the set
 
-bool removeAll(Set) 
+\item \tt bool removeAll(Set) \rm \\ 
 -removes all the elements in the set parameter from the invoking set
 
-bool containsAll(Set) 
+\item \tt bool containsAll(Set) \rm \\
 -returns true if all the elements in the parameter set are included in the invoking set
+
+\end{itemize}
+
+
+% subsection set (end) 
 
 \subsection{List} % (fold)
 \label{sub:list}
