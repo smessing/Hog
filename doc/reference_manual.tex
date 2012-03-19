@@ -915,6 +915,8 @@ type \tt int\rm). The built-in functions are as follows:
 
 \begin{itemize}
 
+
+
 \item[] \tt T peek() \rm \\
 
 This function returns the next object (if one exists) for the owning \tt iter \rm
@@ -929,6 +931,12 @@ This function returns the next object (if one exists) for the owning \tt iter \r
 object. A call to \tt next() \rm differs from a call to \tt peek() \rm in that the
 function call advances the cursor of the iterator. If \tt next() \rm is called on
 an iterator that has no more values, \tt null \rm is returned. 
+
+\item[] \tt bool has\_next() \rm \\
+
+This function returns \tt true \rm if the iterator object has a next object
+to return, and \tt false \rm otherwise. This function is equivalient to evaluating
+\tt if (iter\_object.peek() == null) \rm.
 
 \end{itemize} 
 
