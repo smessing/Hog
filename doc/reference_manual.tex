@@ -1,5 +1,5 @@
 \documentclass{article}
-\usepackage{fancyhdr, multicol}
+\usepackage{fancyhdr, graphicx, multicol}
 
 \title{\huge \textbf{Hog Language Reference}}
 \author{Jason Halpern\\ Samuel Messing\\ 
@@ -73,11 +73,18 @@ key such that each key has a single value. which is the answer to the problem
 MapReduce is trying to solve. The output is done to files in the distributed file
 system.
 
-The use of ``a functional model with user-specified map and reduce operations
-allows (Google) to parallelize large computations easily and to use re-execution as
-the primary mechanism for fault tolerance.'' A programmer only has to specify the
-functions described above and the system handles the rest of the details. The
-following diagram illustrates the execution flow of a MapReduce program.
+The use of ``a functional model with user-specified map and reduce operations allows (Google) to parallelize large computations
+easily and to use re-execution as the primary mechanism for fault tolerance.'' A programmer only has to specify the functions
+described above and the system handles the rest of the details. Figure \ref{fig:map_reduce_overview} illustrates the execution
+flow of a MapReduce program.
+
+\begin{center}
+\begin{figure}
+  \label{fig:map_reduce_overview}
+  \includegraphics[width=0.85\textwidth]{img/map_reduce_overview.pdf}
+  \caption{Overview of the Map Reduce program}
+\end{figure}
+\end{center}
 
 \subsection{The Hog Language}
 \label{sub:hog_language}
