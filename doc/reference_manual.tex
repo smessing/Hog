@@ -1,4 +1,4 @@
-\documentclass{book}
+\documentclass{article}
 \usepackage{fancyhdr, multicol}
 
 \title{\huge \textbf{Hog Language Reference}}
@@ -7,10 +7,10 @@
 
 \begin{document}
 \maketitle
-\tableofcontents
+%\tableofcontents
 
-\chapter{Introduction}
-\label{cha:introduction}
+\section{Introduction}
+\label{sec:introduction}
 
 As data sets have grown in size, so have the complexities of dealing with them.
 For instance, consider wanting to generate counts for all the words in \emph{War
@@ -20,8 +20,8 @@ is required to specify intermediate objects not directly related to the desired
 computation, but required simply to get Hadoop to function properly. Our goal is
 to produce a language that can express the same computation in about 10 lines.
 
-\section{The MapReduce Framework}
-\label{sec:mapreduce}
+\subsection{The MapReduce Framework}
+\label{sub:mapreduce}
 
 With the explosion in the size of datasets that companies have had to manage in
 recent years there are many new challenges that they face. Many companies and
@@ -79,8 +79,8 @@ the primary mechanism for fault tolerance.'' A programmer only has to specify th
 functions described above and the system handles the rest of the details. The
 following diagram illustrates the execution flow of a MapReduce program.
 
-\section{The Hog Language}
-\label{sec:hog_language}
+\subsection{The Hog Language}
+\label{sub:hog_language}
 
 Hog is a \textbf{data-oriented}, \textbf{high-level}, scripting language for
 creating MapReduce programs. Used alongside Hadoop, Hog enables users to
@@ -101,8 +101,8 @@ We intentionally have restricted the scope of Hog to deal with specific problems
 only contain primitive types (preventing such data structures as lists of lists). Also, Hog only supports reading and writing
 plaintext files. While these limitations sacrifice the generality of the language, they promote ease of use.
 
-\subsection{Guiding Principles} % (fold)
-\label{sub:guiding_principles}
+\subsubsection{Guiding Principles} % (fold)
+\label{ssub:guiding_principles}
 
 The guiding principles of Hog are:
 
@@ -113,23 +113,23 @@ The guiding principles of Hog are:
 \end{itemize}
 
 
-% subsection guiding_princples (end)
+% subsubsection guiding_princples (end)
 
-\section{The (Ideal) Hog User} % (fold)
-\label{sec:the_ideal_hog_user}
+\subsection{The (Ideal) Hog User} % (fold)
+\label{sub:the_ideal_hog_user}
 
 Hog was designed with a particular user in mind: one that has already learned the basics of programming in a different
 programming language (such as Python or Java), but is inexperienced enough to benefit from a highly structured framework for
 writing MapReduce programs. The language was designed with the goal of making learning how to write MapReduce programs as easy
 as possible. \textbf{@Paul: flesh out if needed}.
 
-% section the_ideal_hog_user (end)
+% subsection the_ideal_hog_user (end)
 
-\chapter{Program Structure} % (fold)
-\label{cha:program_structure}
+\section{Program Structure} % (fold)
+\label{sec:program_structure}
 
-\section{Overall Structure} % (fold)
-\label{sec:overall_structure}
+\subsection{Overall Structure} % (fold)
+\label{sub:overall_structure}
 
 Every Hog program consists of a single source file with a ‘.hog’ extension. This
 source file must contain three sections: \tt @Map\rm, and \tt @Reduce\rm, and
@@ -154,8 +154,8 @@ sections must be included in the following order:
 
 % section overall_structure (end)
 
-\section{\tt @Functions\rm} % (fold)
-\label{sec:tt_functionsrm}
+\subsection{\tt @Functions\rm} % (fold)
+\label{sub:tt_functionsrm}
 
 At the top of every Hog program, the programmer has the option to define functions
 in a section called \tt @Functions\rm. Any function defined in this section can be
@@ -208,8 +208,8 @@ user-defined functions can make reference to other user-defined functions.
 
 % section tt_functionsrm (end)
 
-\section{\tt @Map \rm} % (fold)
-\label{sec:tt_map_rm}
+\subsection{\tt @Map \rm} % (fold)
+\label{sub:tt_map_rm}
 
 The map function in a MapReduce program takes as input key-value pairs, performs
 the appropriate calculations and procedures, and emits intermediate key-value pairs
@@ -256,8 +256,8 @@ reduce function for every word.
 
 % section tt_map_rm (end)
 
-\section{\tt @Reduce \rm} % (fold)
-\label{sec:tt_reduce_rm}
+\subsection{\tt @Reduce \rm} % (fold)
+\label{sub:tt_reduce_rm}
 
 The reduce function in a MapReduce program takes a list of values that share the
 same key, as emitted by the map function, and outputs a smaller set of values to be
@@ -287,29 +287,29 @@ in the output file.
 Below is a sample at \tt @Reduce \rm section, which continues the word count
 example, and follows the @mapsample introduce in the previous section.
 
-% section tt_reduce_rm (end)
+% subsection tt_reduce_rm (end)
 
-\section{\tt @Main \rm} % (fold)
+\subsection{\tt @Main \rm} % (fold)
 \label{sec:tt_main_rm}
 
-\textbf{Fill this in!} Hog.mapReduce()
+\textbf{@BEN: Fill this in!} Hog.mapReduce()
 
-% section tt_main_rm (end)
+% subsection tt_main_rm (end)
 
-% chapter program_structure (end)
+% section program_structure (end)
 
-\chapter{Lexical Conventions} % (fold)
-\label{cha:lexical_conventions}
+\section{Lexical Conventions} % (fold)
+\label{sec:lexical_conventions}
 
-\section{Tokens} % (fold)
-\label{sec:tokens}
+\subsection{Tokens} % (fold)
+\label{sub:tokens}
 
 \textbf The classes of tokens include the following: identifiers, keywords, constants, string literals, operators and separators. Blanks, tabs, newlines and comments are ignored. If the input is separated into tokens up to a given character, the next token is the longest string of characters that could represent a token.
 
-% section tokens (end)
+% subsection tokens (end)
 
-\section{Comments} % (fold)
-\label{sec:comments}
+\subsection{Comments} % (fold)
+\label{sub:comments}
 
 Multi-line comments are identified by the enclosing character sequences \tt \#\{ \rm and \tt \}\#\rm. Anything within these
 enclosing characters is considered a comment, and is completely ignored by the compiler. For example,
@@ -330,10 +330,10 @@ Single-line comments are defined to be strings of text included between a '\tt
 \#\rm' symbol on the left-hand side an a newline character ('\tt\textbackslash
 n\rm') on the right-hand side.
 
-% section comments (end)
+% subsection comments (end)
 
-\section{Identifiers} % (fold)
-\label{sec:identifiers}
+\subsection{Identifiers} % (fold)
+\label{sub:identifiers}
 A valid identifier consists of sequence on contiguous leters, digits, or
 underscores. The first character of an identifier must not be a digit.
 The identifiers are case sensitive so foo is not the same identifier as Foo. 
@@ -342,8 +342,8 @@ The identifiers are case sensitive so foo is not the same identifier as Foo.
 
 % section identifiers (end)
 
-\section{Keywords} % (fold)
-\label{sec:keywords}
+\subsection{Keywords} % (fold)
+\label{sub:keywords}
 
 The reserved words of Hog are a superset of the reserved words of Java, since
 Hadoop scripts compile into runnable Java code. The following words are reserved
@@ -385,48 +385,48 @@ compile into Java programs, at first blush it would seem that there is the poten
 Hog compiler is smart enough to recognize when a user uses a Java reserved word as an identifier, and automatically prepends
 the text "hog" to avoid any collisions.
 
-% section keywords (end)
+% subsection keywords (end)
 
-\section{Constants} % (fold)
-\label{sec:constants}
+\subsection{Constants} % (fold)
+\label{sub:constants}
 
 \textbf{@Paul: flesh this out}
 
-% section constants (end)
+% subsection constants (end)
 
-\section{String Literals} % (fold)
-\label{sec:string_literals}
+\subsection{String Literals} % (fold)
+\label{sub:string_literals}
 A string literal consists of a sequence of zero of more contiguous characters enclosed
 in double quotes, such as "hello". A string literal can also contain escape characters
 such as slash-n for the new line character or slash-t for the tab character. 
 
 \textbf{@Kurry: flesh this out as k\&r would}
 
-% section string_literals (end)
+% subsection string_literals (end)
 
-\section{Variable Scope} % (fold)
-\label{sec:variable_scope}
+\subsection{Variable Scope} % (fold)
+\label{sub:variable_scope}
 
 Hog implements what is generally referred to as lexical scoping or block scope. An
 identifier is valid within its enclosing block. The identifier is also value for
 any block nested within its enclosing block.
 
-% section variable_scope (end)
+% subsection variable_scope (end)
 
-% chapter lexical_conventions (end)
+% section lexical_conventions (end)
 
-\chapter{Syntax Notation} % (fold)
-\label{cha:syntax_notation}
+\section{Syntax Notation} % (fold)
+\label{sec:syntax_notation}
 
 \textbf In the syntax notation used throughout the Hog manual, different syntactic categories are noted by italic type, and literal words and characters are in typewriter style. 
 
-% chapter syntax_notation (end)
+% sec syntax_notation (end)
 
-\chapter{Types} % (fold)
-\label{cha:types}
+\section{Types} % (fold)
+\label{sec:types}
 
-\section{Basic Types} % (fold)
-\label{sec:basic_types}
+\subsection{Basic Types} % (fold)
+\label{sub:basic_types}
 
 The basic types of Hog include \tt int \rm (integer numbers, 64 bytes in size), \tt
 real \rm (floating point numbers, 64 bytes in size), \tt bool \rm(boolean values,
@@ -451,10 +451,10 @@ of:
 \end{tabular}
 \end{center}
 
-% section basic_types (end)
+% subsection basic_types (end)
 
-\section{Derived Types (Collections)} % (fold)
-\label{sec:derived_types_collections_}
+\subsection{Derived Types (Collections)} % (fold)
+\label{sub:derived_types_collections_}
 
 Derived types include \tt list<T>\rm, \tt set<t>\rm, \tt multiset<t>\rm, and \tt
 iter<t>\rm. The \tt list<T> \rm type is an ordered collection of objects of the
@@ -468,25 +468,25 @@ constructs as a list of lists. All collections allow for null
 entries.\footnote{Note that for \tt set<T>\rm, only one \tt null \rm entry is
 allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is allowed.}
 
-% section derived_types_collections_ (end)
+% subsection derived_types_collections_ (end)
 
-\section{Conversions} % (fold)
-\label{sec:conversions}
+\subsection{Conversions} % (fold)
+\label{sub:conversions}
 
 \textbf{@Paul}
 
-% section conversions (end)
+% subsection conversions (end)
 
-% chapter types (end)
+% section types (end)
 
-\chapter{Expressions} % (fold)
-\label{cha:expressions}
+\section{Expressions} % (fold)
+\label{sec:expressions}
 
-\section{Operators} % (fold)
-\label{sec:operators}
+\subsection{Operators} % (fold)
+\label{sub:operators}
 
-\subsection{Arithmetic Operators} % (fold)
-\label{sub:arithmetic_operators}
+\subsubsection{Arithmetic Operators} % (fold)
+\label{ssub:arithmetic_operators}
 
 Hog implements all of the standard arithmetic operators. All arithmetic operators are only defined for use between variables of
 numeric type (\tt int\rm, \tt real\rm) with the exception that the \tt + \rm operator is also defined for use between two \tt
@@ -534,10 +534,10 @@ then the resulting operation will cause a run-time \tt NullValueException\rm, an
 \end{tabular}
 \end{center}
 
-% subsection arithmetic_operators (end)
+% subsubsection arithmetic_operators (end)
 
-\subsection{Logical Operators} % (fold)
-\label{sub:logical_operators}
+\subsubsection{Logical Operators} % (fold)
+\label{ssub:logical_operators}
 
 The following are the logical operators implemented in Hog. Note that these
 operators only work with two operands of type \tt bool\rm. Attempting to use a
@@ -555,18 +555,15 @@ exception (see \S \ref{sec:internal_run_time_exceptions}).
 \end{tabular}
 \end{center}
 
-% subsection logical_operators (end)
+% subsubsection logical_operators (end)
 
-\subsection{Comparators} % (fold)
-\label{sub:comparators}
+\subsubsection{Comparators} % (fold)
+\label{ssub:comparators}
 
 The following are the comparators implemented in Hog (all are binary operations).
 
 \textbf{Need to say something about comparing two objects of different types, and
 null types}. \textbf{@Kurry, say something about which comparators don't work with non-numeric types}
-
-
-
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
@@ -587,10 +584,10 @@ a true or false being returned. Comparisons require that the two operands
 be either both numeric (including char) or both boolean, and a numeric value
 cannot be compared to a boolean value.
 
-% subsection comparators (end)
+% subsubsection comparators (end)
 
-\subsection{Assignment} % (fold)
-\label{sub:assignment}
+\subsubsection{Assignment} % (fold)
+\label{ssub:assignment}
 
 There is one single assignment operator, '\tt =\rm'. Expressions involving the
 assignment operator have the following form:
@@ -603,22 +600,22 @@ At compile-time, the compiler checks that both the result of the \tt expression 
 (or \tt PRIMITIVE \rm or \tt DERIVED\rm) and \tt lvalue \rm have the same type. If
 not, a compile-time \tt TypeMistmatchException \rm will be thrown.
 
-% subsection assignment (end)
+% subsubsection assignment (end)
 
-% section operators (end)
+% subsection operators (end)
 
-% chapter expressions (end)
+% section expressions (end)
 
-\chapter{Declarations} % (fold)
-\label{cha:declarations}
+\section{Declarations} % (fold)
+\label{sec:declarations}
 
 While it is not specified in the grammar of Hog, like many other programming
 languages, a user is only allowed to use variables/functions after they have been
 declared. \textbf When declaring a variable, a user must include both a type and an 
 identifier for that variable. Otherwise, an exception will be thrown at compile time.
 
-\section{Type Specifiers} % (fold)
-\label{sec:type_specifiers}
+\subsection{Type Specifiers} % (fold)
+\label{sub:type_specifiers}
 
 Every variable, be it a \tt primitive-type \rm or a \tt derived-type \rm has to be
 assigned a type upon declaration, for instance,
@@ -635,23 +632,23 @@ text myText
 
 Declares the variable \tt myText \rm to be of type \tt text\rm .
 
-% section type_specifiers (end)
+% subsection type_specifiers (end)
 
-\section{Declarations} % (fold)
-\label{sec:declarations}
+\subsection{Declarations} % (fold)
+\label{sub:declarations}
 
-\subsection{Null Declarations} % (fold)
-\label{sub:null_declarations}
+\subsubsection{Null Declarations} % (fold)
+\label{ssub:null_declarations}
 
 If a variable is declared but not initialized, the variable becomes a
 \textbf{\emph{null reference}}, which means it points to nothing, holds no data,
 and will fail any comparison (see \S \ref{sec:operators}) for a discussion of how
 \tt null \rm affects comparisons and elementary arithmetic and boolean operations).
 
-% subsection null_declarations (end)
+% subsubsection null_declarations (end)
 
-\subsection{Primitive-type Variable Declarations} % (fold)
-\label{sub:primitive_type_variable_declarations}
+\subsubsection{Primitive-type Variable Declarations} % (fold)
+\label{ssub:primitive_type_variable_declarations}
 
 Variables of one of the primitive types, including \tt int\rm, \tt real\rm, \tt
 text \rm or \tt bool \rm are declared using the following patterns:
@@ -673,10 +670,10 @@ variables and unnamed raw primitives (e.g. 1 or 2), an expression involving only
 other variables or unnamed raw primitives, or a single variable, or a single
 unnamed raw primitive.
 
-% subsection primitive_type_variable_declarations (end)
+% subsubsection primitive_type_variable_declarations (end)
 
-\subsection{Derived-Type Variable Declarations} % (fold)
-\label{sub:derived_type_variable_declarations}
+\subsubsection{Derived-Type Variable Declarations} % (fold)
+\label{ssub:derived_type_variable_declarations}
 
 Derived-type variables are declared using the following patterns:
 
@@ -692,7 +689,7 @@ variables. When the first pattern is used, we say that the variable is
 \textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user attempts to
 use any type­specific operations (for instance, \tt size(myList)) \rm on an
 uninitialized variable, the program will through a run­time exception (see \S
-\ref{cha:exception_handling} for a discussion of exceptions). When the second
+\ref{sec:exception_handling} for a discussion of exceptions). When the second
 pattern is used, the variable is \textbf{\emph{initialized}} to the result of the
 \tt derived­expr\rm.
 
@@ -707,40 +704,40 @@ list<int> myList(5)
 
 Specifies that \tt myList \rm should be initialized with five \tt null \rm values.
 
-% subsection derived_type_variable_declarations (end)
+% subsubsection derived_type_variable_declarations (end)
 
-\subsection{Function Declarations} % (fold)
-\label{sub:function_declarations}
+\subsubsection{Function Declarations} % (fold)
+\label{ssub:function_declarations}
 
 \textbf{@Paul, reiterate how you define functions}
 
-% subsection function_declarations (end)
+% subsubsection function_declarations (end)
+
+% subsection declarations (end)
 
 % section declarations (end)
 
-% chapter declarations (end)
+\section{Statements} % (fold)
+\label{sec:statements}
 
-\chapter{Statements} % (fold)
-\label{cha:statements}
-
-\section{Expression Statement} % (fold)
-\label{sec:expression_statement}
+\subsection{Expression Statement} % (fold)
+\label{sub:expression_statement}
 
 An \textbf{\emph{expression statement}} is either an individual assignment or a function call. All consequences of a given
 expression take effect before the next expression is executed.
 
-% section expression_statement (end)
+% subsection expression_statement (end)
 
-\section{Compound Statement (Blocks)} % (fold)
-\label{sec:compound_statement}
+\subsection{Compound Statement (Blocks)} % (fold)
+\label{sub:compound_statement}
 
 Compound statements are defined by \{ and \} and are used to group a sequence of
 statements, so that they are syntactically equivalent to a single statement.
 
-% section compound_statement (end)
+% subsection compound_statement (end)
 
-\section{Flow-Of-Control Statements} % (fold)
-\label{sec:flow_of_control_statements}
+\subsection{Flow-Of-Control Statements} % (fold)
+\label{sub:flow_of_control_statements}
 
 \textbf{@Paul: think about what you want here! Maybe include example for each?} The
 following are the \textbf{\emph{flow-of-control}} statements included in Hog:
@@ -787,10 +784,10 @@ switch.
 
 The above control statements can all be nested within each other.
 
-% section flow_of_control_statements (end)
+% subsection flow_of_control_statements (end)
 
-\section{Iteration Statements} % (fold)
-\label{sec:iteration_statements}
+\subsection{Iteration Statements} % (fold)
+\label{sub:iteration_statements}
 
 Iteration statements signify looping and can appear in one of the two following
 forms:
@@ -826,8 +823,8 @@ the array or list and the statement executes during every iteration. The iterati
 ends when the statement has been executed for each item in the array (or list) and
 there are no items left to iterate through.
 
-\subsection{Example 1} % (fold)
-\label{sub:example_1}
+\subsubsection{Example 1} % (fold)
+\label{ssub:example_1}
 
 \begin{verbatim}
 int i = 0
@@ -837,10 +834,10 @@ while (i < 10) {
 }
 \end{verbatim}
 
-% subsection example_1 (end)
+% subsubsection example_1 (end)
 
-\subsection{Example 2} % (fold)
-\label{sub:example_2}
+\subsubsection{Example 2} % (fold)
+\label{ssub:example_2}
 
 \begin{verbatim}
 for (int i = 0; i < 10; i++) {
@@ -848,10 +845,10 @@ for (int i = 0; i < 10; i++) {
 }
 \end{verbatim}
 
-% subsection example_2 (end)
+% subsubsection example_2 (end)
 
-\subsection{Example 3} % (fold)
-\label{sub:example_3}
+\subsubsection{Example 3} % (fold)
+\label{ssub:example_3}
 
 \begin{verbatim}
 list<int> iList()
@@ -861,19 +858,19 @@ foreach i in iList {
 }
 \end{verbatim}
 
-% subsection example_3 (end)
+% subsubsection example_3 (end)
 
-% section iteration_statements (end)
+% subsection iteration_statements (end)
 
-% chapter statements (end)
+% section statements (end)
 
-\chapter{Built-in Functions} % (fold)
-\label{cha:built_in_functions}
+\section{Built-in Functions} % (fold)
+\label{sec:built_in_functions}
 
 \textbf{Overview of built-in functions? How they are called on objects...} \textbf{@Paul: do this}
 
-\section{System-level Built-ins} % (fold)
-\label{sec:system_level_built_ins}
+\subsection{System-level Built-ins} % (fold)
+\label{sub:system_level_built_ins}
 
 Hog includes a number of system­level built­in functions that can be called from
 various sections of a Hog program. The functions are:
@@ -901,17 +898,17 @@ standard output. The argument must be a primitive type.
 
 \end{itemize}
 
-% section system_level_built_ins (end)
+% subsection system_level_built_ins (end)
 
-\section{Object-level Built-ins} % (fold)
-\label{sec:object_level_built_ins}
+\subsection{Object-level Built-ins} % (fold)
+\label{sub:object_level_built_ins}
 
 The derived type objects have several built-in functions that provide additional functionality. 
 
 \textbf{@ALL:} introduction. \textbf{@Sam: do this}
 
-\subsection{Iter} % (fold)
-\label{sub:iter}
+\subsubsection{\tt iter \rm} % (fold)
+\label{ssub:iter}
 
 \tt iter \rm is Hog's iteration object, and supports several built-in functions
 that are independent of the particular type of the \tt iter \rm object. Note, 
@@ -955,39 +952,56 @@ to return, and \tt false \rm otherwise. This function is equivalient to evaluati
 \end{itemize} 
 
 
-% subsection iter (end)
+% subsubsection iter (end)
 
-Set Methods
+\subsubsection{\tt set \rm} % (fold)
+\label{ssub:tt_set_rm}
 
-bool add(element)
--returns true if the element was added to the set
+\begin{itemize}
 
-void clear()
--removes all elements from the set so it is now empty
+  \item[] \tt bool add(T element) \rm \\
+  
+   Returns \tt true \rm if the element was successfully added to the \tt set\rm, \tt false \rm otherwise.
+  
+   \item[] \tt void clear() \rm \\
+  
+   Removes all elements from the \tt set \rm such that it is empty afterwards.
+  
+   \item[] \tt bool contains(T element) \rm \\
+  
+   Returns \tt true \rm if the \tt set \rm contains this element, \tt false \rm otherwise.
+  
+   \item[] \tt bool isEmpty() \rm \\
+  
+   Returns \tt true \rm if there are no elements in this \tt set\rm, \tt false \rm otherwise.
+  
+   \item[] \tt iter<T> iterator() \rm \\
+  
+   Returns an iterator over the elements in this \tt set\rm.
+  
+   \item[] \tt bool remove(T element) \rm \\
+  
+   Returns \tt true \rm if the element was successfully removed from the \tt set\rm, \tt false \rm otherwise (i.e. the \tt list
+  \rm didn't contain \tt element \rm).
+  
+  \item[] \tt int size() \rm \\
+  
+  Returns the number of elements in the set.
+  
+  \item[] \tt bool removeAll(set<T> otherSet) \rm \\
+  
+  Returns \tt true \rm if all the elements in \tt otherSet \rm were successfully removed from this set.
+  
+  \item[] \tt bool containsAll(set<T> otherSet) \rm \\
+  
+  Returns \tt true \rm if all elements in \tt otherSet \rm are found in this set.
+  
+  \end{itemize}
 
-bool contains(element)
--returns true if the set contains this element
+% subsubsection tt_set_rm (end)
 
-bool isEmpty()
--returns true if there are no elements in this set
-
-iter iterator()
-- returns an iterator over the elements in the set
-
-bool remove(element)
--returns true if the element was removed from the set
-
-int size()
--returns the number of elements in the set
-
-bool removeAll(Set) 
--removes all the elements in the set parameter from the invoking set
-
-bool containsAll(Set) 
--returns true if all the elements in the parameter set are included in the invoking set
-
-\subsection{List} % (fold)
-\label{sub:list}
+\subsubsection{List} % (fold)
+\label{ssub:list}
 
 \begin{itemize}
 
@@ -1012,10 +1026,10 @@ Returns the item from the list at the specified index.
 \end{itemize}
 
 
-% subsection list (end)
+% subsubsection list (end)
 
-\subsection{Multiset} % (fold)
-\label{sub:multiset}
+\subsubsection{Multiset} % (fold)
+\label{ssub:multiset}
 
 The \tt multiset \rm object is similar in kind to the \tt set \rm object in that
 it is an unordered collection of objects of the same type. The key difference
@@ -1072,10 +1086,10 @@ Removes one instance of \tt object \rm from the given \tt multiset\rm. Returns
 
 \end{itemize}
 
-% subsection multiset (end)
+% subsubsection multiset (end)
 
-\subsection{text} % (fold)
-\label{sub:text}
+\subsubsection{text} % (fold)
+\label{ssub:text}
 
 The following function can be called on a \tt text \rm object:
 
@@ -1089,14 +1103,14 @@ in any of the \tt text \rm objects in the returned list.
 
 \end{itemize}
 
-% subsection text (end)
+% subsubsection text (end)
 
-% section object_level_built_ins (end)
+% subsection object_level_built_ins (end)
 
-% chapter built_in_functions (end)
+% section built_in_functions (end)
 
-\chapter{System Configuration} % (fold)
-\label{cha:system_configuration}
+\section{System Configuration} % (fold)
+\label{sec:system_configuration}
 
 \textbf{What facts about Hadoop instance does Hog need, and how to do you define
 them in a Hog program. Are there path variables that Hog depends on?}
@@ -1118,10 +1132,10 @@ file.
 
 \end{itemize}
 
-% chapter system_configuration (end)
+% section system_configuration (end)
 
-\chapter{Scanning and Parsing Tools and Java Source Code Generation} % (fold)
-\label{cha:parsing_tools}
+\section{Scanning and Parsing Tools and Java Source Code Generation} % (fold)
+\label{sec:parsing_tools}
 
 \textbf{INCLUDE GRAPHIC}
 
@@ -1146,17 +1160,17 @@ improves performance because a JVM can handle primitive types much more efficien
 objects. Also, a JVM implements optimizations for well-known types, such as String, and 
 thus Hog is built for optimal performance.
 
-% chapter parsing_tools (end)
+% section parsing_tools (end)
 
-\chapter{Linkage and I/O} % (fold)
-\label{cha:linkage_and_i_o}
+\section{Linkage and I/O} % (fold)
+\label{sec:linkage_and_i_o}
 
 \textbf{INCLUDE GRAPHIC}
 
-\section{Usage} % (fold)
-\label{sec:usage}
+\subsection{Usage} % (fold)
+\label{sub:usage}
 
-% section usage (end)
+% subsection usage (end)
 
 To build and run a Hog source file there is an executable script \tt hog
 \rm that automates the compilation and linking steps for the user.
@@ -1167,8 +1181,8 @@ Usage: \tt hog [--hdfs|--local] job <job args> \rm
   \item[] \tt --local\rm: run on local host.
 \end{itemize}
 
-\section{Example} % (fold)
-\label{sec:example}
+\subsection{Example} % (fold)
+\label{sub:example}
 
 \tt hog ­­local WordCountJob.hog ­­input someInputFile.txt ­­output
 ./someOutputFile.tsv \rm
@@ -1176,12 +1190,12 @@ Usage: \tt hog [--hdfs|--local] job <job args> \rm
 This runs the \tt wordCount \rm job in \emph{local} mode (i.e. not on a Hadoop
 cluster).
 
-% section example (end)
+% subsection example (end)
 
-% chapter linkage_and_i_o (end)
+% section linkage_and_i_o (end)
 
-\chapter{Exception Handling} % (fold)
-\label{cha:exception_handling}
+\section{Exception Handling} % (fold)
+\label{sec:exception_handling}
 
 Similar to other programming languages (Java, C++), Hog uses an exception model in
 which an exception is thrown and can be caught by a catch block. Code should be
@@ -1211,8 +1225,8 @@ can be divided into three categories: \textbf{\emph{compile­time exceptions}},
 \textbf{\emph{internal run­time exceptions}} and \textbf{\emph{external run­time
 exceptions}}.
 
-\section{Compile-time Exceptions} % (fold)
-\label{sec:compile_time_exceptions}
+\subsection{Compile-time Exceptions} % (fold)
+\label{sub:compile_time_exceptions}
 
 The primary cause of most compile­time exceptions in Hog are syntax errors. Such
 errors are unrecoverable because it is impossible for the compiler to properly
@@ -1236,10 +1250,10 @@ following are Hog compile­time exceptions:
   \item[] RedundantDeclarationException
 \end{itemize}
 
-% section compile_time_exceptions (end)
+% subsection compile_time_exceptions (end)
 
-\section{Internal Run-time Exceptions} % (fold)
-\label{sec:internal_run_time_exceptions}
+\subsection{Internal Run-time Exceptions} % (fold)
+\label{sub:internal_run_time_exceptions}
 
 Internal run­time exceptions include such problems as I/O exceptions (i.e. a
 specified file is not found on either the user’s local file system or the
@@ -1270,8 +1284,8 @@ rum­time exceptions:
 
 % section internal_run_time_exceptions (end)
 
-\section{External Run-time Exceptions} % (fold)
-\label{sec:external_run_time_exceptions}
+\subsection{External Run-time Exceptions} % (fold)
+\label{sub:external_run_time_exceptions}
 
 \textbf{@Kurry, redo this}
 
@@ -1293,12 +1307,12 @@ these?}):
   \item[] HadoopReduceFunctionException
 \end{itemize}
 
-% section external_run_time_exceptions (end)
+% subsection external_run_time_exceptions (end)
 
-% chapter exception_handling (end)
+% section exception_handling (end)
 
-\chapter{Grammar} % (fold)
-\label{cha:grammar}
+\section{Grammar} % (fold)
+\label{sec:grammar}
 
 \begin{verbatim}
 
@@ -1352,7 +1366,7 @@ constant:
 
 \end{verbatim}
 
-% chapter grammar (end)
+% section grammar (end)
 
 
 \end{document}
