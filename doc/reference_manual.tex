@@ -916,7 +916,15 @@ standard output. The argument must be a primitive type.
 \subsection{Object-level Built-ins} % (fold)
 \label{sub:object_level_built_ins}
 
-The derived type objects have several built-in functions that provide additional functionality. 
+The derived type objects have several built-in functions that provide additional functionality. All of these functions
+are invoked using the following pattern:
+
+\begin{quotation}
+\emph{identifier.functionName(parameterList)}
+\end{quotation}
+
+Where \emph{identifier} is the identifier for the object in question, \emph{functionName} is the name of the function,
+and \emph{parameterList} is a (possibly empty) list of parameters used to specify the behavior of the invocation.
 
 \textbf{@ALL:} introduction. \textbf{@Sam: do this}
 
