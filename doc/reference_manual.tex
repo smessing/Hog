@@ -314,6 +314,9 @@ n\rm') on the right-hand side.
 
 \section{Identifiers} % (fold)
 \label{sec:identifiers}
+A valid identifier consists of sequence on contiguous leters, digits, or
+underscores. The first character of an identifier must not be a digit.
+The identifiers are case sensitive so foo is not the same identifier as Foo. 
 
 % section identifiers (end)
 
@@ -403,6 +406,9 @@ reserved words that are actually semantically meaningless for the language...}
 
 \section{String Literals} % (fold)
 \label{sec:string_literals}
+A string literal consists of a sequence of zero of more contiguous characters enclosed
+in double quotes, such as "hello". A string literal can also contain escape characters
+such as slash-n for the new line character or slash-t for the tab character. 
 
 % section string_literals (end)
 
@@ -535,8 +541,12 @@ this be a compile-time exception?}
 \label{sub:comparators}
 
 The following are the comparators implemented in Hog (all are binary operations).
+
 \textbf{Need to say something about comparing two objects of different types, and
 null types}.
+
+
+
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
@@ -551,6 +561,11 @@ null types}.
 
 \end{tabular}
 \end{center}
+
+Comparison operators are used in boolean expressions and result in either 
+a true or false being returned. Comparisons require that the two operands 
+be either both numeric (including char) or both boolean, and a numeric value
+cannot be compared to a boolean value.
 
 % subsection comparators (end)
 
@@ -700,6 +715,9 @@ See \S \ref{sec:tt_functionsrm}.
 
 \section{Compound Statement} % (fold)
 \label{sec:compound_statement}
+
+Compound statements are defined by { and } and are used to group a sequence of
+statements, so that they are syntactically equivalent to a single statement.
 
 % section compound_statement (end)
 
