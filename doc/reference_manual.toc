@@ -46,15 +46,17 @@
 \contentsline {chapter}{\numberline {9}Built-in Functions}{27}
 \contentsline {section}{\numberline {9.1}System-level Built-ins}{27}
 \contentsline {section}{\numberline {9.2}Object-level Built-ins}{27}
-\contentsline {subsection}{\numberline {9.2.1}List}{28}
-\contentsline {subsection}{\numberline {9.2.2}text}{28}
-\contentsline {chapter}{\numberline {10}System Configuration}{29}
-\contentsline {chapter}{\numberline {11}Parsing Tools}{31}
-\contentsline {chapter}{\numberline {12}Linkage and I/O}{33}
-\contentsline {section}{\numberline {12.1}Usage}{33}
-\contentsline {section}{\numberline {12.2}Example}{33}
-\contentsline {chapter}{\numberline {13}Exception Handling}{35}
-\contentsline {section}{\numberline {13.1}Compile-time Exceptions}{35}
-\contentsline {section}{\numberline {13.2}Internal Run-time Exceptions}{36}
-\contentsline {section}{\numberline {13.3}External Run-time Exceptions}{37}
-\contentsline {chapter}{\numberline {14}Grammar}{39}
+\contentsline {subsection}{\numberline {9.2.1}Iter}{28}
+\contentsline {subsection}{\numberline {9.2.2}List}{29}
+\contentsline {subsection}{\numberline {9.2.3}Multiset}{29}
+\contentsline {subsection}{\numberline {9.2.4}text}{30}
+\contentsline {chapter}{\numberline {10}System Configuration}{31}
+\contentsline {chapter}{\numberline {11}Scanning and Parsing Tools and Java Source Code Generation}{33}
+\contentsline {chapter}{\numberline {12}Linkage and I/O}{35}
+\contentsline {section}{\numberline {12.1}Usage}{35}
+\contentsline {section}{\numberline {12.2}Example}{35}
+\contentsline {chapter}{\numberline {13}Exception Handling}{37}
+\contentsline {section}{\numberline {13.1}Compile-time Exceptions}{37}
+\contentsline {section}{\numberline {13.2}Internal Run-time Exceptions}{38}
+\contentsline {section}{\numberline {13.3}External Run-time Exceptions}{39}
+\contentsline {chapter}{\numberline {14}Grammar}{41}
