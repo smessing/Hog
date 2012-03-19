@@ -1006,13 +1006,31 @@ file.
 
 % chapter system_configuration (end)
 
-\chapter{Parsing Tools} % (fold)
+\chapter{Scanning and Parsing Tools and Java Source Code Generation} % (fold)
 \label{cha:parsing_tools}
 
 \textbf{INCLUDE GRAPHIC}
 
-JFlex is a lexical analyzer generator for Java, and written in Java. JFlex is
-designed to work together with the LALR parser generator CUP.
+Currently, the Hog compiler is implemented as a translator into the Java programming 
+language. The first phase of Hog compilation uses the JFlex as its lexical analyzer,
+which is designed to work with the Look-Ahead Left-to-Right (LALR) parser generator
+CUP. The lexical analyzer creates lexemes, which are logically meaningful sequences,
+and for each lexeme the lexlical analyser sends to the LALR parser a token of the
+form <token-name, attribute-value>. The second phase of Hog compilation uses Java CUP
+to create a syntax tree, which is a tree-like intermediate representation of the source
+program, which depics the grammatical structure of the Hog source program.
+
+In the last phase of compilation, the Hog semantic analyzer generates Java source code,
+which is then compiled into byte code by the Java compiler. Then with the Hadoop Java Archives
+(JARs) the bytecode is executed on the Java Virtual Machine (JVM). With the syntax tree and
+the information from the symbol table, the Hog compiler then checks the Hog source program
+to ensure semantic consistency with the language specification. The syntax tree is initially
+untyped, but after semantic analysis Hog types are added to the syntax tree. Hog types are
+represented in two ways, either a translation of a Hog type into a new Java class, or by
+mapping Hog types to the equivalent Java types. Mapping Hog types directly to Java types
+improves performance because a JVM can handle primitive types much more efficiently than 
+objects. Also, a JVM implements optimizations for well-known types, such as String, and 
+thus Hog is built for optimal performance.
 
 % chapter parsing_tools (end)
 
