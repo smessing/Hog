@@ -346,78 +346,42 @@ The reserved words of Hog are a superset of the reserved words of Java, since
 Hadoop scripts compile into runnable Java code. The following words are reserved
 for use as keywords, and may not be redefined by a programmer:
 
-\textbf{@Sam: take out java-only, and explain we prevent collisions}
-
 \begin{multicols}{4}
 \tt
 \begin{itemize}
-  \item[] abstract
-  \item[] assert
   \item[] bool
-  \item[] boolean
-  \item[] break
-  \item[] byte
   \item[] case
   \item[] catch
-  \item[] char
-  \item[] class
-  \item[] const
-  \item[] continue
   \item[] default
-  \item[] do
-  \item[] double
+  \item[] dict
   \item[] else
-  \item[] enum
-  \item[] extends
-  \item[] file
+  \item[] elseif
+  \item[] emit
   \item[] final
-  \item[] finally
-  \item[] float
   \item[] for
-  \item[] goto
   \item[] hadoop
   \item[] if
-  \item[] implements
-  \item[] import
   \item[] instanceof
   \item[] int
-  \item[] interface
   \item[] iter
   \item[] list
-  \item[] long
   \item[] map
-  \item[] native
-  \item[] new
-  \item[] package
-  \item[] private
-  \item[] protected
-  \item[] public
   \item[] real
-  \item[] reduce
   \item[] return
-  \item[] short
-  \item[] static
-  \item[] strictfp
-  \item[] super
   \item[] switch
-  \item[] synchronized
   \item[] text
-  \item[] this
-  \item[] throw
-  \item[] throws
-  \item[] transient
   \item[] try
   \item[] void
-  \item[] volatile
   \item[] while
 \end{itemize}
 \rm
 \end{multicols}
 
-\textbf{@All: should we not say Java keywords are reserved, and instead rename any
-identifiers that could cause name conflicts? Feels weird to have a bunch of
-reserved words that are actually semantically meaningless for the language...}
-\textbf{@All: I agree, if this is not too difficult to implement. - PT}
+The experienced programmer may note that several of Java's reserved words are missing from this list. Because Hog programs
+compile into Java programs, at first blush it would seem that there is the potential here to create invalid java programs. The
+Hog compiler is smart enough to recognize when a user uses a Java reserved word as an identifier, and automatically prepends
+the text "hog" to avoid any collisions.
+
 % section keywords (end)
 
 \section{Constants} % (fold)
