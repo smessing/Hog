@@ -311,14 +311,20 @@ example, and follows the @mapsample introduce in the previous section.
 \section{Comments} % (fold)
 \label{sec:comments}
 
-\textbf{@Sam: flesh out}
-
-Block comments: 
+Multi-line comments are identified by the enclosing character sequences \tt \#\{ \rm and \tt \}\#\rm. Anything within these
+enclosing characters is considered a comment, and is completely ignored by the compiler. For example,
 
 \begin{verbatim}
+int i = 0
 #{ these are block
-   comments }#
+   comments and are ignored
+   by the compiler }#
+i++
 \end{verbatim}
+
+In the above example, the text \tt these are block comments \textbackslash n comments and are ignored \textbackslash n by the
+complier \rm are completely ignored during compilation. Compilation goes directly from the line \tt int i = 0 \rm to the line
+\tt i++\rm.
 
 Single-line comments are defined to be strings of text included between a '\tt
 \#\rm' symbol on the left-hand side an a newline character ('\tt\textbackslash
