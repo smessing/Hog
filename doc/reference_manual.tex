@@ -97,7 +97,9 @@ Hog takes care of all the low-level details required to run computations on
 Hadoop’s distributed network. All a user needs to do is tell Hog the location of
 their valid Hadoop instance, and Hog will do the rest.
 
-\textbf{TODO:  about restrictions of Hog}
+We intentionally have restricted the scope of Hog to deal with specific problems. For example, Hog's collection objects can
+only contain primitive types (preventing such data structures as lists of lists). Also, Hog only supports reading and writing
+plaintext files. While these limitations sacrifice the generality of the language, they promote ease of use.
 
 \subsection{Guiding Principles} % (fold)
 \label{sub:guiding_principles}
@@ -112,6 +114,16 @@ The guiding principles of Hog are:
 
 
 % subsection guiding_princples (end)
+
+\section{The (Ideal) Hog User} % (fold)
+\label{sec:the_ideal_hog_user}
+
+Hog was designed with a particular user in mind: one that has already learned the basics of programming in a different
+programming language (such as Python or Java), but is inexperienced enough to benefit from a highly structured framework for
+writing MapReduce programs. The language was designed with the goal of making learning how to write MapReduce programs as easy
+as possible. \textbf{@Paul: flesh out if needed}.
+
+% section the_ideal_hog_user (end)
 
 \chapter{Program Structure} % (fold)
 \label{cha:program_structure}
@@ -215,13 +227,11 @@ then the body of the map function as follows:
 }
 \end{verbatim}
 
-The first key-value pair defines the key and value types that form the input to the
-map function, and names these values so that they can be referred to in the body of
-the function. This is followed by an arrow and another key-value pair, defining the
-types of the output of the map function. Note that the output signature is
-\emph{unnamed}, as these pairs are only produces at the end of the map function
-(\textbf{@All: mention something about emit() being similar to return() in that all
-code after it is unreachable?}).
+The first key-value pair defines the key and value types that form the input to the map function, and names these values so
+that they can be referred to in the body of the function. This is followed by an arrow and another key-value pair, defining the
+types of the output of the map function. Note that the output signature is \emph{unnamed}, as these pairs are only produces at
+the end of the map function. Please note that any code written in the same scope after an \tt emit() \rm call will be
+\textbf{\emph{unreachable}}, and will cause a compile-time \tt UnreachableCodeException\rm.
 
 The map function can include any number of calls to \tt emit()\rm, which outputs
 the resulting intermediate key-value pairs for use by the function defined in the
@@ -294,10 +304,14 @@ example, and follows the @mapsample introduce in the previous section.
 \section{Tokens} % (fold)
 \label{sec:tokens}
 
+\textbf{@Jason: copy k\& r}
+
 % section tokens (end)
 
 \section{Comments} % (fold)
 \label{sec:comments}
+
+\textbf{@Sam: flesh out}
 
 Block comments: 
 
@@ -315,6 +329,8 @@ n\rm') on the right-hand side.
 \section{Identifiers} % (fold)
 \label{sec:identifiers}
 
+\textbf{@kurry: explain what a valid identifier is}
+
 % section identifiers (end)
 
 \section{Keywords} % (fold)
@@ -323,6 +339,8 @@ n\rm') on the right-hand side.
 The reserved words of Hog are a superset of the reserved words of Java, since
 Hadoop scripts compile into runnable Java code. The following words are reserved
 for use as keywords, and may not be redefined by a programmer:
+
+\textbf{@Sam: take out java-only, and explain we prevent collisions}
 
 \begin{multicols}{4}
 \tt
@@ -399,10 +417,14 @@ reserved words that are actually semantically meaningless for the language...}
 \section{Constants} % (fold)
 \label{sec:constants}
 
+\textbf{@Paul: flesh this out}
+
 % section constants (end)
 
 \section{String Literals} % (fold)
 \label{sec:string_literals}
+
+\textbf{@Kurry: flesh this out as k\&r would}
 
 % section string_literals (end)
 
@@ -419,6 +441,8 @@ any block nested within its enclosing block.
 
 \chapter{Syntax Notation} % (fold)
 \label{cha:syntax_notation}
+
+\textbf{@Jason: flesh out ala k\& r}
 
 % chapter syntax_notation (end)
 
@@ -473,6 +497,8 @@ allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is allowed.}
 \section{Conversions} % (fold)
 \label{sec:conversions}
 
+\textbf{@Paul}
+
 % section conversions (end)
 
 % chapter types (end)
@@ -488,7 +514,7 @@ allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is allowed.}
 
 Hog implements all of the standard arithmetic operators. \textbf{Need to say
 something about using arithmetic operators with two operands of different type, and
-about using them with null values}.
+about using them with null values}. \textbf{@sam}
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
@@ -516,7 +542,7 @@ The following are the logical operators implemented in Hog. Note that these
 operators only work with two operands of type \tt bool\rm. Attempting to use a
 logical operator with an object of any other type results in an internal run-time
 exception (see \S \ref{sec:internal_run_time_exceptions}). \textbf{@ALL: should
-this be a compile-time exception?}
+this be a compile-time exception?} \textbf{@sam: fix, yes}
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
@@ -536,7 +562,7 @@ this be a compile-time exception?}
 
 The following are the comparators implemented in Hog (all are binary operations).
 \textbf{Need to say something about comparing two objects of different types, and
-null types}.
+null types}. \textbf{@Kurry, say something about which comparators don't work with non-numeric types}
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
@@ -567,7 +593,7 @@ lvalue = expression | PRIMITIVE | DERIVED
 At compile-time, the compiler checks that both the result of the \tt expression \rm
 (or \tt PRIMITIVE \rm or \tt DERIVED\rm) and \tt lvalue \rm have the same type. If
 not, the compile throws a \tt TypeMistmatchException\rm. \textbf{@ALL: should this
-be a run-time exception?}
+be a run-time exception?} \textbf{@sam: fix this, compile-time}.
 
 % subsection assignment (end)
 
@@ -580,7 +606,7 @@ be a run-time exception?}
 
 While it is not specified in the grammar of Hog, like many other programming
 languages, a user is only allowed to use variables/functions after they have been
-declared. \textbf{Another sentence of introduction}.
+declared. \textbf{Another sentence of introduction}. \textbf{@jason: flesh out, one or two more sentences}
 
 \section{Type Specifiers} % (fold)
 \label{sec:type_specifiers}
@@ -677,16 +703,11 @@ Specifies that \tt myList \rm should be initialized with five \tt null \rm value
 \subsection{Function Declarations} % (fold)
 \label{sub:function_declarations}
 
-See \S \ref{sec:tt_functionsrm}.
+\textbf{@Paul, reiterate how you define functions}
 
 % subsection function_declarations (end)
 
 % section declarations (end)
-
-\section{Initialization} % (fold)
-\label{sec:initialization}
-
-% section initialization (end)
 
 % chapter declarations (end)
 
@@ -696,10 +717,14 @@ See \S \ref{sec:tt_functionsrm}.
 \section{Expression Statement} % (fold)
 \label{sec:expression_statement}
 
+\textbf{@Sam: fill this in}
+
 % section expression_statement (end)
 
-\section{Compound Statement} % (fold)
+\section{Compound Statement (Blocks)} % (fold)
 \label{sec:compound_statement}
+
+\textbf{@Kurry: fill this in}
 
 % section compound_statement (end)
 
@@ -865,7 +890,7 @@ foreach i in iList {
 \chapter{Built-in Functions} % (fold)
 \label{cha:built_in_functions}
 
-\textbf{Overview of built-in functions? How they are called on objects...}
+\textbf{Overview of built-in functions? How they are called on objects...} \textbf{@Paul: do this}
 
 \section{System-level Built-ins} % (fold)
 \label{sec:system_level_built_ins}
@@ -901,7 +926,7 @@ standard output. The argument must be a primitive type.
 \section{Object-level Built-ins} % (fold)
 \label{sec:object_level_built_ins}
 
-\textbf{@ALL:} introduction.
+\textbf{@ALL:} introduction. \textbf{@Sam: do this}
 
 \subsection{Iter} % (fold)
 \label{sub:iter}
@@ -986,7 +1011,7 @@ bool containsAll(Set)
 
 \item \tt void sort() \rm \\
 
-Destructive?? function that sorts the items in the list in ascending order.
+Function that sorts the items in the list in lexicographical ascending order.
 
 \item \tt int len() \rm \\
 
@@ -1151,10 +1176,10 @@ thus Hog is built for optimal performance.
 
 % section usage (end)
 
-To build and run a Hog source file there is an executable Ruby script \tt hog.rb
+To build and run a Hog source file there is an executable script \tt hog
 \rm that automates the compilation and linking steps for the user.
 
-Usage: \tt hog.rb [--hdfs|--local] job <job args> \rm
+Usage: \tt hog [--hdfs|--local] job <job args> \rm
 \begin{itemize}
   \item[] \tt --hdfs\rm: if job ends in '.hog' or '.java' and the file exists, link it against the hadoop JARFILE and then run it on HOST.
   \item[] \tt --local\rm: run on local host.
@@ -1163,7 +1188,7 @@ Usage: \tt hog.rb [--hdfs|--local] job <job args> \rm
 \section{Example} % (fold)
 \label{sec:example}
 
-\tt hog.rb ­­local WordCountJob.hog ­­input someInputFile.txt ­­output
+\tt hog ­­local WordCountJob.hog ­­input someInputFile.txt ­­output
 ./someOutputFile.tsv \rm
 
 This runs the \tt wordCount \rm job in \emph{local} mode (i.e. not on a Hadoop
@@ -1219,6 +1244,8 @@ following are Hog compile­time exceptions:
 
 \textbf{Add descriptions for each exception}
 
+\textbf{@Jason: fill out decsriptions}
+
 \begin{itemize}
   \item[] ProgramStructureException
   \item[] NoSuchVariableException
@@ -1241,6 +1268,8 @@ rum­time exceptions:
 
 \textbf{Add descriptions for each exception}
 
+\textbf{@Sam: fill out descriptions}
+
 \begin{itemize}
   \item[] FileNotFoundException
   \item[] FileLoadException
@@ -1261,6 +1290,8 @@ rum­time exceptions:
 
 \section{External Run-time Exceptions} % (fold)
 \label{sec:external_run_time_exceptions}
+
+\textbf{@Kurry, redo this}
 
 Hog programs are primarily meant to be run on a Hadoop cluster, and therefore a
 third source of exceptions for the language comes from errors associated with the
