@@ -781,6 +781,23 @@ is equivalent to,
 for (expression1; expression2; expression3) statement
 \end{verbatim}
 
+\textbf Example:
+
+\begin{verbatim}                                                                                                                     
+int count = 0;
+int i = 0;                                                                                                                      
+while(i < 10) {                                                                                                                
+  count += i;                                                                                                            
+  i++;                                                                                                                        
+}
+
+int count = 0;
+for (int i = 0; i < 10; i++){ 
+   count += i;
+}                                                                                                                                    
+\end{verbatim}
+
+
 \textbf{@Ben: clean up the above, needs to be a specific example, because it's not
 always true in this generic a fashion}.
 
@@ -886,42 +903,34 @@ standard output. The argument must be a primitive type.
 
 \textbf{@ALL:} introduction.
 
-\subsection{Set} % (fold)                                                      
-\label{sub:set}
+Set Methods
 
-\begin{itemize}
-
-\item \tt bool add(element) \rm \\
+bool add(element)
 -returns true if the element was added to the set
 
-\item \tt void clear()\rm \\
+void clear()
 -removes all elements from the set so it is now empty
 
-\item \tt bool contains(element) \rm \\
+bool contains(element)
 -returns true if the set contains this element
 
-\item \tt bool isEmpty() \rm \\
+bool isEmpty()
 -returns true if there are no elements in this set
 
-\item \tt iter iterator() \rm \\
+iter iterator()
 - returns an iterator over the elements in the set
 
-\item \tt bool remove(element) \rm \\
+bool remove(element)
 -returns true if the element was removed from the set
 
-\item \tt int size() \rm \\
+int size()
 -returns the number of elements in the set
 
-\item \tt bool removeAll(Set) \rm \\ 
+bool removeAll(Set) 
 -removes all the elements in the set parameter from the invoking set
 
-\item \tt bool containsAll(Set) \rm \\
+bool containsAll(Set) 
 -returns true if all the elements in the parameter set are included in the invoking set
-
-\end{itemize}
-
-
-% subsection set (end) 
 
 \subsection{List} % (fold)
 \label{sub:list}
