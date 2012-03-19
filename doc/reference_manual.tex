@@ -1011,23 +1011,27 @@ to return, and \tt false \rm otherwise. This function is equivalient to evaluati
 
 \begin{itemize}
 
-\item \tt void sort() \rm \\
+\item[] \tt void sort() \rm \\
 
 Function that sorts the items in the list in lexicographical ascending order.
 
-\item \tt int len() \rm \\
+\item[] \tt int len() \rm \\
 
 Returns an int with the number of elements in the list.
 
-\item \tt void append(itemToAppend) \rm \\
+\item[] \tt void append(T itemToAppend) \rm \\
 
 Appends the object passed to the end of the list. The object must be of the same
 type as the list, or the operation will result in a \textbf{compile-time or
 run-time} exception.
 
-\item \tt <type> get(int index) \rm \\
+\item[] \tt T get(int index) \rm \\
 
 Returns the item from the list at the specified index.
+
+\item[] \tt iter<T> iterator() \rm \\
+
+Returns an iterator for the objects in this list.
 
 \end{itemize}
 
