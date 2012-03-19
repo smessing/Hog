@@ -886,6 +886,38 @@ standard output. The argument must be a primitive type.
 
 \textbf{@ALL:} introduction.
 
+\subsection{Iter} % (fold)
+\label{sub:iter}
+
+\tt iter \rm is Hog's iteration object, and supports several built-in functions
+that are independent of the particular type of the \tt iter \rm object. Note, 
+as with other objects in this section, if the function has return type T, it 
+means that the return type of this function matches the parameterized type of
+this object (i.e. for an \tt iter<int> \rm object, these functions have return
+type \tt int\rm). The built-in functions are as follows:
+
+\begin{itemize}
+
+\item[] \tt T peek() \rm \\
+
+This function returns the next object (if one exists) for the owning \tt iter \rm
+object. A call to \tt peek() \rm returns the object without advancing the iterator's
+cursor, thus multiple calls to \tt peek() \rm without any intermediate function calls
+will all return the same value. If \tt peek() \rm is called on an iterator that has
+no more values, \tt null \rm is returned. 
+
+\item[] \tt T next() \rm \\
+
+This function returns the next object (if one exists) for the owning \tt iter \rm
+object. A call to \tt next() \rm differs from a call to \tt peek() \rm in that the
+function call advances the cursor of the iterator. If \tt next() \rm is called on
+an iterator that has no more values, \tt null \rm is returned. 
+
+\end{itemize} 
+
+
+% subsection iter (end)
+
 \subsection{List} % (fold)
 \label{sub:list}
 
