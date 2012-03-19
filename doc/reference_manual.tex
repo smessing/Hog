@@ -137,19 +137,25 @@ source file must contain three sections: \tt @Map\rm, and \tt @Reduce\rm, and
 sections must be included in the following order:
 
 \begin{verbatim}
-@Functions 
-.
-.
-.
-@Map <type signature>
-.
-.
-.
-@Reduce <type signature>
-.
-.
-.
-@Main
+    @Functions {
+      .
+      .
+      .
+    }
+    @Map <type signature> {
+      .
+      .
+      .
+    }
+    @Reduce <type signature>
+      .
+      .
+      .
+    @Main {
+      .
+      .
+      .
+    }
 \end{verbatim}
 
 % section overall_structure (end)
@@ -167,10 +173,10 @@ keyword \tt @Functions \rm on its own line, followed by the function definitions
 Function definitions have the form:
 
 \begin{verbatim}
-@Functions
-return-type function-name(parameter-list) {
-  exprlist
-}
+    @Functions
+    return-type function-name(parameter-list) {
+      exprlist
+    }
 \end{verbatim}
 
 The return-type can be any valid Hog type. The rules regarding legal function-names
@@ -183,23 +189,22 @@ Hog section begins.
 A complete example of an @Functions section:
 
 \begin{verbatim}
-@Functions
-int min(int a, int b) {
-  if (a < b) {
-    return a
-  }
-  else {
-    return b
-  }
-}
+    @Functions
+    int min(int a, int b) {
+      if (a < b) {
+        return a
+      } else {
+        return b
+      }
+    }
 
-list<int> reverseList(list<int> oldList) {
-  linst<int> newList()
-  for (int i = oldList.len()-1; i >= 0; i--) {
-    newList.append(oldList.get(i))
-  }
-  return newList
-}
+    list<int> reverseList(list<int> oldList) {
+      list<int> newList()
+      for (int i = oldList.len()-1; i >= 0; i--) {
+        newList.append(oldList.get(i))
+      }
+      return newList
+    }
 \end{verbatim}
 
 Function names can be overloaded as long as the function definitions have different
@@ -220,18 +225,20 @@ The \tt @map \rm header must be followed by the signature of the map function, a
 then the body of the map function as follows:
 
 \begin{verbatim}
-@Map (key-type key-name, value-type value-name) -> (key-type, value-type) {
-.
-.
-.
-}
+    @Map (type identifier, type identifier) -> (type, type) {
+      .
+      .
+      .
+    }
 \end{verbatim}
 
-The first key-value pair defines the key and value types that form the input to the map function, and names these values so
-that they can be referred to in the body of the function. This is followed by an arrow and another key-value pair, defining the
-types of the output of the map function. Note that the output signature is \emph{unnamed}, as these pairs are only produces at
-the end of the map function. Please note that any code written in the same scope after an \tt emit() \rm call will be
-\textbf{\emph{unreachable}}, and will cause a compile-time \tt UnreachableCodeException\rm.
+The first \tt type identifier \rm defines the \emph{\textbf{key}} and the second defines the \emph{\textbf{value}} of the input
+key-value pair to the \tt @map \rm function. The identifiers specified for the key and value can be made reference to later
+within the \tt @map \rm block. The \tt @map \rm signature is followed by an arrow and another key-value pair, defining the
+types of the output of the map function. Notice that identifiers are not specified for the output key and value (said to be
+\emph{unnamed}), as these pairs are only produced at the end of the map function. Also note that any code written in the same
+scope after an \tt emit() \rm call will be \textbf{\emph{unreachable}}, and will cause a compile-time \tt
+UnreachableCodeException\rm.
 
 The map function can include any number of calls to \tt emit()\rm, which outputs
 the resulting intermediate key-value pairs for use by the function defined in the
@@ -271,13 +278,11 @@ key emitted by the map function. The iterator must be an iterator over the type 
 the values emitted by the map function.
 
 \begin{verbatim}
-
-@Reduce (key-type key-name, iter<value-type> value-name) -> (key-type, value-type)
-{
-.
-.
-.
-}
+    @Reduce (type identifier, iter<type> identifier) -> (type, type) {
+      .
+      .
+      .
+    }
 \end{verbatim}
 
 As with the map function, the reduce function can emit as many key/value pairs as
@@ -315,11 +320,11 @@ Multi-line comments are identified by the enclosing character sequences \tt \#\{
 enclosing characters is considered a comment, and is completely ignored by the compiler. For example,
 
 \begin{verbatim}
-int i = 0
-#{ these are block
-   comments and are ignored
-   by the compiler }#
-i++
+    int i = 0
+    #{ these are block
+        comments and are ignored
+         by the compiler }#
+    i++
 \end{verbatim}
 
 In the above example, the text \tt these are block comments \textbackslash n comments and are ignored \textbackslash n by the
@@ -362,6 +367,7 @@ for use as keywords, and may not be redefined by a programmer:
   \item[] emit
   \item[] final
   \item[] for
+  \item[] foreach
   \item[] hadoop
   \item[] if
   \item[] instanceof
@@ -493,9 +499,9 @@ numeric type (\tt int\rm, \tt real\rm) with the exception that the \tt + \rm ope
 text \rm variables. In such instances, \tt + \rm is defined as concatenation. Thus, in the following,
 
 \begin{verbatim}
-text face = "face"
-text book = "book"
-text facebook = face + book
+    text face = "face"
+    text book = "book"
+    text facebook = face + book
 \end{verbatim}
 
 After execution, the variable \tt facebook \rm will have the value ``facebook''. No other arithmetic operators are defined for
@@ -505,9 +511,9 @@ will result in a compile-time \tt TypeMismatchException\rm.
 When an arithmetic operator is used between two numeric variables of different type, as in,
 
 \begin{verbatim}
-int a = 1
-real b = 2.0
-a + b
+    int a = 1
+    real b = 2.0
+    a + b
 \end{verbatim}
 
 the non-\tt real\rm variable will be \textbf{\emph{coerced}} into a \tt real \rm before the evaluation of the statement, so
@@ -593,7 +599,7 @@ There is one single assignment operator, '\tt =\rm'. Expressions involving the
 assignment operator have the following form:
 
 \begin{verbatim}
-lvalue = expression | PRIMITIVE | DERIVED
+    lvalue = expression | identifier
 \end{verbatim}
 
 At compile-time, the compiler checks that both the result of the \tt expression \rm
@@ -621,13 +627,13 @@ Every variable, be it a \tt primitive-type \rm or a \tt derived-type \rm has to 
 assigned a type upon declaration, for instance,
 
 \begin{verbatim}
-list<int> myList
+    list<int> myList
 \end{verbatim}
 
 Declares the variable \tt myList \rm to be a \tt list \rm of \tt int\rm s. And,
 
 \begin{verbatim}
-text myText
+    text myText
 \end{verbatim}
 
 Declares the variable \tt myText \rm to be of type \tt text\rm .
@@ -699,7 +705,7 @@ can specify a list of \textbf{\emph{parameters}} to initialize the object. For
 instance,
 
 \begin{verbatim}
-list<int> myList(5)
+    list<int> myList(5)
 \end{verbatim}
 
 Specifies that \tt myList \rm should be initialized with five \tt null \rm values.
@@ -766,10 +772,10 @@ matching case label. There can be an unlimited number of case labels within the
 switch statement, so that the switch will operate as such:
 
 \begin{verbatim}
-switch(expression) {
-  case consant-expression : statment
-  default : statement
-}
+    switch(expression) {
+      case consant-expression : statment
+      default : statement
+    }
 \end{verbatim}
 
 An expression is passed in to the switch statement and then the flow of control
@@ -827,11 +833,11 @@ there are no items left to iterate through.
 \label{ssub:example_1}
 
 \begin{verbatim}
-int i = 0
-while (i < 10) {
-  print(i)
-  i++
-}
+    int i = 0
+    while (i < 10) {
+      print(i)
+      i++
+    }
 \end{verbatim}
 
 % subsubsection example_1 (end)
@@ -840,9 +846,9 @@ while (i < 10) {
 \label{ssub:example_2}
 
 \begin{verbatim}
-for (int i = 0; i < 10; i++) {
-  print(i)
-}
+    for (int i = 0; i < 10; i++) {
+      print(i)
+    }
 \end{verbatim}
 
 % subsubsection example_2 (end)
@@ -851,11 +857,11 @@ for (int i = 0; i < 10; i++) {
 \label{ssub:example_3}
 
 \begin{verbatim}
-list<int> iList()
-iList = [0,1,2,3,4,5,6,7,8,9]
-foreach i in iList {
-  print(i)
-}
+    list<int> iList()
+    iList = [0,1,2,3,4,5,6,7,8,9]
+    foreach i in iList {
+      print(i)
+    }
 \end{verbatim}
 
 % subsubsection example_3 (end)
@@ -1209,13 +1215,13 @@ similar to this, although there can be multiple catch blocks and the finally blo
 is optional:
 
 \begin{verbatim}
-try {
-  statement-list
-} catch (exception) {
-  statement-list
-} finally {
-  statement-list
-}
+    try {
+      expression
+    } catch (exception) {
+      expression
+    } finally {
+      expression
+    }
 \end{verbatim}
 
 Because the proper behavior of a Hog program is dependent on resources outside of
@@ -1224,6 +1230,8 @@ more sources exceptions in Hog than most general purpose languages. These source
 can be divided into three categories: \textbf{\emph{compile­time exceptions}},
 \textbf{\emph{internal run­time exceptions}} and \textbf{\emph{external run­time
 exceptions}}.
+
+\textbf{@ALL: do we allow exceptions to be thrown? if not we need to say...}
 
 \subsection{Compile-time Exceptions} % (fold)
 \label{sub:compile_time_exceptions}
