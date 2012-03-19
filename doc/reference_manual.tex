@@ -1182,6 +1182,18 @@ these?}):
 
 \begin{verbatim}
 
+
+declaration:
+   declaration-specifiers
+
+declaration-list:
+   declaration
+   declaration-list declaration
+
+type-specifier: one of
+   void int real bool text
+
+
 selection-statement:
    if ( expression ) statement
    if ( expression ) statement else statement
@@ -1202,14 +1214,21 @@ iteration-statement:
    return­type function­name­1 (parameter­list) {
       exprlist 
    }
-   return­type function­name­2 (parameter­list) { exprlist}
+   returntype functionname2 (parameterlist){
+      exprlist
+   }
 
-@Map: (type key­name, type value­name) ­> (type, type) {
-.
-.
-.
-}
+@Map: 
+   (type key­name, type value­name) ­> (type, type) {
+      .
+      .
+      .
+  }
 
+unary-operator:
+[]
+
+constant:
 
 \end{verbatim}
 
