@@ -483,7 +483,8 @@ allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is allowed.}
 \label{sub:arithmetic_operators}
 
 Hog implements all of the standard arithmetic operators. All arithmetic operators are only defined for use between variables of
-numeric type (\tt int\rm, \tt real\rm) with the exception that the \tt + \rm operator is also defined for use between two \tt text \rm variables. In such instances, \tt + \rm is defined as concatenation. Thus, in the following,
+numeric type (\tt int\rm, \tt real\rm) with the exception that the \tt + \rm operator is also defined for use between two \tt
+text \rm variables. In such instances, \tt + \rm is defined as concatenation. Thus, in the following,
 
 \begin{verbatim}
 text face = "face"
@@ -491,9 +492,11 @@ text book = "book"
 text facebook = face + book
 \end{verbatim}
 
-After completion, the variable \tt facebook \rm will have the value ``facebook''. No other arithmetic operators are defined for
-used with \tt text \rm variables, and \tt + \rm is only valid if both variables are of type \tt text \rm. Otherwise, the
-program will result in a compile-time \tt TypeMismatchException\rm. Note that when an arithmetic operator is used between two numeric variables of different type, as in,
+After execution, the variable \tt facebook \rm will have the value ``facebook''. No other arithmetic operators are defined for
+use with \tt text \rm variables, and \tt + \rm is only valid if both variables are of type \tt text \rm. Otherwise, the program
+will result in a compile-time \tt TypeMismatchException\rm. 
+
+When an arithmetic operator is used between two numeric variables of different type, as in,
 
 \begin{verbatim}
 int a = 1
@@ -502,7 +505,8 @@ a + b
 \end{verbatim}
 
 the non-\tt real\rm variable will be \textbf{\emph{coerced}} into a \tt real \rm before the evaluation of the statement, so
-that both operands have the same type.
+that both operands have the same type. Therefore, the resulting type of the value of an expression involving an arithmetic
+operator and one or two operand of type \tt real \rm is always \tt real\rm.s
 
 If one of the operands happens to have a \tt null \rm value (for instance, if a variable is \textbf{\emph{uninitialized}}),
 then the resulting operation will cause a run-time \tt NullValueException\rm, and the program will crash.
