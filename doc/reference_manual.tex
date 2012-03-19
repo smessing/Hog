@@ -1272,19 +1272,19 @@ following are Hog compile­time exceptions:
 (like TypeMismatchException)}
 
 \begin{itemize}
-  \item[] IncorrectArgumentException
+  \item[] \tt IncorrectArgumentException \rm
   
   Thrown when a derived-type object is instantiated with invalid parameters, or a function is called with invalid parameters.
   
-  \item[] TypeMismatchException
+  \item[] \tt TypeMismatchException \rm
   
   Thrown when a program attempts to carry out an operation on a variable of the wrong type (like adding a \tt text \rm and an
   \tt int \rm together).
-  \item[] ProgramStructureException
-  \item[] NoSuchVariableException
-  \item[] NoSuchMethodException
-  \item[] UnsupportedOperationException
-  \item[] RedundantDeclarationException
+  \item[] \tt ProgramStructureException \rm
+  \item[] \tt NoSuchVariableException \rm
+  \item[] \tt NoSuchMethodException \rm
+  \item[] \tt UnsupportedOperationException \rm
+  \item[] \tt RedundantDeclarationException \rm
 \end{itemize}
 
 % subsection compile_time_exceptions (end)
@@ -1304,49 +1304,49 @@ rum­time exceptions:
 \textbf{@Sam: fill out descriptions}
 
 \begin{itemize}
-  \item[] FileNotFoundException \\
+  \item[] \tt FileNotFoundException \rm
   
   Thrown when the the Hog program attempts to open a non-existent file.
   
-  \item[] FileLoadException \\
+  \item[] \tt FileLoadException \rm
   
   Thrown when an error occurs while Hog is attempting to read a file (e.g. the file is deleted while reading).
   
-  \item[] ArrayOutOfBoundsException \\
+  \item[] \tt ArrayOutOfBoundsException \rm
   
   Thrown when a program tries to access a non-valid index of a \tt list\rm.
   
-  \item[] IncorrectArgumentException
+  \item[] \tt IncorrectArgumentException \rm
   
   Thrown when a derived-type object is instantiated with invalid parameters, or a function is called with invalid parameters.
   
-  \item[] TypeMismatchException
+  \item[] \tt TypeMismatchException \rm
   
   Thrown when a program attempts to carry out an operation on a variable of the wrong type (like adding a \tt text \rm and an
   \tt int \rm together).
   
-  \item[] HogMapFunctionException
+  \item[] \tt HogMapFunctionException \rm
   
   Thrown when a map function receives a key, value pair of the wrong type.
   
-  \item[] HogReduceFunctionException
+  \item[] \tt HogReduceFunctionException \rm
   
   Thrown when a reduce function receives a key, value pair of the wrong type.
   
-  \item[] NullPointerException
+  \item[] \tt NullPointerException \rm
   
   Thrown whenever the value of a variable cannot be \tt null \rm (e.g. in \tt myList.get(i)\rm, if \tt i \rm is \tt null\rm,
   the operation with throw a \tt NullPointerException\rm).
   
-  \item[] ArithmeticException
+  \item[] \tt ArithmeticException \rm
   
   Thrown whenever an arithmetic operation is attempted on non-numeric operands.
   
-  \item[] IOException
+  \item[] \tt IOException \rm
   
-  \item[] InterruptedException
+  \item[] \tt InterruptedException \rm
   
-  \item[] ParseException
+  \item[] \tt ParseException \rm
 \end{itemize}
 
 % section internal_run_time_exceptions (end)
