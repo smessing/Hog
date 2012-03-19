@@ -10,3 +10,15 @@
 * Figure out timeline for next two days
 * Discuss potential meeting with Aho
 * Discuss potential meeting with SIMPL team 
+
+# Obligations for next time:
+
+## Sam
+
+## Jason
+
+## Kurry
+
+## Paul
+
+## Ben
