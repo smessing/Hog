@@ -2,8 +2,8 @@
 \usepackage{fancyhdr, multicol}
 
 \title{\huge \textbf{Hog Language Reference}}
-\author{Jason Halpern\\ Samuel Messing\\ Kurry Tran \\ 
-        Benjamin Rapaport \\ Paul Tylkin}
+\author{Jason Halpern\\ Samuel Messing\\ 
+        Benjamin Rapaport \\  Kurry Tran \\ Paul Tylkin}
 
 \begin{document}
 \maketitle
@@ -107,7 +107,7 @@ The guiding principles of Hog are:
 \begin{itemize}
   \item Anyone can MapReduce
   \item Brevity over verbosity
-  \item Preference simplicity over complexity
+  \item Simplicity over complexity
 \end{itemize}
 
 
@@ -393,7 +393,7 @@ for use as keywords, and may not be redefined by a programmer:
 \textbf{@All: should we not say Java keywords are reserved, and instead rename any
 identifiers that could cause name conflicts? Feels weird to have a bunch of
 reserved words that are actually semantically meaningless for the language...}
-
+\textbf{@All: I agree, if this is not too difficult to implement. - PT}
 % section keywords (end)
 
 \section{Constants} % (fold)
@@ -781,6 +781,23 @@ is equivalent to,
 for (expression1; expression2; expression3) statement
 \end{verbatim}
 
+\textbf Example:
+
+\begin{verbatim}                                                                                                                     
+int count = 0;
+int i = 0;                                                                                                                      
+while(i < 10) {                                                                                                                
+  count += i;                                                                                                            
+  i++;                                                                                                                        
+}
+
+int count = 0;
+for (int i = 0; i < 10; i++){ 
+   count += i;
+}                                                                                                                                    
+\end{verbatim}
+
+
 \textbf{@Ben: clean up the above, needs to be a specific example, because it's not
 always true in this generic a fashion}.
 
@@ -918,6 +935,35 @@ an iterator that has no more values, \tt null \rm is returned.
 
 % subsection iter (end)
 
+Set Methods
+
+bool add(element)
+-returns true if the element was added to the set
+
+void clear()
+-removes all elements from the set so it is now empty
+
+bool contains(element)
+-returns true if the set contains this element
+
+bool isEmpty()
+-returns true if there are no elements in this set
+
+iter iterator()
+- returns an iterator over the elements in the set
+
+bool remove(element)
+-returns true if the element was removed from the set
+
+int size()
+-returns the number of elements in the set
+
+bool removeAll(Set) 
+-removes all the elements in the set parameter from the invoking set
+
+bool containsAll(Set) 
+-returns true if all the elements in the parameter set are included in the invoking set
+
 \subsection{List} % (fold)
 \label{sub:list}
 
@@ -992,13 +1038,31 @@ file.
 
 % chapter system_configuration (end)
 
-\chapter{Parsing Tools} % (fold)
+\chapter{Scanning and Parsing Tools and Java Source Code Generation} % (fold)
 \label{cha:parsing_tools}
 
 \textbf{INCLUDE GRAPHIC}
 
-JFlex is a lexical analyzer generator for Java, and written in Java. JFlex is
-designed to work together with the LALR parser generator CUP.
+Currently, the Hog compiler is implemented as a translator into the Java programming 
+language. The first phase of Hog compilation uses the JFlex as its lexical analyzer,
+which is designed to work with the Look-Ahead Left-to-Right (LALR) parser generator
+CUP. The lexical analyzer creates lexemes, which are logically meaningful sequences,
+and for each lexeme the lexlical analyser sends to the LALR parser a token of the
+form <token-name, attribute-value>. The second phase of Hog compilation uses Java CUP
+to create a syntax tree, which is a tree-like intermediate representation of the source
+program, which depics the grammatical structure of the Hog source program.
+
+In the last phase of compilation, the Hog semantic analyzer generates Java source code,
+which is then compiled into byte code by the Java compiler. Then with the Hadoop Java Archives
+(JARs) the bytecode is executed on the Java Virtual Machine (JVM). With the syntax tree and
+the information from the symbol table, the Hog compiler then checks the Hog source program
+to ensure semantic consistency with the language specification. The syntax tree is initially
+untyped, but after semantic analysis Hog types are added to the syntax tree. Hog types are
+represented in two ways, either a translation of a Hog type into a new Java class, or by
+mapping Hog types to the equivalent Java types. Mapping Hog types directly to Java types
+improves performance because a JVM can handle primitive types much more efficiently than 
+objects. Also, a JVM implements optimizations for well-known types, such as String, and 
+thus Hog is built for optimal performance.
 
 % chapter parsing_tools (end)
 
@@ -1150,30 +1214,53 @@ these?}):
 
 \begin{verbatim}
 
-if ( expression ) statement
-if ( expression ) statement else statement
-if ( expression ) statement elseif ( expression ) statement... else statement
 
-switch ( expression ) statement if ( expression ) statement
-if ( expression ) statement else statement
-if ( expression ) statement elseif ( expression ) statement... else statement
+declaration:
+   declaration-specifiers
 
-switch ( expression ) statement
+declaration-list:
+   declaration
+   declaration-list declaration
 
-while ( expression ) statement
-for ( expression; expression; expression ) statement
-foreach ( expression in array or list) statement
-@Functions
-return­type function­name­1 (parameter­list) {
-exprlist }
-return­type function­name­2 (parameter­list) { exprlist
-}
-@Map: (type key­name, type value­name) ­> (type, type) {
-.
-.
-.
-}
+type-specifier: one of
+   void int real bool text
 
+
+selection-statement:
+   if ( expression ) statement
+   if ( expression ) statement else statement
+   if ( expression ) statement elseif ( expression ) statement... else statement
+
+   switch ( expression ) statement if ( expression ) statement
+   if ( expression ) statement else statement
+   if ( expression ) statement elseif ( expression ) statement... else statement
+ 
+   switch ( expression ) statement
+
+iteration-statement:  
+   while ( expression ) statement
+   for ( expression; expression; expression ) statement
+   foreach ( expression in array or list) statement
+
+@Functions:
+   return­type function­name­1 (parameter­list) {
+      exprlist 
+   }
+   returntype functionname2 (parameterlist){
+      exprlist
+   }
+
+@Map: 
+   (type key­name, type value­name) ­> (type, type) {
+      .
+      .
+      .
+  }
+
+unary-operator:
+[]
+
+constant:
 
 \end{verbatim}
 
