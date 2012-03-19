@@ -107,7 +107,7 @@ The guiding principles of Hog are:
 \begin{itemize}
   \item Anyone can MapReduce
   \item Brevity over verbosity
-  \item Preference simplicity over complexity
+  \item Simplicity over complexity
 \end{itemize}
 
 
@@ -393,7 +393,7 @@ for use as keywords, and may not be redefined by a programmer:
 \textbf{@All: should we not say Java keywords are reserved, and instead rename any
 identifiers that could cause name conflicts? Feels weird to have a bunch of
 reserved words that are actually semantically meaningless for the language...}
-
+\textbf{@All: I agree, if this is not too difficult to implement. - PT}
 % section keywords (end)
 
 \section{Constants} % (fold)
@@ -1164,24 +1164,28 @@ these?}):
 
 \begin{verbatim}
 
-if ( expression ) statement
-if ( expression ) statement else statement
-if ( expression ) statement elseif ( expression ) statement... else statement
+selection-statement:
+   if ( expression ) statement
+   if ( expression ) statement else statement
+   if ( expression ) statement elseif ( expression ) statement... else statement
 
-switch ( expression ) statement if ( expression ) statement
-if ( expression ) statement else statement
-if ( expression ) statement elseif ( expression ) statement... else statement
+   switch ( expression ) statement if ( expression ) statement
+   if ( expression ) statement else statement
+   if ( expression ) statement elseif ( expression ) statement... else statement
+ 
+   switch ( expression ) statement
 
-switch ( expression ) statement
+iteration-statement:  
+   while ( expression ) statement
+   for ( expression; expression; expression ) statement
+   foreach ( expression in array or list) statement
 
-while ( expression ) statement
-for ( expression; expression; expression ) statement
-foreach ( expression in array or list) statement
-@Functions
-return­type function­name­1 (parameter­list) {
-exprlist }
-return­type function­name­2 (parameter­list) { exprlist
-}
+@Functions:
+   return­type function­name­1 (parameter­list) {
+      exprlist 
+   }
+   return­type function­name­2 (parameter­list) { exprlist}
+
 @Map: (type key­name, type value­name) ­> (type, type) {
 .
 .
