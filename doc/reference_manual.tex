@@ -932,16 +932,7 @@ type \tt int\rm). The built-in functions are as follows:
 
 \begin{itemize}
 
-\item[] \tt iter<T> duplicate\_self() \rm \\
-
-This function returns a copy of the current \tt iter \rm object, with the cursor
-currently advanced to the current position of this cursor. The new \tt iter \rm
-object is independent of the previous one: advancing the cursor on the new object
-does not advance the cursor of the old one. \textbf{@ALL: should we support? would
-allow for branch-prediction-eqsue computation, may help recovering from network
-errors}.
-
-\item[] \tt T peek() \rm \\
+\item[] \tt T peek() \rm
 
 This function returns the next object (if one exists) for the owning \tt iter \rm
 object. A call to \tt peek() \rm returns the object without advancing the iterator's
@@ -949,14 +940,14 @@ cursor, thus multiple calls to \tt peek() \rm without any intermediate function 
 will all return the same value. If \tt peek() \rm is called on an iterator that has
 no more values, \tt null \rm is returned. 
 
-\item[] \tt T next() \rm \\
+\item[] \tt T next() \rm
 
 This function returns the next object (if one exists) for the owning \tt iter \rm
 object. A call to \tt next() \rm differs from a call to \tt peek() \rm in that the
 function call advances the cursor of the iterator. If \tt next() \rm is called on
 an iterator that has no more values, \tt null \rm is returned. 
 
-\item[] \tt bool has\_next() \rm \\
+\item[] \tt bool has\_next() \rm
 
 This function returns \tt true \rm if the iterator object has a next object
 to return, and \tt false \rm otherwise. This function is equivalient to evaluating
@@ -972,40 +963,40 @@ to return, and \tt false \rm otherwise. This function is equivalient to evaluati
 
 \begin{itemize}
 
-  \item[] \tt bool add(T element) \rm \\
+  \item[] \tt bool add(T element) \rm
   
    Returns \tt true \rm if the element was successfully added to the \tt set\rm, \tt false \rm otherwise.
   
-   \item[] \tt void clear() \rm \\
+   \item[] \tt void clear() \rm
   
    Removes all elements from the \tt set \rm such that it is empty afterwards.
   
-   \item[] \tt bool contains(T element) \rm \\
+   \item[] \tt bool contains(T element) \rm
   
    Returns \tt true \rm if the \tt set \rm contains this element, \tt false \rm otherwise.
   
-   \item[] \tt bool isEmpty() \rm \\
+   \item[] \tt bool isEmpty() \rm
   
    Returns \tt true \rm if there are no elements in this \tt set\rm, \tt false \rm otherwise.
   
-   \item[] \tt iter<T> iterator() \rm \\
+   \item[] \tt iter<T> iterator() \rm
   
    Returns an iterator over the elements in this \tt set\rm.
   
-   \item[] \tt bool remove(T element) \rm \\
+   \item[] \tt bool remove(T element) \rm
   
    Returns \tt true \rm if the element was successfully removed from the \tt set\rm, \tt false \rm otherwise (i.e. the \tt list
   \rm didn't contain \tt element \rm).
   
-  \item[] \tt int size() \rm \\
+  \item[] \tt int size() \rm
   
   Returns the number of elements in the set.
   
-  \item[] \tt bool removeAll(set<T> otherSet) \rm \\
+  \item[] \tt bool removeAll(set<T> otherSet) \rm
   
   Returns \tt true \rm if all the elements in \tt otherSet \rm were successfully removed from this set.
   
-  \item[] \tt bool containsAll(set<T> otherSet) \rm \\
+  \item[] \tt bool containsAll(set<T> otherSet) \rm
   
   Returns \tt true \rm if all elements in \tt otherSet \rm are found in this set.
   
@@ -1018,25 +1009,25 @@ to return, and \tt false \rm otherwise. This function is equivalient to evaluati
 
 \begin{itemize}
 
-\item[] \tt void sort() \rm \\
+\item[] \tt void sort() \rm
 
 Function that sorts the items in the list in lexicographical ascending order.
 
-\item[] \tt int len() \rm \\
+\item[] \tt int len() \rm
 
 Returns an int with the number of elements in the list.
 
-\item[] \tt void append(T itemToAppend) \rm \\
+\item[] \tt void append(T itemToAppend) \rm
 
 Appends the object passed to the end of the list. The object must be of the same
 type as the list, or the operation will result in a \textbf{compile-time or
 run-time} exception.
 
-\item[] \tt T get(int index) \rm \\
+\item[] \tt T get(int index) \rm
 
 Returns the item from the list at the specified index.
 
-\item[] \tt iter<T> iterator() \rm \\
+\item[] \tt iter<T> iterator() \rm
 
 Returns an iterator for the objects in this list.
 
