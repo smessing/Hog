@@ -915,7 +915,14 @@ type \tt int\rm). The built-in functions are as follows:
 
 \begin{itemize}
 
+\item[] \tt iter<T> duplicate\_self() \rm \\
 
+This function returns a copy of the current \tt iter \rm object, with the cursor
+currently advanced to the current position of this cursor. The new \tt iter \rm
+object is independent of the previous one: advancing the cursor on the new object
+does not advance the cursor of the old one. \textbf{@ALL: should we support? would
+allow for branch-prediction-eqsue computation, may help recovering from network
+errors}.
 
 \item[] \tt T peek() \rm \\
 
