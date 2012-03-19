@@ -886,6 +886,35 @@ standard output. The argument must be a primitive type.
 
 \textbf{@ALL:} introduction.
 
+Set Methods
+
+bool add(element)
+-returns true if the element was added to the set
+
+void clear()
+-removes all elements from the set so it is now empty
+
+bool contains(element)
+-returns true if the set contains this element
+
+bool isEmpty()
+-returns true if there are no elements in this set
+
+iter iterator()
+- returns an iterator over the elements in the set
+
+bool remove(element)
+-returns true if the element was removed from the set
+
+int size()
+-returns the number of elements in the set
+
+bool removeAll(Set) 
+-removes all the elements in the set parameter from the invoking set
+
+bool containsAll(Set) 
+-returns true if all the elements in the parameter set are included in the invoking set
+
 \subsection{List} % (fold)
 \label{sub:list}
 
