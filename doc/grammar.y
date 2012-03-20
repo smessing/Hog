@@ -80,10 +80,10 @@ expression_statement
     
 expression
     : ID
-	| CONSTANT
-	| TEXT
-	| '(' expression ')'
-	;
+    | CONSTANT
+    | TEXT
+    | '(' expression ')'
+    ;
 
 unary_operator
     : '-'
