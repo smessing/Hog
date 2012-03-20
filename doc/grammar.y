@@ -3,7 +3,7 @@
 %}
 
 %token FALSE TRUE
-%token UMINUS DECR INCR
+%token UMINUS DECR INCR DBL_EQLS NOT_EQLS
 %token TEXT BOOL INT REAL LIST VOID
 %token TEXT_LITERAL ID CONST
 %token BREAK CASE DEFAULT
@@ -89,8 +89,15 @@ expression
     ;
 
 logical_expression
-    : expression OR logical_term
+    : equality_expression
+    | logical_expression OR logical_term
     | logical_term
+    ;
+
+equality_expression
+    : relational_expression
+    | equality_expression DBL_EQLS relational_expression
+    | equality_expression NOT_EQLS relational_expression
     ;
 
 logical_term
