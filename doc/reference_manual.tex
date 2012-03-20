@@ -606,12 +606,8 @@ There is one single assignment operator, '\tt =\rm'. Expressions involving the
 assignment operator have the following form:
 
 \begin{quotation}
-\emph{lvalue} \tt = \rm \emph{expression} $|$ \emph{identifier}
+\emph{identifier} \tt = \rm \emph{expression} $|$ \emph{identifier}
 \end{quotation}
-
-\begin{verbatim}
-    lvalue = expression | identifier
-\end{verbatim}
 
 At compile-time, the compiler checks that both the result of the \tt expression \rm
 (or \tt PRIMITIVE \rm or \tt DERIVED\rm) and \tt lvalue \rm have the same type. If
