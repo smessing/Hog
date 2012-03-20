@@ -667,9 +667,8 @@ Variables of one of the primitive types, including \tt int\rm, \tt real\rm, \tt
 text \rm or \tt bool \rm are declared using the following patterns:
 
 \begin{enumerate}
-  \item \tt variable-type variable-name \rm $\hfill$ (a null declaration)
-  \item \tt variable-type variable-name = primitive-expr \rm $\hfill$ (declaration 
-with initialization)
+  \item \emph{type identifier} \rm $\hfill$ (uninitialized)
+  \item \emph{type identifier = expression } \rm $\hfill$ (initialized)
 \end{enumerate}
 
 When the first pattern is used, we say that the variable is
@@ -691,10 +690,10 @@ unnamed raw primitive.
 Derived-type variables are declared using the following patterns:
 
 \begin{enumerate}
-  \item \tt variable-type variable-name \rm
-  \item \tt variable-type variable-name = derived-expr \rm
-  \item \tt variable-type variable-name(parameter-list) \rm \\
-  \tt parameter-list -> parameter, parameter-list | parameter \rm
+  \item \emph{type identifier}
+  \item \emph{type identifier = expression }
+  \item \emph{type idenfitier(parameterList)} \\
+  \indent \emph{parameterList} $\rightarrow$ \emph{parameter}, \emph{parameterList} $|$ \emph{parameter}
 \end{enumerate}
 
 The first two patterns operate in essentially the same way as for primitive­type
