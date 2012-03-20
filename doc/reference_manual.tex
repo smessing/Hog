@@ -1368,11 +1368,6 @@ rather re­tool their program than risk the chance of discovering, only after ho
 of processing, that the compilers has incorrectly assumed what the user meant. The
 following are Hog compile­time exceptions:
 
-\textbf{Add descriptions for each exception}
-
-\textbf{@Jason: fill out decsriptions, make note of the fact that some exceptoins are both run-time and compile-time
-(like TypeMismatchException)}
-
 \begin{itemize}
   \item[] \tt IncorrectArgumentException \rm
   
@@ -1381,13 +1376,32 @@ following are Hog compile­time exceptions:
   \item[] \tt TypeMismatchException \rm
   
   Thrown when a program attempts to carry out an operation on a variable of the wrong type (like adding a \tt text \rm and an
-  \tt int \rm together).
+  \tt int \rm together). This exception can be generated at compile-time or run-time.
+  
   \item[] \tt ProgramStructureException \rm
+  
+  Thrown when a Hog program does not follow the structure described earlier in section 2.1
+
   \item[] \tt NoSuchVariableException \rm
-  \item[] \tt NoSuchMethodException \rm
+  
+  Thrown when an attempt is made to use a variable that has not been declared yet.
+
+  \item[] \tt NoSuchFunctionException \rm
+  
+  Thrown when a function is invoked that does not exist.
+
   \item[] \tt UnsupportedOperationException \rm
+  
+  Thrown when a variable invokes a function that is not supported for that type (i.e. when tokenize is invoked by a variable of type int).
+
   \item[] \tt UnreachableCodeException \rm
+
+  Thrown when code is included in a part of a program that will never be executed (i.e. any code included after the emit function in the @Map and @Reduce sections).
+
   \item[] \tt RedundantDeclarationException \rm
+
+  Thrown when a variable is redeclared in a program that it has previously been declared in.
+
 \end{itemize}
 
 % subsection compile_time_exceptions (end)
