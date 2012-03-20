@@ -755,11 +755,11 @@ statements, so that they are syntactically equivalent to a single statement.
 following are the \textbf{\emph{flow-of-control}} statements included in Hog:
 
 \begin{itemize}
-  \item[] \tt if (expression) statement \rm
-  \item[] \tt if (expression) statement else statement \rm
-  \item[] \tt if (expression) statement elif (expression statement) .. else 
-  statement \rm
-  \item[] \tt switch(expression) statement \rm
+  \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement}
+  \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt else \rm \emph{statement}
+  \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt elseif ( \rm \emph{statement} \tt ) .. else 
+  \rm \emph{statement}
+  \item[] \tt switch ( \rm \emph{expression} \tt ) \rm \emph{statement} \rm
 \end{itemize}
 
 In the above statements, the ‘...’ signifies an unlimited number of elseif
@@ -777,12 +777,12 @@ The switch statement causes control to transfer to a statement depending on the
 matching case label. There can be an unlimited number of case labels within the
 switch statement, so that the switch will operate as such:
 
-\begin{verbatim}
-    switch(expression) {
-      case consant-expression : statment
-      default : statement
-    }
-\end{verbatim}
+\begin{quotation}
+  \tt switch ( \rm \emph{expression} \tt ) \{\\
+  \indent \indent \tt case \rm \emph{expression} \tt : \emph{statement} \\
+  \indent \indent \tt default : \rm \emph{statement} \\
+  \indent \tt \}
+\end{quotation}
 
 An expression is passed in to the switch statement and then the flow of control
 will fall through the switch and the expression will then be compared to the
@@ -805,9 +805,9 @@ Iteration statements signify looping and can appear in one of the two following
 forms:
 
 \begin{itemize}
-  \item[] \tt while ( expression ) statement-list \rm
-  \item[] \tt for (expression ; expression ; expression ) statement-list \rm
-  \item[] \tt foreach expression in iterable-object statement-list \rm
+  \item[] \tt while ( \rm \emph{expression} \tt ) \rm \emph{statement}
+  \item[] \tt for ( \rm \emph{expression} \tt ; \rm \emph{expression} \tt ; \rm \emph{expression} \tt ) \rm \emph{statement}
+  \item[] \tt foreach \rm \emph{expression} \tt in \rm \emph{iterable-object statement}
 \end{itemize}
 
                                                                                                 
