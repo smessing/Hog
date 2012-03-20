@@ -2,16 +2,25 @@
 #include <stdio.h>
 %}
 
-%token IDENTIFIER CONSTANT
-%token TEXT BOOL INT REAL
-%token IN
-%token INPUT 
+%token IDENTIFIER CONSTANT TEXT BOOL INT REAL LIST VOID
+%token IN 
+%token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
+%token FUNCTION FUNCTIONS MAIN MAP REDUCE
 
 %left '+' '-'
 %left '*' '/'
 %right UMINUS
 
+%start start_symbol
 %%
+
+expression
+    : IDENTIFIER
+	| CONSTANT
+	| TEXT
+	| '(' expression ')'
+	;
+
 unary_operator
     : '-'
     | '!'
@@ -31,6 +40,36 @@ header
     | REDUCE
     | MAIN
     ;
+
+
+start_symbol
+    : functions map reduce main
+	| /* epsilon */
+	;
+
+functions
+    : FUNCTION statement_list
+    ;
+    
+map
+    : MAP statement_list
+    ;
+    
+reduce
+    : REDUCE statement_list
+    ;
+
+main
+    : MAIN statement_list
+    ;    
+	
+declaration
+    : declaration_specifiers
+    ;   
+	
+declaration_specifiers
+    : type_specifier
+	;
 	
 declaration_list
     : declaration
@@ -42,23 +81,32 @@ statement_list
     | statement_list statement
     ;
 
+	
+statement
+    : expression_statement
+    ;
+	
 expression_statement
     : '\n'
     | expression
     ;
 	
 selection_statement
-    : if '(' expression ')' statement
-    | if '(' expression ')' statement else statement
-    | if '(' expression ')' statement elseif '(' expression ')' statement... else statement
-    | switch '(' expression ')' statement if '(' expression ')' statement
-    | switch '(' expression ')' statement
+    : IF '(' expression ')' statement
+    | IF '(' expression ')' statement elseif_statement ELSE statement
+    | SWITCH '(' expression ')' statement IF '(' expression ')' statement
+    | SWITCH '(' expression ')' statement
     ; 
+
+elseif_statement
+    : ELSEIF '(' expression ')' elseif_statement
+	| /* epsilon */
+	;
    
 iteration_statement 
-    : while '(' expression ')' statement
-    | for '(' expression ';' expression ';' expression ')' statement
-    | foreach '(' expression IN list ')' statement
+    : WHILE '(' expression ')' statement
+    | FOR '(' expression ';' expression ';' expression ')' statement
+    | FOREACH '(' expression IN LIST ')' statement
     ;
 
    
