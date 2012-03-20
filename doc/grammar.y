@@ -23,42 +23,46 @@
 
 program
     : functions map reduce main
-    | /* epsilon */
     ;
 
 functions
     : FUNCTION '{' statement_list '}'
+    | /* epsilon */
     ;
     
 map
-    : MAP map_type '{' statement_list '}'
+    : MAP section_type '{' statement_list '}'
     ;
-
-map_type
-    : '(' type ID ',' type ID ')' '-' '>' '(' type ',' type ')'
     
 reduce
-    : REDUCE statement_list
+    : REDUCE section_type '{' statement_list '}'
+    ;
+
+section_type
+    : '(' type ID ',' type ID ')' '-' '>' '(' type ',' type ')'
     ;
 
 main
-    : MAIN statement_list
-    ; 
-    
+    : MAIN '{' statement_list '}'
+    ;
 
 statement_list
     : statement
     | statement_list statement
     ;
 
-	
 statement
-    : expression_statement
+    : function_statement
+    | expression_statement
     | iteration_statement
     | selection_statement
     | declarator
     ;
-	
+
+function_statement
+  : type 
+  ;
+
 expression_statement
     : '\n'
     | expression
