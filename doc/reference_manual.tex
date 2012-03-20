@@ -231,13 +231,13 @@ as output. Any given input pair may map to zero, one, or multiple output pairs. 
 The \tt @map \rm header must be followed by the signature of the map function, and
 then the body of the map function as follows:
 
-\begin{verbatim}
-    @Map (type identifier, type identifier) -> (type, type) {
-      .
-      .
-      .
-    }
-\end{verbatim}
+\begin{quotation}
+  \tt @map ( \rm \emph{type identifier, type identifier} \tt ) -> ( \rm \emph{type, type} \tt ) \{ \\
+  \indent \indent . \\
+  \indent \indent . \\
+  \indent \indent . \\
+  \indent \tt \} \rm
+\end{quotation}
 
 The first \tt type identifier \rm defines the \emph{\textbf{key}} and the second defines the \emph{\textbf{value}} of the input
 key-value pair to the \tt @map \rm function. The identifiers specified for the key and value can be made reference to later
@@ -284,13 +284,13 @@ associated with its key. The type of the key must be the same as the type of the
 key emitted by the map function. The iterator must be an iterator over the type of
 the values emitted by the map function.
 
-\begin{verbatim}
-    @Reduce (type identifier, iter<type> identifier) -> (type, type) {
-      .
-      .
-      .
-    }
-\end{verbatim}
+\begin{quotation}
+  \tt @reduce ( \rm \emph{type identifier, type identifier} \tt ) -> ( \rm \emph{type, type} \tt ) \{ \\
+  \indent \indent . \\
+  \indent \indent . \\
+  \indent \indent . \\
+  \indent \tt \} \rm
+\end{quotation}
 
 As with the map function, the reduce function can emit as many key/value pairs as
 the user would like. Any key/value pair emitted by the reduce function is recorded
