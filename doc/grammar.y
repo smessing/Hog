@@ -71,8 +71,8 @@ statement_list
 
 statement
     : expression_statement
-    | iteration_statement
     | selection_statement
+    | iteration_statement
     | declarator
     ;
 
@@ -83,7 +83,7 @@ expression_statement
 
 expression
     : logical_expression
-    | unary_expression '=' assignment_expression
+    | unary_expression '=' expression
     ;
 
 logical_expression
@@ -121,9 +121,28 @@ primary_expression
     | '(' expression ')'
     ;
 
+// not sure about below:
 cast_expression
     : unary_expression
     | '(' type ')' cast_expression
+    ;
+
+selection_statement
+    : IF '(' expression ')' statement
+    | IF '(' expression ')' statement elseif_statement ELSE statement
+    | SWITCH '(' expression ')' statement
+    ; 
+
+elseif_statement
+    : ELSEIF '(' expression ')' elseif_statement
+    | /* epsilon */
+    ;
+
+iteration_statement 
+    : WHILE '(' expression ')' statement
+    | FOR '(' expression ';' expression ';' expression ')' statement
+    | FOREACH '(' expression IN ID ')' statement
+    | FOREACH '(' expression IN expression ')' statement
     ;
 
 
@@ -157,23 +176,3 @@ declaration
 declaration_specifiers
     : type
 	;
-		
-selection_statement
-    : IF '(' expression ')' statement
-    | IF '(' expression ')' statement elseif_statement ELSE statement
-    | SWITCH '(' expression ')' statement IF '(' expression ')' statement
-    | SWITCH '(' expression ')' statement
-    ; 
-
-elseif_statement
-    : ELSEIF '(' expression ')' elseif_statement
-	| /* epsilon */
-	;
-   
-iteration_statement 
-    : WHILE '(' expression ')' statement
-    | FOR '(' expression ';' expression ';' expression ')' statement
-    | FOREACH '(' expression IN LIST ')' statement
-    ;
-
-   
