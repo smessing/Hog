@@ -344,9 +344,14 @@ n\rm') on the right-hand side.
 
 \subsection{Identifiers} % (fold)
 \label{sub:identifiers}
-A valid identifier consists of sequence on contiguous leters, digits, or
-underscores. The first character of an identifier must not be a digit.
-The identifiers are case sensitive so foo is not the same identifier as Foo. 
+
+A valid identifier in Hog is a sequence of contiguous letters, digits, or
+underscores, which are used to distinguish declared entities, such as 
+methods, parameters, or variables from one another. A valid identifier also
+provide a means of determining scope of an entity, and helps to determine whether
+the same valid identifier in another scope refers to the same entity. The first
+character of an identifier must not be a digit. Valid identifiers are case sensitive
+so foo is not the same identifier as Foo.
 
 \textbf{@kurry: explain what a valid identifier is}
 
@@ -421,7 +426,14 @@ constant:
 \label{sub:string_literals}
 A string literal consists of a sequence of zero of more contiguous characters enclosed
 in double quotes, such as "hello". A string literal can also contain escape characters
-such as slash-n for the new line character or slash-t for the tab character. 
+such as "\/n" for the new line character or "\/t" for the tab character. A string literal
+has a String type has many of the same builtin functions as the String class in Java.
+String literals are constant and their values cannot be changed after they are created.
+String literals can be concatenated with adjacent string literals by use of the "+"
+operator and are then converted into a single string. Hog implements concatention
+by use of the Java StringBuilder(or StringBuffer) class and its append method. All string
+literals in Hog programs are implemented as instances of the String class, and then are
+mapped directly to the equivalent String class in Java.
 
 \textbf{@Kurry: flesh this out as k\&r would}
 
@@ -602,10 +614,15 @@ null types}. \textbf{@Kurry, say something about which comparators don't work wi
 \end{tabular}
 \end{center}
 
-Comparison operators are used in boolean expressions and result in either 
-a true or false being returned. Comparisons require that the two operands 
-be either both numeric (including char) or both boolean, and a numeric value
-cannot be compared to a boolean value.
+All comparators DO NOT work with non-numeric (including char) or non-boolean
+types, except for null. Comparison operators are used in boolean expressions
+and result in either a true or false being returned. Comparisons require that
+the two operands be either both numeric (including char) or both boolean, and
+a numeric value cannot be compared to a boolean value. The use of a comparison
+operator in Hog between any two objects (non-numeric (including char), or non-boolean)
+will result in a compile-time exception (see \S \ref{sub:internal_run_time_exceptions}).
+In Hog, null == null will evaluate to true. For any non-null reference value foo, foo.equals(null)
+will evaluate to false.
 
 % subsubsection comparators (end)
 
@@ -1353,6 +1370,33 @@ elements of different types into the same list) and parsing exceptions. The foll
 \label{sub:external_run_time_exceptions}
 
 \textbf{@Kurry, redo this}
+
+In Hog, if a compute-node throws any run-time exception
+that causes the compute-node to crash or abort execution,
+the tasks running on that node will be reassigned to other
+compute-nodes automatically by the Hadoop runtime. There
+will not be any data transferred between compute-nodes since
+the Hadoop Distributed File System replicates the same data
+across all compute-nodes.
+
+In Hog, there is support for specifying a policy for retrying
+method failures after an exception has been thrown, through the
+interface RetryPolicy in Hadoop. The interface consists of one 
+method:
+     boolean shouldRetry(Exception e, int retries)  
+which determines whether Hadoop should retry a method, and the
+number of retries that have been attempted so far.
+
+Hog also provides, through the Hadoop, prespecified retry policies:
+
+1) RETRY_FOREVER: Keep trying forever. 
+
+2) TRY_ONCE_DONT_FAIL: Try once, and fail silently for void methods,
+or by re-throwing the exception for non-void methods.
+
+3) TRY_ONCE_THEN_FAIL: Try once, and fail by re-throwing the exception.
+
+
 
 % subsection external_run_time_exceptions (end)
 
