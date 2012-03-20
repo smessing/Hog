@@ -2,13 +2,16 @@
 #include <stdio.h>
 %}
 
+%token FALSE TRUE
 %token UMINUS DECR INCR
-%token ID CONSTANT TEXT BOOL INT REAL LIST VOID
+%token ID CONST TEXT BOOL INT REAL LIST VOID
+%token TEXT_LITERAL
 %token IN AND OR NOT
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
 %token FUNCTION FUNCTIONS MAIN MAP REDUCE
 
-%left AND OR
+%left OR
+%left AND
 %right NOT
 
 %left '+' '-'
@@ -75,15 +78,60 @@ statement
 
 expression_statement
     : '\n'
-    | expression
+    | expression '\n'
     ;
-    
+
 expression
-    : ID
-    | CONSTANT
-    | TEXT
-    | '(' expression ')'
+    : logical_expression
+    | unary_expression '=' assignment_expression
     ;
+
+logical_expression
+    : expression OR logical_term
+    | logical_term
+    ;
+
+logical_term
+    : logical_term AND logical_factor
+    | logical_factor
+    ;
+
+logical_factor
+    : NOT logical_factor
+    | '(' logical_expression ')'
+    | TRUE
+    | FALSE
+    ;
+
+unary_expression
+    : postfix_expression
+    | cast_expression
+    ;
+
+postfix_expression
+    : primary_expression
+    | postfix_expression INCR
+    | postfix_expression DECR
+    ;
+
+primary_expression
+    : ID
+    | CONST
+    | TEXT_LITERAL
+
+cast_expression
+    : unary_expression
+    | '(' type ')' cast_expression
+    ;
+
+conditional_expression
+    : logical_and_expression
+    | conditional_expression 'or' logical_and_expression
+    ;
+
+logical_and_expression:
+    : inclusive_or_expression
+    | 
 
 unary_operator
     : '-'
