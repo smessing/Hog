@@ -672,8 +672,9 @@ assignment operator have the following form:
 \emph{identifier}$_1$ \tt = \rm \emph{expression} $|$ \emph{identifier}$_2$
 \end{quotation}
 
-At compile-time, the compiler checks that both the result of the \emph{expression} (or \emph{identifier}$_2$) and
-\emph{identifier}$_1$ have the same type. If not, a compile-time \tt TypeMismatchException \rm will be thrown.
+At compile-time, the compiler checks that both the result of the \emph{expression}
+(or \emph{identifier}$_2$) and \emph{identifier}$_1$ have the same type. If not, a
+compile-time \tt TypeMismatchException \rm will be thrown.
 
 % subsubsection assignment (end)
 
@@ -686,8 +687,8 @@ At compile-time, the compiler checks that both the result of the \emph{expressio
 
 While it is not specified in the grammar of Hog, like many other programming
 languages, a user is only allowed to use variables/functions after they have been
-declared. \textbf When declaring a variable, a user must include both a type and
-an identifier for that variable. Otherwise, an exception will be thrown at compile
+declared. When declaring a variable, a user must include both a type and an
+identifier for that variable. Otherwise, an exception will be thrown at compile
 time.
 
 \subsection{Type Specifiers} % (fold)
