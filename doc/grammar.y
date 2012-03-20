@@ -164,7 +164,7 @@ unary_operator
     : '-'
     | NOT
     ;
-	
+
 type
     : VOID
     | TEXT
@@ -172,7 +172,8 @@ type
     | INT
     | REAL
     ;
-    
+
+/*    
 declarator
     : ID
     | '(' declarator ')'    
@@ -189,4 +190,4 @@ declaration
 
 declaration_specifiers
     : type
-	;
+	;*/
