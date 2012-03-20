@@ -537,6 +537,11 @@ allow for null entries.\footnote{Note that for \tt set<T>\rm, only one \tt null
 \rm entry is allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is
 allowed.}
 
+The last derived type is \tt iter<T>\rm, which is Hog's iterator object. An \tt
+iter \rm object is associated with a collection object (of one of the types
+mentioned above), and allows the user to traverse the elements in the collection
+once.
+
 % subsection derived_types_collections_ (end)
 
 \subsection{Conversions} % (fold)
@@ -595,7 +600,7 @@ then the resulting operation will cause a run-time \tt NullValueException\rm, an
 \tt - \rm & binary & left & 0 & minus \\ \hline
 \tt * \rm & binary & left & 1 & multiplication \\ \hline
 \tt / \rm & binary & left & 1 & division \\ \hline
-\tt \% \rm & binary & left & 2 \textbf{??} & mod\footnote{Follows Java's 
+\tt \% \rm & binary & left & 2 & mod\footnote{Follows Java's 
 \tt \% \rm behavior: a modulus of a negative number is a negative number.} \\ 
 \hline
 \tt ++ \rm & unary & left & 3 & increment \\ \hline
@@ -645,16 +650,15 @@ The following are the comparators implemented in Hog (all are binary operations)
 \end{tabular}
 \end{center}
 
-All comparators DO NOT work with non-numeric (including char) or non-boolean
-types, except for null. Comparison operators are used in boolean expressions and
-result in either a true or false being returned. Comparisons require that the two
-operands be either both numeric (including char) or both boolean, and a numeric
-value cannot be compared to a boolean value. The use of a comparison operator in
-Hog between any two objects (non-numeric (including char), or non-boolean) will
-result in a compile-time exception (see \S
-\ref{sub:internal_run_time_exceptions}). In Hog, null == null will evaluate to
-true. For any non-null reference value foo, foo.equals(null) will evaluate to
-false.
+\emph{Note:} All comparators do not work with non-numeric or non-boolean types,
+except for null. Comparisons require that the two operands be either both numeric
+or both boolean, and a numeric value cannot be compared to a boolean value. The
+only valid comparators that can be used with boolean expressions are \tt == \rm
+and \tt !=\rm. The use of a comparison operator in Hog between any two objects
+(non-numeric (including char), or non-boolean) will result in a compile-time
+exception (see \S \ref{sub:internal_run_time_exceptions}). In Hog, \tt null ==
+null \rm will evaluate to \tt false\rm. For any non-null reference value \tt
+foo\rm, \tt foo.equals(null) \rm will evaluate to \tt false\rm.
 
 % subsubsection comparators (end)
 
