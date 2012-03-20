@@ -524,17 +524,18 @@ of:
 \subsection{Derived Types (Collections)} % (fold)
 \label{sub:derived_types_collections_}
 
-Derived types include \tt list<T>\rm, \tt set<t>\rm, \tt multiset<t>\rm, and \tt
-iter<t>\rm. The \tt list<T> \rm type is an ordered collection of objects of the
-same type. The \tt set<T> \rm is an unordered collection of unique objects of the
-same type. The \tt multiset<T> \rm is an unordered collection of objects of the
-same type, with duplicates allowed. The \tt dict<K,V> \rm is a collection of
-key­value pairs, where keys are all of the same type, and values are all of the
-same type (keys and values can be of different types from one another). The only
-types currently allowed within collections are primitive types, preventing such
-constructs as a list of lists. All collections allow for null
-entries.\footnote{Note that for \tt set<T>\rm, only one \tt null \rm entry is
-allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is allowed.}
+Derived types include \tt dict<K, V>\rm, \tt list<T>\rm, \tt set<T>\rm, \tt
+multiset<T>\rm, and \tt iter<T>\rm. The \tt list<T> \rm type is an ordered
+collection of objects of the same type. The \tt set<T> \rm is an unordered
+collection of unique objects of the same type. The \tt multiset<T> \rm is an
+unordered collection of objects of the same type, with duplicates allowed. The \tt
+dict<K,V> \rm is a collection of key­value pairs, where keys are all of the same
+type, and values are all of the same type (keys and values can be of different
+types from one another). The only types currently allowed within collections are
+primitive types, preventing such constructs as a list of lists. All collections
+allow for null entries.\footnote{Note that for \tt set<T>\rm, only one \tt null
+\rm entry is allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is
+allowed.}
 
 % subsection derived_types_collections_ (end)
 
