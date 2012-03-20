@@ -4,8 +4,8 @@
 
 %token FALSE TRUE
 %token UMINUS DECR INCR
-%token ID CONST TEXT BOOL INT REAL LIST VOID
-%token TEXT_LITERAL
+%token TEXT BOOL INT REAL LIST VOID
+%token TEXT_LITERAL ID CONST
 %token IN AND OR NOT
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
 %token FUNCTION FUNCTIONS MAIN MAP REDUCE
@@ -71,8 +71,8 @@ statement_list
 
 statement
     : expression_statement
-    | iteration_statement
     | selection_statement
+    | iteration_statement
     | declarator
     ;
 
@@ -83,7 +83,7 @@ expression_statement
 
 expression
     : logical_expression
-    | unary_expression '=' assignment_expression
+    | unary_expression '=' expression
     ;
 
 logical_expression
@@ -118,20 +118,33 @@ primary_expression
     : ID
     | CONST
     | TEXT_LITERAL
+    | '(' expression ')'
+    ;
 
+// not sure about below:
 cast_expression
     : unary_expression
     | '(' type ')' cast_expression
     ;
 
-conditional_expression
-    : logical_and_expression
-    | conditional_expression 'or' logical_and_expression
+selection_statement
+    : IF '(' expression ')' statement
+    | IF '(' expression ')' statement elseif_statement ELSE statement
+    | SWITCH '(' expression ')' statement
+    ; 
+
+elseif_statement
+    : ELSEIF '(' expression ')' elseif_statement
+    | /* epsilon */
     ;
 
-logical_and_expression:
-    : inclusive_or_expression
-    | 
+iteration_statement 
+    : WHILE '(' expression ')' statement
+    | FOR '(' expression ';' expression ';' expression ')' statement
+    | FOREACH '(' expression IN ID ')' statement
+    | FOREACH '(' expression IN expression ')' statement
+    ;
+
 
 unary_operator
     : '-'
@@ -163,23 +176,3 @@ declaration
 declaration_specifiers
     : type
 	;
-		
-selection_statement
-    : IF '(' expression ')' statement
-    | IF '(' expression ')' statement elseif_statement ELSE statement
-    | SWITCH '(' expression ')' statement IF '(' expression ')' statement
-    | SWITCH '(' expression ')' statement
-    ; 
-
-elseif_statement
-    : ELSEIF '(' expression ')' elseif_statement
-	| /* epsilon */
-	;
-   
-iteration_statement 
-    : WHILE '(' expression ')' statement
-    | FOR '(' expression ';' expression ';' expression ')' statement
-    | FOREACH '(' expression IN LIST ')' statement
-    ;
-
-   
