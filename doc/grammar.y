@@ -39,6 +39,12 @@ function
     : type ID '(' parameter_list ')' '{' statement_list '}'
     ;
 
+parameter_list
+    : type ID ',' parameter_list
+    | type ID
+    | /* epsilon */
+    ;
+
 map
     : MAP section_type '{' statement_list '}'
     ;
