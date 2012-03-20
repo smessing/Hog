@@ -2,31 +2,40 @@
 #include <stdio.h>
 %}
 
-%token IDENTIFIER CONSTANT TEXT BOOL INT REAL LIST VOID
-%token IN AND OR
+%token UMINUS DECR INCR
+%token ID CONSTANT TEXT BOOL INT REAL LIST VOID
+%token IN AND OR NOT
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
 %token FUNCTION FUNCTIONS MAIN MAP REDUCE
+
+%left AND OR
+%right NOT
 
 %left '+' '-'
 %left '*' '/'
 %right UMINUS
+%left DECR
+%left INCR
 
-%start start_symbol
+%start program
 %%
 
 
-start_symbol
+program
     : functions map reduce main
-	| /* epsilon */
-	;
+    | /* epsilon */
+    ;
 
 functions
-    : FUNCTION statement_list
+    : FUNCTION '{' statement_list '}'
     ;
     
 map
-    : MAP statement_list
+    : MAP map_type '{' statement_list '}'
     ;
+
+map_type
+    : '(' type ID ',' type ID ')' '-' '>' '(' type ',' type ')'
     
 reduce
     : REDUCE statement_list
@@ -56,7 +65,7 @@ expression_statement
     ;
     
 expression
-    : IDENTIFIER
+    : ID
 	| CONSTANT
 	| TEXT
 	| '(' expression ')'
@@ -64,10 +73,10 @@ expression
 
 unary_operator
     : '-'
-    | '!'
+    | NOT
     ;
 	
-type_specifier
+type
     : VOID
     | TEXT
     | BOOL
@@ -76,7 +85,7 @@ type_specifier
     ;
     
 declarator
-    : IDENTIFIER
+    : ID
     | '(' declarator ')'    
     ;
     
