@@ -26,10 +26,19 @@ program
     ;
 
 functions
-    : FUNCTION '{' statement_list '}'
+    : FUNCTION '{' function_list '}'
     | /* epsilon */
     ;
-    
+
+function_list
+    : function
+    | function_list function
+    ;
+
+function
+    : type ID '(' parameter_list ')' '{' statement_list '}'
+    ;
+
 map
     : MAP section_type '{' statement_list '}'
     ;
@@ -52,16 +61,11 @@ statement_list
     ;
 
 statement
-    : function_statement
-    | expression_statement
+    : expression_statement
     | iteration_statement
     | selection_statement
     | declarator
     ;
-
-function_statement
-  : type 
-  ;
 
 expression_statement
     : '\n'
