@@ -1229,15 +1229,15 @@ or not an exception is thrown. The structure of exception handling should be
 similar to this, although there can be multiple catch blocks and the finally block
 is optional:
 
-\begin{verbatim}
-    try {
-      expression
-    } catch (exception) {
-      expression
-    } finally {
-      expression
-    }
-\end{verbatim}
+\begin{quotation}
+\tt try \{ \rm \\
+\indent \indent \emph{expression} \\
+\tt \indent \} catch ( \rm \emph{exception} \tt ) \rm \{ \\
+\indent \indent \emph{expression} \\
+\tt \indent \} finally \rm \{ \\
+\indent \indent \emph{expression} \\
+\tt \indent \}
+\end{quotation}
 
 Because the proper behavior of a Hog program is dependent on resources outside of
 the language (i.e. the proper behavior of the user’s Hadoop software), there are
