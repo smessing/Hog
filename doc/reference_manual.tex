@@ -179,12 +179,12 @@ keyword \tt @Functions \rm on its own line, followed by the function definitions
 
 Function definitions have the form:
 
-\begin{verbatim}
-    @Functions
-    return-type function-name(parameter-list) {
-      exprlist
-    }
-\end{verbatim}
+\begin{quotation}
+  \tt @Functions \rm \\
+  \indent \emph{type functionName(parameterList)} \tt \{ \rm \\
+  \indent \indent \emph{expressionList} \\
+  \indent \tt \} \rm
+\end{quotation}
 
 The return-type can be any valid Hog type. The rules regarding legal function-names
 are identical to those regarding legal variable identifiers. Each parameter in the
@@ -926,17 +926,14 @@ are invoked using the following pattern:
 \noindent Where \emph{identifier} is the identifier for the object in question, \emph{functionName} is the name of the
 function, and \emph{parameterList} is a (possibly empty) list of parameters used to specify the behavior of the invocation.
 
-\textbf{@ALL:} introduction. \textbf{@Sam: do this}
+\emph{Note:} in what follows, if a function has return type T, it means that the return type of this function matches the
+parameterized type of this object (i.e. for an \tt iter<int> \rm object, these functions have return type \tt int\rm).
 
 \subsubsection{\tt iter \rm} % (fold)
 \label{ssub:iter}
 
 \tt iter \rm is Hog's iteration object, and supports several built-in functions
-that are independent of the particular type of the \tt iter \rm object. Note, 
-as with other objects in this section, if the function has return type T, it 
-means that the return type of this function matches the parameterized type of
-this object (i.e. for an \tt iter<int> \rm object, these functions have return
-type \tt int\rm). The built-in functions are as follows:
+that are independent of the particular type of the \tt iter \rm object. The built-in functions are as follows:
 
 \begin{itemize}
 
