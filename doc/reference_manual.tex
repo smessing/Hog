@@ -606,12 +606,11 @@ There is one single assignment operator, '\tt =\rm'. Expressions involving the
 assignment operator have the following form:
 
 \begin{quotation}
-\emph{identifier} \tt = \rm \emph{expression} $|$ \emph{identifier}
+\emph{identifier}$_1$ \tt = \rm \emph{expression} $|$ \emph{identifier}$_2$
 \end{quotation}
 
-At compile-time, the compiler checks that both the result of the \tt expression \rm
-(or \tt PRIMITIVE \rm or \tt DERIVED\rm) and \tt lvalue \rm have the same type. If
-not, a compile-time \tt TypeMistmatchException \rm will be thrown.
+At compile-time, the compiler checks that both the result of the \emph{expression} (or \emph{identifier}$_2$) and
+\emph{identifier}$_1$ have the same type. If not, a compile-time \tt TypeMismatchException \rm will be thrown.
 
 % subsubsection assignment (end)
 
