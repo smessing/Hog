@@ -405,7 +405,12 @@ for use as keywords, and may not be redefined by a programmer:
 \begin{multicols}{4}
 \tt
 \begin{itemize}
+  \item[] @functions
+  \item[] @main
+  \item[] @map
+  \item[] @reduce
   \item[] bool
+  \item[] break
   \item[] case
   \item[] catch
   \item[] default
@@ -418,6 +423,7 @@ for use as keywords, and may not be redefined by a programmer:
   \item[] foreach
   \item[] hadoop
   \item[] if
+  \item[] in
   \item[] instanceof
   \item[] int
   \item[] iter
@@ -584,9 +590,11 @@ When an arithmetic operator is used between two numeric variables of different t
     a + b
 \end{verbatim}
 
-the non-\tt real\rm variable will be \textbf{\emph{coerced}} into a \tt real \rm before the evaluation of the statement, so
-that both operands have the same type. Therefore, the resulting type of the value of an expression involving an arithmetic
-operator and one or two operand of type \tt real \rm is always \tt real\rm.
+\noindent the non-\tt real \rm variable will be \textbf{\emph{coerced}} into a \tt
+real \rm before the evaluation of the statement, so that both operands have the
+same type. Therefore, the resulting type of the value of an expression involving
+an arithmetic operator and one or two operand of type \tt real \rm is always \tt
+real\rm.
 
 If one of the operands happens to have a \tt null \rm value (for instance, if a variable is \textbf{\emph{uninitialized}}),
 then the resulting operation will cause a run-time \tt NullValueException\rm, and the program will crash.
@@ -725,7 +733,7 @@ operations).
 
 % subsubsection null_declarations (end)
 
-\subsubsection{Primitive-type Variable Declarations} % (fold)
+\subsubsection{Primitive-Type Variable Declarations} % (fold)
 \label{ssub:primitive_type_variable_declarations}
 
 Variables of one of the primitive types, including \tt int\rm, \tt real\rm, \tt
@@ -739,12 +747,12 @@ text \rm or \tt bool \rm are declared using the following patterns:
 When the first pattern is used, we say that the variable is
 \textbf{\emph{uninitialized}}, and has the value \tt null\rm. When the second
 pattern is used, we say that the variable is \textbf{\emph{initialized}}, and has
-the same value as the value of the result of the \tt primitive-assignment-expr\rm.
-The \tt primitive-assignment­expr \rm must return a value of the right type, or
-the compiler will fail citing a syntax error. The \tt primitive­assignment­expr
-\rm may contain an expression involving both other variables and unnamed raw
-primitives (e.g. 1 or 2), an expression involving only other variables or unnamed
-raw primitives, or a single variable, or a single unnamed raw primitive.
+the same value as the value of the result of the \emph{expression}. The
+\emph{expression} must return a value of the right type, or the compiler will
+throw a \tt TypeMismatchError\rm. The \emph{expression} may contain an expression
+involving both other variables and unnamed raw primitives (e.g. 1 or 2), an
+expression involving only other variables or unnamed raw primitives, or a single
+variable, or a single unnamed raw primitive.
 
 % subsubsection primitive_type_variable_declarations (end)
 
@@ -763,7 +771,7 @@ Derived-type variables are declared using the following patterns:
 The first two patterns operate in essentially the same way as for primitive­type
 variables. When the first pattern is used, we say that the variable is
 \textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user attempts
-to use any type­specific operations (for instance, \tt size(myList)) \rm on an
+to use any type­specific operations (for instance, \tt myList.size() \rm on an
 uninitialized variable, the program will through a run­time exception (see \S
 \ref{sec:exception_handling} for a discussion of exceptions). When the second
 pattern is used, the variable is \textbf{\emph{initialized}} to the result of the
@@ -815,8 +823,7 @@ statements, so that they are syntactically equivalent to a single statement.
 \subsection{Flow-Of-Control Statements} % (fold)
 \label{sub:flow_of_control_statements}
 
-\textbf{@Paul: think about what you want here! Maybe include example for each?} The
-following are the \textbf{\emph{flow-of-control}} statements included in Hog:
+The following are the \textbf{\emph{flow-of-control}} statements included in Hog:
 
 \begin{itemize}
   \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement}
@@ -826,37 +833,49 @@ following are the \textbf{\emph{flow-of-control}} statements included in Hog:
   \item[] \tt switch ( \rm \emph{expression} \tt ) \rm \emph{statement} \rm
 \end{itemize}
 
-In the above statements, the ‘...’ signifies an unlimited number of elseif
-statements, since there is no limit on the number of elseif statements that can
-appear before the final else statement. In all forms of the if statement, the
-expression will be evaluated as a Boolean. If the expression is a number, then any
-non­zero number will be considered true and zero will be treated as false. In the
-second statement above, when the expression in the if statement evaluates to
-false, then the else statement will execute. In the third statement above with if,
-elseif and else statements, the statement will be executed that follows the first
-expression evaluating to true. If none of these expressions evaluate to true, then
-the else statement is executed.
+In the above statements, the ‘...’ signifies an unlimited number of \tt elseif \rm
+statements, since there is no limit on the number of \tt elseif \rm statements
+that can appear before the final \tt else \rm statement. In all forms of the \tt
+if \rm statement, the expression will be evaluated as a \tt bool\rm. If the
+expression is a number, then any non­zero number will be considered \tt true \rm
+and zero will be treated as \tt false\rm. In the second statement above, when the
+expression in the \tt if \rm statement evaluates to \tt false\rm, then the \tt
+else \rm statement will execute. In the third statement above with \tt if\rm, \tt
+elseif \rm and \tt else \rm statements, the statement will be executed that
+follows the first expression evaluating to \tt true\rm. If none of these
+expressions evaluate to \tt true\rm, then the \tt else \rm statement is executed.
 
-The switch statement causes control to transfer to a statement depending on the
-matching case label. There can be an unlimited number of case labels within the
-switch statement, so that the switch will operate as such:
+The \tt switch \rm statement causes control to transfer to a statement depending
+on the matching \tt case \rm label. There can be an unlimited number of \tt case
+\rm labels within the \tt switch \rm statement, so that the \tt switch \rm will
+operate as such:
 
 \begin{quotation}
-  \tt switch ( \rm \emph{expression} \tt ) \{\\
-  \indent \indent \tt case \rm \emph{expression} \tt : \emph{statement} \\
-  \indent \indent \tt default : \rm \emph{statement} \\
+  \tt switch ( \rm \emph{expression}$_0$ \tt ) \{\\
+  \indent \indent \tt case \rm \emph{expression}$_1$ \tt : \rm\emph{statement}$_1$ \\
+  \indent \indent \tt case \rm \emph{expression}$_2$ \tt : \rm\emph{statement}$_2$ \\
+  \indent \indent \tt default : \rm \emph{statement}$_3$ \\
   \indent \tt \}
 \end{quotation}
 
-An expression is passed in to the switch statement and then the flow of control
-will fall through the switch and the expression will then be compared to the
-constant expression next to each case label. When the switch expression matches
-the expression next to a specific case, the statement for that case is executed.
-If the flow of control falls to the bottom of the switch without finding an
-equality, then the default statement will be executed. The case constants are
-converted to the switch expression type. There cannot be two case expressions with
-the same value after conversion. In addition, there can only be one default label
-within each switch.
+An \emph{expression} is passed in to the \tt switch \rm statement and then the
+flow of control will fall through the \tt switch \rm and the \emph{expression}
+will then be compared to the constant \emph{expression} next to each \tt case \rm
+label. When the \tt switch \rm \emph{expression} matches the \emph{expression}
+next to a specific \tt case\rm, the \emph{statement} for that \tt case \rm is
+executed. If the flow of control falls to the bottom of the \tt switch \rm without
+finding an equality, then the \tt default \rm \emph{statement} will be executed.
+The \tt case \rm constants are converted to the \tt switch \rm \emph{expression}
+type. There cannot be two \tt case \rm \emph{expressions} with the same value
+after conversion. In addition, there can only be one \tt default \rm label within
+each \tt switch\rm.
+
+\emph{Note}: \tt switch \rm statements in Hog follow the normal conventions of
+\textbf{\emph{fall-through}}. When a particular \tt case \rm is matched,
+\emph{all} of the statements are executed until the keyword \tt break \rm is
+encountered. So statements from other \tt case\rm's are executed so long as they
+are below the matched \tt case\rm, and there is no \tt break \rm statement between
+them.
 
 The above control statements can all be nested within each other.
 
@@ -870,36 +889,28 @@ forms:
 
 \begin{itemize}
   \item[] \tt while ( \rm \emph{expression} \tt ) \rm \emph{statement}
-  \item[] \tt for ( \rm \emph{expression} \tt ; \rm \emph{expression} \tt ; \rm \emph{expression} \tt ) \rm \emph{statement}
+  \item[] \tt for ( \rm \emph{expression}$_1$ \tt ; \rm \emph{expression}$_2$ \tt ; \rm \emph{expression}$_3$ \tt ) \rm \emph{statement}
   \item[] \tt foreach \rm \emph{expression} \tt in \rm \emph{iterable-object statement}
 \end{itemize}
 
-                                                                                                
+In the \tt while \rm pattern, the associated \emph{statements} will be executed
+repeatedly until the \emph{expression} evaluates to \tt false\rm. The
+\emph{expression} is evaluated before every iteration.
 
-\textbf{@Ben: clean up the above, needs to be a specific example, because it's not
-always true in this generic a fashion}.
+In the \tt for \rm pattern, \emph{expression}$_1$ is the initialization step,
+\emph{expression}$_2$ is the test or condition and \emph{expression}$_3$ is the
+increment step. At each step through the for loop, \emph{expression}$_2$ is
+evaluated. When \emph{expression}$_2$ evaluates to false, iteration through the
+loop ends.
 
-In the above while statement, expression1 will typically represent the
-initialization of a variable, then at each iteration through the while loop, the
-current Boolean value of expression2 is evaluated. Expression2 will be a test or
-condition. If expression2 evaluates to true, then iteration will continue through
-the while loop. Expression3 normally represents an increment step and its value
-changes at each step through the while. Expression3 could be a part of the
-condition tested in expression2. The first time expression2 evaluates to false,
-iteration through the loop ends and drops to the code that comes after the closing
-bracket of the while statement.
+In the \tt foreach \rm pattern, the iteration starts at the first element in the
+\emph{iterable-object statement} (a statement that evaluates to an object that
+supports the \tt iterator() \rm function) and the \emph{statement} executes during
+every iteration. The iteration ends when the \emph{statement} has been executed
+for each item in the iterable object and there are no items left to iterate
+through.
 
-In the above for statement, expression1 is the initialization step, expression2 is
-the test or condition and expression3 is the increment step. At each step through
-the for loop, expression2 is evaluated. When expression2 evaluates to false,
-iteration through the loop ends.
-
-When the foreach starts to execute, the iteration starts at the first element in
-the array or list and the statement executes during every iteration. The iteration
-ends when the statement has been executed for each item in the array (or list) and
-there are no items left to iterate through.
-
-\subsubsection{Example 1} % (fold)
+\subsubsection{Example of \tt while \rm \textbf{Pattern}} % (fold)
 \label{ssub:example_1}
 
 \begin{verbatim}
@@ -912,7 +923,7 @@ there are no items left to iterate through.
 
 % subsubsection example_1 (end)
 
-\subsubsection{Example 2} % (fold)
+\subsubsection{Example of \tt for \rm \textbf{Pattern}} % (fold)
 \label{ssub:example_2}
 
 \begin{verbatim}
@@ -923,7 +934,7 @@ there are no items left to iterate through.
 
 % subsubsection example_2 (end)
 
-\subsubsection{Example 3} % (fold)
+\subsubsection{Example of \tt foreach \rm \textbf{Pattern}} % (fold)
 \label{ssub:example_3}
 
 \begin{verbatim}
