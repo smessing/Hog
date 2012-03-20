@@ -905,7 +905,7 @@ loop ends.
 
 In the \tt foreach \rm pattern, the iteration starts at the first element in the
 \emph{iterable-object statement} (a statement that evaluates to an object that
-supports the \tt iterator() \rm function) and the \emph{statement} executes during
+supports the \tt iterator() \rm function). The \emph{statement} executes during
 every iteration. The iteration ends when the \emph{statement} has been executed
 for each item in the iterable object and there are no items left to iterate
 through.
@@ -954,7 +954,9 @@ through.
 \section{Built-in Functions} % (fold)
 \label{sec:built_in_functions}
 
-\textbf{Overview of built-in functions? How they are called on objects...} \textbf{@Paul: do this}
+Hog includes both \emph{\textbf{system-level}} and \emph{\textbf{object-level}}
+built-in functions. Here \emph{\textbf{built-in}} means functions provided by the
+language itself.
 
 \subsection{System-level Built-ins} % (fold)
 \label{sub:system_level_built_ins}
@@ -973,9 +975,9 @@ types in the header of each section.
 
 \item[] \tt void mapReduce() \rm \\
 
-This function can be called from the \tt @Main \rm section in order to initiate the
-mapreduce job, as definied in the \tt @Map \rm and \tt @Reduce \rm sections. Any
-Hog program that implements mapreduce will need to call this function in \tt
+This function can be called from the \tt @Main \rm section in order to initiate
+the mapreduce job, as definied in the \tt @Map \rm and \tt @Reduce \rm sections.
+Any Hog program that implements mapreduce will need to call this function in \tt
 @Main\rm.
 
 \item[] \tt void print(toPrint) \rm \\
@@ -1087,16 +1089,20 @@ to return, and \tt false \rm otherwise. This function is equivalient to evaluati
 \label{ssub:list}
 
 \begin{itemize}
+  
+\item[] \tt void clear() \rm
+
+Removes all elements in this \tt list\rm.
 
 \item[] \tt void sort() \rm
 
 Function that sorts the items in the list in lexicographical ascending order.
 
-\item[] \tt int len() \rm
+\item[] \tt int size() \rm
 
 Returns an int with the number of elements in the list.
 
-\item[] \tt void append(T itemToAppend) \rm
+\item[] \tt void add(T itemToAdd) \rm
 
 Appends the object passed to the end of the list. The object must be of the same
 type as the list, or the operation will result in a \textbf{compile-time or
@@ -1152,7 +1158,7 @@ providing a consistent ordering of objects.
 This function returns \tt true \rm if the \tt multiset \rm contains no objects, and
 \tt false \rm otherwise.
 
-\item[] \tt iter<T> iter() \rm
+\item[] \tt iter<T> iterator() \rm
 
 This function returns an iterator for the entries of the objects in this list,
 with duplicates removed. Again, the order of the objects is arbitrary. 
@@ -1169,6 +1175,14 @@ Removes one instance of \tt object \rm from the given \tt multiset\rm. Returns
 \tt true \rm if the removal was successful, \tt false \rm otherwise (i.e.,
 \tt object \rm was not in the \tt multiset\rm).
 
+\item[] \tt int size() \rm
+
+Returns the total number of objects in this \tt multiset\rm.
+
+\item[] \tt void clear() \rm
+
+Removes all elements in this \tt multiset\rm.
+
 \end{itemize}
 
 % subsubsection multiset (end)
@@ -1180,11 +1194,21 @@ The following function can be called on a \tt text \rm object:
 
 \begin{itemize}
 
-\item[] \tt list<text> tokenize(text fullText, text delimiter) \rm \\
+\item[] \tt list<text> tokenize(text delimiter) \rm \\
 
 \tt tokenize() \rm can be called on a \tt text \rm object to tokenize it into a
 list of \tt text \rm objects based on the delimiter. The delimiter is not included
 in any of the \tt text \rm objects in the returned list.
+
+\item[] \tt int length() \rm \\
+
+Returns the length (number of individual characters) of this \tt text\rm.
+
+\item[] \tt text replace(text matchText, text replacementText) \rm \\
+
+Returns a new \tt text \rm object with each sub-\tt text \rm that matches \tt
+matchText \rm replaced by \tt replacementText\rm. This function does \textbf{not}
+alter the original \tt text \rm object.
 
 \end{itemize}
 
@@ -1210,7 +1234,7 @@ file.
 \item[] \textbf{JAVAC\_HOME} absolute path of javac executable
 \item[] \textbf{HOST} where to job is rsynced to and run
 \item[] \textbf{LOCALMEM} how much memory for java to use when running in local mode 
-\item[] \textbf{REDUCERS} the number of reduce tasks to run, set to zero for map­only jobs
+\item[] \textbf{REDUCERS} the number of reduce tasks to run, set to zero for map only jobs
 
 \end{itemize}
 
@@ -1219,36 +1243,28 @@ file.
 \section{Scanning and Parsing Tools and Java Source Code Generation} % (fold)
 \label{sec:parsing_tools}
 
-\begin{center}
-\begin{figure}
-  \label{fig:parser_architecture}
-  \includegraphics[width=1.0\textwidth]{img/parser_architecture.pdf}
-  \caption{The overall architecture of the Hog compilation process.}
-\end{figure}
-\end{center}
+Currently, the Hog compiler is implemented as a translator into the Java
+programming language. The first phase of Hog compilation uses the JFlex as its
+lexical analyzer, which is designed to work with the Look-Ahead Left-to-Right
+(LALR) parser generator CUP. The lexical analyzer creates lexemes, which are
+logically meaningful sequences, and for each lexeme the lexlical analyser sends to
+the LALR parser a token of the form $<$token-name, attribute-value$>$. The second
+phase of Hog compilation uses Java CUP to create a syntax tree, which is a
+tree-like intermediate representation of the source program, which depics the
+grammatical structure of the Hog source program.
 
-\textbf{@ALL: Do we want to really keep Figure 2?}
-
-Currently, the Hog compiler is implemented as a translator into the Java programming 
-language. The first phase of Hog compilation uses the JFlex as its lexical analyzer,
-which is designed to work with the Look-Ahead Left-to-Right (LALR) parser generator
-CUP. The lexical analyzer creates lexemes, which are logically meaningful sequences,
-and for each lexeme the lexlical analyser sends to the LALR parser a token of the
-form <token-name, attribute-value>. The second phase of Hog compilation uses Java CUP
-to create a syntax tree, which is a tree-like intermediate representation of the source
-program, which depics the grammatical structure of the Hog source program.
-
-In the last phase of compilation, the Hog semantic analyzer generates Java source code,
-which is then compiled into byte code by the Java compiler. Then with the Hadoop Java Archives
-(JARs) the bytecode is executed on the Java Virtual Machine (JVM). With the syntax tree and
-the information from the symbol table, the Hog compiler then checks the Hog source program
-to ensure semantic consistency with the language specification. The syntax tree is initially
-untyped, but after semantic analysis Hog types are added to the syntax tree. Hog types are
-represented in two ways, either a translation of a Hog type into a new Java class, or by
-mapping Hog types to the equivalent Java types. Mapping Hog types directly to Java types
-improves performance because a JVM can handle primitive types much more efficiently than 
-objects. Also, a JVM implements optimizations for well-known types, such as String, and 
-thus Hog is built for optimal performance.
+In the last phase of compilation, the Hog semantic analyzer generates Java source
+code, which is then compiled into byte code by the Java compiler. Then with the
+Hadoop Java Archives (JARs) the bytecode is executed on the Java Virtual Machine
+(JVM). With the syntax tree and the information from the symbol table, the Hog
+compiler then checks the Hog source program to ensure semantic consistency with
+the language specification. The syntax tree is initially untyped, but after
+semantic analysis Hog types are added to the syntax tree. Hog types are
+represented in two ways, either a translation of a Hog type into a new Java class,
+or by mapping Hog types to the equivalent Java types. Mapping Hog types directly
+to Java types improves performance because a JVM can handle primitive types much
+more efficiently than objects. Also, a JVM implements optimizations for well-known
+types, such as String, and thus Hog is built for optimal performance.
 
 % section parsing_tools (end)
 
