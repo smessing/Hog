@@ -905,7 +905,7 @@ loop ends.
 
 In the \tt foreach \rm pattern, the iteration starts at the first element in the
 \emph{iterable-object statement} (a statement that evaluates to an object that
-supports the \tt iterator() \rm function) and the \emph{statement} executes during
+supports the \tt iterator() \rm function). The \emph{statement} executes during
 every iteration. The iteration ends when the \emph{statement} has been executed
 for each item in the iterable object and there are no items left to iterate
 through.
@@ -954,7 +954,9 @@ through.
 \section{Built-in Functions} % (fold)
 \label{sec:built_in_functions}
 
-\textbf{Overview of built-in functions? How they are called on objects...} \textbf{@Paul: do this}
+Hog includes both \emph{\textbf{system-level}} and \emph{\textbf{object-level}}
+built-in functions. Here \emph{\textbf{built-in}} means functions provided by the
+language itself.
 
 \subsection{System-level Built-ins} % (fold)
 \label{sub:system_level_built_ins}
@@ -973,9 +975,9 @@ types in the header of each section.
 
 \item[] \tt void mapReduce() \rm \\
 
-This function can be called from the \tt @Main \rm section in order to initiate the
-mapreduce job, as definied in the \tt @Map \rm and \tt @Reduce \rm sections. Any
-Hog program that implements mapreduce will need to call this function in \tt
+This function can be called from the \tt @Main \rm section in order to initiate
+the mapreduce job, as definied in the \tt @Map \rm and \tt @Reduce \rm sections.
+Any Hog program that implements mapreduce will need to call this function in \tt
 @Main\rm.
 
 \item[] \tt void print(toPrint) \rm \\
@@ -1096,7 +1098,7 @@ Function that sorts the items in the list in lexicographical ascending order.
 
 Returns an int with the number of elements in the list.
 
-\item[] \tt void append(T itemToAppend) \rm
+\item[] \tt void add(T itemToAdd) \rm
 
 Appends the object passed to the end of the list. The object must be of the same
 type as the list, or the operation will result in a \textbf{compile-time or
