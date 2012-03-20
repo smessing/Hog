@@ -4,8 +4,8 @@
 
 %token FALSE TRUE
 %token UMINUS DECR INCR
-%token ID CONST TEXT BOOL INT REAL LIST VOID
-%token TEXT_LITERAL
+%token TEXT BOOL INT REAL LIST VOID
+%token TEXT_LITERAL ID CONST
 %token IN AND OR NOT
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
 %token FUNCTION FUNCTIONS MAIN MAP REDUCE
@@ -118,20 +118,14 @@ primary_expression
     : ID
     | CONST
     | TEXT_LITERAL
+    | '(' expression ')'
+    ;
 
 cast_expression
     : unary_expression
     | '(' type ')' cast_expression
     ;
 
-conditional_expression
-    : logical_and_expression
-    | conditional_expression 'or' logical_and_expression
-    ;
-
-logical_and_expression:
-    : inclusive_or_expression
-    | 
 
 unary_operator
     : '-'
