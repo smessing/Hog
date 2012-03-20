@@ -47,18 +47,18 @@ expression_statement
     | expression
 	;
 	
-selection-statement:
+selection_statement
    : if '(' expression ')' statement
-   | if ( expression ) statement else statement
-   | if ( expression ) statement elseif ( expression ) statement... else statement
-   | switch ( expression ) statement if ( expression ) statement
-   | switch ( expression ) statement
+   | if '(' expression ')' statement else statement
+   | if '(' expression ')' statement elseif '(' expression ')' statement... else statement
+   | switch '(' expression ')' statement if '(' expression ')' statement
+   | switch '(' expression ')' statement
    ; 
    
-iteration-statement 
-   : while ( expression ) statement
-   | for ( expression; expression; expression ) statement
-   | foreach ( expression IN list ) statement
+iteration_statement 
+   : while '(' expression ')' statement
+   | for '(' expression ';' expression ';' expression ')' statement
+   | foreach '(' expression IN list ')' statement
    ;
 
    
