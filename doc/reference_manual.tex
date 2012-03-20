@@ -455,18 +455,18 @@ constant:
 
 % subsection constants (end)
 
-\subsection{String Literals} % (fold)
-\label{sub:string_literals}
-A string literal consists of a sequence of zero of more contiguous characters enclosed
-in double quotes, such as "hello". A string literal can also contain escape characters
-such as "\/n" for the new line character or "\/t" for the tab character. A string literal
-has a String type has many of the same builtin functions as the String class in Java.
-String literals are constant and their values cannot be changed after they are created.
-String literals can be concatenated with adjacent string literals by use of the "+"
-operator and are then converted into a single string. Hog implements concatention
-by use of the Java StringBuilder(or StringBuffer) class and its append method. All string
-literals in Hog programs are implemented as instances of the String class, and then are
-mapped directly to the equivalent String class in Java.
+\subsection{String Literals} % (fold) \label{sub:string_literals} A string literal
+consists of a sequence of zero of more contiguous characters enclosed in double
+quotes, such as "hello". A string literal can also contain escape characters such
+as "\textbackslash n" for the new line character or "\textbackslash t" for the tab
+character. A string literal has a String type has many of the same builtin
+functions as the String class in Java. String literals are constant and their
+values cannot be changed after they are created. String literals can be
+concatenated with adjacent string literals by use of the "+" operator and are then
+converted into a single string. Hog implements concatention by use of the Java
+StringBuilder(or StringBuffer) class and its append method. All string literals in
+Hog programs are implemented as instances of the String class, and then are mapped
+directly to the equivalent String class in Java.
 
 % subsection string_literals (end)
 
@@ -484,7 +484,9 @@ any block nested within its enclosing block.
 \section{Syntax Notation} % (fold)
 \label{sec:syntax_notation}
 
-\textbf In the syntax notation used throughout the Hog manual, different syntactic categories are noted by italic type, and literal words and characters are in typewriter style. 
+In the syntax notation used throughout the Hog manual, different syntactic
+categories are noted by italic type, and literal words and characters are in
+typewriter style.
 
 % sec syntax_notation (end)
 
@@ -494,11 +496,11 @@ any block nested within its enclosing block.
 \subsection{Basic Types} % (fold)
 \label{sub:basic_types}
 
-The basic types of Hog include \tt int \rm (integer numbers in base 10, 64 bytes in size), \tt
-real \rm (floating point numbers, 64 bytes in size), \tt bool \rm(boolean values,
-true or false) and \tt text \rm (Strings, variable in size). Unlike most languages,
-Hog includes no basic character type. Instead, a programmer makes use of \tt
-text\rm s of size 1.
+The basic types of Hog include \tt int \rm (integer numbers in base 10, 64 bytes
+in size), \tt real \rm (floating point numbers, 64 bytes in size), \tt bool
+\rm(boolean values, true or false) and \tt text \rm (Strings, variable in size).
+Unlike most languages, Hog includes no basic character type. Instead, a programmer
+makes use of \tt text\rm s of size 1.
 
 \emph{Implementation details} Hog’s primitive types are not so primitive. They are
 in fact wrappers around Hadoop classes. For instance, Hog’s \tt int \rm type is a
