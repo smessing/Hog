@@ -6,6 +6,7 @@
 %token UMINUS DECR INCR
 %token TEXT BOOL INT REAL LIST VOID
 %token TEXT_LITERAL ID CONST
+%token BREAK CASE DEFAULT
 %token IN AND OR NOT
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
 %token FUNCTION FUNCTIONS MAIN MAP REDUCE
@@ -73,7 +74,8 @@ statement
     : expression_statement
     | selection_statement
     | iteration_statement
-    | declarator
+    | labeled_statement
+    | BREAK
     ;
 
 expression_statement
@@ -143,6 +145,11 @@ iteration_statement
     | FOR '(' expression ';' expression ';' expression ')' statement
     | FOREACH '(' expression IN ID ')' statement
     | FOREACH '(' expression IN expression ')' statement
+    ;
+
+labeled_statement
+    : CASE ':' statement
+    | DEFAULT ':' statement
     ;
 
 
