@@ -4,8 +4,9 @@
 
 %token FALSE TRUE
 %token UMINUS DECR INCR DBL_EQLS NOT_EQLS
+%token LESS GRTR LESS_EQL GRTR_EQL
 %token TEXT BOOL INT REAL LIST VOID
-%token TEXT_LITERAL ID CONST
+%token TEXT_LITERAL ID CONST ARROW
 %token BREAK CASE DEFAULT
 %token IN AND OR NOT
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
@@ -58,7 +59,7 @@ reduce
     ;
 
 section_type
-    : '(' type ID ',' type ID ')' '-' '>' '(' type ',' type ')'
+    : '(' type ID ',' type ID ')' ARROW '(' type ',' type ')'
     ;
 
 main
