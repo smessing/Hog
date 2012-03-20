@@ -2,13 +2,19 @@
 #include <stdio.h>
 %}
 
-%token UMINUS DECR INCR
-%token ID CONSTANT TEXT BOOL INT REAL LIST VOID
+%token FALSE TRUE
+%token UMINUS DECR INCR DBL_EQLS NOT_EQLS
+%token MINUS PLUS TIMES DIVIDE MOD
+%token LESS GRTR LESS_EQL GRTR_EQL
+%token TEXT BOOL INT REAL LIST VOID
+%token TEXT_LITERAL ID CONST ARROW
+%token BREAK CASE DEFAULT
 %token IN AND OR NOT
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
 %token FUNCTION FUNCTIONS MAIN MAP REDUCE
 
-%left AND OR
+%left OR
+%left AND
 %right NOT
 
 %left '+' '-'
@@ -54,7 +60,7 @@ reduce
     ;
 
 section_type
-    : '(' type ID ',' type ID ')' '-' '>' '(' type ',' type ')'
+    : '(' type ID ',' type ID ')' ARROW '(' type ',' type ')'
     ;
 
 main
@@ -68,28 +74,115 @@ statement_list
 
 statement
     : expression_statement
-    | iteration_statement
     | selection_statement
-    | declarator
+    | iteration_statement
+    | labeled_statement
+    | BREAK
     ;
 
 expression_statement
     : '\n'
-    | expression
+    | expression '\n'
     ;
-    
+
 expression
+    : logical_expression
+    | unary_expression '=' expression
+    ;
+
+logical_expression
+    : equality_expression
+    | logical_expression OR logical_term
+    | logical_term
+    ;
+
+equality_expression
+    : relational_expression
+    | equality_expression DBL_EQLS relational_expression
+    | equality_expression NOT_EQLS relational_expression
+    ;
+
+relational_expression
+    : additive_expression
+    | relational_expression LESS additive_expression
+    | relational_expression GRTR additive_expression
+    | relational_expression LESS_EQL additive_expression
+    | relational_expression GRTR_EQL additive_expression
+    ;
+
+additive_expression
+    : multiplicative_expression
+    | additive_expression PLUS multiplicative_expression
+    | additive_expression MINUS multiplicative_expression
+    ;
+
+multiplicative_expression
+    : cast_expression
+    | multiplicative_expression TIMES cast_expression
+    | multiplicative_expression DIVIDE cast_expression
+    | multiplicative_expression MOD cast_expression
+    ;
+
+// not sure about below:
+cast_expression
+    : unary_expression
+    | '(' type ')' cast_expression
+    ;
+
+logical_term
+    : logical_term AND logical_factor
+    | logical_factor
+    ;
+
+logical_factor
+    : NOT logical_factor
+    | '(' logical_expression ')'
+    | TRUE
+    | FALSE
+    ;
+
+unary_expression
+    : UMINUS cast_expression
+    | postfix_expression
+    | cast_expression
+    ;
+
+postfix_expression
+    : primary_expression
+    | postfix_expression INCR
+    | postfix_expression DECR
+    ;
+
+primary_expression
     : ID
-    | CONSTANT
-    | TEXT
+    | CONST
+    | TEXT_LITERAL
     | '(' expression ')'
     ;
 
-unary_operator
-    : '-'
-    | NOT
+selection_statement
+    : IF '(' expression ')' statement
+    | IF '(' expression ')' statement elseif_statement ELSE statement
+    | SWITCH '(' expression ')' statement
+    ; 
+
+elseif_statement
+    : ELSEIF '(' expression ')' elseif_statement
+    | /* epsilon */
     ;
-	
+
+iteration_statement 
+    : WHILE '(' expression ')' statement
+    | FOR '(' expression ';' expression ';' expression ')' statement
+    | FOREACH '(' expression IN ID ')' statement
+    | FOREACH '(' expression IN expression ')' statement
+    ;
+
+labeled_statement
+    : CASE ':' statement
+    | DEFAULT ':' statement
+    ;
+
 type
     : VOID
     | TEXT
@@ -97,7 +190,8 @@ type
     | INT
     | REAL
     ;
-    
+
+/*    
 declarator
     : ID
     | '(' declarator ')'    
@@ -114,24 +208,4 @@ declaration
 
 declaration_specifiers
     : type
-	;
-		
-selection_statement
-    : IF '(' expression ')' statement
-    | IF '(' expression ')' statement elseif_statement ELSE statement
-    | SWITCH '(' expression ')' statement IF '(' expression ')' statement
-    | SWITCH '(' expression ')' statement
-    ; 
-
-elseif_statement
-    : ELSEIF '(' expression ')' elseif_statement
-	| /* epsilon */
-	;
-   
-iteration_statement 
-    : WHILE '(' expression ')' statement
-    | FOR '(' expression ';' expression ';' expression ')' statement
-    | FOREACH '(' expression IN LIST ')' statement
-    ;
-
-   
+	;*/

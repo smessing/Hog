@@ -183,7 +183,7 @@ Function definitions have the form:
   \tt @Functions \{ \rm \\
   \indent \emph{type functionName(parameterList)} \tt \{ \rm \\
   \indent \indent \emph{expressionList} \\
-  \indent \tt \}
+  \indent \tt \}\}
 \end{quotation}
 
 The return-type can be any valid Hog type. The rules regarding legal function-names
@@ -275,7 +275,7 @@ reduce function for every word.
 \begin{verbatim}
 
   @Map: (int lineNum, text line)  ->  (text, int) {
-    foreach word in tokenize(line, " ") {
+    foreach word in line.tokenize(" ") {
       emit(word, 1)
     }
   }
@@ -314,7 +314,13 @@ in the output file.
 Below is a sample \tt @Reduce \rm section, which continues the word count example,
 and follows the \tt @map \rm sample introduced in the previous section.
 
-\textbf{@sam: fill in the @reduce example}
+\begin{verbatim} 
+
+     @Reduce: (text word, iter<int> values) -> (text, int) {                   
+            int count = 0                                                                  while (values.hasNext()) {                                                          count = count + values.getNext()                              
+            }                                                                              emit(word, count)                                                        }  
+
+\end{verbatim} 
 
 % subsection tt_reduce_rm (end)
 
@@ -449,19 +455,21 @@ for use as keywords, and may not be redefined by a programmer:
 \subsection{Constants} % (fold)
 \label{sub:constants}
 
-There are different kinds of constants, corresponding to each of the primitive data types in Hog.
+There are different kinds of constants, corresponding to each of the primitive data types in Hog. Once a variable has been declared a constant, its type and value cannot be changed. To declare a constant, use the following notation:
+
+   final type variableName value
 
 \begin{verbatim}
-constant:
-   int-constant
-   real-constant
-   bool-constant
-   text-constant  
+constants can be of the following types:
+   int
+   real
+   bool
+   text  
 \end{verbatim}
 
-{\tt int} constants are 
-
-\textbf{@Paul: flesh this out}
+Example:
+{\tt int} constants would be declared as such:
+     final int rate 100
 
 % subsection constants (end)
 
@@ -557,7 +565,11 @@ once.
 \subsection{Conversions} % (fold)
 \label{sub:conversions}
 
-\textbf{@Paul}
+\textbf In order to cast a variable to be of a different type, use the following notation:
+
+      (new type)variableName
+
+Not all basic types can be cast to a different basic type. Any variable of type int or real can be cast to any of the other basic types (int, real, bool text). However, a variable of type bool can only be cast to text and a variable of type text cannot be cast to any of the other variable types. 
 
 % subsection conversions (end)
 
@@ -629,7 +641,7 @@ then the resulting operation will cause a run-time \tt NullValueException\rm, an
 The following are the logical operators implemented in Hog. Note that these
 operators only work with two operands of type \tt bool\rm. Attempting to use a
 logical operator with an object of any other type results in a compile-time
-exception (see \S \ref{sub:internal_run_time_exceptions}).
+exception (see \S13.1 \ref{sub:internal_run_time_exceptions}).
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
@@ -652,7 +664,8 @@ The following are the comparators implemented in Hog (all are binary operations)
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 
-\hline
+\hline \textbf{Operator} & \textbf{Associativity} &
+\textbf{Precedence Level} & \textbf{Behavior} \\ \hline
 \tt < \rm & none & 0 & less than \\ \hline
 \tt <= \rm & none & 0 & less than or equal to \\ \hline
 \tt > \rm & none & 0 & greater than \\ \hline
@@ -669,7 +682,7 @@ or both boolean, and a numeric value cannot be compared to a boolean value. The
 only valid comparators that can be used with boolean expressions are \tt == \rm
 and \tt !=\rm. The use of a comparison operator in Hog between any two objects
 (non-numeric (including char), or non-boolean) will result in a compile-time
-exception (see \S \ref{sub:internal_run_time_exceptions}). In Hog, \tt null ==
+exception (see \S13.1 \ref{sub:internal_run_time_exceptions}). In Hog, \tt null ==
 null \rm will evaluate to \tt false\rm. For any non-null reference value \tt
 foo\rm, \tt foo.equals(null) \rm will evaluate to \tt false\rm.
 
@@ -798,7 +811,12 @@ Specifies that \tt myList \rm should be initialized with five \tt null \rm value
 \subsubsection{Function Declarations} % (fold)
 \label{ssub:function_declarations}
 
-\textbf{@Paul, reiterate how you define functions}
+In order to declare a function, use the following notation:
+
+\indent type functionName(parameterList) \tt \{ \rm \\
+\indent \indent \emph{expressionList} \\
+\indent \tt \} 
+
 
 % subsubsection function_declarations (end)
 
@@ -812,8 +830,9 @@ Specifies that \tt myList \rm should be initialized with five \tt null \rm value
 \subsection{Expression Statement} % (fold)
 \label{sub:expression_statement}
 
-An \textbf{\emph{expression statement}} is either an individual assignment or a function call. All consequences of a given
-expression take effect before the next expression is executed.
+An \textbf{\emph{expression statement}} is either an individual assignment or a
+function call. All consequences of a given expression take effect before the next
+expression is executed.
 
 % subsection expression_statement (end)
 
@@ -1033,7 +1052,7 @@ object. A call to \tt next() \rm differs from a call to \tt peek() \rm in that t
 function call advances the cursor of the iterator. If \tt next() \rm is called on
 an iterator that has no more values, \tt null \rm is returned. 
 
-\item[] \tt bool has\_next() \rm
+\item[] \tt bool hasNext() \rm
 
 This function returns \tt true \rm if the iterator object has a next object
 to return, and \tt false \rm otherwise. This function is equivalient to evaluating
@@ -1155,7 +1174,7 @@ object, then \tt 0 \rm is returned.
 
 This function returns a list of all entries in the multiset, with duplicates removed.
 Please note: objects are added to the list in an arbitrary order, since \tt multiset
-\rm objects are inherently unordered. Do not ever rely on \tt entry\_set() \rm 
+\rm objects are inherently unordered. Do not ever rely on \tt entrySet() \rm 
 providing a consistent ordering of objects.
 
 \item[] \tt bool isEmpty() \rm
