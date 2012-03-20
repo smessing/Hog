@@ -4,6 +4,7 @@
 
 %token FALSE TRUE
 %token UMINUS DECR INCR DBL_EQLS NOT_EQLS
+%token MINUS PLUS TIMES DIVIDE MOD
 %token LESS GRTR LESS_EQL GRTR_EQL
 %token TEXT BOOL INT REAL LIST VOID
 %token TEXT_LITERAL ID CONST ARROW
@@ -101,6 +102,33 @@ equality_expression
     | equality_expression NOT_EQLS relational_expression
     ;
 
+relational_expression
+    : additive_expression
+    | relational_expression LESS additive_expression
+    | relational_expression GRTR additive_expression
+    | relational_expression LESS_EQL additive_expression
+    | relational_expression GRTR_EQL additive_expression
+    ;
+
+additive_expression
+    : multiplicative_expression
+    | additive_expression PLUS multiplicative_expression
+    | additive_expression MINUS multiplicative_expression
+    ;
+
+multiplicative_expression
+    : cast_expression
+    | multiplicative_expression TIMES cast_expression
+    | multiplicative_expression DIVIDE cast_expression
+    | multiplicative_expression MOD cast_expression
+    ;
+
+// not sure about below:
+cast_expression
+    : unary_expression
+    | '(' type ')' cast_expression
+    ;
+
 logical_term
     : logical_term AND logical_factor
     | logical_factor
@@ -114,7 +142,8 @@ logical_factor
     ;
 
 unary_expression
-    : postfix_expression
+    : UMINUS cast_expression
+    | postfix_expression
     | cast_expression
     ;
 
@@ -129,12 +158,6 @@ primary_expression
     | CONST
     | TEXT_LITERAL
     | '(' expression ')'
-    ;
-
-// not sure about below:
-cast_expression
-    : unary_expression
-    | '(' type ')' cast_expression
     ;
 
 selection_statement
@@ -158,12 +181,6 @@ iteration_statement
 labeled_statement
     : CASE ':' statement
     | DEFAULT ':' statement
-    ;
-
-
-unary_operator
-    : '-'
-    | NOT
     ;
 
 type
