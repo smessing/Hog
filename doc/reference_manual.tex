@@ -22,7 +22,9 @@ to produce a language that can express the same computation in about 10 lines.
 
 \subsection{The MapReduce Framework}
 \label{sub:mapreduce}
-
+\begin{tiny}
+•
+\end{tiny}
 With the explosion in the size of datasets that companies have had to manage in
 recent years there are many new challenges that they face. Many companies and
 organizations have to handle the processing of datasets that are terabytes or even
@@ -152,10 +154,11 @@ sections must be included in the following order:
       .
       .
     }
-    @Reduce <type signature>
+    @Reduce <type signature> {
       .
       .
       .
+    }
     @Main {
       .
       .
@@ -170,18 +173,17 @@ sections must be included in the following order:
 
 At the top of every Hog program, the programmer has the option to define functions
 in a section called \tt @Functions\rm. Any function defined in this section can be
-called from any other section of the program, including \tt @Map\rm, and \tt
-@Reduce\rm, and can also be called from other functions defined in the \tt
-@Functions \rm section. The section containing the functions begins with the
+called from any other section of the program, including \tt @Map\rm, \tt
+@Reduce\rm, and \tt @Main\rm and can also be called from other functions defined in the \tt @Functions \rm section. The section containing the functions begins with the
 keyword \tt @Functions \rm on its own line, followed by the function definitions.
 
 Function definitions have the form:
 
 \begin{quotation}
-  \tt @Functions \rm \\
+  \tt @Functions \{ \rm \\
   \indent \emph{type functionName(parameterList)} \tt \{ \rm \\
   \indent \indent \emph{expressionList} \\
-  \indent \tt \} \rm
+  \indent \tt \} \}\rm
 \end{quotation}
 
 The return-type can be any valid Hog type. The rules regarding legal function-names
@@ -224,13 +226,13 @@ user-defined functions can make reference to other user-defined functions.
 The map function in a MapReduce program takes as input key-value pairs, performs
 the appropriate calculations and procedures, and emits intermediate key-value pairs
 as output. Any given input pair may map to zero, one, or multiple output pairs. The
-\tt @map \rm section defines the code for the map function.
+\tt @Map \rm section defines the code for the map function.
 
-The \tt @map \rm header must be followed by the signature of the map function, and
+The \tt @Map \rm header must be followed by the signature of the map function, and
 then the body of the map function as follows:
 
 \begin{quotation}
-  \tt @map ( \rm \emph{type identifier, type identifier} \tt ) -> ( \rm \emph{type, type} \tt ) \{ \\
+  \tt @Map ( \rm \emph{type identifier, type identifier} \tt ) -> ( \rm \emph{type, type} \tt ) \{ \\
   \indent \indent . \\
   \indent \indent . \\
   \indent \indent . \\
@@ -238,8 +240,8 @@ then the body of the map function as follows:
 \end{quotation}
 
 The first \tt type identifier \rm defines the \emph{\textbf{key}} and the second defines the \emph{\textbf{value}} of the input
-key-value pair to the \tt @map \rm function. The identifiers specified for the key and value can be made reference to later
-within the \tt @map \rm block. The \tt @map \rm signature is followed by an arrow and another key-value pair, defining the
+key-value pair to the \tt @Map \rm function. The identifiers specified for the key and value can be made reference to later
+within the \tt @Map \rm block. The \tt @Map \rm signature is followed by an arrow and another key-value pair, defining the
 types of the output of the map function. Notice that identifiers are not specified for the output key and value (said to be
 \emph{unnamed}), as these pairs are only produced at the end of the map function. Also note that any code written in the same
 scope after an \tt emit() \rm call will be \textbf{\emph{unreachable}}, and will cause a compile-time \tt
@@ -247,11 +249,11 @@ UnreachableCodeException\rm.
 
 The map function can include any number of calls to \tt emit()\rm, which outputs
 the resulting intermediate key-value pairs for use by the function defined in the
-\tt @reduce \rm section. The types of the values passed to the \tt emit() \rm
+\tt @Reduce \rm section. The types of the values passed to the \tt emit() \rm
 function must agree with the signature of the output key-value pair as defined in
-the \tt @map \rm type signature. All output pairs from the map function are
+the \tt @Map \rm type signature. All output pairs from the map function are
 subsequently grouped by key by the framework, and passed as input to the \tt
-@reduce \rm function.
+@Reduce \rm function.
 
 Currently, the only configuration available is for a file to be passed into the map
 function one line at a time, with the line of text being the value, and the
@@ -265,6 +267,18 @@ receives a single line of text, and for each word in the line (as delineated by
 whitespace), it emits the word as the key with a value of one. By emitting the word
 as the key, we can allow the framework to group by the word, thus calling the
 reduce function for every word.
+
+\begin{verbatim}
+
+	@Map: (int lineNum, text line)  ->  (text, int)
+	{
+	      foreach word in tokenize(line, " ") {
+	            emit(word, 1)
+	      }
+	}
+
+\end{verbatim}
+
 
 % section tt_map_rm (end)
 
@@ -283,7 +297,7 @@ key emitted by the map function. The iterator must be an iterator over the type 
 the values emitted by the map function.
 
 \begin{quotation}
-  \tt @reduce ( \rm \emph{type identifier, type identifier} \tt ) -> ( \rm \emph{type, type} \tt ) \{ \\
+  \tt @Reduce ( \rm \emph{type identifier, type identifier} \tt ) -> ( \rm \emph{type, type} \tt ) \{ \\
   \indent \indent . \\
   \indent \indent . \\
   \indent \indent . \\
@@ -294,7 +308,7 @@ As with the map function, the reduce function can emit as many key/value pairs a
 the user would like. Any key/value pair emitted by the reduce function is recorded
 in the output file.
 
-Below is a sample at \tt @Reduce \rm section, which continues the word count
+Below is a sample \tt @Reduce \rm section, which continues the word count
 example, and follows the @mapsample introduce in the previous section.
 
 % subsection tt_reduce_rm (end)
@@ -302,7 +316,18 @@ example, and follows the @mapsample introduce in the previous section.
 \subsection{\tt @Main \rm} % (fold)
 \label{sec:tt_main_rm}
 
-\textbf{@BEN: Fill this in!} Hog.mapReduce()
+The @Main section defines the code that is the entry point to a Hog program. In order to run the map reduce program defined by the user in the previous sections, @Main must contain a call to the system-level built-in function mapReduce(). Other arbtrary code can be run from the @Main section as well. Currently, @Main does not have access to the results of the map reduce program resulting from a call to mapReduce(). Therefore, it is quite common for the @Main section to contain the call to mapReduce() and nothing else.
+
+Below is a sample @Main section which prints to the standard output and runs a map reduce job.
+
+\begin{verbatim}
+    @Main {
+          print("Starting mapReduce job.\n")
+          mapReduce()
+          print("mapReduce complete.\n")
+    }
+\end{verbatim}
+
 
 % subsection tt_main_rm (end)
 
@@ -1389,12 +1414,12 @@ number of retries that have been attempted so far.
 
 Hog also provides, through the Hadoop, prespecified retry policies:
 
-1) RETRY_FOREVER: Keep trying forever. 
+1) RETRY\_FOREVER: Keep trying forever. 
 
-2) TRY_ONCE_DONT_FAIL: Try once, and fail silently for void methods,
+2) TRY\_ONCE\_DONT\_FAIL: Try once, and fail silently for void methods,
 or by re-throwing the exception for non-void methods.
 
-3) TRY_ONCE_THEN_FAIL: Try once, and fail by re-throwing the exception.
+3) TRY\_ONCE\_THEN\_FAIL: Try once, and fail by re-throwing the exception.
 
 
 
