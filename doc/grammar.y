@@ -3,7 +3,7 @@
 %}
 
 %token IDENTIFIER CONSTANT TEXT BOOL INT REAL LIST VOID
-%token IN 
+%token IN AND OR
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
 %token FUNCTION FUNCTIONS MAIN MAP REDUCE
 
@@ -13,33 +13,6 @@
 
 %start start_symbol
 %%
-
-expression
-    : IDENTIFIER
-	| CONSTANT
-	| TEXT
-	| '(' expression ')'
-	;
-
-unary_operator
-    : '-'
-    | '!'
-    ;
-	
-type_specifier
-    : VOID
-    | TEXT
-    | BOOL
-    | INT
-    | REAL
-    ;
-
-header
-    : FUNCTIONS
-    | MAP
-    | REDUCE
-    | MAIN
-    ;
 
 
 start_symbol
@@ -61,20 +34,8 @@ reduce
 
 main
     : MAIN statement_list
-    ;    
-	
-declaration
-    : declaration_specifiers
-    ;   
-	
-declaration_specifiers
-    : type_specifier
-	;
-	
-declaration_list
-    : declaration
-    | declaration_list declaration
-    ;
+    ; 
+    
 
 statement_list
     : statement
@@ -84,13 +45,54 @@ statement_list
 	
 statement
     : expression_statement
+    | iteration_statement
+    | selection_statement
+    | declarator
     ;
 	
 expression_statement
     : '\n'
     | expression
     ;
+    
+expression
+    : IDENTIFIER
+	| CONSTANT
+	| TEXT
+	| '(' expression ')'
+	;
+
+unary_operator
+    : '-'
+    | '!'
+    ;
 	
+type_specifier
+    : VOID
+    | TEXT
+    | BOOL
+    | INT
+    | REAL
+    ;
+    
+declarator
+    : IDENTIFIER
+    | '(' declarator ')'    
+    ;
+    
+declaration_list
+    : declaration
+    | declaration_list declaration
+    ;
+  	
+declaration
+    : declaration_specifiers
+    ;   
+
+declaration_specifiers
+    : type_specifier
+	;
+		
 selection_statement
     : IF '(' expression ')' statement
     | IF '(' expression ')' statement elseif_statement ELSE statement
