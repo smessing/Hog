@@ -4,7 +4,8 @@
 
 %token IDENTIFIER CONSTANT
 %token TEXT BOOL INT REAL
-%token 
+%token IN
+%token INPUT 
 
 %left '+' '-'
 %left '*' '/'
@@ -22,7 +23,14 @@ type_specifier
 	| BOOL
 	| INT
 	| REAL
-	
+	;
+
+header
+    : FUNCTIONS
+	| MAP
+	| REDUCE
+	| MAIN
+	;
 	
 declaration_list
 	: declaration
@@ -40,9 +48,17 @@ expression_statement
 	;
 	
 selection-statement:
-   : if ( expression ) statement
+   : if '(' expression ')' statement
    | if ( expression ) statement else statement
    | if ( expression ) statement elseif ( expression ) statement... else statement
    | switch ( expression ) statement if ( expression ) statement
    | switch ( expression ) statement
    ; 
+   
+iteration-statement 
+   : while ( expression ) statement
+   | for ( expression; expression; expression ) statement
+   | foreach ( expression IN list ) statement
+   ;
+
+   
