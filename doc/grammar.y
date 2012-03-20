@@ -99,7 +99,7 @@ declaration
     ;   
 
 declaration_specifiers
-    : type_specifier
+    : type
 	;
 		
 selection_statement
