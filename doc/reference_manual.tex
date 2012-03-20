@@ -1109,14 +1109,14 @@ The \tt count(T object) \rm method returns the number of instances of \tt object
 in the given \tt multiset\rm. If the \tt multiset \rm does not contain the given
 object, then \tt 0 \rm is returned. 
 
-\item[] \tt list<T> entry\_set() \rm
+\item[] \tt list<T> entrySet() \rm
 
 This function returns a list of all entries in the multiset, with duplicates removed.
 Please note: objects are added to the list in an arbitrary order, since \tt multiset
 \rm objects are inherently unordered. Do not ever rely on \tt entry\_set() \rm 
 providing a consistent ordering of objects.
 
-\item[] \tt bool is\_empty() \rm
+\item[] \tt bool isEmpty() \rm
 
 This function returns \tt true \rm if the \tt multiset \rm contains no objects, and
 \tt false \rm otherwise.
@@ -1126,13 +1126,13 @@ This function returns \tt true \rm if the \tt multiset \rm contains no objects, 
 This function returns an iterator for the entries of the objects in this list,
 with duplicates removed. Again, the order of the objects is arbitrary. 
 
-\item[] \tt bool remove\_all(T object) \rm
+\item[] \tt bool removeAll(T object) \rm
 
 Removes all instances of \tt object \rm from the given \tt multiset\rm. Returns
 \tt true \rm if removal was successful, \tt false \rm otherwise (i.e. \tt object \rm
 was not contained in the \tt mutliset\rm).
 
-\item[] \tt bool remove\_one(T object) \rm
+\item[] \tt bool removeOne(T object) \rm
 
 Removes one instance of \tt object \rm from the given \tt multiset\rm. Returns
 \tt true \rm if the removal was successful, \tt false \rm otherwise (i.e.,
