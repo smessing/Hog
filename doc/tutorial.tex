@@ -150,7 +150,7 @@ calculate the totals in the \tt @Reduce \rm section.
 
 In this section, for each word (the key) emitted by the \tt @Map \rm section, we
 will simply add up all the counts (the values) emitted for each particular word to
-get the final count. It should now be clear why we emitted the valued \tt 1 \rm for
+get the final count. It should now be clear why we emitted the value \tt 1 \rm for
 each word in the \tt @Map \rm section, as we do so once for every instance of
 seeing a particular word.
 
@@ -413,9 +413,9 @@ MapReduce job has completed.
 
 \subsubsection*{Sample Output}
 
-Because we used the same, empty \tt text \rm ( \tt "" \rm) for the keys for
-key-value pairs to the \tt @Reduce \rm section, we end up with a sorted list of
-numbers all on one line. An example is given below,
+Because we used the same, empty \tt text \rm ( \tt text reduceKey = "" \rm) for the
+keys for key-value pairs to the \tt @Reduce \rm section, we end up with a sorted
+list of numbers all on one line. An example is given below,
 
 \begin{verbatim}
   ,-123,-1,0,0,0,1,1,2,3,4,9,15,1234,6234,53854,123495,...
