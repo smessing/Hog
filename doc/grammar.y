@@ -5,7 +5,7 @@
 %token FALSE TRUE
 %token UMINUS DECR INCR
 %token MINUS PLUS TIMES DIVIDE MOD
-%token LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS
+%token LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS ASSIGN
 %token TEXT BOOL INT REAL LIST VOID
 %token TEXT_LITERAL ID CONST ARROW
 %token BREAK CASE DEFAULT
@@ -24,6 +24,7 @@
 %left DECR INCR
 
 %nonassoc LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS
+%right ASSIGN
 
 %start program
 %%
@@ -89,7 +90,7 @@ expression_statement
 
 expression
     : logical_expression
-    | unary_expression '=' expression
+    | unary_expression ASSIGN expression
     ;
 
 logical_expression
@@ -125,7 +126,6 @@ multiplicative_expression
     | multiplicative_expression MOD cast_expression
     ;
 
-// not sure about below:
 cast_expression
     : unary_expression
     | '(' type ')' cast_expression
