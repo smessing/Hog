@@ -155,10 +155,10 @@ primary_expression
     ;
 
 constant
-  : INT_CONST
-  | REAL_CONST
-  | BOOL_CONST
-  ;
+   : INT_CONST
+   | REAL_CONST
+   | BOOL_CONST
+   ;
 
 selection_statement
     : IF '(' expression ')' statement elseif_statement else_statement
