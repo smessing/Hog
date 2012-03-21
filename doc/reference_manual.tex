@@ -1118,24 +1118,16 @@ Returns the number of elements in the set.
 \label{ssub:list}
 
 \begin{itemize}
-  
-\item[] \tt void clear() \rm
-
-Removes all elements in this \tt list\rm.
-
-\item[] \tt void sort() \rm
-
-Function that sorts the items in the list in lexicographical ascending order.
-
-\item[] \tt int size() \rm
-
-Returns an int with the number of elements in the list.
 
 \item[] \tt void add(T itemToAdd) \rm
 
 Adds the object passed to the end of the list. The object must be of the same
 type as the list, or the operation will result in a \textbf{compile-time or
 run-time} exception.
+
+\item[] \tt void clear() \rm
+
+Removes all elements in this \tt list\rm.
 
 \item[] \tt T get(int index) \rm
 
@@ -1144,6 +1136,15 @@ Returns the item from the list at the specified index.
 \item[] \tt iter<T> iterator() \rm
 
 Returns an iterator for the objects in this list.
+
+
+\item[] \tt void sort() \rm
+
+Function that sorts the items in the list in lexicographical ascending order.
+
+\item[] \tt int size() \rm
+
+Returns an int with the number of elements in the list.
 
 \end{itemize}
 
@@ -1163,6 +1164,10 @@ duplicates. The built-in functions on \tt multiset \rm are as follows:
 \item[] \tt void add(T object) \rm
 
 Adds \tt object \rm to the \tt multiset\rm.
+
+\item[] \tt void clear() \rm
+
+Removes all elements in this \tt multiset\rm.
 
 \item[] \tt bool contains(T object) \rm
 
@@ -1207,10 +1212,6 @@ Removes one instance of \tt object \rm from the given \tt multiset\rm. Returns
 \item[] \tt int size() \rm
 
 Returns the total number of objects in this \tt multiset\rm.
-
-\item[] \tt void clear() \rm
-
-Removes all elements in this \tt multiset\rm.
 
 \end{itemize}
 
