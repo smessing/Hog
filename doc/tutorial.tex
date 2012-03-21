@@ -346,8 +346,23 @@ sorted lists it receives.
 
 \end{verbatim}
 
-\subsubsection*{@Functions}
-In this section, we define a function called merge, which takes two sorted lists of ints, and returns a merged list of the two in sorted order. The way to define a function should be familiar to programmers comfortable with C or Java. In the first line of the body of the function, we are creating a new, empty list. Following that, we demonstrate a few flow of control statements such as while loops, and if else statements, the \&\& (and) boolean operator, and comparators all of which should also be familiar. 
+\subsubsection*{\tt @Functions \rm}
+
+In this section, we define a function called \tt merge\rm, which takes two sorted
+\tt list\rm s of \tt int\rm s, and returns a merged \tt list \rm of the two in
+sorted order. The way to define a function should be familiar to programmers
+comfortable with C or Java. In the first line of the body of the function, we are
+creating a new, empty list. Following that, we demonstrate a few flow of control
+statements such as \tt while \rm loops, and \tt if else \rm statements, the \tt and
+\rm boolean operator, and comparators all of which should also be familiar.
+
+The function works as follows: it starts with cursors at the beginning of both
+input lists. It continues to add elements from the first list to the combined list
+until there is a smaller element in the second list, at which point it starts
+adding elements from that list instead. It continues switching back and forth
+between the two lists in this manner to ensure that it adds all the elements from
+both lists in the proper order. It finally checks that no elements in either list
+has been left out, and then returns the new, combined list.
 
 Also included in this section are some built-in list functions, such as .size() to get the number of elements in a list, .add() to add an element onto the end of the list, and .get() to get an element at a specific index in the list.
 
