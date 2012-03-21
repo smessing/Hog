@@ -518,7 +518,7 @@ in size), \tt real \rm (floating point numbers, 64 bytes in size), \tt bool
 Unlike most languages, Hog includes no basic character type. Instead, a programmer
 makes use of \tt text\rm s of size 1.
 
-\emph{Implementation details} Hog’s primitive types are not so primitive. They are
+\emph{Implementation details}: Hog’s primitive types are not so primitive. They are
 in fact wrappers around Hadoop classes. For instance, Hog’s \tt int \rm type is a
 wrapper around Hadoop's \tt IntWritableclass\rm. The following lists for every
 primitive type in Hog the corresponding Hadoop class that the type is built on top
@@ -565,9 +565,15 @@ once.
 
 \textbf In order to cast a variable to be of a different type, use the following notation:
 
-      (new type)variableName
+\begin{quotation}
+      \tt ( \rm \emph{type} \tt ) \rm \emph{variableName}
+\end{quotation}
 
-Not all basic types can be cast to a different basic type. Any variable of type int or real can be cast to any of the other basic types (int, real, bool text). However, a variable of type bool can only be cast to text and a variable of type text can be cast to an int or real. If casting a text to an int or real results in an invalid number (i.e. 1a4), then an exception will be thrown. 
+
+Not all basic types can be cast to a different basic type. Any variable of type \tt int \rm or \tt real \rm can be cast to any
+of the other basic types (\tt int\rm, \tt real\rm, \tt bool\rm, \tt text\rm). However, a variable of type bool can only be cast
+to \tt text \rm and a variable of type \tt text \rm can be cast to an int or real. If casting a \tt text \rm to an \tt int \rm
+or \tt real \rm results in an invalid number (e.g. \tt (int) "1a4"\rm), then a \tt TypeCaseException \rm will be thrown.
 
 % subsection conversions (end)
 
@@ -639,7 +645,7 @@ then the resulting operation will cause a run-time \tt NullValueException\rm, an
 The following are the logical operators implemented in Hog. Note that these
 operators only work with two operands of type \tt bool\rm. Attempting to use a
 logical operator with an object of any other type results in a compile-time
-exception (see \S13.1 \ref{sub:internal_run_time_exceptions}).
+exception (see \S \ref{sub:compile_time_exceptions}).
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
@@ -680,7 +686,7 @@ or both boolean, and a numeric value cannot be compared to a boolean value. The
 only valid comparators that can be used with boolean expressions are \tt == \rm
 and \tt !=\rm. The use of a comparison operator in Hog between any two objects
 (non-numeric (including char), or non-boolean) will result in a compile-time
-exception (see \S13.1 \ref{sub:internal_run_time_exceptions}). In Hog, \tt null ==
+exception (see \S \ref{sub:compile_time_exceptions}). In Hog, \tt null ==
 null \rm will evaluate to \tt false\rm. For any non-null reference value \tt
 foo\rm, \tt foo.equals(null) \rm will evaluate to \tt false\rm.
 
