@@ -79,7 +79,7 @@ program.
 \begin{center}
 \begin{figure}
   \label{fig:map_reduce_overview}
-  \includegraphics[width=0.85\textwidth]{img/map_reduce_overview.pdf}
+  \includegraphics[width=1.0\textwidth]{img/map_reduce_overview.pdf}
   \caption{Overview of the Map Reduce program}
 \end{figure}
 \end{center}
@@ -1034,6 +1034,35 @@ function, and \emph{parameterList} is a (possibly empty) list of parameters used
 \emph{Note:} in what follows, if a function has return type T, it means that the return type of this function matches the
 parameterized type of this object (i.e. for an \tt iter<int> \rm object, these functions have return type \tt int\rm).
 
+\subsubsection{\tt dict \rm} % (fold)
+\label{ssub:tt_dict_rm}
+
+\begin{itemize}
+
+\item[] \tt void clear() \rm
+
+Removes all key-value pairs in this \tt dict\rm.
+
+\item[] \tt set<T> keySet() \rm
+
+Returns a set of all the keys in this \tt dict\rm.
+
+\item[] \tt dict<V, K> reverseDict() \rm
+
+Returns as new \tt dict \rm object with the key-value pairs of this \tt dict \rm reverse (i.e. keys become values and values
+become keys). \emph{Note}: If there are duplicate values, they are collapsed, and an arbitrary key out of all of the associated
+keys is chosen as the new value.
+
+\item[] \tt bool size() \rm
+
+Returns the number of key-value pairs in this \tt dict\rm.
+
+
+
+\end{itemize}
+
+% subsubsection tt_dict_rm (end)
+
 \subsubsection{\tt iter \rm} % (fold)
 \label{ssub:iter}
 
@@ -1067,52 +1096,6 @@ no more values, \tt null \rm is returned.
 
 
 % subsubsection iter (end)
-
-\subsubsection{\tt set \rm} % (fold)
-\label{ssub:tt_set_rm}
-
-\begin{itemize}
-
-\item[] \tt bool add(T element) \rm
-
-Returns \tt true \rm if the element was successfully added to the \tt set\rm, \tt false \rm otherwise.
-
-\item[] \tt void clear() \rm
-
-Removes all elements from the \tt set \rm such that it is empty afterwards.
-
-\item[] \tt bool contains(T element) \rm
-
-Returns \tt true \rm if the \tt set \rm contains this element, \tt false \rm otherwise.
-
-\item[] \tt bool containsAll(set<T> otherSet) \rm
-
-Returns \tt true \rm if all elements in \tt otherSet \rm are found in this set.
-
-\item[] \tt bool isEmpty() \rm
-
-Returns \tt true \rm if there are no elements in this \tt set\rm, \tt false \rm otherwise.
-
-\item[] \tt iter<T> iterator() \rm
-
-Returns an iterator over the elements in this \tt set\rm.
-
-\item[] \tt bool remove(T element) \rm
-
-Returns \tt true \rm if the element was successfully removed from the \tt set\rm, \tt false \rm otherwise (i.e. the \tt list
-\rm didn't contain \tt element\rm).
-
-\item[] \tt bool removeAll(set<T> otherSet) \rm
-
-Returns \tt true \rm if all the elements in \tt otherSet \rm were successfully removed from this set.
-
-\item[] \tt int size() \rm
-
-Returns the number of elements in the set.
-
-\end{itemize}
-
-% subsubsection tt_set_rm (end)
 
 \subsubsection{\tt list \rm} % (fold)
 \label{ssub:list}
@@ -1151,7 +1134,7 @@ Returns an int with the number of elements in the list.
 
 % subsubsection list (end)
 
-\subsubsection{Multiset} % (fold)
+\subsubsection{\tt multiset \rm} % (fold)
 \label{ssub:multiset}
 
 The \tt multiset \rm object is similar in kind to the \tt set \rm object in that
@@ -1216,6 +1199,52 @@ Returns the total number of objects in this \tt multiset\rm.
 \end{itemize}
 
 % subsubsection multiset (end)
+
+\subsubsection{\tt set \rm} % (fold)
+\label{ssub:tt_set_rm}
+
+\begin{itemize}
+
+\item[] \tt bool add(T element) \rm
+
+Returns \tt true \rm if the element was successfully added to the \tt set\rm, \tt false \rm otherwise.
+
+\item[] \tt void clear() \rm
+
+Removes all elements from the \tt set \rm such that it is empty afterwards.
+
+\item[] \tt bool contains(T element) \rm
+
+Returns \tt true \rm if the \tt set \rm contains this element, \tt false \rm otherwise.
+
+\item[] \tt bool containsAll(set<T> otherSet) \rm
+
+Returns \tt true \rm if all elements in \tt otherSet \rm are found in this set.
+
+\item[] \tt bool isEmpty() \rm
+
+Returns \tt true \rm if there are no elements in this \tt set\rm, \tt false \rm otherwise.
+
+\item[] \tt iter<T> iterator() \rm
+
+Returns an iterator over the elements in this \tt set\rm.
+
+\item[] \tt bool remove(T element) \rm
+
+Returns \tt true \rm if the element was successfully removed from the \tt set\rm, \tt false \rm otherwise (i.e. the \tt list
+\rm didn't contain \tt element\rm).
+
+\item[] \tt bool removeAll(set<T> otherSet) \rm
+
+Returns \tt true \rm if all the elements in \tt otherSet \rm were successfully removed from this set.
+
+\item[] \tt int size() \rm
+
+Returns the number of elements in the set.
+
+\end{itemize}
+
+% subsubsection tt_set_rm (end)
 
 \subsubsection{text} % (fold)
 \label{ssub:text}
