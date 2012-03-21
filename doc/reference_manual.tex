@@ -453,7 +453,7 @@ The following words are reserved for use as keywords, and may not be redefined b
 \subsection{Constants} % (fold)
 \label{sub:constants}
 
-The word \textbf{\emph{constant}} has two different meanings in Hog. It can refer to either a variable that is \emph{constant},
+The word \textbf{\emph{constant}} has two different meanings in Hog. It can refer to either a variable that is \emph{fixed},
 that is, once it is initialized cannot be changed, or can refer to an \textbf{\emph{unnamed value}}, such as "1.0". To declare
 a constant variable, use the following pattern,
 
@@ -465,26 +465,11 @@ a constant variable, use the following pattern,
 The following are a list of examples of unnamed values and their corresponding types:
 
 \begin{itemize}
-  \item[] \tt -1\rm, \tt 0\rm, \tt 1\rm, \tt 2\rm (all of type \tt int\rm)
+  \item[] \tt -1\rm, \tt 0\rm, \tt 1\rm, \tt 2\rm $\hfill$ (all of type \tt int\rm)
+  \item[] \tt -0.12\rm, \tt3.14159\rm, \tt 2.7182\rm, \tt 1.41421 \rm $\hfill$ (all of type \tt real\rm)
+  \item[] \tt true\rm, \tt false \rm $\hfill$ (all of type \tt bool\rm)
+  \item[] \tt "ulm"\rm, \tt "basel"\rm, \tt "kiel"\rm, \tt "brno" \rm $\hfill$ (all of type \tt text\rm)
 \end{itemize}
-
-In addition, there are also constants associated with each type:
-   int (i.e. -1, 0, 1, 2, 3)
-   real (i.e. -0.12, 6.79, 140.4)
-   bool (true, false)
-   text (i.e. ``hello world'', ``programming'')
-
-\begin{verbatim}
-constants can be of the following types:
-   int
-   real
-   bool
-   text  
-\end{verbatim}
-
-Example:
-{\tt int} constants would be declared as such:
-     final int rate 100
 
 % subsection constants (end)
 
