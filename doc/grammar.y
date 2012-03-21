@@ -175,7 +175,6 @@ elseif_statement
 iteration_statement 
     : WHILE '(' expression ')' statement
     | FOR '(' expression ';' expression ';' expression ')' statement
-    | FOREACH '(' expression IN ID ')' statement
     | FOREACH '(' expression IN expression ')' statement
     ;
 
