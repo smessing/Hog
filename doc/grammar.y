@@ -162,13 +162,17 @@ primary_expression
     ;
 
 selection_statement
-    : IF '(' expression ')' statement
-    | IF '(' expression ')' statement elseif_statement ELSE statement
+    : IF '(' expression ')' statement elseif_statement else_statement
     | SWITCH '(' expression ')' statement
     ; 
 
 elseif_statement
     : ELSEIF '(' expression ')' elseif_statement
+    | /* epsilon */
+    ;
+
+else_statement
+    : ELSE statement
     | /* epsilon */
     ;
 
