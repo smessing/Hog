@@ -1,6 +1,7 @@
 # Latex:
 *.aux
 *.log
+*.synctex.gz
 
 # Bibtex:
 *.bbl
