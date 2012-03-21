@@ -1522,53 +1522,197 @@ Hog also provides, through the Hadoop, prespecified retry policies:
 
 \begin{verbatim}
 
+  %token FALSE TRUE
+  %token UMINUS DECR INCR
+  %token MINUS PLUS TIMES DIVIDE MOD
+  %token LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS ASSIGN
+  %token TEXT BOOL INT REAL LIST VOID
+  %token TEXT_LITERAL ID ARROW INT_CONST REAL_CONST BOOL_CONST
+  %token BREAK CASE DEFAULT
+  %token IN AND OR NOT
+  %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
+  %token FUNCTION FUNCTIONS MAIN MAP REDUCE
 
-declaration:
-   declaration-specifiers
+  %left OR
+  %left AND
+  %right NOT
 
-declaration-list:
-   declaration
-   declaration-list declaration
+  %left MINUS PLUS
+  %left TIMES DIVIDE
+  %left MOD
+  %right UMINUS
+  %left DECR INCR
 
-type-specifier: one of
-   void int real bool text
+  %nonassoc LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS
+  %right ASSIGN
+
+  %start program
+  %%
 
 
-selection-statement:
-   if ( expression ) statement
-   if ( expression ) statement else statement
-   if ( expression ) statement elseif ( expression ) statement... else statement
+  program
+      : functions map reduce main
+      ;
 
-   switch ( expression ) statement if ( expression ) statement
-   if ( expression ) statement else statement
-   if ( expression ) statement elseif ( expression ) statement... else statement
- 
-   switch ( expression ) statement
+  functions
+      : FUNCTION '{' function_list '}'
+      | /* epsilon */
+      ;
 
-iteration-statement:  
-   while ( expression ) statement
-   for ( expression; expression; expression ) statement
-   foreach ( expression in array or list) statement
+  function_list
+      : function
+      | function_list function
+      ;
 
-@Functions:
-   return­type function­name­1 (parameter­list) {
-      exprlist 
-   }
-   returntype functionname2 (parameterlist){
-      exprlist
-   }
+  function
+      : type ID '(' parameter_list ')' '{' statement_list '}'
+      ;
 
-@Map: 
-   (type key­name, type value­name) ­> (type, type) {
-      .
-      .
-      .
-  }
+  parameter_list
+      : type ID ',' parameter_list
+      | type ID
+      | /* epsilon */
+      ;
 
-unary-operator:
-[]
+  map
+      : MAP section_type '{' statement_list '}'
+      ;
 
-constant:
+  reduce
+      : REDUCE section_type '{' statement_list '}'
+      ;
+
+  section_type
+      : '(' type ID ',' type ID ')' ARROW '(' type ',' type ')'
+      ;
+
+  main
+      : MAIN '{' statement_list '}'
+      ;
+
+  statement_list
+      : statement
+      | statement_list statement
+      ;
+
+  statement
+      : expression_statement
+      | selection_statement
+      | iteration_statement
+      | labeled_statement
+      | BREAK
+      ;
+
+  expression_statement
+      : '\n'
+      | expression '\n'
+      ;
+
+  expression
+      : logical_expression
+      | unary_expression ASSIGN expression
+      ;
+
+  logical_expression
+      : logical_expression OR logical_term
+      | logical_term
+      ;
+
+  logical_term
+      : logical_term AND equality_expression
+      | equality_expression
+      ;
+
+  equality_expression
+      : relational_expression
+      | equality_expression DBL_EQLS relational_expression
+      | equality_expression NOT_EQLS relational_expression
+      ;
+
+  relational_expression
+      : additive_expression
+      | relational_expression LESS additive_expression
+      | relational_expression GRTR additive_expression
+      | relational_expression LESS_EQL additive_expression
+      | relational_expression GRTR_EQL additive_expression
+      ;
+
+  additive_expression
+      : multiplicative_expression
+      | additive_expression PLUS multiplicative_expression
+      | additive_expression MINUS multiplicative_expression
+      ;
+
+  multiplicative_expression
+      : cast_expression
+      | multiplicative_expression TIMES cast_expression
+      | multiplicative_expression DIVIDE cast_expression
+      | multiplicative_expression MOD cast_expression
+      ;
+
+  cast_expression
+      : unary_expression
+      | '(' type ')' cast_expression
+      ;
+
+  unary_expression
+      : UMINUS cast_expression
+      | NOT cast_expression
+      | postfix_expression
+      ;
+
+  postfix_expression
+      : primary_expression
+      | postfix_expression INCR
+      | postfix_expression DECR
+      ;
+
+  primary_expression
+      : ID
+      | constant
+      | TEXT_LITERAL
+      | '(' expression ')'
+      ;
+
+  constant
+     : INT_CONST
+     | REAL_CONST
+     | BOOL_CONST
+     ;
+
+  selection_statement
+      : IF '(' expression ')' statement elseif_statement else_statement
+      | SWITCH '(' expression ')' statement
+      ; 
+
+  elseif_statement
+      : ELSEIF '(' expression ')' elseif_statement
+      | /* epsilon */
+      ;
+
+  else_statement
+      : ELSE statement
+      | /* epsilon */
+      ;
+
+  iteration_statement 
+      : WHILE '(' expression ')' statement
+      | FOR '(' expression ';' expression ';' expression ')' statement
+      | FOREACH '(' expression IN expression ')' statement
+      ;
+
+  labeled_statement
+      : CASE ':' statement
+      | DEFAULT ':' statement
+      ;
+
+  type
+      : VOID
+      | TEXT
+      | BOOL
+      | INT
+      | REAL
+      ;
 
 \end{verbatim}
 
