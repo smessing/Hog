@@ -6,7 +6,8 @@
 %token MINUS PLUS TIMES DIVIDE MOD
 %token LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS ASSIGN
 %token TEXT BOOL INT REAL LIST VOID
-%token TEXT_LITERAL ID ARROW INT_CONST REAL_CONST BOOL_CONST
+%token ARROW DOT
+%token TEXT_LITERAL ID INT_CONST REAL_CONST BOOL_CONST
 %token BREAK CASE DEFAULT
 %token IN AND OR NOT
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
@@ -148,9 +149,15 @@ postfix_expression
 
 primary_expression
     : ID
+    | ID DOT ID '(' parameters ')'
     | constant
     | TEXT_LITERAL
     | '(' expression ')'
+    ;
+
+parameters
+    : ID
+    | ID ',' parameters
     ;
 
 constant
