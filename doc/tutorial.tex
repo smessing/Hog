@@ -322,12 +322,12 @@ sorted lists it receives.
             text reduceKey = ""
             
             # begin with the first list as the fully sorted list 
-            list<int> allSortedNums = allSortedLists.getNext()
+            list<int> allSortedNums = allSortedLists.next()
             
             #{ merge the allSortedNums with the next 
                sorted list until all lists have been merged }#
             while(allSortedLists.hasNext()) {
-                  allSortedNums = merge(allSortedNums, allSortedLists.getNext())
+                  allSortedNums = merge(allSortedNums, allSortedLists.next())
             }
             
             emit(reduceKey, allSortedNums)
