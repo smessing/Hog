@@ -459,6 +459,12 @@ There are different kinds of constants, corresponding to each of the primitive d
 
    final type variableName value
 
+In addition, there are also constants associated with each type:
+   int (i.e. -1, 0, 1, 2, 3)
+   real (i.e. -0.12, 6.79, 140.4)
+   bool (true, false)
+   text (i.e. ``hello world'', ``programming'')
+
 \begin{verbatim}
 constants can be of the following types:
    int
@@ -569,7 +575,7 @@ once.
 
       (new type)variableName
 
-Not all basic types can be cast to a different basic type. Any variable of type int or real can be cast to any of the other basic types (int, real, bool text). However, a variable of type bool can only be cast to text and a variable of type text cannot be cast to any of the other variable types. 
+Not all basic types can be cast to a different basic type. Any variable of type int or real can be cast to any of the other basic types (int, real, bool text). However, a variable of type bool can only be cast to text and a variable of type text can be cast to an int or real. If casting a text to an int or real results in an invalid number (i.e. 1a4), then an exception will be thrown. 
 
 % subsection conversions (end)
 
