@@ -148,11 +148,11 @@ italicized font}} is used.
 
 Every Hog program consists of a single source file with a ‘.hog’ extension. This
 source file must contain three sections: \tt @Map\rm, and \tt @Reduce\rm, and
-\tt @Main \rm and can also include an optional \tt @Functions \rm section. These
+\tt @Main \rm and can also include an optional \tt @Functionss \rm section. These
 sections must be included in the following order:
 
 \begin{verbatim}
-    @Functions {
+    @Functionss {
       .
       .
       .
@@ -176,21 +176,21 @@ sections must be included in the following order:
 
 % section overall_structure (end)
 
-\subsection{\tt @Functions\rm} % (fold)
+\subsection{\tt @Functionss\rm} % (fold)
 \label{sub:tt_functionsrm}
 
 At the top of every Hog program, the programmer has the option to define functions
-in a section called \tt @Functions\rm. Any function defined in this section can be
+in a section called \tt @Functionss\rm. Any function defined in this section can be
 called from any other section of the program, including \tt @Map\rm, \tt
 @Reduce\rm, and \tt @Main \rm and can also be called from other functions defined
-in the \tt @Functions \rm section. The section containing the functions begins
-with the keyword \tt @Functions \rm on its own line, followed by the function
+in the \tt @Functionss \rm section. The section containing the functions begins
+with the keyword \tt @Functionss \rm on its own line, followed by the function
 definitions.
 
 Function definitions have the form:
 
 \begin{quotation}
-  \tt @Functions \{ \rm \\
+  \tt @Functionss \{ \rm \\
   \indent \emph{type functionName(parameterList)} \tt \{ \rm \\
   \indent \indent \emph{expressionList} \\
   \indent \tt \}
@@ -200,13 +200,13 @@ The return-type can be any valid Hog type. The rules regarding legal function-na
 are identical to those regarding legal variable identifiers. Each parameter in the
 parameter-list consists of a valid Hog type followed by the name of the parameter,
 which must also follow the naming rules for identifiers. Parameters in the
-parameter-list are separated by commas. The \tt @Functions \rm section ends when the next
+parameter-list are separated by commas. The \tt @Functionss \rm section ends when the next
 Hog section begins.
 
-A complete example of an \tt @Functions \rm section:
+A complete example of an \tt @Functionss \rm section:
 
 \begin{verbatim}
-    @Functions {
+    @Functionss {
       int min(int a, int b) {
         if (a < b) {
           return a
@@ -319,7 +319,7 @@ the user would like. Any key/value pair emitted by the reduce function is record
 in the output file.
 
 Below is a sample \tt @Reduce \rm section, which continues the word count example,
-and follows the \tt @map \rm sample introduced in the previous section.
+and follows the \tt @Map \rm sample introduced in the previous section.
 
 \begin{verbatim} 
 
@@ -419,10 +419,10 @@ The following words are reserved for use as keywords, and may not be redefined b
 \begin{multicols}{4}
 \tt
 \begin{itemize}
-  \item[] @functions
-  \item[] @main
-  \item[] @map
-  \item[] @reduce
+  \item[] @Functionsss
+  \item[] @Meduce
+  \item[] @Map
+  \item[] @Reduce
   \item[] and
   \item[] bool
   \item[] break
