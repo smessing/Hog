@@ -758,7 +758,7 @@ operations).
 \label{ssub:primitive_type_variable_declarations}
 
 Variables of one of the primitive types, including \tt int\rm, \tt real\rm, \tt
-text \rm or \tt bool \rm are declared using the following patterns:
+text\rm, or \tt bool\rm, are declared using the following patterns:
 
 \begin{enumerate}
   \item \emph{type identifier} \rm $\hfill$ (uninitialized)
@@ -785,7 +785,7 @@ Derived-type variables are declared using the following patterns:
 \begin{enumerate}
   \item \emph{type identifier}
   \item \emph{type identifier = expression }
-  \item \emph{type idenfitier(parameterList)} \\
+  \item \emph{type idenfitier(parameterList)}  where, \\
   \indent \emph{parameterList} $\rightarrow$ \emph{parameter}, \emph{parameterList} $|$ \emph{parameter}
 \end{enumerate}
 
@@ -794,11 +794,11 @@ variables. When the first pattern is used, we say that the variable is
 \textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user attempts
 to use any type­specific operations (for instance, \tt myList.size() \rm on an
 uninitialized variable, the program will through a run­time exception (see \S
-\ref{sec:exception_handling} for a discussion of exceptions). When the second
+\ref{sec:exception_handling} for a discussion of exceptions)). When the second
 pattern is used, the variable is \textbf{\emph{initialized}} to the result of the
-\tt derived­expr\rm.
+\emph{expression}.
 
-Because derived­type variables often have additional structure that needs to be
+Because derived-type variables often have additional structure that needs to be
 defined at initialization, a third pattern is provided. In this pattern, the user
 can specify a list of \textbf{\emph{parameters}} to initialize the object. For
 instance,
@@ -816,9 +816,11 @@ Specifies that \tt myList \rm should be initialized with five \tt null \rm value
 
 In order to declare a function, use the following notation:
 
-\indent type functionName(parameterList) \tt \{ \rm \\
+\begin{quotation}
+\emph{type functionName} \tt ( \rm \emph{parameterList} \tt ) \{ \rm \\
 \indent \indent \emph{expressionList} \\
-\indent \tt \} 
+\indent \tt \}
+\end{quotation}
 
 
 % subsubsection function_declarations (end)
