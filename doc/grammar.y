@@ -7,7 +7,7 @@
 %token MINUS PLUS TIMES DIVIDE MOD
 %token LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS ASSIGN
 %token TEXT BOOL INT REAL LIST VOID
-%token TEXT_LITERAL ID CONST ARROW
+%token TEXT_LITERAL ID ARROW INT_CONST REAL_CONST BOOL_CONST
 %token BREAK CASE DEFAULT
 %token IN AND OR NOT
 %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
@@ -94,9 +94,13 @@ expression
     ;
 
 logical_expression
-    : equality_expression
-    | logical_expression OR logical_term
+    : logical_expression OR logical_term
     | logical_term
+    ;
+
+logical_term
+    : logical_term AND equality_expression
+    | equality_expression
     ;
 
 equality_expression
@@ -131,20 +135,9 @@ cast_expression
     | '(' type ')' cast_expression
     ;
 
-logical_term
-    : logical_term AND logical_factor
-    | logical_factor
-    ;
-
-logical_factor
-    : NOT logical_factor
-    | '(' logical_expression ')'
-    | TRUE
-    | FALSE
-    ;
-
 unary_expression
     : UMINUS cast_expression
+    | NOT cast_expression
     | postfix_expression
     ;
 
@@ -156,10 +149,16 @@ postfix_expression
 
 primary_expression
     : ID
-    | CONST
+    | constant
     | TEXT_LITERAL
     | '(' expression ')'
     ;
+
+constant
+  : INT_CONST
+  | REAL_CONST
+  | BOOL_CONST
+  ;
 
 selection_statement
     : IF '(' expression ')' statement elseif_statement else_statement
