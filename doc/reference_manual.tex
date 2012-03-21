@@ -190,10 +190,10 @@ The return-type can be any valid Hog type. The rules regarding legal function-na
 are identical to those regarding legal variable identifiers. Each parameter in the
 parameter-list consists of a valid Hog type followed by the name of the parameter,
 which must also follow the naming rules for identifiers. Parameters in the
-parameter-list are separated by commas. The @Functions section ends when the next
+parameter-list are separated by commas. The \tt @Functions \rm section ends when the next
 Hog section begins.
 
-A complete example of an @Functions section:
+A complete example of an \tt @Functions \rm section:
 
 \begin{verbatim}
     @Functions {
@@ -207,8 +207,8 @@ A complete example of an @Functions section:
 
       list<int> reverseList(list<int> oldList) {
         list<int> newList()
-        for (int i = oldList.len()-1; i >= 0; i--) {
-          newList.append(oldList.get(i))
+        for (int i = oldList.size() - 1; i >= 0; i--) {
+          newList.add(oldList.get(i))
         }
         return newList
       }
@@ -240,16 +240,13 @@ then the body of the map function as follows:
   \indent \tt \} \rm
 \end{quotation}
 
-The first \tt type identifier \rm defines the \emph{\textbf{key}} and the second
-defines the \emph{\textbf{value}} of the input key-value pair to the \tt @Map \rm
-function. The identifiers specified for the key and value can be made reference to
-later within the \tt @Map \rm block. The \tt @Map \rm signature is followed by an
-arrow and another key-value pair, defining the types of the output of the map
-function. Notice that identifiers are not specified for the output key and value
-(said to be \emph{unnamed}), as these pairs are only produced at the end of the
-map function. Also note that any code written in the same scope after an \tt
-emit() \rm call will be \textbf{\emph{unreachable}}, and will cause a compile-time
-\tt UnreachableCodeException\rm.
+The first \emph{type identifier} defines the \emph{\textbf{key}} and the second defines the \emph{\textbf{value}} of the input
+key-value pair to the \tt @Map \rm function. The identifiers specified for the key and value can be made reference to later
+within the \tt @Map \rm block. The \tt @Map \rm signature is followed by an arrow and another key-value pair, defining the
+types of the output of the map function. Notice that identifiers are not specified for the output key and value (said to be
+\emph{\textbf{unnamed}}), as these pairs are only produced at the end of the map function. Also note that any code written in
+the same scope after an \tt emit() \rm call will be \textbf{\emph{unreachable}}, and will cause a compile-time \tt
+UnreachableCodeException\rm.
 
 The map function can include any number of calls to \tt emit()\rm, which outputs
 the resulting intermediate key-value pairs for use by the function defined in the
