@@ -18,16 +18,23 @@
 \section*{Introduction}
 \label{sec:introduction}
 
-Hog gives users with some programming experience a gentle introduction to mapReduce, a popular programming model for distributed computation. In a Hog program, a user specifies an @Map function, which operates on key-value pairs (read from a text file), and outputs intermediate key-value pairs. The user also specifies an @Reduce function, which groups the intermediate key-value pairs by key, and outputs a final set of key-value pairs. This model of computation has been widely adopted for distributing large computations that might be considered "embarassingly parallelizable."
+Hog gives users with some programming experience a gentle introduction to
+MapReduce, a popular programming model for distributed computation. In a Hog
+program, a user specifies an \tt @Map \rm function, which operates on key-value
+pairs (read from a text file), and outputs intermediate key-value pairs. The user
+also specifies an \tt @Reduce \rm function, which groups the intermediate key-value
+pairs by key, and outputs a final set of key-value pairs. This model of computation
+has been widely adopted for distributing large computations that might be
+considered "embarassingly parallelizable."
 
 \subsection*{Program Structure} % (fold)
 \label{sub:program_structure}
 Every Hog program has four sections, defined in the following order:
 \begin{description}
-\item[@Functions] optional section which defines functions used throughout the program.
-\item[@Map] defines the map function that takes the input key-value pairs and outputs intermediate key-value pairs.
-\item[@Reduce] defines the reduce function that takes a single key from the set of intermediate key-value pairs output by the map function, and all of the values associated with that key, and reduces them to a final output.
-\item [@Main] the entry point for the program which generally initiates the mapReduce routine and can perform other local (non-distributed) computations.
+\item[\tt @Functions\rm:] An optional section which defines functions used throughout the program.
+\item[\tt @Map\rm:] This section defines the map function that takes the input key-value pairs and outputs intermediate key-value pairs.
+\item[\tt @Reduce\rm:] This section defines the reduce function that takes a single key from the set of intermediate key-value pairs output by the map function, and all of the values associated with that key, and reduces them to a final output.
+\item [\tt @Main\rm:] The entry point for the program which initiates the MapReduce routine and can perform other local (non-distributed) computations.
 \end{description}
 
 \section*{Word Count}
