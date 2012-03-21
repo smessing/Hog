@@ -144,7 +144,6 @@ logical_factor
 unary_expression
     : UMINUS cast_expression
     | postfix_expression
-    | cast_expression
     ;
 
 postfix_expression
