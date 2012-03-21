@@ -121,19 +121,44 @@ Exception handling is outside of the scope of this tutorial. Please see the
 language reference manual for guidance on how to anticipate and handle exceptions.
 
 In the body of the \tt foreach \rm loop, we use the built-in function \tt emit()
-\rm to output a key-value pair, which the framework then groups by key. In this
-case, since we want to group by the word itself, and so we emit the word and the
-value \tt 1\rm, which we will use to calculate the totals in the \tt @Reduce \rm
-section.
+\rm to output a key-value pair, which the framework then groups by key when passing
+to the \tt @reduce \rm section. In this case, since we want to group by the word
+itself, we emit the word and the value \tt 1\rm, which we will later use to
+calculate the totals in the \tt @Reduce \rm section.
 
-\subsubsection*{@Reduce}
-In this section, for each word (the key) emitted by the @Map section, we will simply add up all the ones (the value) emitted as well to get a final count for each word. 
+\subsubsection*{\tt @Reduce \rm}
 
-Since the inputs to this section are grouped by key, @Reduce will receive a word and an iterator over all of that word's values (the ones). For every word, this function will receive an iterator over all of the values emitted by the @Map function for that word. This is why the header for this section has the word as the key and an iterator over a list of ints as the value. The key type of the input to the reduce function must match the key type of the output of the map function. Similarly, the values type of the reduce function is simply an iterator over the type of the value output by the map function.
 
-Since we want to output a word and its associated word count, @Reduce will output text and an int for each word.
+In this section, for each word (the key) emitted by the \tt @Map \rm section, we
+will simply add up all the counts (the values) emitted for each particular word to
+get the final count. It should now be clear why we emitted the valued \tt 1 \rm for
+each word in the \tt @Map \rm section, as we do so once for every instance of
+seeing a particular word.
 
-In the body, we initialize the count to 0, and then iterate through the list of values using a familiar while loop, adding each value of one to a running total. To do this, we use the built-in functions on iterators hasNext(), which returns true or false, and getNext(), which returns the next value in the list and moves the iterator forward. 
+Since the inputs to this section are grouped by key, \tt @Reduce \rm will receive a
+word and an \textbf{\emph{iterator}} (referred to as an \tt iter \rm in Hog) over
+all of that word's values (the \tt 1\rm's we emitted in the \tt @Map \rm section).
+For \emph{every} word, this function will receive an iterator over all of the
+values emitted by the \tt @Map \rm function for \emph{that} word. This is why the
+header for this section has the word as the key and an iterator over a \tt list \rm
+of \tt int\rm s as the value. The key type of the input to the reduce function
+\emph{must match} the key type of the output of the map function. Similarly, the
+values type of the reduce function is \emph{always} an iterator over the type of
+the value output by the map function.
+
+Since we want to output a word and its associated word count, \tt @Reduce \rm will
+output \tt text \rm and \tt int \rm for each word.
+
+In the body, we initialize the \textbf{\emph{variable}} \tt count \rm to \tt 0\rm,
+and then iterate through the list of values using a familiar \tt while \rm loop,
+adding each value of \tt 1 \rm to a running total (recall that \tt count \rm has
+type \tt int\rm, which means it can represent an integer value). To do this, we use
+the built-in functions on iterators \tt hasNext()\rm---which returns \tt true \rm
+if the iterator contains more values and \tt false \rm otherwise---and \tt
+getNext()\rm---which returns the next value in the \tt list \rm and moves the
+iterator position forward. The statements inside \tt while \rm loop continue to
+execute until we have seen every variable in the \tt iter \rm object (when \tt
+values.hasNext() \rm evalutes to \tt false\rm).
 
 After we have a full count for the input word, we emit the word and its count as our final output.
 
