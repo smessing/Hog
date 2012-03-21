@@ -74,22 +74,44 @@ The general idea of this program is that we want to read every line of text from
 every file, and then, grouping by word, output the total number of times we
 encountered each word. Since we want to group by word, we will use the words
 themselves as the intermediate key output by the \tt @Map \rm function. This will
-allow us to group each words value and send them all together in one key-value pair
-to the \tt @Reduce \rm function.
+allow us to group each word's value and send them all together in one key-value
+pair to the \tt @Reduce \rm function.
 
-\subsubsection*{@Functions}
-The first thing we notice is that this program does not contain an @Functions section. This section is optional, and only needs to be included if the user wants to write his or her own subroutines to be used elsewhere in the program.
+\subsubsection*{\tt @Functions \rm}
 
-\subsubsection*{@Map}
-This section's job is to read in a line of text from a file, and simply output each word as the key with a value that indicates we have just encountered it. We will use this value later to perform the summation.
+The first thing we notice is that this program does not contain an \tt @Functions
+\rm section. This section is optional, and only needs to be included if the user
+wants to write his or her own subroutines to be used elsewhere in the program.
 
-The first line of this section is the @Map header, which defines the signature of the @Map function. In the current release, all Hog programs read input files one line at a time, where the file offset of the line is the key, and the text of the line is the value. That is why in this and all Hog programs, the only allowable types for the input key-value pair is (int, text). The inputs are also named in the signature in order to reference them in the body of the function.
+\subsubsection*{\tt @Map \rm}
 
-The input signature is followed by an arrow, followed by the type signature of the outputted intermediate key-value pairs. In this case, we will output each word as text and a count as an int. These values are unnamed, as they cannot be referenced in the @Map section.
+This section's job is to read in a line of text from a file, and simply output each
+word as the key with a value that indicates we have just encountered it. We will
+use this value later to perform the summation.
 
-In the body of the function, we split the line of text passed in as the value into words delineated by whitespace by using the built-in function tokenize(). We then iterate through the list of words (of type list $\langle$text$\rangle$) that tokenize() returns using a foreach loop. 
+The first line of this section is the \tt @Map \rm header, which defines the
+\textbf{\emph{signature}} of the \tt @Map \rm function. In the current release, all
+Hog programs read input files one line at a time, where the file offset of the line
+is the key, and the text of the line is the value. \emph{This means that for all
+Hog programs, the only allowable types for the input key-value pair is \tt (int\rm,
+\tt text)\rm}. The inputs are also \textbf{\emph{named}} in the signature in order
+to reference them in the body of the function.
 
-In the body of the foreach loop, we use the built-in function emit() to output a key-value pair to the framework for grouping by key. In this case, since we want to group by the word, we emit the word and the value 1, which we will use to calculate the totals in the @Reduce section.
+The input signature is followed by an arrow, followed by the type signature of the
+outputted intermediate key-value pairs. In this case, we will output each word as
+\tt text \rm and its count as an \tt int\rm. These values are
+\textbf{\emph{unnamed}}, as they cannot be referenced in the \tt @Map \rm section.
+
+In the body of the function, we split the line of text passed in as the value into
+words delineated by whitespace by using the built-in function \tt tokenize()\rm. We
+then iterate through the \tt list \rm of words (of type \tt list<text>\rm) that \tt tokenize() \rm returns using a \tt foreach \rm
+loop.
+
+In the body of the \tt foreach \rm loop, we use the built-in function \tt emit()
+\rm to output a key-value pair, which the framework then groups by key. In this
+case, since we want to group by the word itself, and so we emit the word and the
+value \tt 1\rm, which we will use to calculate the totals in the \tt @Reduce \rm
+section.
 
 \subsubsection*{@Reduce}
 In this section, for each word (the key) emitted by the @Map section, we will simply add up all the ones (the value) emitted as well to get a final count for each word. 
