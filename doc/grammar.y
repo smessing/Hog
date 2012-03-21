@@ -3,9 +3,9 @@
 %}
 
 %token FALSE TRUE
-%token UMINUS DECR INCR DBL_EQLS NOT_EQLS
+%token UMINUS DECR INCR
 %token MINUS PLUS TIMES DIVIDE MOD
-%token LESS GRTR LESS_EQL GRTR_EQL
+%token LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS
 %token TEXT BOOL INT REAL LIST VOID
 %token TEXT_LITERAL ID CONST ARROW
 %token BREAK CASE DEFAULT
@@ -17,11 +17,13 @@
 %left AND
 %right NOT
 
-%left '+' '-'
-%left '*' '/'
+%left MINUS PLUS
+%left TIMES DIVIDE
+%left MOD
 %right UMINUS
-%left DECR
-%left INCR
+%left DECR INCR
+
+%nonassoc LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS
 
 %start program
 %%
