@@ -670,7 +670,8 @@ The following are the comparators implemented in Hog (all are binary operations)
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 
-\hline
+\hline \textbf{Operator} & \textbf{Associativity} &
+\textbf{Precedence Level} & \textbf{Behavior} \\ \hline
 \tt < \rm & none & 0 & less than \\ \hline
 \tt <= \rm & none & 0 & less than or equal to \\ \hline
 \tt > \rm & none & 0 & greater than \\ \hline
@@ -816,11 +817,11 @@ Specifies that \tt myList \rm should be initialized with five \tt null \rm value
 \subsubsection{Function Declarations} % (fold)
 \label{ssub:function_declarations}
 
-\textbf In order to declare a function, use the following notation:
+In order to declare a function, use the following notation:
 
-   \indent type functionName(parameterList)} \tt \{ \rm \\
-  \indent \indent \emph{expressionList} \\
-   \indent \tt \} 
+\indent type functionName(parameterList) \tt \{ \rm \\
+\indent \indent \emph{expressionList} \\
+\indent \tt \} 
 
 
 % subsubsection function_declarations (end)
@@ -835,8 +836,9 @@ Specifies that \tt myList \rm should be initialized with five \tt null \rm value
 \subsection{Expression Statement} % (fold)
 \label{sub:expression_statement}
 
-An \textbf{\emph{expression statement}} is either an individual assignment or a function call. All consequences of a given
-expression take effect before the next expression is executed.
+An \textbf{\emph{expression statement}} is either an individual assignment or a
+function call. All consequences of a given expression take effect before the next
+expression is executed.
 
 % subsection expression_statement (end)
 
