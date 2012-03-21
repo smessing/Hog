@@ -373,15 +373,16 @@ specific index in the list.
 
 The map function reads in a line of comma-separated integers as \tt text\rm, and
 outputs a list of the integers in sorted order. To do this, we introduce
-\textbf{\emph{casting}}, which allows to transform a value of one type into another
-type. In order to cast, the programmer must put the type he or she wants to cast to
-in parenthesis before the value or variable name. In this case, we are casting a
-\tt text \rm to an \tt int\rm, which is a very common operation in Hog, since all
-input is read in as \tt text\rm. If the string contained in the \tt text \rm object
-is not a valid number (e.g. \tt "1ab2"\rm), the cast will result in an exception. A
-more robust version of the MergeSort program would include some exception handling
-to handle these cases. It's worth noting that the current code is somewhat brittle,
-in that if such a string of characters is encountered, the program will fail.
+\textbf{\emph{casting}}, which allows enables transforming a value of one type into
+another type. In order to cast, the programmer must put the type he or she wants to
+cast to in parenthesis before the value or variable name. In this case, we are
+casting a \tt text \rm to an \tt int\rm, which is a very common operation in Hog,
+since all input is read in as \tt text\rm. If the string contained in the \tt text
+\rm object is not a valid number (e.g. \tt "1ab2"\rm), the cast will result in an
+exception. A more robust version of the MergeSort program would include some
+exception handling to handle these cases. It's worth noting that the current code
+is somewhat brittle, in that if such a string of characters is encountered, the
+program will fail.
 
 To sort the list of \tt int\rm s that have been read in from the input, we call a
 built-in function on lists called \tt.sort()\rm. This function sorts the elements
@@ -392,13 +393,36 @@ language reference manual for more details about \tt lists \rm and their built-i
 functions.
 
 Finally, we emit the sorted list as a value, with identical keys for each list, so
-that they are all sent to a single reducer.
+that they are all sent to the same reducer. This is a common trick employed in Hog
+when we only care about one value instead of two (i.e. a key-value pair).
 
-\subsection*{@Reduce}
-The reduce function receives an iterator to all of the sorted lists from the map function, and merges them together one by one using the merge() function we defined earlier.
+\subsubsection*{\tt @Reduce \rm}
 
-\subsection*{@Main}
-In this section, we demonstrate that arbitrary code can be performed locally in the @Main block. While the @Main must always call the mapReduce() function to begin the map reduce program, it can also perform locally any code that could be written in a function. In this example, we use the built-in function print() to print to standard output and let the user know that the mapReduce job has completed.
+The reduce function receives an iterator over \emph{all} of the sorted lists from
+the map function, and merges them together one by one using the \tt merge() \rm
+function we defined earlier.
 
+\subsubsection*{\tt @Main \rm}
+
+In this section, we demonstrate that arbitrary code can be performed locally in the
+\tt @Main \rm block. While the \tt @Main \rm must always call the \tt mapReduce()
+\rm function to begin the map reduce program, it can also perform locally any code
+that could be written in a function. In this example, we use the built-in function
+\tt print() \rm to print messages to standard out and let the user know that the
+MapReduce job has completed.
+
+\subsubsection*{Sample Output}
+
+Because we used the same, empty \tt text \rm ( \tt "" \rm) for the keys for
+key-value pairs to the \tt @Reduce \rm section, we end up with a sorted list of
+numbers all on one line. An example is given below,
+
+\begin{verbatim}
+  ,-123,-1,0,0,0,1,1,2,3,4,9,15,1234,6234,53854,123495,...
+\end{verbatim}
+
+\noindent Notice that the string begins with a space and then a comma, this is
+because of the empty \tt text \rm key. If we had instead put some non-empty \tt
+text \rm for the key, it would've shown up here.
 
 \end{document}
