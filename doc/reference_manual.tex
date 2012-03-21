@@ -453,9 +453,20 @@ The following words are reserved for use as keywords, and may not be redefined b
 \subsection{Constants} % (fold)
 \label{sub:constants}
 
-There are different kinds of constants, corresponding to each of the primitive data types in Hog. Once a variable has been declared a constant, its type and value cannot be changed. To declare a constant, use the following notation:
+The word \textbf{\emph{constant}} has two different meanings in Hog. It can refer to either a variable that is \emph{constant},
+that is, once it is initialized cannot be changed, or can refer to an \textbf{\emph{unnamed value}}, such as "1.0". To declare
+a constant variable, use the following pattern,
 
-   final type variableName value
+
+\begin{quotation}
+   \tt final \rm \emph{type variableName value}
+\end{quotation}
+
+The following are a list of examples of unnamed values and their corresponding types:
+
+\begin{itemize}
+  \item[] \tt -1\rm, \tt 0\rm, \tt 1\rm, \tt 2\rm (all of type \tt int\rm)
+\end{itemize}
 
 In addition, there are also constants associated with each type:
    int (i.e. -1, 0, 1, 2, 3)
