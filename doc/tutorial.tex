@@ -68,7 +68,7 @@ program will produce a single output file with each word and its associated coun
       
 \end{verbatim}
 
-\subsection{Running the Word Count Code} % (fold)
+\subsection*{Running the Word Count Code} % (fold)
 \label{sub:running_the_word_count_code}
 
 To run the program \tt WordCount.hog\rm, the user types the following into the
@@ -77,8 +77,8 @@ terminal: \\
 \noindent \tt hog --hdfs WordCount.hog --input inputFile.txt
 --output wordCounts.csv \rm \\
 
-Here, \tt --hdfs \rm indicates that we want to run the job on the users Hadoop
-cluster (specified in a configuration file, see the Hog's reference manual for
+Here, \tt --hdfs \rm indicates that we want to run the job on the user's Hadoop
+cluster (specified in a configuration file, see the Hog reference manual for
 details on how to properly orient Hog to your Hadoop cluster). If, alternatively,
 we wanted to run the job locally, we can type \tt --local\rm. The second parameter
 is the name of the program, here \tt WordCount.hog\rm. The last two parameters
@@ -181,10 +181,14 @@ values.hasNext() \rm evalutes to \tt false\rm).
 
 After we have a full count for the input word, we emit the word and its total count
 as our final output. The framework then takes care of writing these emitted
-key-value pairs to an output file, the name of which is specified by the user.
+key-value pairs to an output file, the name of which is specified by the user when
+the program is above (see the section above, \textbf{Running the Word Count Code}).
 
 \subsubsection*{@Main}
-In this section, we simply call the built-in function mapReduce(), which initiates the mapReduce program as specified by the previous sections and the command line arguments.
+
+In this section, we simply call the built-in function \tt mapReduce()\rm, which
+initiates the MapReduce program as specified by the previous sections and the
+command line arguments.
 
 
 \section*{Merge Sort}
