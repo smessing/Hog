@@ -473,7 +473,7 @@ a constant variable, use the following pattern,
 
 
 \begin{quotation}
-   \tt final \rm \emph{type variableName value}
+   \tt final \rm \emph{type variableName} = \emph{value}
 \end{quotation}
 
 The following are a list of examples of unnamed values and their corresponding types:
@@ -493,9 +493,10 @@ A string literal consists of a sequence of zero of more contiguous characters en
 or \tt "\textbackslash t" \rm for the tab character. A string literal has a String type has many of the same built-in functions
 as the String class in Java. String literals are constant and their values cannot be changed after they are created. String
 literals can be concatenated with adjacent string literals by use of the \tt + \rm operator and are then converted into a
-single string. Hog implements concatenation by use of the Java StringBuilder (or StringBuffer) class and its append method. All
-string literals in Hog programs are implemented as instances of the String class, and then are mapped directly to the
-equivalent String class in Java.
+single string. Hog implements concatenation by use of the Java \tt StringBuilder \rm (or \tt StringBuffer\rm) class and its
+append method. All text literals in Hog programs are implemented as instances of the \tt text \rm class, and then are mapped
+directly to the equivalent \tt String \rm class in Java.\footnote{Technically, \tt text \rm objects are implemented as
+instances of Hadoop's \tt Text \rm class, which is closely related to the Java \tt String \rm class.}
 
 % subsection string_literals (end)
 

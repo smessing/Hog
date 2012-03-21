@@ -18,8 +18,8 @@
 \contentsline {subsection}{\numberline {4.5}Constants}{12}
 \contentsline {subsection}{\numberline {4.6}Text Literals}{12}
 \contentsline {subsection}{\numberline {4.7}Variable Scope}{12}
-\contentsline {section}{\numberline {5}Types}{12}
-\contentsline {subsection}{\numberline {5.1}Basic Types}{12}
+\contentsline {section}{\numberline {5}Types}{13}
+\contentsline {subsection}{\numberline {5.1}Basic Types}{13}
 \contentsline {subsection}{\numberline {5.2}Derived Types (Collections)}{13}
 \contentsline {subsection}{\numberline {5.3}Conversions}{13}
 \contentsline {section}{\numberline {6}Expressions}{14}
