@@ -473,18 +473,15 @@ The following are a list of examples of unnamed values and their corresponding t
 
 % subsection constants (end)
 
-\subsection{String Literals} % (fold) \label{sub:string_literals} A string literal
-consists of a sequence of zero of more contiguous characters enclosed in double
-quotes, such as "hello". A string literal can also contain escape characters such
-as "\textbackslash n" for the new line character or "\textbackslash t" for the tab
-character. A string literal has a String type has many of the same builtin
-functions as the String class in Java. String literals are constant and their
-values cannot be changed after they are created. String literals can be
-concatenated with adjacent string literals by use of the "+" operator and are then
-converted into a single string. Hog implements concatention by use of the Java
-StringBuilder(or StringBuffer) class and its append method. All string literals in
-Hog programs are implemented as instances of the String class, and then are mapped
-directly to the equivalent String class in Java.
+\subsection{String Literals} % (fold) \label{sub:string_literals} 
+
+A string literal consists of a sequence of zero of more contiguous characters enclosed in double quotes, such as "hello". A
+string literal can also contain escape characters such as "\textbackslash n" for the new line character or "\textbackslash t"
+for the tab character. A string literal has a String type has many of the same builtin functions as the String class in Java.
+String literals are constant and their values cannot be changed after they are created. String literals can be concatenated
+with adjacent string literals by use of the "+" operator and are then converted into a single string. Hog implements
+concatention by use of the Java StringBuilder(or StringBuffer) class and its append method. All string literals in Hog programs
+are implemented as instances of the String class, and then are mapped directly to the equivalent String class in Java.
 
 % subsection string_literals (end)
 
