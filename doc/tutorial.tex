@@ -102,10 +102,17 @@ outputted intermediate key-value pairs. In this case, we will output each word a
 \tt text \rm and its count as an \tt int\rm. These values are
 \textbf{\emph{unnamed}}, as they cannot be referenced in the \tt @Map \rm section.
 
+The \tt int \rm type represents an \textbf{\emph{integer number}} such as 0, 1, -2,
+3, 5, etc. In addition, Hog has the type \tt real \rm which represents
+\textbf{\emph{real numbers}} such as 0.1, 2.141, etc. The \tt text \rm type is
+Hog's string type, and represents a sequence of characters. To create a \tt text
+\rm object, simply include a string of characters between two double quotes (e.g.
+\tt "hello world 123"\rm).
+
 In the body of the function, we split the line of text passed in as the value into
 words delineated by whitespace by using the built-in function \tt tokenize()\rm. We
-then iterate through the \tt list \rm of words (of type \tt list<text>\rm) that \tt tokenize() \rm returns using a \tt foreach \rm
-loop.
+then iterate through the \tt list \rm of words (of type \tt list<text>\rm) that \tt
+tokenize() \rm returns using a \tt foreach \rm loop.
 
 In the body of the \tt foreach \rm loop, we use the built-in function \tt emit()
 \rm to output a key-value pair, which the framework then groups by key. In this
