@@ -130,6 +130,16 @@ programming language (such as Python or Java), but is inexperienced with distrib
 
 % subsection the_ideal_hog_user (end)
 
+
+\section{Syntax Notation} % (fold)
+\label{sec:syntax_notation}
+
+In the syntax notation used throughout the Hog manual, different syntactic categories are noted by \emph{italic type}, and
+literal words and characters are in \tt typewriter style\rm. When specific terms are introduced, \textbf{\emph{emboldened,
+italicized font}} is used.
+
+% sec syntax_notation (end)
+
 \section{Program Structure} % (fold)
 \label{sec:program_structure}
 
@@ -468,20 +478,20 @@ The following are a list of examples of unnamed values and their corresponding t
   \item[] \tt -1\rm, \tt 0\rm, \tt 1\rm, \tt 2\rm $\hfill$ (all of type \tt int\rm)
   \item[] \tt -0.12\rm, \tt3.14159\rm, \tt 2.7182\rm, \tt 1.41421 \rm $\hfill$ (all of type \tt real\rm)
   \item[] \tt true\rm, \tt false \rm $\hfill$ (all of type \tt bool\rm)
-  \item[] \tt "ulm"\rm, \tt "basel"\rm, \tt "kiel"\rm, \tt "brno" \rm $\hfill$ (all of type \tt text\rm)
 \end{itemize}
 
 % subsection constants (end)
 
-\subsection{String Literals} % (fold) \label{sub:string_literals} 
+\subsection{Text Literals} % (fold) \label{sub:string_literals} 
 
-A string literal consists of a sequence of zero of more contiguous characters enclosed in double quotes, such as "hello". A
-string literal can also contain escape characters such as "\textbackslash n" for the new line character or "\textbackslash t"
-for the tab character. A string literal has a String type has many of the same builtin functions as the String class in Java.
-String literals are constant and their values cannot be changed after they are created. String literals can be concatenated
-with adjacent string literals by use of the "+" operator and are then converted into a single string. Hog implements
-concatention by use of the Java StringBuilder(or StringBuffer) class and its append method. All string literals in Hog programs
-are implemented as instances of the String class, and then are mapped directly to the equivalent String class in Java.
+A string literal consists of a sequence of zero of more contiguous characters enclosed in double quotes, such as \tt
+"hello"\rm. A string literal can also contain escape characters such as \tt "\textbackslash n" \rm for the new line character
+or \tt "\textbackslash t" \rm for the tab character. A string literal has a String type has many of the same built-in functions
+as the String class in Java. String literals are constant and their values cannot be changed after they are created. String
+literals can be concatenated with adjacent string literals by use of the \tt + \rm operator and are then converted into a
+single string. Hog implements concatenation by use of the Java StringBuilder (or StringBuffer) class and its append method. All
+string literals in Hog programs are implemented as instances of the String class, and then are mapped directly to the
+equivalent String class in Java.
 
 % subsection string_literals (end)
 
@@ -495,15 +505,6 @@ any block nested within its enclosing block.
 % subsection variable_scope (end)
 
 % section lexical_conventions (end)
-
-\section{Syntax Notation} % (fold)
-\label{sec:syntax_notation}
-
-In the syntax notation used throughout the Hog manual, different syntactic
-categories are noted by italic type, and literal words and characters are in
-typewriter style.
-
-% sec syntax_notation (end)
 
 \section{Types} % (fold)
 \label{sec:types}
