@@ -190,22 +190,3 @@ type
     | INT
     | REAL
     ;
-
-/*    
-declarator
-    : ID
-    | '(' declarator ')'    
-    ;
-    
-declaration_list
-    : declaration
-    | declaration_list declaration
-    ;
-  	
-declaration
-    : declaration_specifiers
-    ;   
-
-declaration_specifiers
-    : type
-	;*/
