@@ -59,7 +59,7 @@ program will produce a single output file with each word and its associated coun
             while (values.hasNext()) {
                   count = count + values.next()
             }
-            emit(word, count)
+            emit(count, word)
       }
       
       @Main {
@@ -165,8 +165,8 @@ of \tt int\rm s as the value. The key type of the input to the reduce function
 values type of the reduce function is \emph{always} an iterator over the type of
 the value output by the map function.
 
-Since we want to output a word and its associated word count, \tt @Reduce \rm will
-output \tt text \rm and \tt int \rm for each word.
+Since we want to output a count and its associated word, \tt @Reduce \rm will
+output \tt int \rm and \tt text \rm for each word.
 
 In the body, we initialize the \textbf{\emph{variable}} \tt count \rm to \tt 0\rm,
 and then iterate through the list of values using a familiar \tt while \rm loop,
@@ -179,10 +179,10 @@ iterator position forward. The statements inside the \tt while \rm loop continue
 execute until we have seen every variable in the \tt iter \rm object (when \tt
 values.hasNext() \rm evalutes to \tt false\rm).
 
-After we have a full count for the input word, we emit the word and its total count
+After we have a full count for the input word, we emit the total count and the word
 as our final output. The framework then takes care of writing these emitted
 key-value pairs to an output file, the name of which is specified by the user when
-the program is above (see the section above, \textbf{Running the Word Count Code}).
+the program is run (see the section above, \textbf{Running the Word Count Code}). In this example, we are emitting the word count as the key so that the final result is sorted by the count. If the word was used as the key, the final output would be in alphabetical order. It is also worth noting that even if two words have the same count (and thus the same key), this does not raise any problems, since duplicate keys are only combined in between the \tt @Map \rm and \tt @Reduce \rm phases. Any inidividual key-value pair emitted in the \tt @Reduce \rm phase will be in the final output.
 
 \subsubsection*{@Main}
 
@@ -358,7 +358,7 @@ until there is a smaller element in the second list, at which point it starts
 adding elements from that list instead. It continues switching back and forth
 between the two lists in this manner to ensure that it adds all the elements from
 both lists in the proper order. It finally checks that no elements in either list
-has been left out, and then returns the new, combined list.
+have been left out, and then returns the new, combined list.
 
 Also included in this section are some built-in list functions, such as \tt
 .size()\rm, to get the number of elements in a list, \tt .add()\rm, to add an
