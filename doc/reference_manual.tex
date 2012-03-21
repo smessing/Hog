@@ -1114,7 +1114,7 @@ Returns the number of elements in the set.
 
 % subsubsection tt_set_rm (end)
 
-\subsubsection{List} % (fold)
+\subsubsection{\tt list \rm} % (fold)
 \label{ssub:list}
 
 \begin{itemize}
@@ -1224,12 +1224,6 @@ The following function can be called on a \tt text \rm object:
 
 \begin{itemize}
 
-\item[] \tt list<text> tokenize(text delimiter) \rm \\
-
-\tt tokenize() \rm can be called on a \tt text \rm object to tokenize it into a
-list of \tt text \rm objects based on the delimiter. The delimiter is not included
-in any of the \tt text \rm objects in the returned list.
-
 \item[] \tt int length() \rm \\
 
 Returns the length (number of individual characters) of this \tt text\rm.
@@ -1239,6 +1233,12 @@ Returns the length (number of individual characters) of this \tt text\rm.
 Returns a new \tt text \rm object with each sub-\tt text \rm that matches \tt
 matchText \rm replaced by \tt replacementText\rm. This function does \textbf{not}
 alter the original \tt text \rm object.
+
+\item[] \tt list<text> tokenize(text delimiter) \rm \\
+
+\tt tokenize() \rm can be called on a \tt text \rm object to tokenize it into a
+list of \tt text \rm objects based on the delimiter. The delimiter is not included
+in any of the \tt text \rm objects in the returned list.
 
 \end{itemize}
 
@@ -1270,7 +1270,7 @@ file.
 
 % section system_configuration (end)
 
-\section{Scanning and Parsing Tools and Java Source Code Generation} % (fold)
+\section{Compilation Structure} % (fold)
 \label{sec:parsing_tools}
 
 Currently, the Hog compiler is implemented as a translator into the Java
@@ -1278,7 +1278,7 @@ programming language. The first phase of Hog compilation uses the JFlex as its
 lexical analyzer, which is designed to work with the Look-Ahead Left-to-Right
 (LALR) parser generator CUP. The lexical analyzer creates lexemes, which are
 logically meaningful sequences, and for each lexeme the lexical analyzer sends to
-the LALR parser a token of the form $<$token-name, attribute-value$>$. The second
+the LALR parser a token of the form \tt $<$token-name, attribute-value$>$\rm. The second
 phase of Hog compilation uses Java CUP to create a syntax tree, which is a
 tree-like intermediate representation of the source program, which depicts the
 grammatical structure of the Hog source program.
@@ -1315,7 +1315,7 @@ types, such as String, and thus Hog is built for optimal performance.
 % subsection usage (end)
 
 To build and run a Hog source file there is an executable script \tt hog
-\rm that automates the compilation and linking steps for the user.
+\rm that automates the compilation and linking steps for the user. \\
 
 Usage: \tt hog [--hdfs|--local] job <job args> \rm
 \begin{itemize}
@@ -1377,8 +1377,9 @@ To throw an exception, a programmer uses the following pattern,
 \noindent For example,
 
 \begin{verbatim}
-    if (a instanceof text and b instanceof int)
-    throw TypeMismatchException "Cannot add a text and an int!"
+    if (a instanceof text and b instanceof int) {
+      throw TypeMismatchException "Cannot add a text and an int!"
+    }
 \end{verbatim}
 
 \subsection{Compile-time Exceptions} % (fold)
@@ -1479,11 +1480,6 @@ elements of different types into the same list) and parsing exceptions. The foll
   
   Thrown whenever an arithmetic operation is attempted on non-numeric operands.
   
-  \item[] \tt IOException \rm
-  
-  \item[] \tt InterruptedException \rm
-  
-  \item[] \tt ParseException \rm
 \end{itemize}
 
 % section internal_run_time_exceptions (end)
