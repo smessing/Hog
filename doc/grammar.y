@@ -24,6 +24,7 @@
 %left DECR INCR
 
 %nonassoc LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS
+%right ASSIGN
 
 %start program
 %%
