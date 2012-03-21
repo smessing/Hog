@@ -37,28 +37,32 @@ Every Hog program has four sections, defined in the following order:
 \item [\tt @Main\rm:] The entry point for the program which initiates the MapReduce routine and can perform other local (non-distributed) computations.
 \end{description}
 
-\section*{Word Count}
-\label{word_count}
-Let's assume we have thousands of large text files, and we would like to get a cross-file word count for each word that appears in any of the files. We also have a cluster of computers to help us complete this task. The following short Hog program will produce a single output file with each word and its count.
+\section*{Word Count} 
+\label{word_count} 
+
+Let's assume we have thousands of large text files, and we would like to get a
+cross-file word count for each word that appears in any of the files. We also have
+a cluster of computers to help us complete this task. The following short Hog
+program will produce a single output file with each word and its associated count.
 
 \subsection*{Word Count Code}
 \begin{verbatim}
       
-      @Map: (int lineNum, text line)  ->  (text, int) {
+      @Map (int lineNum, text line)  ->  (text, int) {
             foreach word in line.tokenize(" ") {
                   emit(word, 1)
             }
       }
       
-      @Reduce: (text word, iter<int> values) -> (text, int) {
+      @Reduce (text word, iter<int> values) -> (text, int) {
             int count = 0
             while (values.hasNext()) {
-                  count = count + values.getNext()
+                  count = count + values.next()
             }
             emit(word, count)
       }
       
-      @Main: {
+      @Main {
             mapReduce()
       }
       
