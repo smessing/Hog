@@ -301,14 +301,14 @@ sorted lists it receives.
         }
       }
       
-      @Map: (int lineNum, text line) -> (text, list<int>) {
+      @Map (int lineNum, text line) -> (text, list<int>) {
 
             text reduceKey = "reduceKey"
             list<int> sortedInts()
             
             # put every number from line into list
             foreach number in line.tokenize(",") {
-                  sortedInts.add((int) (number))
+                  sortedInts.add((int) number)
             }
             
             # sort list
@@ -320,7 +320,7 @@ sorted lists it receives.
       }
       
       # reduce will get a list of sorted lists, and merge them 2 at a time
-      @Reduce: (text key, iter<list<int>> allSortedLists) -> (text, list<int>) {
+      @Reduce (text key, iter<list<int>> allSortedLists) -> (text, list<int>) {
             
             # only one output key
             text reduceKey = ""
@@ -328,7 +328,8 @@ sorted lists it receives.
             # begin with the first list as the fully sorted list 
             list<int> allSortedNums = allSortedLists.getNext()
             
-            # merge the allSortedNums with the next sorted list until all lists have been merged
+            #{ merge the allSortedNums with the next 
+               sorted list until all lists have been merged }#
             while(allSortedLists.hasNext()) {
                   allSortedNums = merge(allSortedNums, allSortedLists.getNext())
             }
@@ -337,7 +338,7 @@ sorted lists it receives.
             
       }
       
-      @Main: {
+      @Main {
             print("Beginning sort.\n")
             mapReduce()
             print("Sort complete.\n")
