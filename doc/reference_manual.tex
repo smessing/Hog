@@ -575,10 +575,15 @@ once.
 \end{quotation}
 
 
-Not all basic types can be cast to a different basic type. Any variable of type \tt int \rm or \tt real \rm can be cast to any
-of the other basic types (\tt int\rm, \tt real\rm, \tt bool\rm, \tt text\rm). However, a variable of type bool can only be cast
-to \tt text \rm and a variable of type \tt text \rm can be cast to an int or real. If casting a \tt text \rm to an \tt int \rm
-or \tt real \rm results in an invalid number (e.g. \tt (int) "1a4"\rm), then a \tt TypeCaseException \rm will be thrown.
+Not all basic types can be cast to a different basic type. Any variable of type
+\tt int \rm or \tt real \rm can be cast to any of the other basic types (\tt
+int\rm, \tt real\rm, \tt bool\rm, \tt text\rm). Note, when casting from a \tt real
+\rm to an \tt int\rm, the fractional part of the \tt real \rm value will be
+\textbf{\emph{truncated}}. However, a variable of type bool can only be cast to
+\tt text \rm and a variable of type \tt text \rm can be cast to an \tt int \rm or
+\tt real\rm. If casting a \tt text \rm to an \tt int \rm or \tt real \rm results
+in an invalid number (e.g. \tt (int) "1a4"\rm), then a \tt TypeCaseException \rm
+will be thrown.
 
 % subsection conversions (end)
 
@@ -1568,10 +1573,12 @@ Hog also provides, through the Hadoop, prespecified retry policies:
 \section{Grammar} % (fold)
 \label{sec:grammar}
 
-\emph{Note}: The presented grammar has one minor ambiguity relating to the \textbf{\emph{dangling-else}} problem. If the
-grammar is run through the parser generator \tt yacc\rm, \tt yacc \rm will identify 3 shift/reduce parsing-action conflicts.
-However, the ambiguity is handled by the default behavior of \tt yacc\rm, which preferences shift to reduce, associating \tt
-else \rm and \tt elseif \rm clauses with the closest \tt if \rm clause.
+\emph{Note}: The presented grammar has one minor ambiguity relating to the
+\textbf{\emph{dangling-else}} problem. If the grammar is run through the parser
+generator \tt yacc\rm, \tt yacc \rm will identify 3 shift/reduce parsing-action
+conflicts. However, the ambiguity is handled by the default behavior of \tt
+yacc\rm, which preferences shift to reduce, associating \tt else \rm and \tt
+elseif \rm clauses with the closest \tt if \rm clause.
 
 \begin{verbatim}
   %token UMINUS DECR INCR
@@ -1776,6 +1783,7 @@ else \rm and \tt elseif \rm clauses with the closest \tt if \rm clause.
 
 % section grammar (end)
 
+\nocite{*}
 \bibliographystyle{acm}
 \bibliography{references}
 
