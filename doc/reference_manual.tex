@@ -256,10 +256,10 @@ the \tt @Map \rm type signature. All output pairs from the map function are
 subsequently grouped by key by the framework, and passed as input to the \tt
 @Reduce \rm function.
 
-Currently, the only configuration available is for a file to be passed into the map
+\emph{Note}: Currently, the only configuration available is for a file to be passed into the map
 function one line at a time, with the line of text being the value, and the
 corresponding line number as the key. This requires that the input key/value pair
-to the map function is of type \tt (int key‐name,text value‐name)\rm. Extending
+to the map function is of type \tt (int key‐name, text value‐name)\rm. Extending
 this to allow for other input formats is a future goal of the Hog language.
 
 The following is an example of a complete \tt @Map \rm section for a program that
