@@ -115,7 +115,7 @@ The guiding principles of Hog are:
 
 % subsubsection guiding_princples (end)
 
-\subsection{The \lq\lq Ideal \rq\rq Hog User} % (fold)
+\subsection{The ``Ideal'' Hog User} % (fold)
 \label{sub:the_ideal_hog_user}
 
 Hog was designed with a particular user in mind: one that has already learned the basics of programming in a different
@@ -141,11 +141,11 @@ italicized font}} is used.
 
 Every Hog program consists of a single source file with a ‘.hog’ extension. This
 source file must contain three sections: \tt @Map\rm, and \tt @Reduce\rm, and
-\tt @Main \rm and can also include an optional \tt @Functionss \rm section. These
+\tt @Main \rm and can also include an optional \tt @Functions \rm section. These
 sections must be included in the following order:
 
 \begin{verbatim}
-    @Functionss {
+   @Functions {
       .
       .
       .
@@ -169,37 +169,42 @@ sections must be included in the following order:
 
 % section overall_structure (end)
 
-\subsection{\tt @Functionss\rm} % (fold)
+\subsection{\tt @Functions\rm} % (fold)
 \label{sub:tt_functionsrm}
 
 At the top of every Hog program, the programmer has the option to define functions
-in a section called \tt @Functionss\rm. Any function defined in this section can be
+in a section called \tt @Functions\rm. Any function defined in this section can be
 called from any other section of the program, including \tt @Map\rm, \tt
 @Reduce\rm, and \tt @Main \rm and can also be called from other functions defined
-in the \tt @Functionss \rm section. The section containing the functions begins
-with the keyword \tt @Functionss \rm on its own line, followed by the function
+in the \tt @Functions \rm section. The section containing the functions begins
+with the keyword \tt @Functions \rm on its own line, followed by the function
 definitions.
 
 Function definitions have the form:
 
 \begin{quotation}
-  \tt @Functionss \{ \rm \\
-  \indent \emph{type functionName(parameterList)} \tt \{ \rm \\
+  \emph{type functionName} \tt ( \rm \emph{parameterList} \tt ) \{ \rm \\
   \indent \indent \emph{expressionList} \\
   \indent \tt \}
+\end{quotation}
+
+where,
+
+\begin{quotation}
+\emph{parameterList} $\rightarrow$ \emph{parameter} \tt , \rm \emph{parameterList} $|$ \emph{parameter}
 \end{quotation}
 
 The return-type can be any valid Hog type. The rules regarding legal function-names
 are identical to those regarding legal variable identifiers. Each parameter in the
 parameter-list consists of a valid Hog type followed by the name of the parameter,
 which must also follow the naming rules for identifiers. Parameters in the
-parameter-list are separated by commas. The \tt @Functionss \rm section ends when the next
+parameter-list are separated by commas. The \tt @Functions \rm section ends when the next
 Hog section begins.
 
-A complete example of an \tt @Functionss \rm section:
+A complete example of an \tt @Functions \rm section:
 
 \begin{verbatim}
-    @Functionss {
+    @Functions {
       int min(int a, int b) {
         if (a < b) {
           return a
@@ -382,7 +387,7 @@ enclosing characters is considered a comment, and is completely ignored by the c
 \end{verbatim}
 
 In the above example, the text \tt these are block comments \textbackslash n comments and are ignored \textbackslash n by the
-complier \rm are completely ignored during compilation. Compilation goes directly from the line \tt int i = 0 \rm to the line
+complier \rm is completely ignored during compilation. Compilation goes directly from the line \tt int i = 0 \rm to the line
 \tt i++\rm.
 
 Single-line comments are defined to be strings of text included between a '\tt
@@ -412,8 +417,7 @@ The following words are reserved for use as keywords, and may not be redefined b
 \begin{multicols}{4}
 \tt
 \begin{itemize}
-  \item[] @Functionsss
-  \item[] @Meduce
+  \item[] @Functions
   \item[] @Map
   \item[] @Reduce
   \item[] and
@@ -837,7 +841,7 @@ expression is executed.
 \subsection{Compound Statement (Blocks)} % (fold)
 \label{sub:compound_statement}
 
-Compound statements are defined by \{ and \} and are used to group a sequence of
+\textbf{\emph{Compound statements}} are defined by \{ and \} and are used to group a sequence of
 statements, so that they are syntactically equivalent to a single statement.
 
 % subsection compound_statement (end)
@@ -850,12 +854,12 @@ The following are the \textbf{\emph{flow-of-control}} statements included in Hog
 \begin{itemize}
   \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement}
   \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt else \rm \emph{statement}
-  \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt elseif ( \rm \emph{statement} \tt ) .. else 
+  \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt elseif ( \rm \emph{statement} \tt ) $\dots$ else 
   \rm \emph{statement}
   \item[] \tt switch ( \rm \emph{expression} \tt ) \rm \emph{statement} \rm
 \end{itemize}
 
-In the above statements, the ‘...’ signifies an unlimited number of \tt elseif \rm
+In the above statements, the  $\dots$ signifies an unlimited number of \tt elseif \rm
 statements, since there is no limit on the number of \tt elseif \rm statements
 that can appear before the final \tt else \rm statement. In all forms of the \tt
 if \rm statement, the expression will be evaluated as a \tt bool\rm. If the
@@ -932,7 +936,7 @@ every iteration. The iteration ends when the \emph{statement} has been executed
 for each item in the iterable object and there are no items left to iterate
 through.
 
-\subsubsection{Example of \tt while \rm \textbf{Pattern}} % (fold)
+\subsubsection{Example of \tt while \rm} % (fold)
 \label{ssub:example_1}
 
 \begin{verbatim}
@@ -945,7 +949,7 @@ through.
 
 % subsubsection example_1 (end)
 
-\subsubsection{Example of \tt for \rm \textbf{Pattern}} % (fold)
+\subsubsection{Example of \tt for \rm} % (fold)
 \label{ssub:example_2}
 
 \begin{verbatim}
@@ -956,7 +960,7 @@ through.
 
 % subsubsection example_2 (end)
 
-\subsubsection{Example of \tt foreach \rm \textbf{Pattern}} % (fold)
+\subsubsection{Example of \tt foreach \rm} % (fold)
 \label{ssub:example_3}
 
 \begin{verbatim}
@@ -1024,7 +1028,7 @@ are invoked using the following pattern:
 \noindent Where \emph{identifier} is the identifier for the object in question, \emph{functionName} is the name of the
 function, and \emph{parameterList} is a (possibly empty) list of parameters used to specify the behavior of the invocation.
 
-\emph{Note:} in what follows, if a function has return type T, it means that the return type of this function matches the
+\emph{Note}: In what follows, if a function has return type T, it means that the return type of this function matches the
 parameterized type of this object (i.e. for an \tt iter<int> \rm object, these functions have return type \tt int\rm).
 
 \subsubsection{\tt dict \rm} % (fold)
@@ -1567,7 +1571,7 @@ Hog also provides, through the Hadoop, prespecified retry policies:
   %token BREAK CASE DEFAULT
   %token IN AND OR NOT
   %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
-  %token FUNCTION FUNCTIONS MAIN MAP REDUCE
+  %token FUNCTION MAIN MAP REDUCE
 
   %left OR
   %left AND
