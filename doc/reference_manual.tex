@@ -316,7 +316,7 @@ and follows the \tt @map \rm sample introduced in the previous section.
     @Reduce (text word, iter<int> values) -> (text, int) {
       int count = 0
       while (values.hasNext()) {
-        count = count + values.getNext()
+        count = count + values.next()
       }
       emit(word, count)
     }
@@ -328,15 +328,14 @@ and follows the \tt @map \rm sample introduced in the previous section.
 \subsection{\tt @Main \rm} % (fold)
 \label{sec:tt_main_rm}
 
-The @Main section defines the code that is the entry point to a Hog program. In
-order to run the map reduce program defined by the user in the previous sections,
-@Main must contain a call to the system-level built-in function mapReduce(). Other
-arbitrary code can be run from the @Main section as well. Currently, @Main does
-not have access to the results of the map reduce program resulting from a call to
-mapReduce(). Therefore, it is quite common for the @Main section to contain the
-call to mapReduce() and nothing else.
+The \tt @Main \rm section defines the code that is the entry point to a Hog program. In order to run the map reduce program
+defined by the user in the previous sections, \tt @Main \rm must contain a call to the system-level built-in function \tt
+mapReduce() \rm in order for the \tt @Map \rm and \tt @Reduce \rm functions to be used. Other arbitrary code can be run from
+the \tt @Main \rm section as well. Currently, \tt @Main \rm does not have access to the results of the MapReduce program
+resulting from a call to \tt mapReduce()\rm. Therefore, it is quite common for the \tt @Main \rm section to contain the call to
+\tt mapReduce() \rm and nothing else.
 
-Below is a sample @Main section which prints to the standard output and runs a map reduce job.
+Below is a sample \tt @Main \rm section which prints to the standard output and runs a map reduce job.
 
 \begin{verbatim}
     @Main {
