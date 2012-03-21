@@ -42,45 +42,34 @@ abstracted away many of the low level details from programmers, so they would no
 have to be concerned with how the data is distributed, how the computation is
 parallelized and how all of this is done in a fault tolerant manner.
 
-The MapReduce framework partitions input data across different machines, so that
-the computations are initially performed on smaller sets of data distributed
-across the cluster. Each cluster has a master node that is responsible for
-coordinating the efforts among the slave nodes. Each slave node sends periodic
-heartbeats to the master node so it can be aware of progress and failure. In the
-case of failure, the master node can reassign tasks to other nodes in the cluster.
-In conjunction with the underlying MapReduce framework created at Google, the
-company also had to build the distributed Google File System (GFS). This file
-system ``allows programs to access files efficiently from any computer, so
-functions can be mapped everywhere.'' GFS was designed with the same goals as
-other distributed file systems, including ``performance, scalability, reliability
-and availability.'' Another key aspect of the GFS design is fault tolerance and
-this is achieved by treating failures as normal and optimizing for ``huge files
-that are mostly appended to and then read.''
+The MapReduce framework partitions input data across different machines, so that the computations are initially performed on
+smaller sets of data distributed across the cluster. Each cluster has a master node that is responsible for coordinating the
+efforts among the slave nodes. Each slave node sends periodic heartbeats to the master node so it can be aware of progress and
+failure. In the case of failure, the master node can reassign tasks to other nodes in the cluster. In conjunction with the
+underlying MapReduce framework created at Google, the company also had to build the distributed Google File System (GFS). This
+file system ``allows programs to access files efficiently from any computer, so functions can be mapped everywhere.''
+\cite{patterson:2008} GFS was designed with the same goals as other distributed file systems, including ``performance,
+scalability, reliability and availability.''\cite{ghemawat:2003} Another key aspect of the GFS design is fault tolerance and
+this is achieved by treating failures as normal and optimizing for ``huge files that are mostly appended to and then read.''\cite{ghemawat:2003}
 
-Within the framework, a programmer is responsible for writing both Map and Reduce
-functions. The map function is applied to all of the input data ``in order to
-compute a set of intermediate key/value pairs.'' In the map step, the master node
-partitions the input data into smaller problems and distributes them across the
-worker nodes in the cluster. This step is applied in parallel to all of the input
-that has been partitioned across the cluster. Then, the reduce step is responsible
-for collecting all the processed data from the slave nodes and formatting the
-output. The reduce function is carried out over all the values that have the same
-key such that each key has a single value. which is the answer to the problem
-MapReduce is trying to solve. The output is done to files in the distributed file
-system.
+Within the framework, a programmer is responsible for writing both Map and Reduce functions. The map function is applied to all
+of the input data ``in order to compute a set of intermediate key/value pairs.''\cite{dean:2004} In the map step, the master
+node partitions the input data into smaller problems and distributes them across the worker nodes in the cluster. This step is
+applied in parallel to all of the input that has been partitioned across the cluster. Then, the reduce step is responsible for
+collecting all the processed data from the slave nodes and formatting the output. The reduce function is carried out over all
+the values that have the same key such that each key has a single value. which is the answer to the problem MapReduce is trying
+to solve. The output is done to files in the distributed file system.
 
-The use of ``a functional model with user-specified map and reduce operations
-allows (Google) to parallelize large computations easily and to use re-execution
-as the primary mechanism for fault tolerance.'' A programmer only has to specify
-the functions described above and the system handles the rest of the details.
-Figure \ref{fig:map_reduce_overview} illustrates the execution flow of a MapReduce
-program.
+The use of ``a functional model with user-specified map and reduce operations allows (Google) to parallelize large computations
+easily and to use re-execution as the primary mechanism for fault tolerance.''\cite{dean:2004} A programmer only has to specify the functions
+described above and the system handles the rest of the details. Figure \ref{fig:map_reduce_overview} illustrates the execution
+flow of a MapReduce program.
 
 \begin{center}
 \begin{figure}
   \label{fig:map_reduce_overview}
   \includegraphics[width=1.0\textwidth]{img/map_reduce_overview.pdf}
-  \caption{Overview of the Map Reduce program}
+  \caption{Overview of the Map Reduce program. Taken from \cite{ghemawat:2003}.}
 \end{figure}
 \end{center}
 
@@ -1760,6 +1749,9 @@ Hog also provides, through the Hadoop, prespecified retry policies:
 \end{verbatim}
 
 % section grammar (end)
+
+\bibliographystyle{acm}
+\bibliography{references}
 
 
 \end{document}
