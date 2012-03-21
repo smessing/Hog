@@ -47,10 +47,11 @@ smaller sets of data distributed across the cluster. Each cluster has a master n
 efforts among the slave nodes. Each slave node sends periodic heartbeats to the master node so it can be aware of progress and
 failure. In the case of failure, the master node can reassign tasks to other nodes in the cluster. In conjunction with the
 underlying MapReduce framework created at Google, the company also had to build the distributed Google File System (GFS). This
-file system ``allows programs to access files efficiently from any computer, so functions can be mapped everywhere.''
-\cite{patterson:2008} GFS was designed with the same goals as other distributed file systems, including ``performance,
-scalability, reliability and availability.''\cite{ghemawat:2003} Another key aspect of the GFS design is fault tolerance and
-this is achieved by treating failures as normal and optimizing for ``huge files that are mostly appended to and then read.''\cite{ghemawat:2003}
+file system ``allows programs to access files efficiently from any computer, so functions can be mapped
+everywhere.''\cite{patterson:2008} GFS was designed with the same goals as other distributed file systems, including
+``performance, scalability, reliability and availability.''\cite{ghemawat:2003} Another key aspect of the GFS design is fault
+tolerance and this is achieved by treating failures as normal and optimizing for ``huge files that are mostly appended to and
+then read.''\cite{ghemawat:2003}
 
 Within the framework, a programmer is responsible for writing both Map and Reduce functions. The map function is applied to all
 of the input data ``in order to compute a set of intermediate key/value pairs.''\cite{dean:2004} In the map step, the master
@@ -61,9 +62,9 @@ the values that have the same key such that each key has a single value. which i
 to solve. The output is done to files in the distributed file system.
 
 The use of ``a functional model with user-specified map and reduce operations allows (Google) to parallelize large computations
-easily and to use re-execution as the primary mechanism for fault tolerance.''\cite{dean:2004} A programmer only has to specify the functions
-described above and the system handles the rest of the details. Figure \ref{fig:map_reduce_overview} illustrates the execution
-flow of a MapReduce program.
+easily and to use re-execution as the primary mechanism for fault tolerance.''\cite{dean:2004} A programmer only has to specify
+the functions described above and the system handles the rest of the details. Figure \ref{fig:map_reduce_overview} illustrates
+the execution flow of a MapReduce program.
 
 \begin{center}
 \begin{figure}
