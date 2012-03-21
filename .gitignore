@@ -2,6 +2,10 @@
 *.aux
 *.log
 
+# Bibtex:
+*.bbl
+*.blg
+
 #OSX:
 *.DS_Store
 
