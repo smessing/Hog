@@ -69,7 +69,13 @@ program will produce a single output file with each word and its associated coun
 \end{verbatim}
 
 \subsection*{Word Count Explanation}
-The general idea of this program is that we want to read every line of text from every file, and then, grouping by word, output the total number of times we encountered the word. Since we want to group by word, we will use the words themselves as the intermediate key output by the @Map function. This will allow us to group each words value and send them all together to the @Reduce function.
+
+The general idea of this program is that we want to read every line of text from
+every file, and then, grouping by word, output the total number of times we
+encountered each word. Since we want to group by word, we will use the words
+themselves as the intermediate key output by the \tt @Map \rm function. This will
+allow us to group each words value and send them all together in one key-value pair
+to the \tt @Reduce \rm function.
 
 \subsubsection*{@Functions}
 The first thing we notice is that this program does not contain an @Functions section. This section is optional, and only needs to be included if the user wants to write his or her own subroutines to be used elsewhere in the program.
