@@ -271,7 +271,7 @@ reduce function for every word.
 
 \begin{verbatim}
 
-  @Map: (int lineNum, text line)  ->  (text, int) {
+  @Map (int lineNum, text line)  ->  (text, int) {
     foreach word in line.tokenize(" ") {
       emit(word, 1)
     }
@@ -313,9 +313,13 @@ and follows the \tt @map \rm sample introduced in the previous section.
 
 \begin{verbatim} 
 
-     @Reduce: (text word, iter<int> values) -> (text, int) {                   
-            int count = 0                                                                  while (values.hasNext()) {                                                          count = count + values.getNext()                              
-            }                                                                              emit(word, count)                                                        }  
+     @Reduce (text word, iter<int> values) -> (text, int) {
+            int count = 0
+            while (values.hasNext()) {
+                count = count + values.getNext()
+            }
+            emit(word, count)
+      }
 
 \end{verbatim} 
 
