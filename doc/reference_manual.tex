@@ -1567,6 +1567,11 @@ Hog also provides, through the Hadoop, prespecified retry policies:
 \section{Grammar} % (fold)
 \label{sec:grammar}
 
+\emph{Note}: The presented grammar has one minor ambiguity relating to the \textbf{\emph{dangling-else}} problem. If the
+grammar is run through the parser generator \tt yacc\rm, \tt yacc \rm will identify 3 shift/reduce parsing-action conflicts.
+However, the ambiguity is handled by the default behavior of \tt yacc\rm, which preferences shift to reduce, associating \tt
+else \rm and \tt elseif \rm clauses with the closest \tt if \rm clause.
+
 \begin{verbatim}
 
   %token FALSE TRUE
