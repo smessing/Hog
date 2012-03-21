@@ -69,7 +69,7 @@ In the body of the function, we split the line of text passed in as the value in
 In the body of the foreach loop, we use the built-in function emit() to output a key-value pair to the framework for grouping by key. In this case, since we want to group by the word, we emit the word and the value 1, which we will use to calculate the totals in the @Reduce section.
 
 \subsubsection*{@Reduce}
-In this section, for each word (the key) emitted by the @Map section, we will simply add up all the ones (the value) emmited as well to get a final count for each word. 
+In this section, for each word (the key) emitted by the @Map section, we will simply add up all the ones (the value) emitted as well to get a final count for each word. 
 
 Since the inputs to this section are grouped by key, @Reduce will receive a word and an iterator over all of that word's values (the ones). For every word, this function will receive an iterator over all of the values emitted by the @Map function for that word. This is why the header for this section has the word as the key and an iterator over a list of ints as the value. The key type of the input to the reduce function must match the key type of the output of the map function. Similarly, the values type of the reduce function is simply an iterator over the type of the value output by the map function.
 
@@ -102,28 +102,28 @@ In this example, we will sort numbers in text files using a version of merge sor
             int ind2 = 0
 
             # merge all values while neither list is empty
-            while( ind1 < sortedList1.len() && ind2 < sortedList2.len() ) {
+            while( ind1 < sortedList1.size() && ind2 < sortedList2.size() ) {
 
                   # insert the smaller of the 2 values and update index pointers
                   if(sortedList1.get(ind1) < sortedList2.get(ind2)) {
-                        mergedList.append(sortedList1.get(ind1))
+                        mergedList.add(sortedList1.get(ind1))
                         ind1 = ind1 + 1
                   }
                   else { 
-                        mergedList.append(sortedList2.get(ind2))
+                        mergedList.add(sortedList2.get(ind2))
                         ind2 = ind2 + 2
                   }
             }
             
             # insert any remaining elements from sortedList1
-            while (ind1 < sortedList1.len()) {
-                  mergedList.append(sortedList1.get(ind1)
+            while (ind1 < sortedList1.size()) {
+                  mergedList.add(sortedList1.get(ind1)
 		          ind1 = ind1 + 1
 		    }
 		
 		    # insert any remaining elements from sortedList2
-            while (ind2 < sortedList2.len()) {
-                  mergedList.append(sortedList2.get(ind2))
+            while (ind2 < sortedList2.size()) {
+                  mergedList.add(sortedList2.get(ind2))
 		          ind2 = ind2 + 1
 		    }
 	        
@@ -138,7 +138,7 @@ In this example, we will sort numbers in text files using a version of merge sor
             
             # put every number from line into list
             foreach number in line.tokenize(",") {
-                  sortedInts.append((text) (number))
+                  sortedInts.add((int) (number))
             }
             
             # sort list
@@ -176,9 +176,9 @@ In this example, we will sort numbers in text files using a version of merge sor
 \end{verbatim}
 
 \subsubsection*{@Functions}
-In this section, we define a function called merge, which takes two sorted lists of ints, and returns a merged list of the two in sorted order. The way to define a function should be familiar to programmers comfortable with C or Java. In the first line of the body of the function, we are creating a new, empty list. Following that, we demonstrate a few flow of control statements such as while loops, and if else statements, the \&\& (and) boolean operator, and comparitors all of which should also be familiar. 
+In this section, we define a function called merge, which takes two sorted lists of ints, and returns a merged list of the two in sorted order. The way to define a function should be familiar to programmers comfortable with C or Java. In the first line of the body of the function, we are creating a new, empty list. Following that, we demonstrate a few flow of control statements such as while loops, and if else statements, the \&\& (and) boolean operator, and comparators all of which should also be familiar. 
 
-Also included in this section are some built-in list functions, such as .len() to get the number of elements in a list, .append() to add an element onto the end of the list, and .get() to get an element at a specific index in the list.
+Also included in this section are some built-in list functions, such as .size() to get the number of elements in a list, .add() to add an element onto the end of the list, and .get() to get an element at a specific index in the list.
 
 \subsubsection*{@Map}
 The map function reads in a line of comma separated integers as text, and outputs a list of the integers in sorted order. To do this, we introduce casting, which much always be explicit. In order to cast, the programmer must put the type he or she wants to cast to in parenthesis before the value or variable name. In this case, we are casting text to an int, which is a very common operation in Hog, since all input is read in as text.
