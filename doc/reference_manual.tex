@@ -1043,9 +1043,22 @@ parameterized type of this object (i.e. for an \tt iter<int> \rm object, these f
 
 Removes all key-value pairs in this \tt dict\rm.
 
+\item[] \tt bool containsKey(K key) \rm
+
+Returns \tt true \rm if \tt key \rm is a key in this \tt dict\rm, \tt false \rm otherwise.
+
+\item[] \tt V get(K key) \rm
+
+Returns the value associated the \tt key \rm in this \tt dict\rm, or \tt null \rm if this \tt dict \rm doesn't contain \tt
+key\rm.
+
 \item[] \tt set<T> keySet() \rm
 
 Returns a set of all the keys in this \tt dict\rm.
+
+\item[] \tt void put(K key, V value) \rm
+
+Places a new key-value pair in this \tt dict\rm.
 
 \item[] \tt dict<V, K> reverseDict() \rm
 
