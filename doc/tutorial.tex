@@ -112,7 +112,13 @@ Hog's string type, and represents a sequence of characters. To create a \tt text
 In the body of the function, we split the line of text passed in as the value into
 words delineated by whitespace by using the built-in function \tt tokenize()\rm. We
 then iterate through the \tt list \rm of words (of type \tt list<text>\rm) that \tt
-tokenize() \rm returns using a \tt foreach \rm loop.
+tokenize() \rm returns using a \tt foreach \rm loop. Notice that you call \tt
+tokenize() \rm "on" a \tt text \rm object. \tt text \rm objects are the only type
+of objects that support this function. Attempting to call the function on an object
+of a different type (e.g. \tt count.tokenize() \rm for the variable \tt count \rm
+in this example) would lead to an error, called an \textbf{\emph{exception}}.
+Exception handling is outside of the scope of this tutorial. Please see the
+language reference manual for guidance on how to anticipate and handle exceptions.
 
 In the body of the \tt foreach \rm loop, we use the built-in function \tt emit()
 \rm to output a key-value pair, which the framework then groups by key. In this
