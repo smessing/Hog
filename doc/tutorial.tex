@@ -364,14 +364,35 @@ between the two lists in this manner to ensure that it adds all the elements fro
 both lists in the proper order. It finally checks that no elements in either list
 has been left out, and then returns the new, combined list.
 
-Also included in this section are some built-in list functions, such as .size() to get the number of elements in a list, .add() to add an element onto the end of the list, and .get() to get an element at a specific index in the list.
+Also included in this section are some built-in list functions, such as \tt
+.size()\rm, to get the number of elements in a list, \tt .add()\rm, to add an
+element onto the end of the list, and \tt .get() \rm to get an element at a
+specific index in the list.
 
-\subsubsection*{@Map}
-The map function reads in a line of comma separated integers as text, and outputs a list of the integers in sorted order. To do this, we introduce casting, which much always be explicit. In order to cast, the programmer must put the type he or she wants to cast to in parenthesis before the value or variable name. In this case, we are casting text to an int, which is a very common operation in Hog, since all input is read in as text.
+\subsubsection*{\tt @Map \rm} 
 
-To sort the list of ints that have been read in from the input, we call a built-in function on lists that contain primitives called .sort(). This function sorts the list in ascending order.
+The map function reads in a line of comma-separated integers as \tt text\rm, and
+outputs a list of the integers in sorted order. To do this, we introduce
+\textbf{\emph{casting}}, which allows to transform a value of one type into another
+type. In order to cast, the programmer must put the type he or she wants to cast to
+in parenthesis before the value or variable name. In this case, we are casting a
+\tt text \rm to an \tt int\rm, which is a very common operation in Hog, since all
+input is read in as \tt text\rm. If the string contained in the \tt text \rm object
+is not a valid number (e.g. \tt "1ab2"\rm), the cast will result in an exception. A
+more robust version of the MergeSort program would include some exception handling
+to handle these cases. It's worth noting that the current code is somewhat brittle,
+in that if such a string of characters is encountered, the program will fail.
 
-Finally, we emit the sorted list as a value, with identical keys for each list, so that they are all sent to a single reducer.
+To sort the list of \tt int\rm s that have been read in from the input, we call a
+built-in function on lists called \tt.sort()\rm. This function sorts the elements
+of a \tt list \rm in ascending order according to their lexicographic ordering. The
+\tt sort \rm method is well-defined in part because \tt list \rm objects can only
+contain elements of the same type, and only supports primitive types. See the
+language reference manual for more details about \tt lists \rm and their built-in
+functions.
+
+Finally, we emit the sorted list as a value, with identical keys for each list, so
+that they are all sent to a single reducer.
 
 \subsection*{@Reduce}
 The reduce function receives an iterator to all of the sorted lists from the map function, and merges them together one by one using the merge() function we defined earlier.
