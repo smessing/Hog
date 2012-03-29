@@ -3,10 +3,14 @@
 	
 	<!-- message variabes -->
   
-	<property name="JFlex Message" value="Running JFlex lexer generator."/>
-	<property name="Usage" value="Usage: hog [input_file | input_dir] [output_file_name]"/>
-	<property name="Version" value="v0.1"/>
-	<property name="Welcome Message" value="Hog ${Version} --- A scripting MapReduce language."/>
+	<property name="jflex.message" value="Running JFlex lexer generator."/>
+	<property name="usage" value="Usage: hog [input_file | input_dir] [output_file_name]"/>
+	<property name="hog.version" value="0.1"/>
+	<property name="welcome.message" value="Hog v${hog.version} --- A scripting MapReduce language."/>
+	
+	<!-- build variables -->
+	<property name="java.source.version" value="1.6"/>
+	<property name="java.target.version" value="1.6"/>
 	
 	<!-- organization variabes -->
 	
@@ -40,9 +44,11 @@
 	</target>
 	
 	<target name="compile">
-		<echo>${Welcome Message}</echo>
+		<echo>${welcome.message}</echo>
 	  <mkdir dir="${classes.dir}"/>
-		<javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}"  
+		 source="${java.source.version}" target="${java.target.version}" 
+		 includeantruntime="false">
 			<classpath>
 			  <path id="jflex" location="${lib.dir}/JFlex.jar"/>
 			  <path id="java_cup" location="${lib.dir}/java-cup-11a.jar"/>

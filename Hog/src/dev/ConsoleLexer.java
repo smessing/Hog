@@ -10,10 +10,10 @@ public class ConsoleLexer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		/*Lexer lexer = new Lexer(System.in);
-		Yytoken token = null;
+		Lexer lexer = new Lexer(System.in);
+		/*Yytoken token = null;
 		do {
-			token = lexer.yylex();
+			//token = lexer.yylex();
 			System.out.println("token = " + token);
 		} while (token != null);*/
 		
