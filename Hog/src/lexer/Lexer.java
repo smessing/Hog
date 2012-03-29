@@ -4,7 +4,7 @@ package lexer;
 
 /** The lexer for scanning command tokens. */
 
-class Lexer {
+public class Lexer {
 
   /** This character denotes the end of file */
   public static final int YYEOF = -1;
@@ -208,7 +208,7 @@ class Lexer {
    *
    * @param   in  the java.io.Reader to read input from.
    */
-  Lexer(java.io.Reader in) {
+  private Lexer(java.io.Reader in) {
     this.zzReader = in;
   }
 
@@ -218,7 +218,7 @@ class Lexer {
    *
    * @param   in  the java.io.Inputstream to read input from.
    */
-  Lexer(java.io.InputStream in) {
+  public Lexer(java.io.InputStream in) {
     this(new java.io.InputStreamReader(in));
   }
 
