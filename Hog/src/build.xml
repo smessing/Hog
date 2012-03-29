@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="HogLanguage" default="main" basedir="../">
-	
-	<!-- message variabes -->
-  
-	<property name="jflex.message" value="Running JFlex lexer generator."/>
-	<property name="usage" value="Usage: hog [input_file | input_dir] [output_file_name]"/>
-	<property name="hog.version" value="0.1"/>
-	<property name="welcome.message" value="Hog v${hog.version} --- A scripting MapReduce language."/>
 
-	
-	<!-- organization variabes -->
-	
-	<property name="src.dir" value="src"/>
-	<property name="build.dir" value="bin"/>
-	<property name="classes.dir" value="${build.dir}/classes"/>
-	<property name="jar.dir" value="${build.dir}/jar"/>
-	<property name="lib.dir" value="lib"/>
-	
-	 <!-- build variables -->
-	  
-	<property name="java.source.version" value="1.6"/>
-	<property name="java.target.version" value="1.6"/>
-	<property name="lexer.specification" value="${src.dir}/lexer/Lexer.jflex"/>
-	<property name="dev.main-class" value="dev.ConsoleLexer"/>
-	<property name="jflex.main-class" value="JFlex.Main"/>
-	<property name="cup.main-class" value="java_cup.Main"/>
-	<property name="parser.specification" value="${src.dir}/parser/HogGrammar.cup"/>
-	
-	<!-- build tasks -->
-	
-	<!-- !TODO! <taskdef classname="JFlex.anttask.JFlexTask" name="jflex"/> -->
-	
-	<!-- build routines -->
-	
-	<target name="help" description="show help message">
-	 <echo message="Ant build file for Hog."/>
-		<echo message=""/>
-		<echo message="Useful targets:"/>
-		<echo message="clean ------ remove all compiled files on this machine."/>
-		<echo message="hog -------- !TODO! clean, build and run on hadoop."/>
-		<echo message="main ------- clean, build and run the project."/>
-		<echo message="jar -------- build java archive of project."/>
-		<echo message=""/>
-		<echo message="Dev builds:"/>
-		<echo message="dev-build  - !TODO! build project and run automated tests."/>
-		<echo message="dev-lexer  - !TODO! run JFlex to regenerate Lexer.java.
-		Use Lexer.jflex for specification."/>
-		<echo message="dev-parser - !TODO! run CUP to regenerate Parser.java."/>
-	</target>
-	
-	<target name="clean">
-	  <delete dir="${build.dir}"/>
-	</target>
-	
-	<target name="compile">
-		<echo>${welcome.message}</echo>
-	  <mkdir dir="${classes.dir}"/>
-		<javac srcdir="${src.dir}" destdir="${classes.dir}"  
-		 source="${java.source.version}" target="${java.target.version}" 
-		 includeantruntime="false">
-			<classpath>
-			  <path id="jflex" location="${lib.dir}/JFlex.jar"/>
-			  <path id="java_cup" location="${lib.dir}/java-cup-11a.jar"/>
-			</classpath>
-		</javac>
-	</target>
-	
-	<target name="jar" depends="compile">
-	  <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
-	    <manifest>
-	 	    <attribute name="Main-Class" value="${dev.main-class}"/>	
-	 	  </manifest>
-	 	</jar>
-	</target>
-	
+  <!-- message variabes -->
+  
+  <property name="jflex.message" value="Running JFlex lexer generator."/>
+  <property name="usage" value="Usage: hog [input_file | input_dir] [output_file_name]"/>
+  <property name="hog.version" value="0.1"/>
+  <property name="welcome.message" value="Hog v${hog.version} --- A scripting MapReduce language."/>
+
+
+  <!-- organization variabes -->
+
+  <property name="src.dir" value="src"/>
+  <property name="build.dir" value="bin"/>
+  <property name="classes.dir" value="${build.dir}/classes"/>
+  <property name="jar.dir" value="${build.dir}/jar"/>
+  <property name="lib.dir" value="lib"/>
+
+  <!-- build variables -->
+
+  <property name="java.source.version" value="1.6"/>
+  <property name="java.target.version" value="1.6"/>
+  <property name="lexer.specification" value="${src.dir}/lexer/Lexer.jflex"/>
+  <property name="dev.main-class" value="dev.ConsoleLexer"/>
+  <property name="jflex.main-class" value="JFlex.Main"/>
+  <property name="cup.main-class" value="java_cup.Main"/>
+  <property name="parser.specification" value="${src.dir}/parser/HogGrammar.cup"/>
+
+  <!-- build tasks -->
+
+  <!-- !TODO! <taskdef classname="JFlex.anttask.JFlexTask" name="jflex"/> -->
+
+  <!-- build routines -->
+
+  <target name="help" description="show help message">
+    <echo message="Ant build file for Hog."/>
+    <echo message=""/>
+    <echo message="Useful targets:"/>
+    <echo message="clean ------ remove all compiled files on this machine."/>
+    <echo message="hog -------- !TODO! clean, build and run on hadoop."/>
+    <echo message="main ------- clean, build and run the project."/>
+    <echo message="jar -------- build java archive of project."/>
+    <echo message=""/>
+    <echo message="Dev builds:"/>
+    <echo message="dev-build  - !TODO! build project and run automated tests."/>
+    <echo message="dev-lexer  - !TODO! run JFlex to regenerate Lexer.java.
+                   Use Lexer.jflex for specification."/>
+    <echo message="dev-parser - !TODO! run CUP to regenerate Parser.java."/>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <target name="compile">
+    <echo>${welcome.message}</echo>
+    <mkdir dir="${classes.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${classes.dir}"  
+      source="${java.source.version}" target="${java.target.version}" 
+      includeantruntime="false">
+      <classpath>
+        <path id="jflex" location="${lib.dir}/JFlex.jar"/>
+        <path id="java_cup" location="${lib.dir}/java-cup-11a.jar"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+      <manifest>
+        <attribute name="Main-Class" value="${dev.main-class}"/>	
+      </manifest>
+    </jar>
+  </target>
+
 	<target name="run" depends="jar">
 	  <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
 	</target>
