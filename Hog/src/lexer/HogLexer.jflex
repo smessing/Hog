@@ -10,6 +10,7 @@
 
 
 import java_cup.runtime.*;
+import parser.Symbol;
 
 
 %%
@@ -21,7 +22,7 @@ import java_cup.runtime.*;
 %line
 %column
 %unicode
-%class PascalLexer
+%class Lexer
 
 %{
 
@@ -68,42 +69,42 @@ whitespace      = [ \n\t]
 /**
  * LEXICAL RULES:
  */
-and             { return newSym(sym.AND); }
-array           { return newSym(sym.ARRAY); }
-begin           { return newSym(sym.BEGIN); }
-else            { return newSym(sym.ELSE); }
-end             { return newSym(sym.END); }
-if              { return newSym(sym.IF); }
-of              { return newSym(sym.OF); }
-or              { return newSym(sym.OR); }
-program         { return newSym(sym.PROGRAM); }
-procedure       { return newSym(sym.PROCEDURE); }
-then            { return newSym(sym.THEN); }
-type            { return newSym(sym.TYPE); }
-var             { return newSym(sym.VAR); }
-"*"             { return newSym(sym.TIMES); }
-"+"             { return newSym(sym.PLUS); }
-"-"             { return newSym(sym.MINUS); }
-"/"             { return newSym(sym.DIVIDE); }
-";"             { return newSym(sym.SEMI); }
-","             { return newSym(sym.COMMA); }
-"("             { return newSym(sym.LEFT_PAREN); }
-")"             { return newSym(sym.RT_PAREN); }
-"["             { return newSym(sym.LEFT_BRKT); }
-"]"             { return newSym(sym.RT_BRKT); }
-"="             { return newSym(sym.EQ); }
-"<"             { return newSym(sym.GTR); }
-">"             { return newSym(sym.LESS); }
-"<="            { return newSym(sym.LESS_EQ); }
-">="            { return newSym(sym.GTR_EQ); }
-"!="            { return newSym(sym.NOT_EQ); }
-":"             { return newSym(sym.COLON); }
-":="            { return newSym(sym.ASSMNT); }
-"."             { return newSym(sym.DOT); }
-{identifier}    { return newSym(sym.IDENT, yytext()); }
-{integer}       { return newSym(sym.INT, new Integer(yytext())); }
-{real}          { return newSym(sym.REAL, new Double(yytext())); }
-{char}          { return newSym(sym.CHAR, new Character(yytext().charAt(1))); }
+and             { return newSym(Symbol.AND); }
+array           { return newSym(Symbol.ARRAY); }
+begin           { return newSym(Symbol.BEGIN); }
+else            { return newSym(Symbol.ELSE); }
+end             { return newSym(Symbol.END); }
+if              { return newSym(Symbol.IF); }
+of              { return newSym(Symbol.OF); }
+or              { return newSym(Symbol.OR); }
+program         { return newSym(Symbol.PROGRAM); }
+procedure       { return newSym(Symbol.PROCEDURE); }
+then            { return newSym(Symbol.THEN); }
+type            { return newSym(Symbol.TYPE); }
+var             { return newSym(Symbol.VAR); }
+"*"             { return newSym(Symbol.TIMES); }
+"+"             { return newSym(Symbol.PLUS); }
+"-"             { return newSym(Symbol.MINUS); }
+"/"             { return newSym(Symbol.DIVIDE); }
+";"             { return newSym(Symbol.SEMI); }
+","             { return newSym(Symbol.COMMA); }
+"("             { return newSym(Symbol.LEFT_PAREN); }
+")"             { return newSym(Symbol.RT_PAREN); }
+"["             { return newSym(Symbol.LEFT_BRKT); }
+"]"             { return newSym(Symbol.RT_BRKT); }
+"="             { return newSym(Symbol.EQ); }
+"<"             { return newSym(Symbol.GTR); }
+">"             { return newSym(Symbol.LESS); }
+"<="            { return newSym(Symbol.LESS_EQ); }
+">="            { return newSym(Symbol.GTR_EQ); }
+"!="            { return newSym(Symbol.NOT_EQ); }
+":"             { return newSym(Symbol.COLON); }
+":="            { return newSym(Symbol.ASSMNT); }
+"."             { return newSym(Symbol.DOT); }
+{identifier}    { return newSym(Symbol.IDENT, yytext()); }
+{integer}       { return newSym(Symbol.INT, new Integer(yytext())); }
+{real}          { return newSym(Symbol.REAL, new Double(yytext())); }
+{char}          { return newSym(Symbol.CHAR, new Character(yytext().charAt(1))); }
 {comment}       { /* For this stand-alone lexer, print out comments. */
                   System.out.println("Recognized comment: " + yytext()); }
 {whitespace}    { /* Ignore whitespace. */ }

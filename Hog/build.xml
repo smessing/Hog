@@ -28,7 +28,7 @@
 
   <property name="java.source.version" value="1.6"/>
   <property name="java.target.version" value="1.6"/>
-  <property name="lexer.specification" value="${src.dir}/lexer/Lexer.jflex"/>
+  <property name="lexer.specification" value="${src.dir}/lexer/HogLexer.jflex"/>
   <property name="dev.main-class" value="dev.ConsoleLexer"/>
   <property name="jflex.main-class" value="JFlex.Main"/>
   <property name="cup.main-class" value="java_cup.Main"/>
@@ -57,9 +57,8 @@
     <echo message=""/>
     <echo message="Dev builds:"/>
     <echo message="dev-build  - !TODO! build project and run automated tests."/>
-    <echo message="dev-lexer  - !TODO! run JFlex to regenerate Lexer.java.
-                   Use Lexer.jflex for specification."/>
-    <echo message="dev-parser - !TODO! run CUP to regenerate Parser.java."/>
+    <echo message="dev-lexer  - run JFlex to regenerate Lexer.java. Use Lexer.jflex for specification."/>
+    <echo message="dev-parser - run CUP to regenerate Parser.java."/>
   </target>
 
   <target name="clean">
@@ -97,21 +96,22 @@
 
   <!-- developer builds -->
 
-  <target name="dev-lexer" depends="clean, compile">
-    <!-- !TODO! <jflex file="${src.dir}/${lexer.specification}"/> -->
+  <target name="dev-lexer" depends="clean, dev-parser">
+    <jflex file="${lexer.specification}" destdir="${src.dir}/lexer"/>
+    <!-- !TODO! <jflex file="${src.dir}/${lexer.specification}"/>
     <jar destfile="${jar.dir}/LexerGenerator.jar" basedir="${classes.dir}">
       <zipfileset includes="**/*.class" src="${lib.dir}/JFlex.jar"/>
       <manifest>
         <attribute name="Main-Class" value="${jflex.main-class}"/>
       </manifest>
     </jar>
-    <java jar="${jar.dir}/LexerGenerator.jar" fork="true"/>
+    <java jar="${jar.dir}/LexerGenerator.jar" fork="true"/> -->
   </target>
 
   <target name="dev-parser" depends="clean">
     <cup srcfile="${parser.specification}"
      destdir="${src.dir}"
-     interface="true" parser="Parser" symbols="Symbols"/>
+     interface="true" parser="Parser" symbols="Symbol"/>
   </target>
 
 </project>
