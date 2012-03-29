@@ -7,7 +7,7 @@
 *.bbl
 *.blg
 
-#OSX:
+# OSX:
 *.DS_Store
 
 # Vim:
