@@ -20,3 +20,6 @@ lib/jFlex/*
 # Eclipse
 *.metadata
 *.project
+
+# JFlex
+*.dot
