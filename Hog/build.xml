@@ -98,19 +98,10 @@
 
   <target name="dev-lexer" depends="clean, dev-parser">
     <jflex file="${lexer.specification}" destdir="${src.dir}/lexer"/>
-    <!-- !TODO! <jflex file="${src.dir}/${lexer.specification}"/>
-    <jar destfile="${jar.dir}/LexerGenerator.jar" basedir="${classes.dir}">
-      <zipfileset includes="**/*.class" src="${lib.dir}/JFlex.jar"/>
-      <manifest>
-        <attribute name="Main-Class" value="${jflex.main-class}"/>
-      </manifest>
-    </jar>
-    <java jar="${jar.dir}/LexerGenerator.jar" fork="true"/> -->
   </target>
 
   <target name="dev-parser" depends="clean">
-    <cup srcfile="${parser.specification}"
-     destdir="${src.dir}"
+    <cup srcfile="${parser.specification}" destdir="${src.dir}"
      interface="true" parser="Parser" symbols="Symbol"/>
   </target>
 
