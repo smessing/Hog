@@ -24,3 +24,6 @@ lib/jFlex/*
 
 # JFlex
 *.dot
+
+# Builds
+Hog/bin/*
