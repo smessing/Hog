@@ -74,36 +74,36 @@
     </jar>
   </target>
 
-	<target name="run" depends="jar">
-	  <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
-	</target>
-	
-	<target name="clean-build" depends="clean,jar"/>
-	
-	<target name="main" depends="clean,run"/>
-	
-	<!-- developer builds -->
-	
-	<target name="dev-lexer" depends="clean, compile">
-		<!-- !TODO! <jflex file="${src.dir}/${lexer.specification}"/> -->
-	  <jar destfile="${jar.dir}/LexerGenerator.jar" basedir="${classes.dir}">
-	  	<zipfileset includes="**/*.class" src="${lib.dir}/JFlex.jar"/>
-	  	<manifest>
-	  	  <attribute name="Main-Class" value="${jflex.main-class}"/>
-	  	</manifest>
-		</jar>
-		<java jar="${jar.dir}/LexerGenerator.jar" fork="true"/>
-	</target>
-	
-	<target name="dev-parser" depends="clean, compile">
-	  <jar destfile="${jar.dir}/ParserGenerator.jar" basedir="${classes.dir}">
-	    <zipfileset includes="**/*.class" src="${lib.dir}/java-cup-11a.jar"/>
-	  	<manifest>
-	      <attribute name="Main-Class" value="${cup.main-class}"/>
-	  	</manifest>
-	  </jar>
-		<java jar="${jar.dir}/ParserGenerator.jar" input="${parser.specification}"
-		 fork="true"/>
-	</target>
+  <target name="run" depends="jar">
+    <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+  </target>
+
+  <target name="clean-build" depends="clean,jar"/>
+
+  <target name="main" depends="clean,run"/>
+
+  <!-- developer builds -->
+
+  <target name="dev-lexer" depends="clean, compile">
+    <!-- !TODO! <jflex file="${src.dir}/${lexer.specification}"/> -->
+    <jar destfile="${jar.dir}/LexerGenerator.jar" basedir="${classes.dir}">
+      <zipfileset includes="**/*.class" src="${lib.dir}/JFlex.jar"/>
+      <manifest>
+        <attribute name="Main-Class" value="${jflex.main-class}"/>
+      </manifest>
+    </jar>
+    <java jar="${jar.dir}/LexerGenerator.jar" fork="true"/>
+  </target>
+
+  <target name="dev-parser" depends="clean, compile">
+    <jar destfile="${jar.dir}/ParserGenerator.jar" basedir="${classes.dir}">
+      <zipfileset includes="**/*.class" src="${lib.dir}/java-cup-11a.jar"/>
+      <manifest>
+        <attribute name="Main-Class" value="${cup.main-class}"/>
+      </manifest>
+    </jar>
+    <java jar="${jar.dir}/ParserGenerator.jar" input="${parser.specification}"
+     fork="true"/>
+  </target>
 
 </project>
