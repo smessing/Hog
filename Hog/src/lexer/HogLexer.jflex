@@ -1,16 +1,5 @@
-/*-***
- *
- * This file defines a stand-alone lexical analyzer for a subset of the Pascal
- * programming language.  This is the same lexer that will later be integrated
- * with a CUP-based parser.  Here the lexer is driven by the simple Java test
- * program in ./PascalLexerTest.java, q.v.  See 330 Lecture Notes 2 and the
- * Assignment 2 writeup for further discussion.
- *
- */
-
-
 import java_cup.runtime.*;
-import parser.Symbol;
+import hog_parser.Symbols;
 
 
 %%
@@ -69,42 +58,44 @@ whitespace      = [ \n\t]
 /**
  * LEXICAL RULES:
  */
-and             { return newSym(Symbol.AND); }
-array           { return newSym(Symbol.ARRAY); }
-begin           { return newSym(Symbol.BEGIN); }
-else            { return newSym(Symbol.ELSE); }
-end             { return newSym(Symbol.END); }
-if              { return newSym(Symbol.IF); }
-of              { return newSym(Symbol.OF); }
-or              { return newSym(Symbol.OR); }
-program         { return newSym(Symbol.PROGRAM); }
-procedure       { return newSym(Symbol.PROCEDURE); }
-then            { return newSym(Symbol.THEN); }
-type            { return newSym(Symbol.TYPE); }
-var             { return newSym(Symbol.VAR); }
-"*"             { return newSym(Symbol.TIMES); }
-"+"             { return newSym(Symbol.PLUS); }
-"-"             { return newSym(Symbol.MINUS); }
-"/"             { return newSym(Symbol.DIVIDE); }
-";"             { return newSym(Symbol.SEMI); }
-","             { return newSym(Symbol.COMMA); }
-"("             { return newSym(Symbol.LEFT_PAREN); }
-")"             { return newSym(Symbol.RT_PAREN); }
-"["             { return newSym(Symbol.LEFT_BRKT); }
-"]"             { return newSym(Symbol.RT_BRKT); }
-"="             { return newSym(Symbol.EQ); }
-"<"             { return newSym(Symbol.GTR); }
-">"             { return newSym(Symbol.LESS); }
-"<="            { return newSym(Symbol.LESS_EQ); }
-">="            { return newSym(Symbol.GTR_EQ); }
-"!="            { return newSym(Symbol.NOT_EQ); }
-":"             { return newSym(Symbol.COLON); }
-":="            { return newSym(Symbol.ASSMNT); }
-"."             { return newSym(Symbol.DOT); }
-{identifier}    { return newSym(Symbol.IDENT, yytext()); }
-{integer}       { return newSym(Symbol.INT, new Integer(yytext())); }
-{real}          { return newSym(Symbol.REAL, new Double(yytext())); }
-{char}          { return newSym(Symbol.CHAR, new Character(yytext().charAt(1))); }
+and             { return newSym(Symbols.AND); }
+else            { return newSym(Symbols.ELSE); }
+elseif          { return newSym(Symbols.ELSEIF); }
+if              { return newSym(Symbols.IF); }
+or              { return newSym(Symbols.OR); }
+@Functions      { return newSym(Symbols.FUNCTIONS); }
+@Map            { return newSym(Symbols.MAP); }
+@Reduce         { return newSym(Symbols.REDUCE); }
+@Main           { return newSym(Symbols.MAIN); }
+then            { return newSym(Symbols.THEN); }
+type            { return newSym(Symbols.TYPE); }
+var             { return newSym(Symbols.VAR); }
+"*"             { return newSym(Symbols.TIMES); }
+"+"             { return newSym(Symbols.PLUS); }
+"-"             { return newSym(Symbols.MINUS); }
+"/"             { return newSym(Symbols.DIVIDE); }
+"%"             { return newSym(Symbols.MOD); }
+";"             { return newSym(Symbols.SEMICOL); }
+","             { return newSym(Symbols.COMMA); }
+"("             { return newSym(Symbols.L_PAREN); }
+")"             { return newSym(Symbols.R_PAREN); }
+"{"             { return newSym(Symbols.L_BRACE); }
+"}"             { return newSym(Symbols.R_BRACE); }
+"["             { return newSym(Symbols.L_BRKT); }
+"]"             { return newSym(Symbols.R_BRKT); }
+"="             { return newSym(Symbols.ASSIGN); }
+"<"             { return newSym(Symbols.GRTR); }
+">"             { return newSym(Symbols.LESS); }
+"<="            { return newSym(Symbols.LESS_EQL); }
+">="            { return newSym(Symbols.GRTR_EQ); }
+"!="            { return newSym(Symbols.NOT_EQS); }
+":"             { return newSym(Symbols.COL); }
+"=="            { return newSym(Symbols.DBL_EQLS); }
+"."             { return newSym(Symbols.DOT); }
+{identifier}    { return newSym(Symbols.IDENT, yytext()); }
+{integer}       { return newSym(Symbols.INT, new Integer(yytext())); }
+{real}          { return newSym(Symbols.REAL, new Double(yytext())); }
+{char}          { return newSym(Symbols.CHAR, new Character(yytext().charAt(1))); }
 {comment}       { /* For this stand-alone lexer, print out comments. */
                   System.out.println("Recognized comment: " + yytext()); }
 {whitespace}    { /* Ignore whitespace. */ }

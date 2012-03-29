@@ -16,7 +16,7 @@
   <property name="classes.dir" value="${build.dir}/classes"/>
   <property name="jar.dir" value="${build.dir}/jar"/>
   <property name="lib.dir" value="lib"/>
-  <property name="parser.dir" value="${src.dir}/parser"/>
+  <property name="parser.dir" value="${src.dir}/hog_parser"/>
   <path id="lib">
     <pathelement location="lib/"/>
     <pathelement location="lib/java-cup-11a.jar"/>
@@ -32,7 +32,7 @@
   <property name="dev.main-class" value="dev.ConsoleLexer"/>
   <property name="jflex.main-class" value="JFlex.Main"/>
   <property name="cup.main-class" value="java_cup.Main"/>
-  <property name="parser.specification" value="${src.dir}/parser/HogGrammar.cup"/>
+  <property name="parser.specification" value="${src.dir}/hog_parser/HogGrammar.cup"/>
 
   <!-- build tasks (ignore Eclipse warnings) -->
 
@@ -58,7 +58,7 @@
     <echo message="Dev builds:"/>
     <echo message="dev-build  - !TODO! build project and run automated tests."/>
     <echo message="dev-lexer  - run JFlex to regenerate Lexer.java. Use Lexer.jflex for specification."/>
-    <echo message="dev-parser - run CUP to regenerate Parser.java."/>
+    <echo message="dev-parser - run CUP to regenerate Parser.java. Use HogGrammar.cup for specificiation."/>
   </target>
 
   <target name="clean">
@@ -102,7 +102,7 @@
 
   <target name="dev-parser" depends="clean">
     <cup srcfile="${parser.specification}" destdir="${src.dir}"
-     interface="true" parser="Parser" symbols="Symbol"/>
+     interface="true" parser="Parser" symbols="Symbols"/>
   </target>
 
 </project>
