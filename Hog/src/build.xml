@@ -24,7 +24,8 @@
 	<property name="lexer.specification" value="lexer/Lexer.jflex"/>
 	<property name="dev.main-class" value="dev.ConsoleLexer"/>
 	<property name="jflex.main-class" value="JFlex.Main"/>
-	<property name="cup.main-class" value="???"/>
+	<property name="cup.main-class" value="java_cup.Main"/>
+	<property name="parser.specification" value="parser/HogGrammar.cup"/>
 	
 	<!-- build tasks -->
 	
@@ -101,7 +102,8 @@
 	      <attribute name="Main-Class" value="${cup.main-class}"/>
 	  	</manifest>
 	  </jar>
-		<java jar="${jar.dir}/ParserGenerator.jar" fork="true"/>
+		<java jar="${jar.dir}/ParserGenerator.jar" input="${parser.specification}"
+		 fork="true"/>
 	</target>
 
 </project>
