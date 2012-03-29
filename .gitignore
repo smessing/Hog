@@ -12,3 +12,7 @@
 
 # Vim:
 *.swp
+
+# Libraries:
+lib/jflex-1.4.3/*
+lib/jFlex/*
