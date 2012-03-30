@@ -46,11 +46,13 @@ identifier      = {letter}({alphanumeric}|{other_id_char})*
 integer         = {digit}*
 real            = {integer}\.{integer}
 char            = '.'
+commentlbrace   = \#\{
+commentrbrace   = \}\#
 leftbrace       = \{
 rightbrace      = \}
 nonrightbrace   = [^}]
 comment_body    = {nonrightbrace}*
-comment         = {leftbrace}{comment_body}{rightbrace}
+comment         = {commentlbrace}{comment_body}{commentrbrace}
 whitespace      = [ \n\t]
 
 
@@ -92,7 +94,6 @@ var             { return newSym(sym.VAR); }
 ":"             { return newSym(sym.COL); }
 "=="            { return newSym(sym.DBL_EQLS); }
 "."             { return newSym(sym.DOT); }
-{identifier}    { return newSym(sym.IDENT, yytext()); }
 {integer}       { return newSym(sym.INT, new Integer(yytext())); }
 {real}          { return newSym(sym.REAL, new Double(yytext())); }
 {char}          { return newSym(sym.CHAR, new Character(yytext().charAt(1))); }
