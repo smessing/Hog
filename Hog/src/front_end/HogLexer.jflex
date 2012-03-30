@@ -69,9 +69,6 @@ or              { return newSym(sym.OR); }
 @Map            { return newSym(sym.MAP); }
 @Reduce         { return newSym(sym.REDUCE); }
 @Main           { return newSym(sym.MAIN); }
-then            { return newSym(sym.THEN); }
-type            { return newSym(sym.TYPE); }
-var             { return newSym(sym.VAR); }
 "*"             { return newSym(sym.TIMES); }
 "+"             { return newSym(sym.PLUS); }
 "-"             { return newSym(sym.MINUS); }
