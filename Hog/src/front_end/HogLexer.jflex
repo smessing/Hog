@@ -1,4 +1,4 @@
-package font_end;
+package front_end;
 
 import java_cup.runtime.*;
 
