@@ -2,7 +2,6 @@ package front_end;
 import java.util.*;
 import java.io.*;
 import java_cup.runtime.*;
-import lexer.*;
 
 action code
   {:
@@ -35,6 +34,7 @@ terminal MINUS, PLUS, TIMES, DIVIDE, MOD;
 terminal LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, ASSIGN;
 terminal TEXT, BOOL, INT, REAL, LIST, VOID;
 terminal ARROW, DOT;
+terminal String CHAR;
 terminal String TEXT_LITERAL;
 terminal String ID;
 terminal String INT_CONST;

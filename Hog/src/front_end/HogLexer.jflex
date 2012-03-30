@@ -3,7 +3,7 @@ package front_end;
 import java_cup.runtime.*;
 
 %%
-/*-*
+/**
  * LEXICAL FUNCTIONS:
  */
 
@@ -35,7 +35,7 @@ Symbol newSym(int tokenId, Object value) {
 %}
 
 
-/*-*
+/**
  * PATTERN DEFINITIONS:
  */
 letter          = [A-Za-z]
@@ -87,7 +87,7 @@ or              { return newSym(sym.OR); }
 ">"             { return newSym(sym.LESS); }
 "<="            { return newSym(sym.LESS_EQL); }
 ">="            { return newSym(sym.GRTR_EQL); }
-"!="            { return newSym(sym.NOT_EQS); }
+"!="            { return newSym(sym.NOT_EQLS); }
 ":"             { return newSym(sym.COL); }
 "=="            { return newSym(sym.DBL_EQLS); }
 "."             { return newSym(sym.DOT); }
