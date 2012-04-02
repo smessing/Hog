@@ -29,7 +29,7 @@
   <property name="java.source.version" value="1.6"/>
   <property name="java.target.version" value="1.6"/>
   <property name="lexer.specification" value="${front_end.dir}/HogLexer.jflex"/>
-  <property name="dev.main-class" value="dev.ConsoleLexer"/>
+  <property name="dev.main-class" value="front_end.ConsoleLexer.main"/>
   <property name="jflex.main-class" value="JFlex.Main"/>
   <property name="cup.main-class" value="java_cup.Main"/>
   <property name="parser.specification" value="${front_end.dir}/HogGrammar.cup"/>
