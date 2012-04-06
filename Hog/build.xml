@@ -102,7 +102,7 @@
 
   <target name="dev-parser" depends="clean">
     <cup srcfile="${parser.specification}" destdir="${src.dir}"
-     interface="true" parser="Parser" symbols="sym"/>
+     interface="true" parser="Parser" symbols="sym" force="true" />
   </target>
 
 </project>
