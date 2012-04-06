@@ -2,7 +2,7 @@ package util;
 
 /**
  * A value for the SymbolTable class.
- * @author sam
+ * @author !TODO!
  *
  */
 public abstract class IdentifierAttributes {

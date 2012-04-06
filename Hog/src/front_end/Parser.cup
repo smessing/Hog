@@ -1,0 +1,266 @@
+package front_end;
+import java.util.*;
+import java.io.*;
+import java_cup.runtime.*;
+
+action code
+  {:
+    Hashtable table = new Hashtable();
+  :};
+
+parser code
+  {:
+    private Lexer lexer;
+    private File file;
+    public Parser( File file ) {
+      this();
+      this.file = file;
+      try {
+        lexer = new Lexer( new FileReader( file ) );
+      }
+      catch ( IOException exception ) {
+        throw new Error( "Unable to open file \"" + file + "\"" );
+      }
+    }
+  :};
+
+scan with
+  {:
+    return lexer.yylex();
+  :};
+
+terminal UMINUS, DECR, INCR;
+terminal MINUS, PLUS, TIMES, DIVIDE, MOD;
+terminal LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, ASSIGN;
+terminal TEXT, BOOL, INT, REAL, LIST, VOID;
+terminal ARROW, DOT;
+terminal String CHAR;
+terminal String TEXT_LITERAL;
+terminal String ID;
+terminal String INT_CONST;
+terminal String REAL_CONST;
+terminal String BOOL_CONST;
+terminal BREAK, CASE, DEFAULT;
+terminal AND, OR, NOT;
+terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
+terminal FUNCTIONS, MAIN, MAP, REDUCE;
+terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
+
+nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Reduce, SectionType;
+nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, IterationStatement;
+nonterminal LabeledStatement, Expression, Type, LogicalExpression, UnaryExpression, LogicalTerm;
+nonterminal EqualityExpression, RelationalExpression, AdditiveExpression, MultiplicativeExpression;
+nonterminal CastExpression, PostfixExpression, PrimaryExpression, Parameters, Constant;
+nonterminal Statement, ElseIfStatement, ElseStatement;
+
+start with Program;
+
+Program::=
+    Functions Map Reduce Main
+  ;
+
+Functions::=
+    FUNCTIONS L_BRACE FunctionList R_BRACE
+  |
+    /* epsilon */
+  ; 
+ 
+FunctionList::=
+    Function
+  |
+    FunctionList Function
+  ;
+
+Function::=
+    Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE
+  ;
+
+ParameterList::=
+    Type ID COMMA ParameterList
+  |
+    Type ID
+  |
+    /* epsilon */
+  ;
+
+Map::=
+    MAP SectionType L_BRACE StatementList R_BRACE
+  ;
+
+Reduce::=
+    REDUCE SectionType L_BRACE StatementList R_BRACE
+  ;
+
+SectionType::=
+    L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN
+  ;
+
+Main::=
+    MAIN L_BRACE StatementList R_BRACE
+  ;
+
+StatementList::=
+    ExpressionStatement
+  |
+    SelectionStatement
+  |
+    IterationStatement
+  |
+    LabeledStatement
+  |
+    BREAK
+  ;
+ 
+ExpressionStatement::=
+    NEWLINE
+  |
+    Expression NEWLINE
+  ;
+
+Expression::=
+    LogicalExpression
+  |
+    UnaryExpression ASSIGN Expression
+  ;
+
+LogicalExpression::=
+    LogicalExpression OR LogicalTerm
+  |
+    LogicalTerm
+  ;
+
+LogicalTerm::=
+    LogicalTerm AND EqualityExpression
+  |
+    EqualityExpression
+  ;
+
+EqualityExpression::=
+    RelationalExpression
+  |
+    EqualityExpression DBL_EQLS RelationalExpression
+  |
+    EqualityExpression NOT_EQLS RelationalExpression
+  ;
+
+RelationalExpression::=
+    AdditiveExpression
+  |
+    RelationalExpression LESS AdditiveExpression
+  |
+    RelationalExpression GRTR AdditiveExpression
+  |
+    RelationalExpression LESS_EQL AdditiveExpression
+  |
+    RelationalExpression GRTR_EQL AdditiveExpression
+  ;
+
+AdditiveExpression::=
+    MultiplicativeExpression
+  |
+    AdditiveExpression PLUS MultiplicativeExpression
+  |
+    AdditiveExpression MINUS MultiplicativeExpression
+  ;
+
+MultiplicativeExpression::=
+    CastExpression
+  |
+    MultiplicativeExpression TIMES CastExpression
+  |
+    MultiplicativeExpression DIVIDE CastExpression
+  |
+    MultiplicativeExpression MOD CastExpression
+  ;
+
+CastExpression::=
+    UnaryExpression
+  |
+    L_PAREN Type R_PAREN CastExpression
+  ;
+
+UnaryExpression::=
+    UMINUS CastExpression
+  |
+    NOT CastExpression
+  |
+    PostfixExpression
+  ;
+
+PostfixExpression::=
+    PrimaryExpression
+  |
+    PostfixExpression INCR
+  |
+    PostfixExpression DECR
+  ;
+
+PrimaryExpression::=
+    ID
+  |
+    ID DOT ID L_PAREN Parameters R_PAREN
+  |
+    Constant
+  |
+    TEXT_LITERAL
+  |
+    L_PAREN Expression R_PAREN
+  ;
+
+Parameters::=
+    ID
+  | 
+    ID COMMA Parameters
+  ;
+
+Constant::=
+    INT_CONST
+  |
+    REAL_CONST
+  |
+    BOOL_CONST
+  ;
+
+SelectionStatement::=
+    IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement
+  |
+    SWITCH L_PAREN Expression R_PAREN Statement
+  ;
+
+ElseIfStatement::=
+    ELSEIF L_PAREN Expression R_PAREN ElseIfStatement
+  |
+    /* epsilon */
+  ;
+
+ElseStatement::=
+    ELSE Statement
+  |
+    /* epsilon */
+  ;
+
+IterationStatement::=
+    WHILE L_PAREN Expression R_PAREN Statement
+  |
+    FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement
+  |
+    FOREACH L_PAREN Expression IN Expression R_PAREN Statement
+  ;
+ 
+LabeledStatement::=
+    CASE COL Statement
+  |
+    DEFAULT COL Statement 
+  ;
+
+Type::=
+    VOID
+  |
+    TEXT
+  |
+    BOOL
+  |
+    INT
+  |
+    REAL
+  ;
