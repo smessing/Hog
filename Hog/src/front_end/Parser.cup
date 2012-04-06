@@ -26,7 +26,7 @@ parser code
 
 scan with
   {:
-    return lexer.yylex();
+    return lexer.next_token();
   :};
 
 terminal UMINUS, DECR, INCR;
