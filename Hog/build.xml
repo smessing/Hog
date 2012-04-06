@@ -96,8 +96,8 @@
 
   <!-- developer builds -->
 
-  <target name="dev-lexer" depends="clean, dev-parser">
-    <jflex file="${lexer.specification}" destdir="${src.dir}"/>
+  <target name="dev-lexer" depends="clean">
+    <jflex file="${lexer.specification}" destdir="${src.dir}" />
   </target>
 
   <target name="dev-parser" depends="clean">
