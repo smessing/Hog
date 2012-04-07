@@ -1,4 +1,4 @@
-package util;
+package util.id;
 
 /**
  * A key for the SymbolTable class.

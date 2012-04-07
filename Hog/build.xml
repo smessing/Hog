@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="HogLanguage" default="main" basedir=".">
+<project name="Hog" default="main" basedir=".">
 
   <!-- message variabes -->
   
@@ -50,15 +50,15 @@
     <echo message="Ant build file for Hog."/>
     <echo message=""/>
     <echo message="Useful targets:"/>
-    <echo message="clean ------ remove all compiled files on this machine."/>
-    <echo message="hog -------- !TODO! clean, build and run on hadoop."/>
-    <echo message="main ------- clean, build and run the project."/>
-    <echo message="jar -------- build java archive of project."/>
+    <echo message="clean -------- remove all compiled files on this machine."/>
+    <echo message="hog ---------- !TODO! clean, build and run on hadoop."/>
+    <echo message="main --------- clean, build and run the project."/>
+    <echo message="jar ---------- build java archive of project."/>
     <echo message=""/>
     <echo message="Dev builds:"/>
-    <echo message="dev-build  - !TODO! build project and run automated tests."/>
-    <echo message="dev-lexer  - run JFlex to regenerate Lexer.java. Use Lexer.jflex for specification."/>
-    <echo message="dev-parser - run CUP to regenerate Parser.java. Use HogGrammar.cup for specificiation."/>
+    <echo message="dev-build ---- !TODO! build project and run automated tests."/>
+    <echo message="dev-lexer ---- runs ConsoleLexer for testing."/>
+    <echo message="dev-frontend - runs JFlex and CUP to regenerate Lexer.java, sym.java and Parser.java"/>
   </target>
 
   <target name="clean">
@@ -95,14 +95,19 @@
   <target name="main" depends="clean,run"/>
 
   <!-- developer builds -->
-
-  <target name="dev-lexer" depends="clean">
+  <target name="dev-frontend" depends="clean">
+    <cup srcfile="${parser.specification}" destdir="${src.dir}"
+     interface="true" parser="Parser" symbols="sym" force="true" />
     <jflex file="${lexer.specification}" destdir="${src.dir}" />
   </target>
 
-  <target name="dev-parser" depends="clean">
-    <cup srcfile="${parser.specification}" destdir="${src.dir}"
-     interface="true" parser="Parser" symbols="sym" force="true" />
+  <target name="dev-lexer" depends="clean, compile">
+    <java classpath="${classes.dir}" classname="front_end.ConsoleLexer" fork="true">
+      <classpath>
+        <path id="jflex" location="${lib.dir}/JFlex.jar"/>
+        <path id="java_cup" location="${lib.dir}/java-cup-11a.jar"/>
+      </classpath>
+     </java>
   </target>
 
 </project>

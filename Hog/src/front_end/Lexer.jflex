@@ -97,5 +97,6 @@ or              { return newSym(sym.OR); }
 {comment}       { /* For this stand-alone lexer, print out comments. */
                   System.out.println("Recognized comment: " + yytext()); }
 {whitespace}    { /* Ignore whitespace. */ }
+{identifier}    { return newSym(sym.ID, new String(yytext())); }
 .               { System.out.println("Illegal char, '" + yytext() +
                     "' line: " + yyline + ", column: " + yychar); }

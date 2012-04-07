@@ -12,15 +12,24 @@ public abstract class AbstractSyntaxTree {
 	private Node root;
 	
 	public Iterator<Node> preOrderTraversal() {
-		throw new UnsupportedOperationException("!TODO!");
+		
+		TreeIteratorBuilder iterator = new TreeIteratorBuilder(this.root, TreeIteratorBuilder.traversalOrder.PREORDER);
+		return iterator.iterator();
+		
 	}
 	
 	public Iterator<Node> postOrderTraversal() {
-		throw new UnsupportedOperationException("!TODO!");
+		
+		TreeIteratorBuilder iterator = new TreeIteratorBuilder(this.root, TreeIteratorBuilder.traversalOrder.POSTORDER);
+		return iterator.iterator();
+		
 	}
 	
 	public Iterator<Node> inOrderTraversal() {
-		throw new UnsupportedOperationException("!TODO!");
+		
+		TreeIteratorBuilder iterator = new TreeIteratorBuilder(this.root, TreeIteratorBuilder.traversalOrder.INORDER);
+		return iterator.iterator();
+		
 	}
 	
 }
