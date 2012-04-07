@@ -65,6 +65,15 @@ else            { return newSym(sym.ELSE); }
 elseif          { return newSym(sym.ELSEIF); }
 if              { return newSym(sym.IF); }
 or              { return newSym(sym.OR); }
+for             { return newSym(sym.FOR); }
+while           { return newSym(sym.WHILE); }
+in              { return newSym(sym.IN); }
+text            { return newSym(sym.TEXT); }
+bool            { return newSym(sym.BOOL); }
+int             { return newSym(sym.INT); }
+real            { return newSym(sym.REAL); }
+list            { return newSym(sym.LIST); }
+void            { return newSym(sym.VOID); }
 @Functions      { return newSym(sym.FUNCTIONS); }
 @Map            { return newSym(sym.MAP); }
 @Reduce         { return newSym(sym.REDUCE); }
@@ -82,6 +91,9 @@ or              { return newSym(sym.OR); }
 "}"             { return newSym(sym.R_BRACE); }
 "["             { return newSym(sym.L_BRKT); }
 "]"             { return newSym(sym.R_BRKT); }
+"->"            { return newSym(sym.ARROW); }
+"--"            { return newSym(sym.DECR); }
+"++"            { return newSym(sym.INCR); }
 "="             { return newSym(sym.ASSIGN); }
 "<"             { return newSym(sym.GRTR); }
 ">"             { return newSym(sym.LESS); }
@@ -91,8 +103,10 @@ or              { return newSym(sym.OR); }
 ":"             { return newSym(sym.COL); }
 "=="            { return newSym(sym.DBL_EQLS); }
 "."             { return newSym(sym.DOT); }
-{integer}       { return newSym(sym.INT, new Integer(yytext())); }
-{real}          { return newSym(sym.REAL, new Double(yytext())); }
+"true"          { return newSym(sym.BOOL_CONST, true); }
+"false"         { return newSym(sym.BOOL_CONST, false); }
+{integer}       { return newSym(sym.INT_CONST, new Integer(yytext())); }
+{real}          { return newSym(sym.REAL_CONST, new Double(yytext())); }
 {char}          { return newSym(sym.CHAR, new Character(yytext().charAt(1))); }
 {comment}       { /* For this stand-alone lexer, print out comments. */
                   System.out.println("Recognized comment: " + yytext()); }
