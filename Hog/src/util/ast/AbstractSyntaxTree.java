@@ -14,25 +14,22 @@ public abstract class AbstractSyntaxTree {
 
 	public Iterator<Node> preOrderTraversal() {
 
-		TreeTraversalBuilder iterator = new TreeTraversalBuilder(this.root,
+		return TreeTraversalBuilder.buildTraversalIterator(root,
 				TreeTraversalBuilder.traversalOrder.PREORDER);
-		return iterator.iterator();
 
 	}
 
 	public Iterator<Node> postOrderTraversal() {
 
-		TreeTraversalBuilder iterator = new TreeTraversalBuilder(this.root,
+		return TreeTraversalBuilder.buildTraversalIterator(root,
 				TreeTraversalBuilder.traversalOrder.POSTORDER);
-		return iterator.iterator();
 
 	}
 
 	public Iterator<Node> inOrderTraversal() {
 
-		TreeTraversalBuilder iterator = new TreeTraversalBuilder(this.root,
+		return TreeTraversalBuilder.buildTraversalIterator(root,
 				TreeTraversalBuilder.traversalOrder.INORDER);
-		return iterator.iterator();
 
 	}
 

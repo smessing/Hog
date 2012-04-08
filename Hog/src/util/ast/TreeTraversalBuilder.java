@@ -12,19 +12,10 @@ import java.util.List;
  * 
  */
 
-class TreeTraversalBuilder implements Iterable<Node> {
-
-	private Node root;
-	private List<Node> iteratorList;
+class TreeTraversalBuilder {
 
 	static enum traversalOrder {
 		PREORDER, INORDER, POSTORDER;
-	}
-
-	TreeTraversalBuilder(Node root, traversalOrder order) {
-
-	throw new UnsupportedOperationException("!TODO!");
-
 	}
 	
 	static Iterator<Node> buildTraversalIterator (Node root, traversalOrder order) {
@@ -59,11 +50,6 @@ class TreeTraversalBuilder implements Iterable<Node> {
 	private static List<Node> buildPreOrderTraversal(Node root) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public Iterator<Node> iterator() {
-		return this.iteratorList.iterator();
 	}
 
 }
