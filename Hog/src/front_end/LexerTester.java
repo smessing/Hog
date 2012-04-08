@@ -346,9 +346,9 @@ public class LexerTester {
 	
 	/*
 	 * Test to make sure the appropriate symbols are returned
-	 * for the logical operators 'and' and 'or'.
-	 * To correctly use the test, input must be in the following format:
-	 * variable and variable, variable or variable
+	 * for the logical operators 'and', 'or' and 'not'.
+	 * To correctly use the test, input must be in one of the following formats:
+	 * variable and variable, variable or variable, not variable
 	 * Use the operators in the order listed above for correct testing flow
 	 * NOTE: This is only to test the correct parsing of expressions with a 
 	 * logical operator, not to confirm the validity of the result
