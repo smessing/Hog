@@ -10,7 +10,6 @@ import java_cup.runtime.Symbol;
 import org.junit.Test;
 
 public class LexerTester {
-
 	
 	/*
 	 * Test to make sure the appropriate symbols are returned
@@ -343,5 +342,54 @@ public class LexerTester {
 		assertEquals(tokenList.get(0).intValue(), sym.ID);
 		assertEquals(tokenList.get(1).intValue(), sym.DECR);
 		//END - postfix decrement test
+	}
+	
+	/*
+	 * Test to make sure the appropriate symbols are returned
+	 * for the logical operators 'and' and 'or'.
+	 * To correctly use the test, input must be in the following format:
+	 * variable and variable, variable or variable
+	 * Use the operators in the order listed above for correct testing flow
+	 * NOTE: This is only to test the correct parsing of expressions with a 
+	 * logical operator, not to confirm the validity of the result
+	 */
+	@Test
+	public void logicalOpTest() throws IOException {
+		Lexer lexer = new Lexer(System.in);
+		Symbol token;
+		ArrayList<Integer> tokenList = new ArrayList<Integer>();
+		
+		//BEGIN - logical 'and' test
+		System.out.print("input: ");
+		for(int i = 0; i < 3; i++){
+			try {
+				token = lexer.next_token();
+				tokenList.add(token.sym);
+			} catch (Exception e) {
+				throw new IOException("Error during lexer.yylex() call: ", e);
+			}
+		} 
+		
+		assertEquals(tokenList.get(0).intValue(), sym.ID);
+		assertEquals(tokenList.get(1).intValue(), sym.AND);
+		assertEquals(tokenList.get(2).intValue(), sym.ID);
+		//END - logical 'and' test
+		
+		//BEGIN - logical 'or' test
+		tokenList.clear();
+		System.out.print("input: ");
+		for(int i = 0; i < 3; i++){
+			try {
+				token = lexer.next_token();
+				tokenList.add(token.sym);
+			} catch (Exception e) {
+				throw new IOException("Error during lexer.yylex() call: ", e);
+			}
+		} 
+				
+		assertEquals(tokenList.get(0).intValue(), sym.ID);
+		assertEquals(tokenList.get(1).intValue(), sym.OR);
+		assertEquals(tokenList.get(2).intValue(), sym.ID);
+		//END - logical 'or' test
 	}
 }
