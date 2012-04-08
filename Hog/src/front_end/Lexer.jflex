@@ -95,8 +95,8 @@ void            { return newSym(sym.VOID); }
 "--"            { return newSym(sym.DECR); }
 "++"            { return newSym(sym.INCR); }
 "="             { return newSym(sym.ASSIGN); }
-"<"             { return newSym(sym.GRTR); }
-">"             { return newSym(sym.LESS); }
+"<"             { return newSym(sym.LESS); }
+">"             { return newSym(sym.GRTR); }
 "<="            { return newSym(sym.LESS_EQL); }
 ">="            { return newSym(sym.GRTR_EQL); }
 "!="            { return newSym(sym.NOT_EQLS); }
