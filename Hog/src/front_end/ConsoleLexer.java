@@ -200,6 +200,9 @@ public class ConsoleLexer {
 			case sym.DBL_EQLS:
 				System.out.print("DBL_EQLS ");
 				break;
+			case sym.RETURN:
+				System.out.print("RETURN ");
+				break;
 			}
 		} while (token != null);
 	}
