@@ -105,6 +105,7 @@ void            { return newSym(sym.VOID); }
 "."             { return newSym(sym.DOT); }
 "true"          { return newSym(sym.BOOL_CONST, true); }
 "false"         { return newSym(sym.BOOL_CONST, false); }
+"return"        { return newSym(sym.RETURN); }
 {integer}       { return newSym(sym.INT_CONST, new Integer(yytext())); }
 {real}          { return newSym(sym.REAL_CONST, new Double(yytext())); }
 {char}          { return newSym(sym.CHAR, new Character(yytext().charAt(1))); }
