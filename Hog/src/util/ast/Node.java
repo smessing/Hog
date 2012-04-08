@@ -28,4 +28,8 @@ public class Node {
 	public List<Node> getChildren() {
 		return this.children;
 	}
+	
+	public Node getParent() {
+		return this.parent;
+	}
 }
