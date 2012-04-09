@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java_cup.runtime.Symbol;
  * @author jason, sam
  *
  */
-public class LexerTester {
+public class AutomatedLexerTester {
 
 
 	@BeforeClass
