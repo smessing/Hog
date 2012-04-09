@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import util.ast.node.Node;
+
 /**
  * Constructs an Iterator<Node> over a given AST for pre-order, in-order and post-order traversal.
  * !TODO!: define what in-order traversal means, since these are non-binary trees.

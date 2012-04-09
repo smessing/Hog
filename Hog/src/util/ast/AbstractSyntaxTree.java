@@ -2,6 +2,8 @@ package util.ast;
 
 import java.util.Iterator;
 
+import util.ast.node.Node;
+
 /**
  * Abstract class for specifying common behavior for ASTs.
  * 
