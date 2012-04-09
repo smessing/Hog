@@ -49,8 +49,8 @@ public class LexerTester {
 	@Test
 	public void additionSymbolTest1() throws IOException {
 
-		String additionText = "2 + 5";
-		stringReader = new StringReader(additionText);
+		String text = "2 + 5";
+		stringReader = new StringReader(text);
 		Lexer lexer = new Lexer(stringReader);
 		List<Integer> tokenList = new ArrayList<Integer>();
 		Symbol token = lexer.next_token();
@@ -61,7 +61,7 @@ public class LexerTester {
 		}
 
 		assertEquals("It should produce find 3 tokens for the string '"
-				+ additionText + "'", 3, tokenList.size());
+				+ text + "'", 3, tokenList.size());
 		assertEquals("The first token should be an INT_CONST", sym.INT_CONST,
 				tokenList.get(0).intValue());
 		assertEquals("The second token should be a PLUS", sym.PLUS, tokenList
@@ -82,8 +82,8 @@ public class LexerTester {
 	@Test
 	public void additionSymbolTest2() throws IOException {
 
-		String additionText = "a + b";
-		stringReader = new StringReader(additionText);
+		String text = "a + b";
+		stringReader = new StringReader(text);
 		Lexer lexer = new Lexer(stringReader);
 		List<Integer> tokenList = new ArrayList<Integer>();
 		Symbol token = lexer.next_token();
@@ -94,12 +94,111 @@ public class LexerTester {
 		}
 
 		assertEquals("It should produce find 3 tokens for the string '"
-				+ additionText + "'", 3, tokenList.size());
+				+ text + "'", 3, tokenList.size());
 		assertEquals("The first token should be an ID", sym.ID,
 				tokenList.get(0).intValue());
 		assertEquals("The second token should be a PLUS", sym.PLUS, tokenList
 				.get(1).intValue());
 		assertEquals("The first token should be an ID", sym.ID,
+				tokenList.get(2).intValue());
+		
+	}
+	
+	/**
+	 * Tests for correct parsing of subtraction operator and it's operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID MINUS ID for strings like
+	 * "a - b" and INT_CONST MINUS INT_CONST for strings like "1 - 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void subtractionSymbolTest1() throws IOException {
+
+		String text = "a - b";
+		stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+		
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals("It should produce find 3 tokens for the string '"
+				+ text + "'", 3, tokenList.size());
+		assertEquals("The first token should be an ID", sym.ID,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a MINUS", sym.MINUS, tokenList
+				.get(1).intValue());
+		assertEquals("The first token should be an ID", sym.ID,
+				tokenList.get(2).intValue());
+		
+	}
+	
+	/**
+	 * Tests for correct parsing of subtraction operator and it's operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID MINUS ID for strings like
+	 * "a - b" and INT_CONST MINUS INT_CONST for strings like "1 - 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void subtractionSymbolTest2() throws IOException {
+
+		String text = "1 - 2";
+		stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+		
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals("It should produce find 3 tokens for the string '"
+				+ text + "'", 3, tokenList.size());
+		assertEquals("The first token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a MINUS", sym.MINUS, tokenList
+				.get(1).intValue());
+		assertEquals("The first token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+		
+	}
+	
+	/**
+	 * Tests for correct parsing of subtraction operator and it's operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID DIVIDE ID for strings like
+	 * "a / b" and INT_CONST DIVIDE INT_CONST for strings like "1 / 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void divisionSymbolTest1() throws IOException {
+
+		String text = "1 / 2";
+		stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+		
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals("It should produce find 3 tokens for the string '"
+				+ text + "'", 3, tokenList.size());
+		assertEquals("The first token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a DIVIDE", sym.DIVIDE, tokenList
+				.get(1).intValue());
+		assertEquals("The first token should be an INT_CONST", sym.INT_CONST,
 				tokenList.get(2).intValue());
 		
 	}
