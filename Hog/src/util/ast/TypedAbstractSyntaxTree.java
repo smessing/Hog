@@ -11,6 +11,6 @@ import util.SymbolTable;
  */
 public class TypedAbstractSyntaxTree extends AbstractSyntaxTree {
 	
-	private Map<Node, SymbolTable> scopeStack;
+	private Map<Node, SymbolTable> scope;
 
 }
