@@ -7,4 +7,6 @@ package util;
  */
 public abstract class SymbolTable {
 
+	public static SymbolTable top;
+	
 }
