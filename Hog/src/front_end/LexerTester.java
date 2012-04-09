@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -15,11 +16,14 @@ import java.util.List;
 
 import java_cup.runtime.Symbol;
 
-import org.junit.Test;
-
+/**
+ * Tests Lexer's performance on decomposing different inputs into the correct sequence of tokens.
+ * 
+ * @author jason, sam
+ *
+ */
 public class LexerTester {
 
-	private StringReader stringReader;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -39,7 +43,7 @@ public class LexerTester {
 	}
 
 	/**
-	 * Tests for correct parsing of addition operator and it's operands.
+	 * Tests for correct parsing of addition operator and its operands.
 	 * 
 	 * Specifically, ensures that Lexer produces token streams of ID PLUS ID for strings like
 	 * "a + b" and INT_CONST PLUS INT_CONST for strings like "1 + 2".
@@ -50,7 +54,7 @@ public class LexerTester {
 	public void additionSymbolTest1() throws IOException {
 
 		String text = "2 + 5";
-		stringReader = new StringReader(text);
+		StringReader stringReader = new StringReader(text);
 		Lexer lexer = new Lexer(stringReader);
 		List<Integer> tokenList = new ArrayList<Integer>();
 		Symbol token = lexer.next_token();
@@ -72,7 +76,7 @@ public class LexerTester {
 	}
 	
 	/**
-	 * Tests for correct parsing of addition operator and it's operands.
+	 * Tests for correct parsing of addition operator and its operands.
 	 * 
 	 * Specifically, ensures that Lexer produces token streams of ID PLUS ID for strings like
 	 * "a + b" and INT_CONST PLUS INT_CONST for strings like "1 + 2".
@@ -83,7 +87,7 @@ public class LexerTester {
 	public void additionSymbolTest2() throws IOException {
 
 		String text = "a + b";
-		stringReader = new StringReader(text);
+		StringReader stringReader = new StringReader(text);
 		Lexer lexer = new Lexer(stringReader);
 		List<Integer> tokenList = new ArrayList<Integer>();
 		Symbol token = lexer.next_token();
@@ -105,7 +109,7 @@ public class LexerTester {
 	}
 	
 	/**
-	 * Tests for correct parsing of subtraction operator and it's operands.
+	 * Tests for correct parsing of subtraction operator and its operands.
 	 * 
 	 * Specifically, ensures that Lexer produces token streams of ID MINUS ID for strings like
 	 * "a - b" and INT_CONST MINUS INT_CONST for strings like "1 - 2".
@@ -116,7 +120,7 @@ public class LexerTester {
 	public void subtractionSymbolTest1() throws IOException {
 
 		String text = "a - b";
-		stringReader = new StringReader(text);
+		StringReader stringReader = new StringReader(text);
 		Lexer lexer = new Lexer(stringReader);
 		List<Integer> tokenList = new ArrayList<Integer>();
 		Symbol token = lexer.next_token();
@@ -138,7 +142,7 @@ public class LexerTester {
 	}
 	
 	/**
-	 * Tests for correct parsing of subtraction operator and it's operands.
+	 * Tests for correct parsing of subtraction operator and its operands.
 	 * 
 	 * Specifically, ensures that Lexer produces token streams of ID MINUS ID for strings like
 	 * "a - b" and INT_CONST MINUS INT_CONST for strings like "1 - 2".
@@ -149,7 +153,7 @@ public class LexerTester {
 	public void subtractionSymbolTest2() throws IOException {
 
 		String text = "1 - 2";
-		stringReader = new StringReader(text);
+		StringReader stringReader = new StringReader(text);
 		Lexer lexer = new Lexer(stringReader);
 		List<Integer> tokenList = new ArrayList<Integer>();
 		Symbol token = lexer.next_token();
@@ -171,7 +175,7 @@ public class LexerTester {
 	}
 	
 	/**
-	 * Tests for correct parsing of subtraction operator and it's operands.
+	 * Tests for correct parsing of division operator and its operands.
 	 * 
 	 * Specifically, ensures that Lexer produces token streams of ID DIVIDE ID for strings like
 	 * "a / b" and INT_CONST DIVIDE INT_CONST for strings like "1 / 2".
@@ -182,7 +186,7 @@ public class LexerTester {
 	public void divisionSymbolTest1() throws IOException {
 
 		String text = "1 / 2";
-		stringReader = new StringReader(text);
+		StringReader stringReader = new StringReader(text);
 		Lexer lexer = new Lexer(stringReader);
 		List<Integer> tokenList = new ArrayList<Integer>();
 		Symbol token = lexer.next_token();
