@@ -5,6 +5,12 @@ import java.io.IOException;
 import java_cup.runtime.Symbol;
 import front_end.*;
 
+/**
+ * A console front-end to the Lexer class for dynamically testing the Lexer.
+ * 
+ * @author sam
+ *
+ */
 @SuppressWarnings("unused")
 public class ConsoleLexer {
 
