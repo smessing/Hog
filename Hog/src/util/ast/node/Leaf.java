@@ -1,4 +1,5 @@
-package util.ast;
+package util.ast.node;
+
 
 /**
  * A leaf of an AST.

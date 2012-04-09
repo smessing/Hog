@@ -3,6 +3,7 @@ package util.ast;
 import java.util.Map;
 
 import util.SymbolTable;
+import util.ast.node.Node;
 
 /**
  * An AST including type information.

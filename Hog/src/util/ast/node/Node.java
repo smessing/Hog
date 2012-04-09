@@ -1,4 +1,4 @@
-package util.ast;
+package util.ast.node;
 
 import java.util.ArrayList;
 import java.util.Iterator;
