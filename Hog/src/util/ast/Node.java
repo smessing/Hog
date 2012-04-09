@@ -10,7 +10,7 @@ import java.util.List;
  * @author !TODO!
  * 
  */
-public class Node {
+public abstract class Node {
 
 	private Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
