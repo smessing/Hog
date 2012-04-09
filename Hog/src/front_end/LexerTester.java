@@ -391,5 +391,21 @@ public class LexerTester {
 		assertEquals(tokenList.get(1).intValue(), sym.OR);
 		assertEquals(tokenList.get(2).intValue(), sym.ID);
 		//END - logical 'or' test
+		
+
+		/*//BEGIN - logical 'not' test
+		System.out.print("input: ");
+		for(int i = 0; i < 2; i++){
+			try {
+				token = lexer.next_token();
+				tokenList.add(token.sym);
+			} catch (Exception e) {
+				throw new IOException("Error during lexer.yylex() call: ", e);
+			}
+		} 
+		
+		assertEquals(tokenList.get(0).intValue(), sym.NOT);
+		assertEquals(tokenList.get(1).intValue(), sym.ID);
+		//END - logical 'not' test*/
 	}
 }
