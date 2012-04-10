@@ -34,11 +34,7 @@ public class MockNode extends Node {
 	}
 	
 	public int compareTo(MockNode that) {
-		if (this.id == that.getId()) {
-			return 0;
-		} else {
-			return this.id - that.getId();
-		}
+		return this.id - that.getId();
 	}
 
 	@Override
