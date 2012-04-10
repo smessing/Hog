@@ -96,8 +96,6 @@ public class AutomatedAbstractSyntaxTreeTester {
 					nextNode, correctNextNode);
 			index++;
 		}
-		
-		System.out.println("A: " + A.toString());
 
 	}
 
