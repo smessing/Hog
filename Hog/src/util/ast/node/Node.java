@@ -1,20 +1,19 @@
 package util.ast.node;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * A node within an AST.
  * 
- * @author !TODO!
+ * @author sam
  * 
  */
 public abstract class Node {
 
-	private Node parent;
+	protected Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
-	private List<Node> children;
+	protected List<Node> children;
 
 	public Node() {
 		this(null);

@@ -12,7 +12,7 @@ import util.ast.node.Node;
  */
 public abstract class AbstractSyntaxTree {
 
-	private Node root;
+	protected Node root;
 
 	public Iterator<Node> preOrderTraversal() {
 
