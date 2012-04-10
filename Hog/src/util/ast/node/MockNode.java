@@ -17,9 +17,30 @@ public class MockNode extends Node {
 		
 	}
 	
+	public int getId() {
+		return this.id;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return Integer.toString(this.id);
+	}
+	
+	public int compareTo(MockNode that) {
+		if (this.id == that.getId()) {
+			return 0;
+		} else {
+			return this.id - that.getId();
+		}
+	}
+
+	@Override
+	public int compareTo(Node that) {
+		if (that instanceof MockNode) {
+			return compareTo((MockNode) that);
+		}
+		return -1;
 	}
 	
 	

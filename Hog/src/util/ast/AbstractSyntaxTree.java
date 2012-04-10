@@ -14,6 +14,10 @@ public abstract class AbstractSyntaxTree {
 
 	protected Node root;
 
+	protected AbstractSyntaxTree(Node root) {
+		this.root = root;
+	}
+	
 	public Iterator<Node> preOrderTraversal() {
 
 		return TreeTraversalBuilder.buildTraversalIterator(root,

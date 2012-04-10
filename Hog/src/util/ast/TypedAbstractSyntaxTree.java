@@ -12,6 +12,10 @@ import util.ast.node.Node;
  */
 public class TypedAbstractSyntaxTree extends AbstractSyntaxTree {
 	
-	private Map<Node, SymbolTable> scope;
+	protected Map<Node, SymbolTable> scope;
+	
+	protected TypedAbstractSyntaxTree(Node root) {
+		super(root);
+	}
 
 }

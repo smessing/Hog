@@ -9,7 +9,7 @@ import java.util.List;
  * @author sam
  * 
  */
-public abstract class Node {
+public abstract class Node implements Comparable<Node> {
 
 	protected Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
@@ -36,5 +36,25 @@ public abstract class Node {
 		children.add(child);
 	}
 	
+	/**
+	 * Sets the parent of this node to be the passed node, if this node doesn't yet have a parent.
+	 * @param p - the proposed parent node
+	 * @return true if this was parent-less and passed node is now parent, false otherwise.
+	 */
+	public boolean setParent(Node p) {
+		if (parent == null) {
+			parent = p;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Get the identifying name of this node.
+	 * @return a string representation of the identifying name of this node. 
+	 */
+	public String getName() {
+		return this.toString();
+	}
 	
 }
