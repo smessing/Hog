@@ -2,6 +2,16 @@ package util.ast.node;
 
 public class MultiplicativeExpressionNode extends Node {
 
+	protected Type type;
+	
+	public MultiplicativeExpressionNode(Node parent) {
+		super(parent);
+	}
+	
+	public Type getType() {
+		return type;
+	}
+	
 	private int compareTo(MultiplicativeExpressionNode that) {
 		return (this.getName().compareTo(that.getName()));
 	}
