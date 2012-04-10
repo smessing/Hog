@@ -33,7 +33,7 @@ public class MockNode extends Node {
 		return Integer.toString(this.id);
 	}
 	
-	public int compareTo(MockNode that) {
+	protected int compareTo(MockNode that) {
 		return this.id - that.getId();
 	}
 
