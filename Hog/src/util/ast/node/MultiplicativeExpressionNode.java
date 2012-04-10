@@ -7,8 +7,6 @@ package util.ast.node;
  *
  */
 public class MultiplicativeExpressionNode extends ExpressionNode {
-
-	protected Type type;
 	
 	public MultiplicativeExpressionNode() {
 		this(null);
@@ -16,8 +14,6 @@ public class MultiplicativeExpressionNode extends ExpressionNode {
 	
 	public MultiplicativeExpressionNode(Node parent) {
 		super(parent);
-		type = null;
-		//computeType();
 	}
 	
 	protected void computeType() {
@@ -38,7 +34,7 @@ public class MultiplicativeExpressionNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return type.toString();
+		return "MultiplicativeExpressionNode<" + type.toString() + ">";
 	}
 	
 

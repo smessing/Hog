@@ -16,6 +16,7 @@ public abstract class ExpressionNode extends Node {
 	
 	protected ExpressionNode(Node parent) {
 		super(parent);
+		type = null;
 	}
 	
 	public Type getType() {
@@ -28,6 +29,11 @@ public abstract class ExpressionNode extends Node {
 	
 	public boolean isSameType(ExpressionNode that) {
 		return this.type == that.getType();
+	}
+	
+	@Override
+	public String getName() {
+		return "ExpressionNode<" + type.toString() + ">";
 	}
 
 }
