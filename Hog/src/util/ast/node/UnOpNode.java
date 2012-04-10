@@ -8,9 +8,18 @@ public class UnOpNode extends ExpressionNode {
 	
 	protected OpType opType;
 
-	protected UnOpNode(Node parent) {
+	public UnOpNode() {
+		this(null);
+	}
+	
+	public UnOpNode(Node parent) {
 		super(parent);
 		this.opType = null;
+	}
+	
+	public UnOpNode(Node parent, OpType type) {
+		super(parent);
+		this.opType = type;
 	}
 	
 	public OpType getOpType() {
