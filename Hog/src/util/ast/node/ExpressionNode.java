@@ -1,5 +1,11 @@
 package util.ast.node;
 
+/**
+ * An abstract class inherited by all expression classes, specifying type information.
+ * 
+ * @author sam
+ *
+ */
 public abstract class ExpressionNode extends Node {
 
 	protected static enum Type {
