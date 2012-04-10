@@ -1,6 +1,6 @@
 package util.ast.node;
 
-public class MultiplicativeExpressionNode extends Node {
+public class MultiplicativeExpressionNode extends ExpressionNode {
 
 	protected Type type;
 	

@@ -11,9 +11,6 @@ import java.util.List;
  */
 public abstract class Node implements Comparable<Node> {
 
-	protected static enum Type {
-		BOOL, TEXT, VOID, INT, REAL
-	}
 	
 	protected Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
