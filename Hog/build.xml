@@ -1,129 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Hog" default="main" basedir=".">
 
-  <!-- message variabes -->
-  
-  <property name="jflex.message" value="Running JFlex lexer generator."/>
-  <property name="usage" value="Usage: hog [input_file | input_dir] [output_file_name]"/>
-  <property name="hog.version" value="0.1"/>
-  <property name="welcome.message" value="Hog v${hog.version} --- A scripting MapReduce language."/>
+	<!-- message variabes -->
+
+	<property name="usage" value="Usage: hog [input_file | input_dir] [output_file_name]" />
+	<property name="hog.version" value="0.1" />
+	<property name="welcome.message" value="Hog v${hog.version} --- A scripting MapReduce language." />
 
 
-  <!-- organization variabes -->
+	<!-- organization variabes -->
 
-  <property name="src.dir" value="src"/>
-  <property name="build.dir" value="bin"/>
-  <property name="classes.dir" value="${build.dir}/classes"/>
-  <property name="jar.dir" value="${build.dir}/jar"/>
-  <property name="lib.dir" value="lib"/>
-  <property name="front_end.dir" value="${src.dir}/front_end"/>
-  <path id="lib">
-    <pathelement location="lib/"/>
-    <pathelement location="lib/java-cup-11a.jar"/>
-    <pathelement location="lib/JFlex.jar"/>
-  	<pathelement location="lib/junit.jar" />
-  </path>
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="bin" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="jar.dir" value="${build.dir}/jar" />
+	<property name="lib.dir" value="lib" />
+	<property name="front_end.dir" value="${src.dir}/front_end" />
+	<property name="test.dir" value="${classes.dir}" />
+	<path id="lib">
+		<pathelement location="lib/" />
+		<pathelement location="lib/java-cup-11a.jar" />
+		<pathelement location="lib/JFlex.jar" />
+		<pathelement location="lib/junit.jar" />
+	</path>
 	<path id="test.classpath">
-	  <pathelement location="${classes.dir}" />
-	  <pathelement location="lib/junit.jar" />
+		<pathelement location="${classes.dir}" />
+		<pathelement location="lib/junit.jar" />
 		<pathelement location="lib/org.hamcrest.core_1.1.0.v20090501071000.jar" />
-	  <fileset dir="${jar.dir}">
-	    <include name="**/*.jar"/>
-	  </fileset>
+		<pathelement location="lib/java-cup-11a.jar" />
+		<pathelement location="lib/JFlex.jar" />
+		<fileset dir="${jar.dir}">
+			<include name="**/*.jar" />
+		</fileset>
 	</path>
 
 
-  <!-- build variables -->
+	<!-- build variables -->
 
-  <property name="java.source.version" value="1.6"/>
-  <property name="java.target.version" value="1.6"/>
-  <property name="lexer.specification" value="${front_end.dir}/Lexer.jflex"/>
-  <property name="dev.main-class" value="front_end.ConsoleLexer.main"/>
-  <property name="jflex.main-class" value="JFlex.Main"/>
-  <property name="cup.main-class" value="java_cup.Main"/>
-  <property name="parser.specification" value="${front_end.dir}/Parser.cup"/>
-	<property name="test.package" value="test" />
+	<property name="java.source.version" value="1.6" />
+	<property name="java.target.version" value="1.6" />
+	<property name="lexer.specification" value="${front_end.dir}/Lexer.jflex" />
+	<property name="dev.main-class" value="front_end.ConsoleLexer.main" />
+	<property name="jflex.main-class" value="JFlex.Main" />
+	<property name="cup.main-class" value="java_cup.Main" />
+	<property name="parser.specification" value="${front_end.dir}/Parser.cup" />
 
-  <!-- build tasks (ignore Eclipse warnings) -->
+	<!-- build tasks (ignore Eclipse warnings) -->
 
-  <taskdef name="jflex" classname="JFlex.anttask.JFlexTask">
-    <classpath refid="lib"/>
-  </taskdef>
+	<taskdef name="jflex" classname="JFlex.anttask.JFlexTask">
+		<classpath refid="lib" />
+	</taskdef>
 
-  <taskdef name="cup" classname="java_cup.anttask.CUPTask">
-    <classpath refid="lib"/>
-  </taskdef>
+	<taskdef name="cup" classname="java_cup.anttask.CUPTask">
+		<classpath refid="lib" />
+	</taskdef>
 
-  <!-- build routines -->
+	<!-- build routines -->
 
-  <target name="help" description="show help message">
-    <echo message="Ant build file for Hog."/>
-    <echo message=""/>
-    <echo message="Useful targets:"/>
-    <echo message="clean -------- remove all compiled files on this machine."/>
-    <echo message="hog ---------- !TODO! clean, build and run on hadoop."/>
-    <echo message="main --------- clean, build and run the project."/>
-    <echo message="jar ---------- build java archive of project."/>
-    <echo message=""/>
-    <echo message="Dev builds:"/>
-    <echo message="dev-build ---- !TODO! build project and run automated tests."/>
-    <echo message="dev-lexer ---- runs ConsoleLexer for testing."/>
-    <echo message="dev-frontend - runs JFlex and CUP to regenerate Lexer.java, sym.java and Parser.java"/>
-  	<echo message="dev-test ----- run all automated tests."/>
-  </target>
+	<target name="help" description="show help message">
+		<echo message="Ant build file for Hog." />
+		<echo message="" />
+		<echo message="Useful targets:" />
+		<echo message="clean -------- remove all compiled files on this machine." />
+		<echo message="hog ---------- !TODO! clean, build and run on hadoop." />
+		<echo message="main --------- clean, build and run the project." />
+		<echo message="jar ---------- build java archive of project." />
+		<echo message="" />
+		<echo message="Dev builds:" />
+		<echo message="dev-build ---- !TODO! build project and run automated tests." />
+		<echo message="dev-lexer ---- runs ConsoleLexer for testing." />
+		<echo message="dev-frontend - runs JFlex and CUP to regenerate Lexer.java, sym.java and Parser.java" />
+		<echo message="dev-test ----- run all automated tests." />
+	</target>
 
-  <target name="clean">
-    <delete dir="${build.dir}"/>
-  </target>
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
 
-  <target name="compile" depends="clean">
-    <echo>${welcome.message}</echo>
-    <mkdir dir="${classes.dir}"/>
-    <javac srcdir="${src.dir}" destdir="${classes.dir}"  
-      source="${java.source.version}" target="${java.target.version}" 
-      includeantruntime="false">
-      <classpath refid="lib"/>
-    </javac>
-  </target>
+	<target name="compile" depends="clean">
+		<echo>${welcome.message}</echo>
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="${java.source.version}" 
+			target="${java.target.version}" includeantruntime="false">
+			<classpath refid="lib" />
+		</javac>
+	</target>
 
-  <target name="jar" depends="compile">
-    <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
-      <manifest>
-        <attribute name="Main-Class" value="${dev.main-class}"/>	
-      </manifest>
-    </jar>
-  </target>
+	<target name="jar" depends="compile">
+		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${dev.main-class}" />
+			</manifest>
+		</jar>
+	</target>
 
-  <target name="run" depends="jar">
-    <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
-  </target>
+	<target name="run" depends="jar">
+		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" />
+	</target>
 
-  <target name="clean-build" depends="jar"/>
+	<target name="clean-build" depends="jar" />
 
-  <target name="main" depends="clean,run"/>
+	<target name="main" depends="clean,run" />
 
-  <!-- developer builds -->
-  <target name="dev-frontend" depends="clean">
-    <cup srcfile="${parser.specification}" destdir="${src.dir}"
-     interface="true" parser="Parser" symbols="sym" force="true" />
-    <jflex file="${lexer.specification}" destdir="${src.dir}" />
-  </target>
+	<!-- developer builds -->
+	<target name="dev-frontend" depends="clean">
+		<cup srcfile="${parser.specification}" destdir="${src.dir}" 
+			interface="true" parser="Parser" symbols="sym" force="true" />
+		<jflex file="${lexer.specification}" destdir="${src.dir}" />
+	</target>
 
-  <target name="dev-lexer" depends="compile">
-    <java classpath="${classes.dir}" classname="front_end.ConsoleLexer" fork="true">
-      <classpath>
-        <path id="jflex" location="${lib.dir}/JFlex.jar"/>
-        <path id="java_cup" location="${lib.dir}/java-cup-11a.jar"/>
-      </classpath>
-     </java>
-  </target>
-	
+	<target name="dev-lexer" depends="compile">
+		<java classpath="${classes.dir}" classname="front_end.ConsoleLexer" fork="true">
+			<classpath>
+				<path id="jflex" location="${lib.dir}/JFlex.jar" />
+				<path id="java_cup" location="${lib.dir}/java-cup-11a.jar" />
+			</classpath>
+		</java>
+	</target>
+
 	<target name="dev-test" depends="jar">
-		 <junit fork="yes" haltonfailure="yes">
-		    <test name="test.ast.AutomatedAbstractSyntaxTreeTester" />
-		    <formatter type="plain" usefile="false" />
-		    <classpath refid="test.classpath" />
-		  </junit>
+		<junit fork="yes" haltonfailure="yes">
+			<formatter type="plain" usefile="false" />
+			<classpath refid="test.classpath" />
+			<batchtest>
+				<fileset dir="${test.dir}" includes="**/*Tester.class" />
+			</batchtest>
+		</junit>
 	</target>
 
 </project>
