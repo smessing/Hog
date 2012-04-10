@@ -33,6 +33,7 @@ public class AutomatedAbstractSyntaxTreeTester {
 	private Node E;
 	private Node F;
 	private Node G;
+	private AbstractSyntaxTree tree;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -60,6 +61,7 @@ public class AutomatedAbstractSyntaxTreeTester {
 		B.addChild(E);
 		C.addChild(F);
 		C.addChild(G);
+		tree = new UntypedAbstractSyntaxTree(A);
 	}
 
 	@After
@@ -82,8 +84,6 @@ public class AutomatedAbstractSyntaxTreeTester {
 		correctPreOrderTraversal.add(C);
 		correctPreOrderTraversal.add(F);
 		correctPreOrderTraversal.add(G);
-
-		AbstractSyntaxTree tree = new UntypedAbstractSyntaxTree(A);
 
 		Iterator<Node> postOrderTraversal = tree.preOrderTraversal();
 
@@ -115,8 +115,6 @@ public class AutomatedAbstractSyntaxTreeTester {
 		correctPostOrderTraversal.add(G);
 		correctPostOrderTraversal.add(C);
 		correctPostOrderTraversal.add(A);
-
-		AbstractSyntaxTree tree = new UntypedAbstractSyntaxTree(A);
 
 		Iterator<Node> postOrderTraversal = tree.postOrderTraversal();
 
