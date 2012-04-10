@@ -12,7 +12,6 @@ import util.ast.node.Node;
  * @author sam
  * 
  */
-
 class TreeTraversalBuilder {
 
 	static enum traversalOrder {
