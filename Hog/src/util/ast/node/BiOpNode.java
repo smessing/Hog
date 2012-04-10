@@ -41,16 +41,4 @@ public class BiOpNode extends ExpressionNode {
 		return opType.toString() + "<" + this.getTypeName() + ">";
 	}
 
-	@Override
-	public int compareTo(Node that) {
-		if (that instanceof BiOpNode) {
-			return this.compareTo((BiOpNode) that);
-		}
-		return -1;
-	}
-	
-	protected int compareTo(BiOpNode that) {
-		return this.opType.compareTo(that.getOpType());
-	}
-
 }
