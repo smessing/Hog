@@ -51,6 +51,15 @@ public class AutomatedAbstractSyntaxTreeTester {
 		E = new MockNode();
 		F = new MockNode();
 		G = new MockNode();
+		// A is root of tree, with children B, C
+		// B has children D, E
+		// C has children F, G
+		A.addChild(B);
+		A.addChild(C);
+		B.addChild(D);
+		B.addChild(E);
+		C.addChild(F);
+		C.addChild(G);
 	}
 
 	@After
@@ -63,16 +72,6 @@ public class AutomatedAbstractSyntaxTreeTester {
 	 */
 	@Test
 	public void postOrderTraversalTest() {
-
-		// A is root of tree, with children B, C
-		// B has children D, E
-		// C has children F, G
-		A.addChild(B);
-		A.addChild(C);
-		B.addChild(D);
-		B.addChild(E);
-		C.addChild(F);
-		C.addChild(G);
 
 		List<Node> correctPostOrderTraversal = new ArrayList<Node>();
 
