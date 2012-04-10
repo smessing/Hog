@@ -44,7 +44,7 @@ public abstract class ExpressionNode extends Node {
 		if (type != null) {
 			return type.toString();
 		}
-		else return "unknown";
+		return "unknown";
 	}
 
 }
