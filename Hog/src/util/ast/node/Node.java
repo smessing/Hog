@@ -53,12 +53,36 @@ public abstract class Node implements Comparable<Node> {
 	
 	/**
 	 * Get the identifying name of this node. 
-	 * 
-	 * Override toString() in any implementation of Node to change default behavior.
+	 *
 	 * @return a string representation of the identifying name of this node. 
 	 */
-	public String getName() {
-		return this.toString();
+	public abstract String getName();
+	
+	/**
+	 * A convenient and concise String representation of this node.
+	 * 
+	 * Override getName() in any implementation of Node to change default behavior.
+	 * @return a string representation of this node.
+	 */
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		stringBuilder.append(this.getName());
+		stringBuilder.append(" Node, Children: [");
+		
+		for (Node child : children) {
+			stringBuilder.append(child.getName());
+			stringBuilder.append(", ");
+		}
+		
+		if (!children.isEmpty()) {
+			stringBuilder.replace(stringBuilder.lastIndexOf(", "), stringBuilder.length() - 1, "");
+		}
+		
+		stringBuilder.append("]");
+		
+		return stringBuilder.toString();
 	}
 	
 }

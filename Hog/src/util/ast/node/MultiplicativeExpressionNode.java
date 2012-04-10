@@ -6,10 +6,18 @@ public class MultiplicativeExpressionNode extends ExpressionNode {
 	
 	public MultiplicativeExpressionNode(Node parent) {
 		super(parent);
+		type = null;
+		//computeType();
 	}
 	
 	private int compareTo(MultiplicativeExpressionNode that) {
 		return (this.getName().compareTo(that.getName()));
+	}
+	
+	
+	@SuppressWarnings("unused")
+	private void computeType() {
+		throw new UnsupportedOperationException("TODO");
 	}
 	
 	@Override
@@ -19,5 +27,11 @@ public class MultiplicativeExpressionNode extends ExpressionNode {
 		}
 		return -1;
 	}
+
+	@Override
+	public String getName() {
+		return type.toString();
+	}
+	
 
 }
