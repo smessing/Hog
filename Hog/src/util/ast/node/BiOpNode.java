@@ -8,15 +8,15 @@ public class BiOpNode extends ExpressionNode {
 	
 	protected OpType opType;
 	
-	protected BiOpNode() {
+	public BiOpNode() {
 		this(null);
 	}
 	
-	protected BiOpNode(Node parent) {
+	public BiOpNode(Node parent) {
 		super(parent);
 	}
 	
-	protected BiOpNode(Node parent, OpType type) {
+	public BiOpNode(Node parent, OpType type) {
 		this(parent);
 		this.opType = type;	
 	}

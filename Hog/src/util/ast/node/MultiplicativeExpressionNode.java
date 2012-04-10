@@ -10,6 +10,10 @@ public class MultiplicativeExpressionNode extends ExpressionNode {
 
 	protected Type type;
 	
+	public MultiplicativeExpressionNode() {
+		this(null);
+	}
+	
 	public MultiplicativeExpressionNode(Node parent) {
 		super(parent);
 		type = null;
