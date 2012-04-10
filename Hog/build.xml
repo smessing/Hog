@@ -75,7 +75,7 @@
     <delete dir="${build.dir}"/>
   </target>
 
-  <target name="compile">
+  <target name="compile" depends="clean">
     <echo>${welcome.message}</echo>
     <mkdir dir="${classes.dir}"/>
     <javac srcdir="${src.dir}" destdir="${classes.dir}"  
@@ -97,7 +97,7 @@
     <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
   </target>
 
-  <target name="clean-build" depends="clean,jar"/>
+  <target name="clean-build" depends="jar"/>
 
   <target name="main" depends="clean,run"/>
 
@@ -108,7 +108,7 @@
     <jflex file="${lexer.specification}" destdir="${src.dir}" />
   </target>
 
-  <target name="dev-lexer" depends="clean, compile">
+  <target name="dev-lexer" depends="compile">
     <java classpath="${classes.dir}" classname="front_end.ConsoleLexer" fork="true">
       <classpath>
         <path id="jflex" location="${lib.dir}/JFlex.jar"/>
@@ -117,9 +117,9 @@
      </java>
   </target>
 	
-	<target name="dev-test" depends="clean, compile">
+	<target name="dev-test" depends="jar">
 		 <junit fork="yes" haltonfailure="yes">
-		    <test name="${test.package}" />
+		    <test name="test.ast.AutomatedAbstractSyntaxTreeTester" />
 		    <formatter type="plain" usefile="false" />
 		    <classpath refid="test.classpath" />
 		  </junit>
