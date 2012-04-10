@@ -9,7 +9,7 @@ package util.ast.node;
 public class UnOpNode extends ExpressionNode {
 	
 	public static enum OpType {
-		UMINUS, NOT, RETURN
+		UMINUS, NOT, RETURN, INCR, DECR
 	}
 	
 	protected OpType opType;
