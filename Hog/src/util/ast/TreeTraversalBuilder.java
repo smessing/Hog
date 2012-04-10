@@ -7,17 +7,16 @@ import java.util.List;
 import util.ast.node.Node;
 
 /**
- * Constructs an Iterator<Node> over a given AST for pre-order, in-order and post-order traversal.
- * !TODO!: define what in-order traversal means, since these are non-binary trees.
+ * Constructs an Iterator<Node> over a given AST for pre-order and post-order traversal.
  * 
- * @author !TODO!
+ * @author sam
  * 
  */
 
 class TreeTraversalBuilder {
 
 	static enum traversalOrder {
-		PREORDER, INORDER, POSTORDER;
+		PREORDER, POSTORDER;
 	}
 	
 	static Iterator<Node> buildTraversalIterator (Node root, traversalOrder order) {
@@ -28,9 +27,6 @@ class TreeTraversalBuilder {
 		case PREORDER:
 			iteratorList = buildPreOrderTraversal(root);
 			break;
-		case INORDER:
-			iteratorList = buildInOrderTraversal(root);
-			break;
 		case POSTORDER:
 			iteratorList = buildPostOrderTraversal(root);
 		}
@@ -40,13 +36,23 @@ class TreeTraversalBuilder {
 	}
 
 	private static List<Node> buildPostOrderTraversal(Node root) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private static List<Node> buildInOrderTraversal(Node root) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Node> subTree = new ArrayList<Node>();
+		
+		// base case
+		if (root.getChildren().isEmpty()) {
+			subTree.add(root);
+			return subTree;
+		}
+		
+		for (Node child : root.getChildren()) {
+			subTree.addAll(buildPostOrderTraversal(child));
+		}
+		
+		subTree.add(root);
+		
+		return subTree;
+		
 	}
 
 	private static List<Node> buildPreOrderTraversal(Node root) {

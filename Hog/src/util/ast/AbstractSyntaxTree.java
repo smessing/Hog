@@ -28,11 +28,4 @@ public abstract class AbstractSyntaxTree {
 
 	}
 
-	public Iterator<Node> inOrderTraversal() {
-
-		return TreeTraversalBuilder.buildTraversalIterator(root,
-				TreeTraversalBuilder.traversalOrder.INORDER);
-
-	}
-
 }
