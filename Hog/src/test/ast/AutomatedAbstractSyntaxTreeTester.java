@@ -85,14 +85,14 @@ public class AutomatedAbstractSyntaxTreeTester {
 		correctPreOrderTraversal.add(F);
 		correctPreOrderTraversal.add(G);
 
-		Iterator<Node> postOrderTraversal = tree.preOrderTraversal();
+		Iterator<Node> preOrderTraversal = tree.preOrderTraversal();
 
 		int index = 0;
-		while (postOrderTraversal.hasNext()) {
-			Node nextNode = postOrderTraversal.next();
+		while (preOrderTraversal.hasNext()) {
+			Node nextNode = preOrderTraversal.next();
 			Node correctNextNode = correctPreOrderTraversal.get(index);
 			assertEquals(
-					"It should compute the peOrderTraversal in the correct order.",
+					"It should compute the preOrderTraversal in the correct order.",
 					nextNode, correctNextNode);
 			index++;
 		}
