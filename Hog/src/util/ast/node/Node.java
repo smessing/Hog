@@ -16,23 +16,47 @@ public abstract class Node implements Comparable<Node> {
 	// Note: children are ordered left-to-right (first child is leftmost child).
 	protected List<Node> children;
 
+	/**
+	 * Construct a new node.
+	 */
 	public Node() {
 		this(null);
 	}
 
+	/**
+	 * Construct a new node with parent as it's parent.
+	 * 
+	 * @param parent the node that will become the parent of this node.
+	 */
 	public Node(Node parent) {
 		this.parent = parent;
 		this.children = new ArrayList<Node>();
 	}
 
+	/**
+	 * Get all the children of this node, sorted in left-> order.
+	 * 
+	 * @return a list of all children of this node.
+	 */
 	public List<Node> getChildren() {
 		return children;
 	}
 	
+	/**
+	 * Get the parent of this node.
+	 * 
+	 * @return the parent of this node.
+	 */
 	public Node getParent() {
 		return parent;
 	}
 	
+	/**
+	 * Add a child to this node. The new child will always been the rightmost child in this node's
+	 * subtree.
+	 * 
+	 * @param child - the node to be added.
+	 */
 	public void addChild(Node child) {
 		children.add(child);
 	}

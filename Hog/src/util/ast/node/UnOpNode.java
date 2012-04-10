@@ -1,5 +1,11 @@
 package util.ast.node;
 
+/**
+ * A node representing the Unary Operator terminals in a parse tree.
+ * 
+ * @author sam
+ *
+ */
 public class UnOpNode extends ExpressionNode {
 	
 	public static enum OpType {
@@ -18,7 +24,7 @@ public class UnOpNode extends ExpressionNode {
 	}
 	
 	public UnOpNode(Node parent, OpType type) {
-		super(parent);
+		this(parent);
 		this.opType = type;
 	}
 	
