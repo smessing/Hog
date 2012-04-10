@@ -15,8 +15,12 @@ public abstract class ExpressionNode extends Node {
 	protected Type type;
 	
 	public ExpressionNode(Node parent) {
+		this(parent, null);
+	}
+	
+	public ExpressionNode(Node parent, Type type) {
 		super(parent);
-		type = null;
+		this.type = type;
 	}
 	
 	public Type getType() {
