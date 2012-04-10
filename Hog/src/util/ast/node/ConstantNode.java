@@ -12,8 +12,12 @@ public class ConstantNode<E> extends ExpressionNode {
 		this(parent, null);
 	}
 	
-	public ConstantNode(Node parent, E value) {
-		super(parent);
+	public ConstantNode(Node parent, Type type) {
+		this(parent, type, null);
+	}
+	
+	public ConstantNode(Node parent, Type type, E value) {
+		super(parent, type);
 		this.value = value;
 	}
 	
@@ -21,6 +25,10 @@ public class ConstantNode<E> extends ExpressionNode {
 		return this.value;
 	}
 	
+	@Override
+	public String getName() {
+		return "ConstantNode<" + this.getTypeName() + ">";
+	}
 	
 	
 	
