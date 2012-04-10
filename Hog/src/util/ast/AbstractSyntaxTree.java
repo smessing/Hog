@@ -7,7 +7,7 @@ import util.ast.node.Node;
 /**
  * Abstract class for specifying common behavior for ASTs.
  * 
- * @author !TODO!
+ * @author sam
  * 
  */
 public abstract class AbstractSyntaxTree {

@@ -26,10 +26,16 @@ public abstract class Node {
 	}
 
 	public List<Node> getChildren() {
-		return this.children;
+		return children;
 	}
 	
 	public Node getParent() {
-		return this.parent;
+		return parent;
 	}
+	
+	public void addChild(Node child) {
+		children.add(child);
+	}
+	
+	
 }
