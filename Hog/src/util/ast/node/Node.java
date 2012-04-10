@@ -50,8 +50,9 @@ public abstract class Node implements Comparable<Node> {
 	}
 	
 	/**
-	 * Get the identifying name of this node. Override toString() in any implementation of Node to
-	 * change default behavior.
+	 * Get the identifying name of this node. 
+	 * 
+	 * Override toString() in any implementation of Node to change default behavior.
 	 * @return a string representation of the identifying name of this node. 
 	 */
 	public String getName() {
