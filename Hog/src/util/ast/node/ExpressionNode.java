@@ -37,7 +37,7 @@ public abstract class ExpressionNode extends Node {
 	
 	@Override
 	public String getName() {
-		return "ExpressionNode<" + type.toString() + ">";
+		return "ExpressionNode<" + this.getTypeName() + ">";
 	}
 	
 	public String getTypeName() {
