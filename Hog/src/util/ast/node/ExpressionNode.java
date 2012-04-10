@@ -39,10 +39,5 @@ public abstract class ExpressionNode extends Node {
 	public String getName() {
 		return "ExpressionNode<" + type.toString() + ">";
 	}
-	
-	@Override
-	public int compareTo(Node that) {
-		return this.getName().compareTo(that.getName());
-	}
 
 }
