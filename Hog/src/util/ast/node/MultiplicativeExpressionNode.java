@@ -10,14 +10,12 @@ public class MultiplicativeExpressionNode extends ExpressionNode {
 		//computeType();
 	}
 	
-	private int compareTo(MultiplicativeExpressionNode that) {
-		return (this.getName().compareTo(that.getName()));
+	protected void computeType() {
+		throw new UnsupportedOperationException("TODO");
 	}
 	
-	
-	@SuppressWarnings("unused")
-	private void computeType() {
-		throw new UnsupportedOperationException("TODO");
+	protected int compareTo(MultiplicativeExpressionNode that) {
+		return (this.getName().compareTo(that.getName()));
 	}
 	
 	@Override
