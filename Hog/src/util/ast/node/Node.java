@@ -111,6 +111,11 @@ public abstract class Node implements Comparable<Node> {
 		return stringBuilder.toString();
 	}
 	
+	/**
+	 * Compares this node to another node.
+	 * 
+	 * Comparison is done based on the names of the two nodes.
+	 */
 	@Override
 	public int compareTo(Node that) {
 		return this.getName().compareTo(that.getName());
