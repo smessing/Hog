@@ -39,6 +39,6 @@
 * Schedule Aho meeting for next week.
 * Implement AST classes and traversal iterators. [`done`]
 * Implement MockNode class for testing. [`done`]
-* Work on Node types.
-* Figure out how to handle `return` from C grammar.
+* Work on Node types. [`done`]
+* Figure out how to handle `return` from C grammar. [`done`]
 * Dump White paper, Tutorial and LRM into Final Report documentation.
