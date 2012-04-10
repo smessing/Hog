@@ -24,7 +24,7 @@ import util.ast.node.Node;
  * @author sam
  * 
  */
-public class AutomatedAbstractSyntaxTreeTester {
+public class AbstractSyntaxTreeTester {
 
 	private Node A;
 	private Node B;
