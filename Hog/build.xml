@@ -21,10 +21,11 @@
     <pathelement location="lib/"/>
     <pathelement location="lib/java-cup-11a.jar"/>
     <pathelement location="lib/JFlex.jar"/>
+  	<pathelement location="lib/junit.jar" />
   </path>
 	<path id="test.classpath">
 	  <pathelement location="${classes.dir}" />
-	  <pathelement location="/path/to/junit.jar" />
+	  <pathelement location="lib/junit.jar" />
 	  <fileset dir="${jar.dir}">
 	    <include name="**/*.jar"/>
 	  </fileset>
@@ -80,10 +81,7 @@
     <javac srcdir="${src.dir}" destdir="${classes.dir}"  
       source="${java.source.version}" target="${java.target.version}" 
       includeantruntime="false">
-      <classpath>
-        <path id="jflex" location="${lib.dir}/JFlex.jar"/>
-        <path id="java_cup" location="${lib.dir}/java-cup-11a.jar"/>
-      </classpath>
+      <classpath refid="lib"/>
     </javac>
   </target>
 
