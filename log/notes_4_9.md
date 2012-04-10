@@ -1,4 +1,17 @@
 # What we discussed:
+* Overall architecture
+* Agreed we should meet twice a week until we're done.
+* Looked over Final Report outline for a sense of what's to come.
+* Discussed major responsibilities for individual classes. What's decided so far:
+
+	* Ben: CUP File 
+	* Sam: AST(s) / Node implementations
+	* Kurry: SymbolTable(s) / Identifier(s) / IdentifierAttributes(es)
+	* Paul: `none yet`
+	* Jason: Automated Tests
+* **Sam suggests Jason and Paul get first dibs of what's left**
+* **Next meeting: Friday**
+* **Meeting with Aho sometime next week. Do enough work to have substantive questions/progress for him.** 
 
 # For Next Time (Friday, April 13th).
 
@@ -13,14 +26,14 @@
 * Get Ubuntu/Eclipse installed ASAP.
 * Add DerivedType productions to grammar (CUP file).
 * Make edits to LRM/Tutorial based on Aho and Melanie's comments.
+* Choose a class in our codebase to be in charge of.
 
 ## Kurry
 * Implement SymbolTable and related classes (Identifier, IdentifierAttributes and their implementations), goal: rough draft by meeting.
 
 ## Jason
-* Finish automated Lexer tests
+* Finish automated Lexer tests.
 * Flesh out AST tree tests (write some failing ones for things not yet implemented).
-* Choose one of Typer, Validator or JavaGenerator to be in charge of.
 
 ## Sam
 * Schedule Aho meeting for next week.
