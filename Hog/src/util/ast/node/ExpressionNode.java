@@ -14,6 +14,10 @@ public abstract class ExpressionNode extends Node {
 	
 	protected Type type;
 	
+	public ExpressionNode() {
+		this(null);
+	}
+	
 	public ExpressionNode(Node parent) {
 		this(parent, null);
 	}

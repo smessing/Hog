@@ -1,9 +1,17 @@
 package util.ast.node;
 
+/**
+ * A node representing all pure-syntax terminals in a parse tree.
+ * 
+ * TODO: is this class necessary?? Do we need these nodes in the parse tree?
+ * 
+ * @author sam
+ *
+ */
 public class SymbolNode extends Node {
 
 	public static enum SymType {
-		ARROW, DOT, COMMA, SEMICOl
+		ARROW, DOT, COMMA, SEMICOl, L_PAREN, R_PAREN 
 	}
 
 	private SymType symType;

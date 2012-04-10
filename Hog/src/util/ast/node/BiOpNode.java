@@ -19,12 +19,11 @@ public class BiOpNode extends ExpressionNode {
 	}
 	
 	public BiOpNode(Node parent) {
-		super(parent);
-		this.opType = null;
+		this(parent, null);
 	}
 	
 	public BiOpNode(Node parent, OpType type) {
-		this(parent);
+		super(parent);
 		this.opType = type;	
 	}
 	

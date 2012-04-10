@@ -19,12 +19,11 @@ public class UnOpNode extends ExpressionNode {
 	}
 	
 	public UnOpNode(Node parent) {
-		super(parent);
-		this.opType = null;
+		this(parent, null);
 	}
 	
 	public UnOpNode(Node parent, OpType type) {
-		this(parent);
+		super(parent);
 		this.opType = type;
 	}
 	
