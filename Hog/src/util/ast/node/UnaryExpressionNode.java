@@ -18,7 +18,7 @@ public class UnaryExpressionNode extends ExpressionNode {
 	
 	@Override
 	public String getName() {
-		return "UnaryExpressionNode<" + type.toString() + ">";
+		return "UnaryExpressionNode<" + this.getTypeName() + ">";
 	}
 
 }

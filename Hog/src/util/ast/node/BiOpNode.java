@@ -9,7 +9,7 @@ package util.ast.node;
 public class BiOpNode extends ExpressionNode {
 	
 	public static enum OpType{
-		MINUS, PLUS, DIVIDE, MULT, MOD
+		MINUS, PLUS, DIVIDE, TIMES, MOD
 	}
 	
 	protected OpType opType;
@@ -31,10 +31,14 @@ public class BiOpNode extends ExpressionNode {
 	public OpType getOpType() {
 		return opType;
 	}
+	
+	public void setOpType(OpType type) {
+		this.opType = type;
+	}
 
 	@Override
 	public String getName() {
-		return opType.toString();
+		return opType.toString() + "<" + this.getTypeName() + ">";
 	}
 
 	@Override

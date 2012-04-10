@@ -34,7 +34,7 @@ public class UnOpNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return opType.toString();
+		return opType.toString() + "<" + this.getTypeName() + ">";
 	}
 
 	@Override

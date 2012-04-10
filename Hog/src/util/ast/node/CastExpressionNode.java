@@ -18,7 +18,7 @@ public class CastExpressionNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "CastExpressionNode<" + type.toString() + ">";
+		return "CastExpressionNode<" + this.getTypeName() + ">";
 	}
 
 }

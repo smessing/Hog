@@ -18,7 +18,7 @@ public class PrimaryExpressionNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "PrimaryExpressionNode<" + type.toString() + ">";
+		return "PrimaryExpressionNode<" + this.getTypeName() + ">";
 	}
 	
 }

@@ -8,7 +8,7 @@ package util.ast.node;
  */
 public abstract class ExpressionNode extends Node {
 
-	protected static enum Type {
+	public static enum Type {
 		BOOL, TEXT, VOID, INT, REAL
 	}
 	
@@ -38,6 +38,13 @@ public abstract class ExpressionNode extends Node {
 	@Override
 	public String getName() {
 		return "ExpressionNode<" + type.toString() + ">";
+	}
+	
+	public String getTypeName() {
+		if (type != null) {
+			return type.toString();
+		}
+		else return "unknown";
 	}
 
 }

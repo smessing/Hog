@@ -18,7 +18,7 @@ public class MultiplicativeExpressionNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "MultiplicativeExpressionNode<" + type.toString() + ">";
+		return "MultiplicativeExpressionNode<" + this.getTypeName() + ">";
 	}
 	
 

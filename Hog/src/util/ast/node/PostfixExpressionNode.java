@@ -18,6 +18,6 @@ public class PostfixExpressionNode extends ExpressionNode {
 	
 	@Override
 	public String getName() {
-		return "PostfixExpressionNode<" + type.toString() + ">";
+		return "PostfixExpressionNode<" + this.getTypeName() + ">";
 	}
 }
