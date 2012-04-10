@@ -14,13 +14,17 @@ public abstract class ExpressionNode extends Node {
 	
 	protected Type type;
 	
-	protected ExpressionNode(Node parent) {
+	public ExpressionNode(Node parent) {
 		super(parent);
 		type = null;
 	}
 	
 	public Type getType() {
 		return type;
+	}
+	
+	protected void computeType() {
+		throw new UnsupportedOperationException("TODO");
 	}
 	
 	public void setType(Type type) {
@@ -34,6 +38,11 @@ public abstract class ExpressionNode extends Node {
 	@Override
 	public String getName() {
 		return "ExpressionNode<" + type.toString() + ">";
+	}
+	
+	@Override
+	public int compareTo(Node that) {
+		return this.getName().compareTo(that.getName());
 	}
 
 }
