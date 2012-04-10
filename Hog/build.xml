@@ -22,6 +22,13 @@
     <pathelement location="lib/java-cup-11a.jar"/>
     <pathelement location="lib/JFlex.jar"/>
   </path>
+	<path id="test.classpath">
+	  <pathelement location="${classes.dir}" />
+	  <pathelement location="/path/to/junit.jar" />
+	  <fileset dir="${jar.dir}">
+	    <include name="**/*.jar"/>
+	  </fileset>
+	</path>
 
 
   <!-- build variables -->
@@ -33,6 +40,7 @@
   <property name="jflex.main-class" value="JFlex.Main"/>
   <property name="cup.main-class" value="java_cup.Main"/>
   <property name="parser.specification" value="${front_end.dir}/Parser.cup"/>
+	<property name="test.package" value="test" />
 
   <!-- build tasks (ignore Eclipse warnings) -->
 
@@ -59,6 +67,7 @@
     <echo message="dev-build ---- !TODO! build project and run automated tests."/>
     <echo message="dev-lexer ---- runs ConsoleLexer for testing."/>
     <echo message="dev-frontend - runs JFlex and CUP to regenerate Lexer.java, sym.java and Parser.java"/>
+  	<echo message="dev-test ----- run all automated tests."/>
   </target>
 
   <target name="clean">
@@ -109,5 +118,13 @@
       </classpath>
      </java>
   </target>
+	
+	<target name="dev-test" depends="clean, compile">
+		 <junit fork="yes" haltonfailure="yes">
+		    <test name="${test.package}" />
+		    <formatter type="plain" usefile="false" />
+		    <classpath refid="test.classpath" />
+		  </junit>
+	</target>
 
 </project>
