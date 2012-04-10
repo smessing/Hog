@@ -67,6 +67,39 @@ public class AutomatedAbstractSyntaxTreeTester {
 	}
 
 	/**
+	 * Tests for correct ordering of nodes when generating preOrderTraversal
+	 * iterators.
+	 */
+	@Test
+	public void preOrderTraversalTest() {
+
+		List<Node> correctPreOrderTraversal = new ArrayList<Node>();
+
+		correctPreOrderTraversal.add(A);
+		correctPreOrderTraversal.add(B);
+		correctPreOrderTraversal.add(D);
+		correctPreOrderTraversal.add(E);
+		correctPreOrderTraversal.add(C);
+		correctPreOrderTraversal.add(F);
+		correctPreOrderTraversal.add(G);
+
+		AbstractSyntaxTree tree = new UntypedAbstractSyntaxTree(A);
+
+		Iterator<Node> postOrderTraversal = tree.preOrderTraversal();
+
+		int index = 0;
+		while (postOrderTraversal.hasNext()) {
+			Node nextNode = postOrderTraversal.next();
+			Node correctNextNode = correctPreOrderTraversal.get(index);
+			assertEquals(
+					"It should compute the peOrderTraversal in the correct order.",
+					nextNode, correctNextNode);
+			index++;
+		}
+
+	}
+
+	/**
 	 * Tests for correct ordering of nodes when generating postOrderTraversal
 	 * iterators.
 	 */
@@ -92,9 +125,7 @@ public class AutomatedAbstractSyntaxTreeTester {
 			Node nextNode = postOrderTraversal.next();
 			Node correctNextNode = correctPostOrderTraversal.get(index);
 			assertEquals(
-					"It should compute the postOrderTraversal in the correct order. "
-							+ "Next comes: " + correctNextNode.getName()
-							+ ". We got: " + nextNode.getName() + ".",
+					"It should compute the postOrderTraversal in the correct order.",
 					nextNode, correctNextNode);
 			index++;
 		}

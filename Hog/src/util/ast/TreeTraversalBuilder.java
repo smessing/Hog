@@ -23,19 +23,13 @@ class TreeTraversalBuilder {
 		
 		List<Node> iteratorList = new ArrayList<Node>();
 		
-		switch (order) {
-		case PREORDER:
-			iteratorList = buildPreOrderTraversal(root);
-			break;
-		case POSTORDER:
-			iteratorList = buildPostOrderTraversal(root);
-		}
+		iteratorList = buildTraversal(root, order);
 		
 		return iteratorList.iterator();
 		
 	}
-
-	private static List<Node> buildPostOrderTraversal(Node root) {
+	
+	private static List<Node> buildTraversal(Node root, traversalOrder order) {
 		
 		List<Node> subTree = new ArrayList<Node>();
 		
@@ -45,19 +39,20 @@ class TreeTraversalBuilder {
 			return subTree;
 		}
 		
-		for (Node child : root.getChildren()) {
-			subTree.addAll(buildPostOrderTraversal(child));
+		if (order == traversalOrder.PREORDER){
+			subTree.add(root);
 		}
 		
-		subTree.add(root);
+		for (Node child : root.getChildren()) {
+			subTree.addAll(buildTraversal(child, order));
+		}
+		
+		if (order == traversalOrder.POSTORDER){
+			subTree.add(root);
+		}
 		
 		return subTree;
 		
-	}
-
-	private static List<Node> buildPreOrderTraversal(Node root) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
