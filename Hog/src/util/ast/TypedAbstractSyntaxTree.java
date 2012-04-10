@@ -1,5 +1,6 @@
 package util.ast;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import util.SymbolTable;
@@ -16,6 +17,7 @@ public class TypedAbstractSyntaxTree extends AbstractSyntaxTree {
 	
 	protected TypedAbstractSyntaxTree(Node root) {
 		super(root);
+		scope = new HashMap<Node, SymbolTable>();
 	}
 
 }

@@ -1,5 +1,12 @@
 package util.ast.node;
 
+/**
+ * A node representing a primitive constant in a parse tree.
+ * 
+ * @author sam
+ *
+ * @param <E>
+ */
 public class ConstantNode<E> extends ExpressionNode {
 
 	private E value;
