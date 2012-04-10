@@ -37,16 +37,4 @@ public class UnOpNode extends ExpressionNode {
 		return opType.toString() + "<" + this.getTypeName() + ">";
 	}
 
-	@Override
-	public int compareTo(Node that) {
-		if (that instanceof UnOpNode) {
-			return this.compareTo((UnOpNode) that);
-		}
-		return -1;
-	}
-	
-	private int compareTo(UnOpNode that) {
-		return this.opType.compareTo(that.getOpType());
-	}
-
 }
