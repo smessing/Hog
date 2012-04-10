@@ -29,7 +29,7 @@ public class MockNode extends Node {
 	}
 	
 	@Override
-	public String toString() {
+	public String getName() {
 		return Integer.toString(this.id);
 	}
 	
