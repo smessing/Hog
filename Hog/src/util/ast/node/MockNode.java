@@ -15,7 +15,7 @@ public class MockNode extends Node {
 	}
 	
 	public MockNode(Node parent) {
-		this.parent = parent;
+		super(parent);
 		this.id = mockNodeCount;
 		mockNodeCount++;	
 	}
