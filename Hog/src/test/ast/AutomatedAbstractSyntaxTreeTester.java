@@ -25,7 +25,7 @@ import util.ast.node.Node;
  * 
  */
 public class AutomatedAbstractSyntaxTreeTester {
-	
+
 	private Node A;
 	private Node B;
 	private Node C;
@@ -56,13 +56,14 @@ public class AutomatedAbstractSyntaxTreeTester {
 	@After
 	public void tearDown() {
 	}
-	
+
 	/**
-	 * Tests for correct ordering of nodes when generating postOrderTraversal iterators.
+	 * Tests for correct ordering of nodes when generating postOrderTraversal
+	 * iterators.
 	 */
 	@Test
 	public void postOrderTraversalTest() {
-		
+
 		// A is root of tree, with children B, C
 		// B has children D, E
 		// C has children F, G
@@ -72,9 +73,9 @@ public class AutomatedAbstractSyntaxTreeTester {
 		B.addChild(E);
 		C.addChild(F);
 		C.addChild(G);
-		
+
 		List<Node> correctPostOrderTraversal = new ArrayList<Node>();
-		
+
 		correctPostOrderTraversal.add(D);
 		correctPostOrderTraversal.add(E);
 		correctPostOrderTraversal.add(B);
@@ -82,17 +83,23 @@ public class AutomatedAbstractSyntaxTreeTester {
 		correctPostOrderTraversal.add(G);
 		correctPostOrderTraversal.add(C);
 		correctPostOrderTraversal.add(A);
-		
+
 		AbstractSyntaxTree tree = new UntypedAbstractSyntaxTree(A);
-		
+
 		Iterator<Node> postOrderTraversal = tree.postOrderTraversal();
-		
+
 		int index = 0;
 		while (postOrderTraversal.hasNext()) {
-			assertEquals("It should compute the postOrderTraversal in the correct order. " +
-					"Next comes: " + correctPost)
+			Node nextNode = postOrderTraversal.next();
+			Node correctNextNode = correctPostOrderTraversal.get(index);
+			assertEquals(
+					"It should compute the postOrderTraversal in the correct order. "
+							+ "Next comes: " + correctNextNode.getName()
+							+ ". We got: " + nextNode.getName() + ".",
+					nextNode, correctNextNode);
+			index++;
 		}
-		
+
 	}
 
 }
