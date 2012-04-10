@@ -38,6 +38,7 @@ public abstract class Node implements Comparable<Node> {
 	
 	/**
 	 * Sets the parent of this node to be the passed node, if this node doesn't yet have a parent.
+	 * 
 	 * @param p - the proposed parent node
 	 * @return true if this was parent-less and passed node is now parent, false otherwise.
 	 */
