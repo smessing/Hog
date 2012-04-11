@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import util.type.Types;
+
 /**
  * An abstract class inherited by all expression classes, specifying type information.
  * 
@@ -8,11 +10,7 @@ package util.ast.node;
  */
 public abstract class ExpressionNode extends Node {
 	
-	public static enum Type {
-		BOOL, TEXT, VOID, INT, REAL
-	}
-	
-	protected Type type;
+	protected Types.Type type;
 	
 	
 	public ExpressionNode() {
@@ -23,12 +21,12 @@ public abstract class ExpressionNode extends Node {
 		this(parent, null);
 	}
 	
-	public ExpressionNode(Node parent, Type type) {
+	public ExpressionNode(Node parent, Types.Type type) {
 		super(parent);
 		this.type = type;
 	}
 	
-	public Type getType() {
+	public Types.Type getType() {
 		return type;
 	}
 	
@@ -36,12 +34,8 @@ public abstract class ExpressionNode extends Node {
 		throw new UnsupportedOperationException("TODO");
 	}
 	
-	public void setType(Type type) {
+	public void setType(Types.Type type) {
 		this.type = type;
-	}
-	
-	public boolean isSameType(ExpressionNode that) {
-		return this.type == that.getType();
 	}
 	
 	@Override
