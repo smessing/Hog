@@ -17,12 +17,8 @@ public class BiOpNode extends ExpressionNode {
 	
 	protected OpType opType;
 	
-	public BiOpNode() {
-		this(new ArrayList<Node>());
-	}
-	
-	public BiOpNode(List<Node> children) {
-		this(children, null);
+	public BiOpNode(OpType type) {
+		this(new ArrayList<Node>(), type);
 	}
 	
 	public BiOpNode(List<Node> children, OpType type) {

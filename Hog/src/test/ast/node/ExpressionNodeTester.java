@@ -42,9 +42,9 @@ public class ExpressionNodeTester {
 		// B -> E (CastExpr)
 		A = new MultiplicativeExpressionNode();
 		B = new MultiplicativeExpressionNode(A);
-		C = new BiOpNode(A, BiOpNode.OpType.TIMES);
-		D = new CastExpressionNode(A);
-		E = new CastExpressionNode(B);
+		C = new BiOpNode(BiOpNode.OpType.TIMES);
+		D = new CastExpressionNode();
+		E = new CastExpressionNode();
 		A.addChild(B);
 		A.addChild(C);
 		A.addChild(D);
