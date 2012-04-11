@@ -6,8 +6,12 @@ package util.ast.node;
  * @author sam
  *
  */
-public class UnaryExpressionNode extends ExpressionNode {
+public class UnaryExpressionNode extends UnOpNode {
 	
+	public UnaryExpressionNode(Node child, OpType opType) {
+		super(child, opType);
+	}
+
 	@Override
 	public String getName() {
 		return "UnaryExpressionNode<" + this.getTypeName() + ">";

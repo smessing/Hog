@@ -6,8 +6,12 @@ package util.ast.node;
  * @author sam
  *
  */
-public class PostfixExpressionNode extends ExpressionNode {
+public class PostfixExpressionNode extends UnOpNode {
 	
+	public PostfixExpressionNode(Node child, OpType opType) {
+		super(child, opType);
+	}
+
 	@Override
 	public String getName() {
 		return "PostfixExpressionNode<" + this.getTypeName() + ">";
