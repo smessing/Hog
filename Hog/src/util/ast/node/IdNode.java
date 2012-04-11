@@ -1,5 +1,6 @@
 package util.ast.node;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +12,10 @@ import java.util.List;
 public class IdNode extends ExpressionNode {
 
 	private String identifier;
+	
+	public IdNode(String id) {
+		this(new ArrayList<Node>(), id, null);
+	}
 	
 	public IdNode(List<Node> children, String id) {
 		this(children, id, null);
