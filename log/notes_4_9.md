@@ -36,7 +36,7 @@
 * Flesh out AST tree tests (write some failing ones for things not yet implemented).
 
 ## Sam
-* Schedule Aho meeting for next week.
+* Schedule Aho meeting for next week. [`done`]
 * Implement AST classes and traversal iterators. [`done`]
 * Implement MockNode class for testing. [`done`]
 * Work on Node types. [`done`]
