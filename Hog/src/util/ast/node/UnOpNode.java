@@ -10,15 +10,16 @@ import java.util.ArrayList;
  */
 public abstract class UnOpNode extends ExpressionNode {
 	
+	// note: NONE means no unary operator applied.
 	public static enum OpType {
-		UMINUS, NOT, RETURN, INCR, DECR
+		UMINUS, NOT, RETURN, INCR, DECR, NONE
 	}
 	
 	protected OpType opType;
 	
 	public UnOpNode(Node child, OpType opType) {
 		this.children = new ArrayList<Node>();
-		// note implicity sets child.parent = this
+		// note implicitly sets child.parent = this
 		this.addChild(child);
 		this.opType = opType;
 	}

@@ -39,7 +39,7 @@ public class ExpressionNodeTester {
 
 	@Before
 	public void setUp() {
-		// A -> B * C
+		// A (BiOpNode) -> B (BiOpNode) * C (UnOpNode)
 		B = new MultiplicativeExpressionNode();
 		C = new BiOpNode(BiOpNode.OpType.TIMES);
 		D = new CastExpressionNode();
