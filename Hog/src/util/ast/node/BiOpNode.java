@@ -30,11 +30,6 @@ public abstract class BiOpNode extends ExpressionNode {
 		this.opType = type;
 	}
 
-	@Override
-	public void addChild(Node child) {
-
-	}
-
 
 	public OpType getOpType() {
 		return opType;
