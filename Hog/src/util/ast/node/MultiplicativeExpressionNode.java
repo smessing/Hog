@@ -4,7 +4,7 @@ package util.ast.node;
  * A node representing the MultiplicativeExpression nonterminal in a parse tree.
  * 
  * @author sam
- *
+ * 
  */
 public class MultiplicativeExpressionNode extends BiOpNode {
 
@@ -14,8 +14,8 @@ public class MultiplicativeExpressionNode extends BiOpNode {
 
 	@Override
 	public String getName() {
-		return "MultiplicativeExpressionNode<" + this.getTypeName() + ">";
+		return "MultiplicativeExpressionNode<" + this.getTypeName() + ","
+				+ this.opType.toString() + ">";
 	}
-	
 
 }

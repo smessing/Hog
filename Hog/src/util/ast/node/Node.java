@@ -101,7 +101,7 @@ public abstract class Node implements Comparable<Node> {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		stringBuilder.append(this.getName());
-		stringBuilder.append(", Children: [");
+		stringBuilder.append(" Children: [");
 
 		for (Node child : children) {
 			stringBuilder.append(child.getName());

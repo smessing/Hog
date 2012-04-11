@@ -7,20 +7,20 @@ import java.util.List;
  * A node representing the ID terminal in a parse tree.
  * 
  * @author sam
- *
+ * 
  */
 public class IdNode extends ExpressionNode {
 
 	private String identifier;
-	
+
 	public IdNode(String id) {
 		this(new ArrayList<Node>(), id, null);
 	}
-	
+
 	public IdNode(List<Node> children, String id) {
 		this(children, id, null);
 	}
-	
+
 	public IdNode(List<Node> children, String id, Type type) {
 		super(children, type);
 		this.setIdentifier(id);
@@ -34,10 +34,11 @@ public class IdNode extends ExpressionNode {
 	public String getIdentifier() {
 		return identifier;
 	}
-	
+
 	@Override
 	public String getName() {
-		return "IdNode<" + this.getTypeName() + "> " + this.getIdentifier();
+		return "IdNode<" + this.getTypeName() + "," + this.getIdentifier()
+				+ ">";
 	}
 
 }

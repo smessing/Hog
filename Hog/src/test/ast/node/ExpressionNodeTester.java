@@ -45,12 +45,8 @@ public class ExpressionNodeTester {
 		C = new IdNode("C");
 		D = new CastExpressionNode();
 		E = new CastExpressionNode();
-		B = new MultiplicativeExpressionNode(OpType.TMIES, D, E);
-		A.addChild(B);
-		A.addChild(C);
+		B = new MultiplicativeExpressionNode(OpType.TIMES, D, E);
 		A = new MultiplicativeExpressionNode(OpType.TIMES, B, C);
-		A.addChild(D);
-		B.addChild(E);
 	}
 
 	@After
