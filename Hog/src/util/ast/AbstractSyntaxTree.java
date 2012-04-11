@@ -7,13 +7,17 @@ import util.ast.node.Node;
 /**
  * Abstract class for specifying common behavior for ASTs.
  * 
- * @author !TODO!
+ * @author sam
  * 
  */
 public abstract class AbstractSyntaxTree {
 
-	private Node root;
+	protected Node root;
 
+	protected AbstractSyntaxTree(Node root) {
+		this.root = root;
+	}
+	
 	public Iterator<Node> preOrderTraversal() {
 
 		return TreeTraversalBuilder.buildTraversalIterator(root,
@@ -25,13 +29,6 @@ public abstract class AbstractSyntaxTree {
 
 		return TreeTraversalBuilder.buildTraversalIterator(root,
 				TreeTraversalBuilder.traversalOrder.POSTORDER);
-
-	}
-
-	public Iterator<Node> inOrderTraversal() {
-
-		return TreeTraversalBuilder.buildTraversalIterator(root,
-				TreeTraversalBuilder.traversalOrder.INORDER);
 
 	}
 
