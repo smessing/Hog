@@ -1,5 +1,8 @@
 package util.ast.node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * MockNode class, a stripped down implementation of the Node class used for testing.
  * @author sam
@@ -11,11 +14,11 @@ public class MockNode extends Node {
 	protected int id;
 	
 	public MockNode() {
-		this(null);
+		this(new ArrayList<Node>());
 	}
 	
-	public MockNode(Node parent) {
-		super(parent);
+	public MockNode(List<Node> children) {
+		super(children);
 		this.id = mockNodeCount;
 		mockNodeCount++;	
 	}
