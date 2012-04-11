@@ -1,6 +1,6 @@
 package util.ast.node;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A node representing the Unary Operator terminals in a parse tree.
@@ -8,7 +8,7 @@ import java.util.List;
  * @author sam
  *
  */
-public class UnOpNode extends ExpressionNode {
+public abstract class UnOpNode extends ExpressionNode {
 	
 	public static enum OpType {
 		UMINUS, NOT, RETURN, INCR, DECR
@@ -16,9 +16,10 @@ public class UnOpNode extends ExpressionNode {
 	
 	protected OpType opType;
 	
-	public UnOpNode(List<Node> children, OpType type) {
-		super(children);
-		this.opType = type;
+	public UnOpNode(Node child, OpType opType) {
+		this.children = new ArrayList<Node>();
+		this.children.add(child);
+		this.opType = opType;
 	}
 	
 	public OpType getOpType() {

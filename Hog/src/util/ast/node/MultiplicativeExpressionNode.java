@@ -6,7 +6,11 @@ package util.ast.node;
  * @author sam
  *
  */
-public class MultiplicativeExpressionNode extends ExpressionNode {
+public class MultiplicativeExpressionNode extends BiOpNode {
+
+	public MultiplicativeExpressionNode(OpType type, Node left, Node right) {
+		super(type, left, right);
+	}
 
 	@Override
 	public String getName() {

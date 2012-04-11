@@ -1,7 +1,6 @@
 package util.ast.node;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A node representing the Binary Operator terminals in a parse tree.
