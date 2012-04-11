@@ -105,11 +105,11 @@ public abstract class Node implements Comparable<Node> {
 
 		for (Node child : children) {
 			stringBuilder.append(child.getName());
-			stringBuilder.append(", ");
+			stringBuilder.append("; ");
 		}
 
 		if (!children.isEmpty()) {
-			stringBuilder.replace(stringBuilder.lastIndexOf(", "),
+			stringBuilder.replace(stringBuilder.lastIndexOf("; "),
 					stringBuilder.length(), "");
 		}
 
