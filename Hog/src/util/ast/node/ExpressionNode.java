@@ -7,12 +7,13 @@ package util.ast.node;
  *
  */
 public abstract class ExpressionNode extends Node {
-
+	
 	public static enum Type {
 		BOOL, TEXT, VOID, INT, REAL
 	}
 	
 	protected Type type;
+	
 	
 	public ExpressionNode() {
 		this(null);
