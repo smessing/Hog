@@ -1,5 +1,6 @@
 package util.ast.node;
 
+import util.type.Types.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,15 +11,16 @@ import java.util.List;
  *
  */
 public abstract class ExpressionNode extends Node {
-
-	public static enum Type {
-		BOOL, TEXT, VOID, INT, REAL
-	}
 	
 	protected Type type;
 	
+	
 	public ExpressionNode() {
 		this(new ArrayList<Node>());
+	}
+	
+	public ExpressionNode(Type type) {
+		this(new ArrayList<Node>(), type);
 	}
 	
 	public ExpressionNode(List<Node> children) {
@@ -40,10 +42,6 @@ public abstract class ExpressionNode extends Node {
 	
 	public void setType(Type type) {
 		this.type = type;
-	}
-	
-	public boolean isSameType(ExpressionNode that) {
-		return this.type == that.getType();
 	}
 	
 	@Override

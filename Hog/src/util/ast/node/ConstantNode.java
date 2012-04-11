@@ -3,6 +3,8 @@ package util.ast.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.type.Types.Type;
+
 /**
  * A node representing a primitive constant in a parse tree.
  * 

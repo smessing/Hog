@@ -11,7 +11,9 @@ import org.junit.Test;
 import util.ast.node.BiOpNode;
 import util.ast.node.CastExpressionNode;
 import util.ast.node.ExpressionNode;
+import util.ast.node.IdNode;
 import util.ast.node.MultiplicativeExpressionNode;
+import util.ast.node.BiOpNode.OpType;
 
 /**
  * 
@@ -38,17 +40,13 @@ public class ExpressionNodeTester {
 
 	@Before
 	public void setUp() {
-		// A -> B (MultExpr) C (BiOp) D (CastExpr)
-		// B -> E (CastExpr)
-		A = new MultiplicativeExpressionNode();
-		B = new MultiplicativeExpressionNode();
-		C = new BiOpNode(BiOpNode.OpType.TIMES);
+		// A (MultExprNode) -> B (MultExprNode) * C (idNode)
+		// B -> D * E
+		C = new IdNode("C");
 		D = new CastExpressionNode();
 		E = new CastExpressionNode();
-		A.addChild(B);
-		A.addChild(C);
-		A.addChild(D);
-		B.addChild(E);
+		B = new MultiplicativeExpressionNode(OpType.TIMES, D, E);
+		A = new MultiplicativeExpressionNode(OpType.TIMES, B, C);
 	}
 
 	@After
@@ -58,26 +56,24 @@ public class ExpressionNodeTester {
 	@Test
 	public void toStringTest1() {
 
-		String properName = "MultiplicativeExpressionNode<unknown>, Children: "
-				+ "[MultiplicativeExpressionNode<unknown>, TIMES<unknown>, "
-				+ "CastExpressionNode<unknown>]";
+		String properName = "MultiplicativeExpressionNode<unknown,TIMES> Children: "
+				+ "[MultiplicativeExpressionNode<unknown,TIMES>; IdNode<unknown,C>]";
 
 		assertEquals("Nodes should return the proper name when toString() is called.",
 				properName, A.toString());
-
+		
 	}
 	
 	@Test
 	public void toStringTest2() {
 
-		A.setType(ExpressionNode.Type.REAL);
-		B.setType(ExpressionNode.Type.REAL);
-		C.setType(ExpressionNode.Type.REAL);
-		D.setType(ExpressionNode.Type.INT);
+		A.setType(util.type.Types.Type.REAL);
+		B.setType(util.type.Types.Type.REAL);
+		C.setType(util.type.Types.Type.INT);
+		D.setType(util.type.Types.Type.INT);
 		
-		String properName = "MultiplicativeExpressionNode<REAL>, Children: "
-				+ "[MultiplicativeExpressionNode<REAL>, TIMES<REAL>, "
-				+ "CastExpressionNode<INT>]";
+		String properName = "MultiplicativeExpressionNode<REAL,TIMES> Children: "
+			+ "[MultiplicativeExpressionNode<REAL,TIMES>; IdNode<INT,C>]";
 
 		assertEquals("Nodes should return the proper name when toString() is called.",
 				properName, A.toString());
