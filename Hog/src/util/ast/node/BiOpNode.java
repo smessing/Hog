@@ -24,7 +24,6 @@ public abstract class BiOpNode extends ExpressionNode {
 	protected OpType opType;
 
 	public BiOpNode(OpType type, ExpressionNode left, ExpressionNode right) {
-		this.children = new ArrayList<Node>();
 		// note implicitly sets children.parent = this
 		this.addChild(left);
 		this.addChild(right);

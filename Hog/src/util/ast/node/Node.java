@@ -59,6 +59,9 @@ public abstract class Node implements Comparable<Node> {
 	 *            - the node to be added.
 	 */
 	public void addChild(Node child) {
+		if (children == null) {
+			children = new ArrayList<Node>();
+		}
 		children.add(child);
 		child.setParent(this);
 	}
@@ -69,13 +72,12 @@ public abstract class Node implements Comparable<Node> {
 	 * 
 	 * @param p
 	 *            - the proposed parent node
-	 * @return true if this was parent-less and passed node is now parent, false
-	 *         otherwise.
+	 * @throws UnsupportedOperationException if this node already has a parent.
 	 */
-	public boolean setParent(Node p) {
+	public void setParent(Node p) {
 		if (parent == null) {
 			parent = p;
-			return true;
+			return;
 		}
 		throw new UnsupportedOperationException("Node " + this.toString()
 				+ "already has a parent!");

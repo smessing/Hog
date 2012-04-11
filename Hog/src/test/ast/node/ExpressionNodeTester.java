@@ -61,7 +61,7 @@ public class ExpressionNodeTester {
 
 		assertEquals("Nodes should return the proper name when toString() is called.",
 				properName, A.toString());
-
+		
 	}
 	
 	@Test
