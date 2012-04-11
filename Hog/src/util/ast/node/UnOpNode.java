@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import java.util.List;
+
 /**
  * A node representing the Unary Operator terminals in a parse tree.
  * 
@@ -13,17 +15,9 @@ public class UnOpNode extends ExpressionNode {
 	}
 	
 	protected OpType opType;
-
-	public UnOpNode() {
-		this(null);
-	}
 	
-	public UnOpNode(Node parent) {
-		this(parent, null);
-	}
-	
-	public UnOpNode(Node parent, OpType type) {
-		super(parent);
+	public UnOpNode(List<Node> children, OpType type) {
+		super(children);
 		this.opType = type;
 	}
 	
