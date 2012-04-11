@@ -11,7 +11,6 @@ import java.util.List;
  */
 public abstract class Node implements Comparable<Node> {
 
-	
 	protected Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
 	protected List<Node> children;
@@ -20,17 +19,18 @@ public abstract class Node implements Comparable<Node> {
 	 * Construct a new node.
 	 */
 	public Node() {
-		this(null);
+		this(new ArrayList<Node>());
 	}
 
 	/**
 	 * Construct a new node with parent as it's parent.
 	 * 
-	 * @param parent the node that will become the parent of this node.
+	 * @param parent
+	 *            the node that will become the parent of this node.
 	 */
-	public Node(Node parent) {
-		this.parent = parent;
-		this.children = new ArrayList<Node>();
+	public Node(List<Node> children) {
+		this.parent = null;
+		this.children = children;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public abstract class Node implements Comparable<Node> {
 	public List<Node> getChildren() {
 		return children;
 	}
-	
+
 	/**
 	 * Get the parent of this node.
 	 * 
@@ -50,65 +50,76 @@ public abstract class Node implements Comparable<Node> {
 	public Node getParent() {
 		return parent;
 	}
-	
+
 	/**
-	 * Add a child to this node. The new child will always been the rightmost child in this node's
-	 * subtree.
+	 * Add a child to this node. The new child will always been the rightmost
+	 * child in this node's subtree.
 	 * 
-	 * @param child - the node to be added.
+	 * @param child
+	 *            - the node to be added.
 	 */
 	public void addChild(Node child) {
+		if (children == null) {
+			children = new ArrayList<Node>();
+		}
 		children.add(child);
+		child.setParent(this);
 	}
-	
+
 	/**
-	 * Sets the parent of this node to be the passed node, if this node doesn't yet have a parent.
+	 * Sets the parent of this node to be the passed node, if this node doesn't
+	 * yet have a parent.
 	 * 
-	 * @param p - the proposed parent node
-	 * @return true if this was parent-less and passed node is now parent, false otherwise.
+	 * @param p
+	 *            - the proposed parent node
+	 * @throws UnsupportedOperationException if this node already has a parent.
 	 */
-	public boolean setParent(Node p) {
+	public void setParent(Node p) {
 		if (parent == null) {
 			parent = p;
-			return true;
+			return;
 		}
-		return false;
+		throw new UnsupportedOperationException("Node " + this.toString()
+				+ "already has a parent!");
 	}
-	
+
 	/**
-	 * Get the identifying name of this node. 
-	 *
-	 * @return a string representation of the identifying name of this node. 
+	 * Get the identifying name of this node.
+	 * 
+	 * @return a string representation of the identifying name of this node.
 	 */
 	public abstract String getName();
-	
+
 	/**
 	 * A convenient and concise String representation of this node.
 	 * 
-	 * Override getName() in any implementation of Node to change default behavior.
+	 * Override getName() in any implementation of Node to change default
+	 * behavior.
+	 * 
 	 * @return a string representation of this node.
 	 */
 	@Override
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
-		
+
 		stringBuilder.append(this.getName());
-		stringBuilder.append(", Children: [");
-		
+		stringBuilder.append(" Children: [");
+
 		for (Node child : children) {
 			stringBuilder.append(child.getName());
-			stringBuilder.append(", ");
+			stringBuilder.append("; ");
 		}
-		
+
 		if (!children.isEmpty()) {
-			stringBuilder.replace(stringBuilder.lastIndexOf(", "), stringBuilder.length(), "");
+			stringBuilder.replace(stringBuilder.lastIndexOf("; "),
+					stringBuilder.length(), "");
 		}
-		
+
 		stringBuilder.append("]");
-		
+
 		return stringBuilder.toString();
 	}
-	
+
 	/**
 	 * Compares this node to another node.
 	 * 
@@ -118,5 +129,5 @@ public abstract class Node implements Comparable<Node> {
 	public int compareTo(Node that) {
 		return this.getName().compareTo(that.getName());
 	}
-	
+
 }

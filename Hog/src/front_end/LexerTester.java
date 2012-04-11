@@ -21,7 +21,7 @@ import java_cup.runtime.Symbol;
  * @author jason, sam
  *
  */
-public class AutomatedLexerTester {
+public class LexerTester {
 
 
 	@BeforeClass

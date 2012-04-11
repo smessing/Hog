@@ -1,6 +1,8 @@
 package util.ast.node;
 
-import util.type.Types;
+import util.type.Types.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An abstract class inherited by all expression classes, specifying type information.
@@ -10,23 +12,27 @@ import util.type.Types;
  */
 public abstract class ExpressionNode extends Node {
 	
-	protected Types.Type type;
+	protected Type type;
 	
 	
 	public ExpressionNode() {
-		this(null);
+		this(new ArrayList<Node>());
 	}
 	
-	public ExpressionNode(Node parent) {
-		this(parent, null);
+	public ExpressionNode(Type type) {
+		this(new ArrayList<Node>(), type);
 	}
 	
-	public ExpressionNode(Node parent, Types.Type type) {
-		super(parent);
+	public ExpressionNode(List<Node> children) {
+		this(children, null);
+	}
+	
+	public ExpressionNode(List<Node> children, Type type) {
+		super(children);
 		this.type = type;
 	}
 	
-	public Types.Type getType() {
+	public Type getType() {
 		return type;
 	}
 	
@@ -34,7 +40,7 @@ public abstract class ExpressionNode extends Node {
 		throw new UnsupportedOperationException("TODO");
 	}
 	
-	public void setType(Types.Type type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 	

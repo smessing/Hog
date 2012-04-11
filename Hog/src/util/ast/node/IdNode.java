@@ -1,29 +1,30 @@
 package util.ast.node;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import util.type.Types.Type;
+
 /**
  * A node representing the ID terminal in a parse tree.
  * 
  * @author sam
- *
+ * 
  */
 public class IdNode extends ExpressionNode {
 
 	private String identifier;
-	
-	public IdNode() {
-		this(null);
+
+	public IdNode(String id) {
+		this(new ArrayList<Node>(), id, null);
 	}
-	
-	public IdNode(Node parent) {
-		this(parent, "none");
+
+	public IdNode(List<Node> children, String id) {
+		this(children, id, null);
 	}
-	
-	public IdNode(Node parent, String id) {
-		this(parent, id, null);
-	}
-	
-	public IdNode(Node parent, String id, Type type) {
-		super(parent, type);
+
+	public IdNode(List<Node> children, String id, Type type) {
+		super(children, type);
 		this.setIdentifier(id);
 		this.type = type;
 	}
@@ -35,10 +36,11 @@ public class IdNode extends ExpressionNode {
 	public String getIdentifier() {
 		return identifier;
 	}
-	
+
 	@Override
 	public String getName() {
-		return "IdNode<" + this.getTypeName() + "> " + this.getIdentifier();
+		return "IdNode<" + this.getTypeName() + "," + this.getIdentifier()
+				+ ">";
 	}
 
 }

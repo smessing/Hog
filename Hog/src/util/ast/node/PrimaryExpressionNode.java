@@ -8,14 +8,6 @@ package util.ast.node;
  */
 public class PrimaryExpressionNode extends ExpressionNode {
 
-	public PrimaryExpressionNode() {
-		this(null);
-	}
-	
-	public PrimaryExpressionNode(Node parent) {
-		super(parent);
-	}
-
 	@Override
 	public String getName() {
 		return "PrimaryExpressionNode<" + this.getTypeName() + ">";
