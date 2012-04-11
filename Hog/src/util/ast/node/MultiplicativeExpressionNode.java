@@ -8,7 +8,7 @@ package util.ast.node;
  */
 public class MultiplicativeExpressionNode extends BiOpNode {
 
-	public MultiplicativeExpressionNode(OpType type, Node left, Node right) {
+	public MultiplicativeExpressionNode(OpType type, ExpressionNode left, ExpressionNode right) {
 		super(type, left, right);
 	}
 

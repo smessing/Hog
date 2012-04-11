@@ -8,7 +8,7 @@ package util.ast.node;
  */
 public class UnaryExpressionNode extends UnOpNode {
 	
-	public UnaryExpressionNode(Node child, OpType opType) {
+	public UnaryExpressionNode(ExpressionNode child, OpType opType) {
 		super(child, opType);
 	}
 

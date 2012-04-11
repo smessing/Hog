@@ -17,7 +17,7 @@ public abstract class UnOpNode extends ExpressionNode {
 	
 	protected OpType opType;
 	
-	public UnOpNode(Node child, OpType opType) {
+	public UnOpNode(ExpressionNode child, OpType opType) {
 		this.children = new ArrayList<Node>();
 		// note implicitly sets child.parent = this
 		this.addChild(child);

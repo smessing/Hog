@@ -8,7 +8,7 @@ package util.ast.node;
  */
 public class PostfixExpressionNode extends UnOpNode {
 	
-	public PostfixExpressionNode(Node child, OpType opType) {
+	public PostfixExpressionNode(ExpressionNode child, OpType opType) {
 		super(child, opType);
 	}
 
