@@ -1,5 +1,8 @@
 package util.ast.node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A node representing the Binary Operator terminals in a parse tree.
  * 
@@ -15,15 +18,15 @@ public class BiOpNode extends ExpressionNode {
 	protected OpType opType;
 	
 	public BiOpNode() {
-		this(null);
+		this(new ArrayList<Node>());
 	}
 	
-	public BiOpNode(Node parent) {
-		this(parent, null);
+	public BiOpNode(List<Node> children) {
+		this(children, null);
 	}
 	
-	public BiOpNode(Node parent, OpType type) {
-		super(parent);
+	public BiOpNode(List<Node> children, OpType type) {
+		super(children);
 		this.opType = type;	
 	}
 	

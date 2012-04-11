@@ -1,5 +1,8 @@
 package util.ast.node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * An abstract class inherited by all expression classes, specifying type information.
  * 
@@ -15,15 +18,15 @@ public abstract class ExpressionNode extends Node {
 	protected Type type;
 	
 	public ExpressionNode() {
-		this(null);
+		this(new ArrayList<Node>());
 	}
 	
-	public ExpressionNode(Node parent) {
-		this(parent, null);
+	public ExpressionNode(List<Node> children) {
+		this(children, null);
 	}
 	
-	public ExpressionNode(Node parent, Type type) {
-		super(parent);
+	public ExpressionNode(List<Node> children, Type type) {
+		super(children);
 		this.type = type;
 	}
 	

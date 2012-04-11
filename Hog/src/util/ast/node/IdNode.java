@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import java.util.List;
+
 /**
  * A node representing the ID terminal in a parse tree.
  * 
@@ -10,20 +12,12 @@ public class IdNode extends ExpressionNode {
 
 	private String identifier;
 	
-	public IdNode() {
-		this(null);
+	public IdNode(List<Node> children, String id) {
+		this(children, id, null);
 	}
 	
-	public IdNode(Node parent) {
-		this(parent, "none");
-	}
-	
-	public IdNode(Node parent, String id) {
-		this(parent, id, null);
-	}
-	
-	public IdNode(Node parent, String id, Type type) {
-		super(parent, type);
+	public IdNode(List<Node> children, String id, Type type) {
+		super(children, type);
 		this.setIdentifier(id);
 		this.type = type;
 	}

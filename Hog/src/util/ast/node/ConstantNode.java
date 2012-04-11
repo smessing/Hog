@@ -1,5 +1,8 @@
 package util.ast.node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A node representing a primitive constant in a parse tree.
  * 
@@ -12,19 +15,19 @@ public class ConstantNode<E> extends ExpressionNode {
 	private E value;
 	
 	public ConstantNode() {
-		this(null);
+		this(new ArrayList<Node>());
 	}
 	
-	public ConstantNode(Node parent) {
-		this(parent, null);
+	public ConstantNode(List<Node> children) {
+		this(children, null);
 	}
 	
-	public ConstantNode(Node parent, Type type) {
-		this(parent, type, null);
+	public ConstantNode(List<Node> children, Type type) {
+		this(children, type, null);
 	}
 	
-	public ConstantNode(Node parent, Type type, E value) {
-		super(parent, type);
+	public ConstantNode(List<Node> children, Type type, E value) {
+		super(children, type);
 		this.value = value;
 	}
 	
