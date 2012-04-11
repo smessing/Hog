@@ -12,6 +12,7 @@ import util.ast.node.BiOpNode;
 import util.ast.node.CastExpressionNode;
 import util.ast.node.ExpressionNode;
 import util.ast.node.MultiplicativeExpressionNode;
+import util.ast.node.BiOpNode.OpType;
 
 /**
  * 
@@ -40,13 +41,13 @@ public class ExpressionNodeTester {
 	public void setUp() {
 		// A -> B (MultExpr) C (BiOp) D (CastExpr)
 		// B -> E (CastExpr)
-		A = new MultiplicativeExpressionNode();
 		B = new MultiplicativeExpressionNode();
 		C = new BiOpNode(BiOpNode.OpType.TIMES);
 		D = new CastExpressionNode();
 		E = new CastExpressionNode();
 		A.addChild(B);
 		A.addChild(C);
+		A = new MultiplicativeExpressionNode(OpType.TIMES, B, C);
 		A.addChild(D);
 		B.addChild(E);
 	}
