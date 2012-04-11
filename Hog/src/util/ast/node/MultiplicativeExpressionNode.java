@@ -7,14 +7,6 @@ package util.ast.node;
  *
  */
 public class MultiplicativeExpressionNode extends ExpressionNode {
-	
-	public MultiplicativeExpressionNode() {
-		this(null);
-	}
-	
-	public MultiplicativeExpressionNode(Node parent) {
-		super(parent);
-	}
 
 	@Override
 	public String getName() {

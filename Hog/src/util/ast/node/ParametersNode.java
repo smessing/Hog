@@ -7,14 +7,6 @@ package util.ast.node;
  *
  */
 public class ParametersNode extends ExpressionNode {
-
-	public ParametersNode() {
-		this(null);
-	}
-	
-	public ParametersNode(Node parent) {
-		super(parent);
-	}
 	
 	@Override
 	public String getName() {
