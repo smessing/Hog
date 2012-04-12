@@ -158,34 +158,26 @@ RelationalExpression::=
 
 AdditiveExpression::=
     MultiplicativeExpression:me
-    {: RESULT = me;:}
   |
-    AdditiveExpression:ae PLUS MultiplicativeExpression:me
-    {: RESULT = new AdditiveExpressionNode(BiOpNode.OpType.PLUS, ae, me); :}
+    AdditiveExpression PLUS MultiplicativeExpression
   |
-    AdditiveExpression:ae MINUS MultiplicativeExpression:me
-    {: RESULT = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, ae, me); :}
+    AdditiveExpression MINUS MultiplicativeExpression
   ;
 
 MultiplicativeExpression::=
-    CastExpression:ce
-    {: RESULT = ce; :}
+    CastExpression
   |
-    MultiplicativeExpression:me TIMES CastExpression:ce
-    {: RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, me, ce); :}
+    MultiplicativeExpression TIMES CastExpression
   |
-    MultiplicativeExpression:me DIVIDE CastExpression:ce
-    {: RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.DIVIDE, me, ce); :}
+    MultiplicativeExpression DIVIDE CastExpression
   |
-    MultiplicativeExpression:me MOD CastExpression:ce
-    {: RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.MOD, me, ce); :}
+    MultiplicativeExpression MOD CastExpression
   ;
 
 CastExpression::=
-    UnaryExpression:ue
-    {: RESULT = ue; :}
+    UnaryExpression
   |
-    L_PAREN Type R_PAREN CastExpression:ce
+    L_PAREN Type R_PAREN CastExpression
   ;
 
 UnaryExpression::=
