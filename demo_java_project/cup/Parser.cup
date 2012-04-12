@@ -1,0 +1,178 @@
+// Technische Universitaet Muenchen 
+// Fakultaet fuer Informatik 
+// Riitta Hoellerer
+//
+// Praktikum des Uebersetzerbaus
+// SS 2001
+//
+// mimasyntax.cup
+// Cup specification for Mima 
+//  
+// CUP - LALR Parser Generator for Java
+// home page: 
+// /usr/proj/uebbau/CUP/
+//
+//
+
+
+import java.util.*;
+import java.io.*;
+import java_cup.runtime.Symbol;
+import node.*;
+
+
+/* Preliminaries to use the scanner.  */
+scan with {: return lexer.next_token(); :};
+
+
+parser code {: 
+  public boolean syntaxErrors;
+
+
+  Lexer lexer;
+
+  public Parser(Lexer lex) {
+      super(lex);
+      lexer = lex;
+  }
+
+  
+  public void report_error(String message, Object info) {
+    syntaxErrors = true;
+    
+    System.out.print(message);
+    
+    if ( !(info instanceof Symbol) ) return;
+    Symbol symbol = (Symbol) info;
+    
+    if ( symbol.left < 0 || symbol.right < 0 ) return;
+    
+    System.out.println(" at line "+symbol.left+", column "+symbol.right);
+  }
+:}; 
+
+
+
+/* Terminals (tokens returned by lexer). */
+terminal         PROG, PROC, BEGIN, END, VARSY;
+terminal         ARRAY,  COMMA, LPAR, RPAR;
+
+terminal Integer TYPE, ADDOP, MULOP;
+terminal Integer INTCONST;
+terminal String  IDENT;
+
+  
+
+non terminal Prog           prog;
+non terminal Proc_Dekl_Seq  proc_Dekl_Seq;
+non terminal Proc_Dekl      proc_Dekl;
+non terminal Form_Par_Seq   form_Par_Seq;
+non terminal Form_Par       form_Par;
+non terminal Var_Dekl       var_Dekl;
+non terminal Typ            typ;
+non terminal Block          block;
+non terminal Dekl_Seq       dekl_Seq;
+non terminal Dekl           dekl;
+non terminal Id_Seq         id_Seq;
+non terminal Anw_Seq        anw_Seq;
+non terminal Anw            anw;
+non terminal Ausdr          ausdr, term, fact ;
+non terminal Var            var;
+
+
+
+prog     ::=  PROG IDENT:i proc_Dekl_Seq:s block:b
+                    {: RESULT = new Prog(i,s,b); :}
+           ;
+
+proc_Dekl_Seq  ::= proc_Dekl:p proc_Dekl_Seq:s 
+                  {: RESULT = new Proc_Dekl_Seq0(p,s); :}
+              | /* leere Sequenz */         
+                  {: RESULT = new Proc_Dekl_Seq1(); :} 
+              ;
+
+proc_Dekl     ::=  PROC IDENT:i LPAR form_Par_Seq:s RPAR block:b
+                    {: RESULT = new Proc_Dekl(i,s,b); :}
+               ;
+
+form_Par_Seq  ::= form_Par:p form_Par_Seq:s 
+                  {: RESULT = new Form_Par_Seq0(p,s); :}
+              | /* leere Sequenz */         
+                  {: RESULT = new Form_Par_Seq1(); :} 
+              ;
+
+
+form_Par     ::= var_Dekl:d
+                             {: RESULT = new Param(d); :}
+              | VARSY  var_Dekl:d
+                             {: RESULT =  new Var_Param(d); :}
+              ; 
+
+var_Dekl ::= typ:t id_Seq:s
+              {: RESULT = new Variable(t,s); :}         
+          | ARRAY INTCONST:c typ:t id_Seq:s
+              {: RESULT = new Array_Variable(c.intValue(),t,s); :}
+          ;  
+
+typ      ::= TYPE:t {: RESULT = new Typ(t.intValue()); :}
+           ;
+
+
+block    ::= BEGIN 
+             dekl_Seq:s1 anw_Seq:s2 {: RESULT = new Block(s1,s2); :}
+             END
+           ;
+
+
+dekl_Seq ::= dekl:d dekl_Seq:s
+               {: RESULT = new Dekl_Seq0(d,s); :}
+           | /* leere Sequenz */        
+               {: RESULT = new Dekl_Seq1(); :} 
+           ;
+
+dekl     ::= var_Dekl:d
+              {: RESULT = d; :}
+           ;
+
+
+id_Seq ::= IDENT:i COMMA id_Seq:s
+             {: RESULT = new Id_Seq0(i,s); :}
+         | IDENT:i 
+             {: RESULT = new Id_Seq1(i); :}
+         ;
+
+anw_Seq ::= anw:a anw_Seq:s
+                  {: RESULT = new  Anw_Seq0(a,s); :}
+           | anw:a         
+                  {: RESULT =  new Anw_Seq1(a) ; :} 
+           ;
+
+anw  ::= ausdr:a       
+              {: RESULT = new Anw(a) ;   :}
+       ;
+
+ 
+ausdr ::= ausdr:a ADDOP:op term:t      
+                   {: RESULT = new BinAusdr(a, op.intValue(), t); :}
+       | term:t                      
+                   {: RESULT = t; :}
+       ;
+
+term ::= term:t MULOP:op fact:f      
+                   {: RESULT = new BinAusdr(t, op.intValue(), f); :}
+       | fact:f                      
+                   {: RESULT = f; :}
+       ;
+
+fact ::= INTCONST:i   
+                   {: RESULT = new IntAusdr(i.intValue()); :}
+       | var:v                     
+                   {: RESULT = new VarAusdr(v); :}
+       | LPAR ausdr:a RPAR            
+                   {: RESULT = a; :}
+       ;
+
+
+var  ::= IDENT:i     {: RESULT = new IdentAusdr(i); :}
+       ;
+
