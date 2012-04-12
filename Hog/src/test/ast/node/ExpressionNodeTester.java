@@ -60,8 +60,7 @@ public class ExpressionNodeTester {
 	@Test
 	public void toStringTest1() {
 
-		String properName = "MultiplicativeExpressionNode<UNKNOWN,TIMES> Children: "
-				+ "[MultiplicativeExpressionNode<UNKNOWN,TIMES>; IdNode<UNKNOWN,C>]";
+		String properName = "MultiplicativeExpressionNode<UNKNOWN,TIMES>";
 
 		assertEquals("Nodes should return the proper name when toString() is called.",
 				properName, A.toString());
@@ -72,12 +71,8 @@ public class ExpressionNodeTester {
 	public void toStringTest2() {
 
 		A.setType(util.type.Types.Type.REAL);
-		B.setType(util.type.Types.Type.REAL);
-		C.setType(util.type.Types.Type.INT);
-		D.setType(util.type.Types.Type.INT);
 		
-		String properName = "MultiplicativeExpressionNode<REAL,TIMES> Children: "
-			+ "[MultiplicativeExpressionNode<REAL,TIMES>; IdNode<INT,C>]";
+		String properName = "MultiplicativeExpressionNode<REAL,TIMES>";
 
 		assertEquals("Nodes should return the proper name when toString() is called.",
 				properName, A.toString());
