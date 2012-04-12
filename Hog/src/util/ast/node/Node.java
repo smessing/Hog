@@ -72,15 +72,16 @@ public abstract class Node implements Comparable<Node> {
 	 * 
 	 * @param p
 	 *            - the proposed parent node
-	 * @throws UnsupportedOperationException if this node already has a parent.
+	 * @throws UnsupportedOperationException
+	 *             if this node already has a parent.
 	 */
 	public void setParent(Node p) {
 		if (parent == null) {
 			parent = p;
 			return;
 		}
-		throw new UnsupportedOperationException("Node " + this.toString()
-				+ "already has a parent!");
+		throw new UnsupportedOperationException(this.toString()
+				+ " already has a parent!");
 	}
 
 	/**
@@ -100,9 +101,15 @@ public abstract class Node implements Comparable<Node> {
 	 */
 	@Override
 	public String toString() {
+		return this.getName();
+	}
+	
+	public String getChildrenString() {
+		
 		StringBuilder stringBuilder = new StringBuilder();
 
 		stringBuilder.append(this.getName());
+		
 		stringBuilder.append(" Children: [");
 
 		for (Node child : children) {
@@ -116,8 +123,9 @@ public abstract class Node implements Comparable<Node> {
 		}
 
 		stringBuilder.append("]");
-
+		
 		return stringBuilder.toString();
+		
 	}
 
 	/**

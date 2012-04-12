@@ -2,6 +2,7 @@ package front_end;
 import java.util.*;
 import java.io.*;
 import java_cup.runtime.*;
+import util.ast.node.*;
 
 action code
   {:
@@ -156,7 +157,7 @@ RelationalExpression::=
   ;
 
 AdditiveExpression::=
-    MultiplicativeExpression
+    MultiplicativeExpression:me
   |
     AdditiveExpression PLUS MultiplicativeExpression
   |
