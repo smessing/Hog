@@ -19,12 +19,12 @@ public abstract class ExpressionNode extends Node {
 		this(new ArrayList<Node>());
 	}
 	
-	public ExpressionNode(Type type) {
-		this(new ArrayList<Node>(), type);
-	}
-	
 	public ExpressionNode(List<Node> children) {
 		this(children, null);
+	}
+	
+	public ExpressionNode(Type type) {
+		this(new ArrayList<Node>(), type);
 	}
 	
 	public ExpressionNode(List<Node> children, Type type) {
