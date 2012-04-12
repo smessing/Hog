@@ -22,6 +22,8 @@ public abstract class UnOpNode extends ExpressionNode {
 		// note implicitly sets child.parent = this
 		this.addChild(child);
 		this.opType = opType;
+		// TODO handle cast expressions here?
+		this.type = child.getType();
 	}
 	
 	public OpType getOpType() {

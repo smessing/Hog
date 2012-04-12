@@ -2,6 +2,7 @@ package util.ast.node;
 
 import java.util.ArrayList;
 import java.util.List;
+import util.type.Types;
 
 /**
  * A node representing the Binary Operator terminals in a parse tree.
@@ -28,6 +29,7 @@ public abstract class BiOpNode extends ExpressionNode {
 		this.addChild(left);
 		this.addChild(right);
 		this.opType = type;
+		this.type = Types.getHigherType(left.getType(), right.getType());
 	}
 
 
