@@ -31,6 +31,8 @@ public class ExpressionNodeTester {
 	private ExpressionNode C;
 	private ExpressionNode D;
 	private ExpressionNode E;
+	private ExpressionNode F;
+	private ExpressionNode G;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -46,7 +48,7 @@ public class ExpressionNodeTester {
 		// B -> D * E
 		C = new IdNode("C");
 		D = new CastExpressionNode(new MockExpressionNode(), UnOpNode.OpType.CAST, Types.Type.BOOL);
-		E = new CastExpressionNode(null);
+		E = new CastExpressionNode(new MockExpressionNode(), UnOpNode.OpType.CAST, Types.Type.BOOL);
 		B = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, D, E);
 		A = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, B, C);
 	}
@@ -58,8 +60,8 @@ public class ExpressionNodeTester {
 	@Test
 	public void toStringTest1() {
 
-		String properName = "MultiplicativeExpressionNode<unknown,TIMES> Children: "
-				+ "[MultiplicativeExpressionNode<unknown,TIMES>; IdNode<unknown,C>]";
+		String properName = "MultiplicativeExpressionNode<UNKNOWN,TIMES> Children: "
+				+ "[MultiplicativeExpressionNode<UNKNOWN,TIMES>; IdNode<UNKNOWN,C>]";
 
 		assertEquals("Nodes should return the proper name when toString() is called.",
 				properName, A.toString());

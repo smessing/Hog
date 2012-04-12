@@ -2,9 +2,9 @@ package util.ast.node;
 
 public class MockExpressionNode extends ExpressionNode {
 
-	public MockExpressionNode() {
+	/*public MockExpressionNode() {
 		super();
-	}
+	}*/
 	
 	@Override
 	public String getName() {

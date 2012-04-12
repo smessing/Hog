@@ -12,11 +12,9 @@ public class CastExpressionNode extends UnOpNode {
 
 	protected Type castType;
 	
-	
 	public CastExpressionNode(ExpressionNode node, OpType opType, Type type) {
 		super(node, opType);
 		this.type = type;
-		this.addChild(node);
 	}
 	
 	public Type getChildType() {
