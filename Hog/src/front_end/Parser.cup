@@ -2,6 +2,7 @@ package front_end;
 import java.util.*;
 import java.io.*;
 import java_cup.runtime.*;
+import util.ast.node.*;
 
 action code
   {:
@@ -157,13 +158,13 @@ RelationalExpression::=
 
 AdditiveExpression::=
     MultiplicativeExpression:me
-    {: RESULT = me;}
+    {: RESULT = me;:}
   |
     AdditiveExpression:ae PLUS MultiplicativeExpression:me
-    {: RESULT = new BiOpNode(BiOpNode.OpType.PLUS, ae, me); :}
+    {: RESULT = new AdditiveExpressionNode(BiOpNode.OpType.PLUS, ae, me); :}
   |
     AdditiveExpression:ae MINUS MultiplicativeExpression:me
-    {: RESULT = new BiOpNode(BiOpNode.OpType.MINUS, ae, me); :}
+    {: RESULT = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, ae, me); :}
   ;
 
 MultiplicativeExpression::=
@@ -171,13 +172,13 @@ MultiplicativeExpression::=
     {: RESULT = ce; :}
   |
     MultiplicativeExpression:me TIMES CastExpression:ce
-    {: RESULT = new BiOpNode(BiOpNode.OpType.TIMES, me, ce); :}
+    {: RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, me, ce); :}
   |
     MultiplicativeExpression:me DIVIDE CastExpression:ce
-    {: RESULT = new BiOpNode(BiOpNode.OpType.DIVIDE, me, ce); :}
+    {: RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.DIVIDE, me, ce); :}
   |
     MultiplicativeExpression:me MOD CastExpression:ce
-    {: RESULT = new BiOpNode(BiOpNode.OpType.MOD, me, ce); :}
+    {: RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.MOD, me, ce); :}
   ;
 
 CastExpression::=
