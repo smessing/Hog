@@ -181,9 +181,10 @@ MultiplicativeExpression::=
   ;
 
 CastExpression::=
-    UnaryExpression
+    UnaryExpression:ue
+    {: RESULT = ue; :}
   |
-    L_PAREN Type R_PAREN CastExpression
+    L_PAREN Type R_PAREN CastExpression:ce
   ;
 
 UnaryExpression::=
