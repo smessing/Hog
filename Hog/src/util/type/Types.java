@@ -5,7 +5,7 @@ import util.ast.node.ExpressionNode;
 public class Types {
 
 	public static enum Type {
-		BOOL, TEXT, VOID, INT, REAL, DERIVED
+		BOOL, TEXT, VOID, INT, REAL, DERIVED, UNKNOWN, NONE
 	}
 
 	public static enum Derived {
@@ -22,8 +22,10 @@ public class Types {
 			return Type.REAL;
 		else if (typeOne == Type.INT || typeTwo == Type.INT)
 			return Type.INT;
-		else
+		else if (typeOne == Type.TEXT || typeTwo == Type.TEXT)
 			return Type.TEXT;
+		else
+			return Type.UNKNOWN;
 
 	}
 

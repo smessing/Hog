@@ -12,7 +12,7 @@ public abstract class UnOpNode extends ExpressionNode {
 	
 	// note: NONE means no unary operator applied.
 	public static enum OpType {
-		UMINUS, NOT, RETURN, INCR, DECR, NONE
+		UMINUS, NOT, RETURN, INCR, DECR, CAST
 	}
 	
 	protected OpType opType;
@@ -22,8 +22,6 @@ public abstract class UnOpNode extends ExpressionNode {
 		// note implicitly sets child.parent = this
 		this.addChild(child);
 		this.opType = opType;
-		// TODO handle cast expressions here?
-		this.type = child.getType();
 	}
 	
 	public OpType getOpType() {

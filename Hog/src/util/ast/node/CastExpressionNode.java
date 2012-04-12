@@ -8,12 +8,14 @@ import util.type.Types.Type;
  * @author sam
  *
  */
-public class CastExpressionNode extends ExpressionNode {
+public class CastExpressionNode extends UnOpNode {
 
 	protected Type castType;
 	
-	CastExpressionNode(ExpressionNode node, Type castType) {
-		this.castType = castType;
+	
+	public CastExpressionNode(ExpressionNode node, OpType opType, Type type) {
+		super(node, opType);
+		this.type = type;
 		this.addChild(node);
 	}
 	
