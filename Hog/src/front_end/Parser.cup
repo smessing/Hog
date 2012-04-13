@@ -54,96 +54,35 @@ nonterminal EqualityExpression, RelationalExpression, AdditiveExpression, Multip
 nonterminal CastExpression, PostfixExpression, PrimaryExpression, Parameters, Constant;
 nonterminal Statement, ElseIfStatement, ElseStatement;
 
-start with Program;
+start with Expression;
 
-Program::=
-    Functions Map Reduce Main
-  ;
-
-Functions::=
-    FUNCTIONS L_BRACE FunctionList R_BRACE
-  |
-    /* epsilon */
-  ; 
- 
-FunctionList::=
-    Function
-  |
-    FunctionList Function
-  ;
-
-Function::=
-    Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE
-  ;
-
-ParameterList::=
-    Type ID COMMA ParameterList
-  |
-    Type ID
-  |
-    /* epsilon */
-  ;
-
-Map::=
-    MAP SectionType L_BRACE StatementList R_BRACE
-  ;
-
-Reduce::=
-    REDUCE SectionType L_BRACE StatementList R_BRACE
-  ;
-
-SectionType::=
-    L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN
-  ;
-
-Main::=
-    MAIN L_BRACE StatementList R_BRACE
-  ;
-
-StatementList::=
-    StatementList ExpressionStatement
-  |
-    StatementList SelectionStatement
-  |
-    StatementList IterationStatement
-  |
-    StatementList LabeledStatement
-  |
-    /* epsilon */
-  |
-    BREAK
-  |
-    CONTINUE
-  |
-    RETURN Expression
-  ;
- 
-ExpressionStatement::=
-    NEWLINE
-  |
-    Expression NEWLINE
-  ;
+// comment out every production before Expression
 
 Expression::=
-    LogicalExpression
+    LogicalExpression:le
+    {: RESULT = le; :}
   |
-    UnaryExpression ASSIGN Expression
+    UnaryExpression:ue ASSIGN Expression:e
+    {: RESULT = new AssignmentExpressionNode(ue, e); :}
   ;
 
 LogicalExpression::=
     LogicalExpression OR LogicalTerm
   |
-    LogicalTerm
+    LogicalTerm:lt
+    {: RESULT = lt; :}
   ;
 
 LogicalTerm::=
     LogicalTerm AND EqualityExpression
   |
-    EqualityExpression
+    EqualityExpression:ee
+    {: RESULT = ee; :}
   ;
 
 EqualityExpression::=
-    RelationalExpression
+    RelationalExpression:re
+    {: RESULT = re; :}
   |
     EqualityExpression DBL_EQLS RelationalExpression
   |
@@ -151,7 +90,8 @@ EqualityExpression::=
   ;
 
 RelationalExpression::=
-    AdditiveExpression
+    AdditiveExpression:ae
+    {: RESULT = ae; :}
   |
     RelationalExpression LESS AdditiveExpression
   |
@@ -203,11 +143,13 @@ UnaryExpression::=
   |
     NOT CastExpression
   |
-    PostfixExpression
+    PostfixExpression:pe
+    {: RESULT = pe; :}
   ;
 
 PostfixExpression::=
-    PrimaryExpression
+    PrimaryExpression:pe
+    {: RESULT = pe; :}
   |
     PostfixExpression INCR
   |
@@ -215,7 +157,8 @@ PostfixExpression::=
   ;
 
 PrimaryExpression::=
-    ID
+    ID:id
+    {: RESULT = new IdNode(id.identifierText); :}
   |
     ID DOT ID L_PAREN Parameters R_PAREN
   |
