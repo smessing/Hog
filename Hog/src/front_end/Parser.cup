@@ -53,9 +53,17 @@ nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, Iterat
 nonterminal LabeledStatement, Expression, Type, LogicalExpression, UnaryExpression, LogicalTerm;
 nonterminal EqualityExpression, RelationalExpression, AdditiveExpression, MultiplicativeExpression;
 nonterminal CastExpression, PostfixExpression, PrimaryExpression, Parameters;
-nonterminal IdNode PrimaryExpression;
-nonterminal ConstantNode Constant;
+
 nonterminal Statement, ElseIfStatement, ElseStatement;
+
+nonterminal Expression AdditiveExpression;
+nonterminal ExpressionNode MultiplicativeExpression;
+nonterminal UnOpNode CastExpression;
+nonterminal UnOpNode UnaryExpression;
+nonterminal UnOpNode PostfixExpression;
+nonterminal ExpressionNode PrimaryExpression;
+nonterminal ConstantNode Constant;
+nonterminal Types.Type Type;
 
 start with Program;
 
