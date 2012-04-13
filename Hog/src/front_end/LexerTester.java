@@ -538,7 +538,7 @@ public class LexerTester {
 	 * 
 	 * @throws IOException
 	 */
-/*	@Test
+	@Test
 	public void notSymbolTest() throws IOException {
 
 		String text = "not true";
@@ -556,9 +556,9 @@ public class LexerTester {
 				+ text + "'", 2, tokenList.size());
 		assertEquals("The first token should be a NOT", sym.NOT, tokenList
 				.get(0).intValue());
-		assertEquals("The second token should be a BOOL", sym.BOOL, tokenList
+		assertEquals("The second token should be a BOOL", sym.BOOL_CONST, tokenList
 				.get(1).intValue());
-	}*/
+	}
 	
 	/**
 	 * Tests for correct parsing of the statements with the 'greater than' comparison operator
@@ -1290,7 +1290,7 @@ public class LexerTester {
 	 * 
 	 * @throws IOException
 	 */
-	/*@Test
+	@Test
 	public void assignmentSymbolTest4() throws IOException {
 
 		String text = "TEXT variable = friend";
@@ -1314,7 +1314,7 @@ public class LexerTester {
 				.get(2).intValue());
 		assertEquals("The fourth token should be a TEXT_LITERAL", sym.TEXT_LITERAL, tokenList
 				.get(3).intValue());
-	}*/
+	}
 	
 	/**
 	 * Tests for correct parsing of the statements with 'while'
@@ -1429,7 +1429,7 @@ public class LexerTester {
 	 * for strings like "switch(test) case 1: variable=1 case 2: variable=2 default: variable=10"
 	 * @throws IOException
 	 */
-/*	@Test
+	@Test
 	public void switchSymbolTest() throws IOException {
 
 		String text = "switch(test) case 1: variable=1 case 2: variable=2 default: variable=10";
@@ -1488,7 +1488,7 @@ public class LexerTester {
 		assertEquals("The twenty first token should be a INT_CONST", sym.INT_CONST, tokenList
 				.get(20).intValue());
 		
-	}*/
+	}
 	
 	/**
 	 * Tests for correct parsing of the 'list' symbol
@@ -1734,7 +1734,7 @@ public class LexerTester {
 	 * 
 	 * @throws IOException
 	 */
-/*	@Test
+	@Test
 	public void foreachSymbolTest() throws IOException {
 
 		String text = "foreach variable in myList";
@@ -1759,7 +1759,7 @@ public class LexerTester {
 		assertEquals("The third token should be an ID", sym.ID,
 				tokenList.get(3).intValue());
 		
-	}*/
+	}
 	
 	/**
 	 * Tests for correct parsing of the 'for' statements
