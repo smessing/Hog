@@ -30,7 +30,7 @@ scan with
     return lexer.next_token();
   :};
 
-terminal UMINUS, DECR, INCR, RETURN;
+terminal UMINUS, DECR, INCR, RETURN, CONTINUE;
 terminal MINUS, PLUS, TIMES, DIVIDE, MOD;
 terminal LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, ASSIGN;
 terminal TEXT, BOOL, INT, REAL, LIST, VOID;
