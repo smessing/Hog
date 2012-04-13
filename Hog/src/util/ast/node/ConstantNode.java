@@ -3,6 +3,7 @@ package util.ast.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.type.Types;
 import util.type.Types.Type;
 
 /**
@@ -10,7 +11,7 @@ import util.type.Types.Type;
  * 
  * @author sam
  */
-public abstract class ConstantNode extends ExpressionNode {
+public class ConstantNode<E> extends ExpressionNode {
 
 	private E value;
 	
@@ -25,6 +26,13 @@ public abstract class ConstantNode extends ExpressionNode {
 	
 	public E getValue() {
 		return this.value;
+	}
+	
+	public Types.Type getValueType() {
+		if (value instanceof Integer) {
+			return Types.Type.INT;
+		}
+		return Types.Type.UNKNOWN;
 	}
 	
 	@Override
