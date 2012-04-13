@@ -186,7 +186,7 @@ AdditiveExpression::=
   |
     AdditiveExpression:ae MINUS MultiplicativeExpression:me
     {: 
-
+      
     :}
   ;
 
@@ -218,9 +218,9 @@ CastExpression::=
       RESULT = u;
     :}
   |
-    L_PAREN Type R_PAREN CastExpression
+    L_PAREN Type:t R_PAREN CastExpression:c
     {:
-      RESULT = new CastExpressionNode
+      RESULT = new CastExpressionNode(c, t);
     :}
   ;
 
