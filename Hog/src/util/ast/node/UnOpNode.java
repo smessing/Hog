@@ -2,6 +2,8 @@ package util.ast.node;
 
 import java.util.ArrayList;
 
+import util.type.Types.Type;
+
 /**
  * A node representing the Unary Operator terminals in a parse tree.
  * 
@@ -22,6 +24,13 @@ public abstract class UnOpNode extends ExpressionNode {
 		// note implicitly sets child.parent = this
 		this.addChild(child);
 		this.opType = opType;
+	}
+	
+	public UnOpNode(ExpressionNode child, Type type) {
+		this.children = new ArrayList<Node>();
+		this.addChild(child);
+		this.opType = OpType.CAST;
+		this.type = type;
 	}
 	
 	public OpType getOpType() {
