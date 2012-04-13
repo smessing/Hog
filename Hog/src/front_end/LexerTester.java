@@ -1293,7 +1293,7 @@ public class LexerTester {
 	@Test
 	public void assignmentSymbolTest4() throws IOException {
 
-		String text = "TEXT variable = friend";
+		String text = "text variable = 'friend'";
 		StringReader stringReader = new StringReader(text);
 		Lexer lexer = new Lexer(stringReader);
 		List<Integer> tokenList = new ArrayList<Integer>();

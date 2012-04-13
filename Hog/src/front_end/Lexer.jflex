@@ -42,6 +42,7 @@ letter          = [A-Za-z]
 digit           = [0-9]
 alphanumeric    = {letter}|{digit}
 other_id_char   = [_]
+text_literal    = \"(\\.|[^"])*\"
 identifier      = {letter}({alphanumeric}|{other_id_char})*
 integer         = {digit}*
 real            = {integer}\.{integer}
@@ -107,6 +108,7 @@ not             { return newSym(sym.NOT); }
 true            { return newSym(sym.BOOL_CONST, true); }
 false           { return newSym(sym.BOOL_CONST, false); }
 return          { return newSym(sym.RETURN); }
+    { return newSym(sym.TEXT_LITERAL); }
 {integer}       { return newSym(sym.INT_CONST, new Integer(yytext())); }
 {real}          { return newSym(sym.REAL_CONST, new Double(yytext())); }
 {char}          { return newSym(sym.CHAR, new Character(yytext().charAt(1))); }
