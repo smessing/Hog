@@ -16,21 +16,24 @@ public class ConstantNode<E> extends ExpressionNode {
 	private E value;
 	
 	public ConstantNode(E value) {
-		this(null, null, value);
-	}
-	
-	public ConstantNode(List<Node> children, Type type, E value) {
-		super(children, type);
+		super(null, null);
 		this.value = value;
+		this.setType(this.getValueType());
 	}
 	
 	public E getValue() {
 		return this.value;
 	}
 	
-	public Types.Type getValueType() {
+	private Types.Type getValueType() {
 		if (value instanceof Integer) {
 			return Types.Type.INT;
+		} else if (value instanceof Boolean) {
+			return Types.Type.BOOL;
+		} else if (value instanceof String) {
+			return Types.Type.TEXT;
+		} else if (value instanceof Double) {
+			return Types.Type.REAL;
 		}
 		return Types.Type.UNKNOWN;
 	}
