@@ -16,15 +16,11 @@ public class IdNode extends ExpressionNode {
 	private String identifier;
 
 	public IdNode(String id) {
-		this(new ArrayList<Node>(), id, null);
+		this(id, null);
 	}
 
-	public IdNode(List<Node> children, String id) {
-		this(children, id, null);
-	}
-
-	public IdNode(List<Node> children, String id, Type type) {
-		super(children, type);
+	public IdNode(String id, Type type) {
+		super(null, type);
 		this.setIdentifier(id);
 		this.type = type;
 	}

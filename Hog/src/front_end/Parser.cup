@@ -3,6 +3,7 @@ import java.util.*;
 import java.io.*;
 import java_cup.runtime.*;
 import util.ast.node.*;
+import util.type.*;
 
 action code
   {:
@@ -38,9 +39,9 @@ terminal ARROW, DOT;
 terminal String CHAR;
 terminal String TEXT_LITERAL;
 terminal String ID;
-terminal Integer INT_CONST;
-terminal Double REAL_CONST;
-terminal Boolean BOOL_CONST;
+terminal String INT_CONST;
+terminal String REAL_CONST;
+terminal String BOOL_CONST;
 terminal BREAK, CASE, DEFAULT;
 terminal AND, OR, NOT;
 terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
@@ -52,6 +53,7 @@ nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, Iterat
 nonterminal LabeledStatement, Expression, Type, LogicalExpression, UnaryExpression, LogicalTerm;
 nonterminal EqualityExpression, RelationalExpression, AdditiveExpression, MultiplicativeExpression;
 nonterminal CastExpression, PostfixExpression, PrimaryExpression, Parameters;
+nonterminal IdNode PrimaryExpression;
 nonterminal ConstantNode Constant;
 nonterminal Statement, ElseIfStatement, ElseStatement;
 
@@ -199,7 +201,10 @@ UnaryExpression::=
   ;
 
 PostfixExpression::=
-    PrimaryExpression
+    PrimaryExpression:p
+    {:
+      RESULT = p;
+    :}
   |
     PostfixExpression INCR
   |
@@ -207,7 +212,10 @@ PostfixExpression::=
   ;
 
 PrimaryExpression::=
-    ID
+    ID:i
+    {:
+      RESULT = IdNode(i);
+    :}
   |
     ID DOT ID L_PAREN Parameters R_PAREN
   |
@@ -227,12 +235,18 @@ Parameters::=
 Constant::=
     INT_CONST:i
     {:
-      RESULT = new ConstantNode<Integer>(i);
+      RESULT = new ConstantNode(Types.Type.INT, i);
     :}
   |
-    REAL_CONST
+    REAL_CONST:d
+    {:
+      RESULT = new ConstantNode(Types.Type.REAL, d);
+    :}
   |
-    BOOL_CONST
+    BOOL_CONST:b
+    {:
+      RESULT = new ConstantNode(Types.Type.BOOL, b);
+    :}
   ;
 
 SelectionStatement::=

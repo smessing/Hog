@@ -11,38 +11,22 @@ import util.type.Types.Type;
  * 
  * @author sam
  */
-public class ConstantNode<E> extends ExpressionNode {
+public class ConstantNode extends ExpressionNode {
 
-	private E value;
+	protected String value;
 	
-	public ConstantNode(E value) {
-		super(null, null);
+	public ConstantNode(Types.Type type, String value) {
+		super(null, type);
 		this.value = value;
-		this.setType(this.getValueType());
 	}
 	
-	public E getValue() {
+	public String getValue() {
 		return this.value;
 	}
-	
-	private Types.Type getValueType() {
-		if (value instanceof Integer) {
-			return Types.Type.INT;
-		} else if (value instanceof Boolean) {
-			return Types.Type.BOOL;
-		} else if (value instanceof String) {
-			return Types.Type.TEXT;
-		} else if (value instanceof Double) {
-			return Types.Type.REAL;
-		}
-		return Types.Type.UNKNOWN;
-	}
-	
+		
 	@Override
 	public String getName() {
 		return "ConstantNode<" + this.getTypeName() + ">";
 	}
-	
-	
 	
 }

@@ -112,12 +112,11 @@ return          { return newSym(sym.RETURN); }
 "=="            { return newSym(sym.DBL_EQLS); }
 "."             { return newSym(sym.DOT); }
 {text_literal}  { return newSym(sym.TEXT_LITERAL, new String(yytext())); }
-true            { return newSym(sym.BOOL_CONST, true); }
-false           { return newSym(sym.BOOL_CONST, false); }
+true            { return newSym(sym.BOOL_CONST, new String("true")); }
+false           { return newSym(sym.BOOL_CONST, new String("false")); }
 return          { return newSym(sym.RETURN); }
-{integer}       { return newSym(sym.INT_CONST, new Integer(yytext())); }
-{real}          { return newSym(sym.REAL_CONST, new Double(yytext())); }
-{char}          { return newSym(sym.CHAR, new Character(yytext().charAt(1))); }
+{integer}       { return newSym(sym.INT_CONST, new String(yytext())); }
+{real}          { return newSym(sym.REAL_CONST, new String(yytext())); }
 {comment}       { /* For this stand-alone lexer, print out comments. */
                   System.out.println("Recognized comment: " + yytext()); }
 {whitespace}    { /* Ignore whitespace. */ }

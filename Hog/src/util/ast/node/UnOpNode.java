@@ -12,7 +12,7 @@ public abstract class UnOpNode extends ExpressionNode {
 	
 	// note: NONE means no unary operator applied.
 	public static enum OpType {
-		UMINUS, NOT, RETURN, INCR, DECR, CAST
+		UMINUS, NOT, RETURN, INCR, DECR, CAST, NONE
 	}
 	
 	protected OpType opType;
