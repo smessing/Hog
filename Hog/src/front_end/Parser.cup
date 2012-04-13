@@ -60,11 +60,11 @@ nonterminal Statement, ElseIfStatement, ElseStatement;
 nonterminal ExpressionNode Expression;
 nonterminal ExpressionNode AdditiveExpression;
 nonterminal ExpressionNode MultiplicativeExpression;
-nonterminal UnOpNode CastExpression;
-nonterminal UnOpNode UnaryExpression;
-nonterminal UnOpNode PostfixExpression;
+nonterminal ExpressionNode CastExpression;
+nonterminal ExpressionNode UnaryExpression;
+nonterminal ExpressionNode PostfixExpression;
 nonterminal ExpressionNode PrimaryExpression;
-nonterminal ConstantNode Constant;
+nonterminal ExpressionNode Constant;
 nonterminal Types.Type Type;
 
 precedence left MINUS, PLUS;
@@ -221,24 +221,23 @@ UnaryOperator::=
 PostfixExpression::=
     PrimaryExpression:p
     {:
-      RESULT = new UnOpNode(p, UnOpNode.OpType.NONE);
+      RESULT = p;
     :}
   |
     PostfixExpression:p INCR
     {:
-      RESULT = new UnOpNode(p, UnOpNode.OpType.INCR);
+      RESULT = new PostfixExpressionNode(p, UnOpNode.OpType.INCR);
     :}
   |
     PostfixExpression:p DECR
     {:
-      RESULT = new UnOpNode(p, UnOpNode.OpType.DECR);
+      RESULT = new PostfixExpressionNode(p, UnOpNode.OpType.DECR);
     :}
   ;
 
 PrimaryExpression::=
     ID:i
     {:
-      RESULT = IdNode(i);
     :}
   |
     ID DOT ID L_PAREN Parameters R_PAREN

@@ -33,7 +33,7 @@ public class MockNode extends Node {
 	
 	@Override
 	public String getName() {
-		return Integer.toString(this.id);
+		return "MockNode-" + Integer.toString(this.id);
 	}
 	
 	protected int compareTo(MockNode that) {

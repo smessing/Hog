@@ -2,6 +2,13 @@ package front_end;
 
 import java.io.IOException;
 
+import util.ast.node.BiOpNode;
+import util.ast.node.ExpressionNode;
+import util.ast.node.MockExpressionNode;
+import util.ast.node.MockNode;
+import util.ast.node.MultiplicativeExpressionNode;
+import util.ast.node.Node;
+
 import java_cup.runtime.Symbol;
 import front_end.*;
 
@@ -20,7 +27,6 @@ public class ConsoleLexer {
 	public static void main(String[] args) throws IOException {
 		Lexer lexer = new Lexer(System.in);
 		Symbol token;
-		System.out.print("input: ");
 		do {
 			try {
 				token = lexer.next_token();
