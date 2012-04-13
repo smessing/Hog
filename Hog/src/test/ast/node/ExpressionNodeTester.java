@@ -47,8 +47,8 @@ public class ExpressionNodeTester {
 		// A (MultExprNode) -> B (MultExprNode) * C (idNode)
 		// B -> D * E
 		C = new IdNode("C");
-		D = new CastExpressionNode(new MockExpressionNode(), UnOpNode.OpType.CAST, Types.Type.BOOL);
-		E = new CastExpressionNode(new MockExpressionNode(), UnOpNode.OpType.CAST, Types.Type.BOOL);
+		D = new CastExpressionNode(new MockExpressionNode(), Types.Type.BOOL);
+		E = new CastExpressionNode(new MockExpressionNode(), Types.Type.BOOL);
 		B = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, D, E);
 		A = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, B, C);
 	}
