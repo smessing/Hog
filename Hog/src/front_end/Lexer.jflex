@@ -42,6 +42,7 @@ letter          = [A-Za-z]
 digit           = [0-9]
 alphanumeric    = {letter}|{digit}
 other_id_char   = [_]
+text_literal    = [a-zA-Z_]?\"(\\.|[^\\'])*\" 
 identifier      = {letter}({alphanumeric}|{other_id_char})*
 integer         = {digit}*
 real            = {integer}\.{integer}
@@ -65,6 +66,7 @@ else            { return newSym(sym.ELSE); }
 elseif          { return newSym(sym.ELSEIF); }
 if              { return newSym(sym.IF); }
 or              { return newSym(sym.OR); }
+foreach         { return newSym(sym.FOREACH); }
 for             { return newSym(sym.FOR); }
 while           { return newSym(sym.WHILE); }
 in              { return newSym(sym.IN); }
@@ -74,6 +76,12 @@ int             { return newSym(sym.INT); }
 real            { return newSym(sym.REAL); }
 list            { return newSym(sym.LIST); }
 void            { return newSym(sym.VOID); }
+not             { return newSym(sym.NOT); }
+switch          { return newSym(sym.SWITCH); }
+case            { return newSym(sym.CASE); }
+default         { return newSym(sym.DEFAULT); }
+continue        { return newSym(sym.CONTINUE); }
+return          { return newSym(sym.RETURN); }
 @Functions      { return newSym(sym.FUNCTIONS); }
 @Map            { return newSym(sym.MAP); }
 @Reduce         { return newSym(sym.REDUCE); }
@@ -103,10 +111,10 @@ void            { return newSym(sym.VOID); }
 ":"             { return newSym(sym.COL); }
 "=="            { return newSym(sym.DBL_EQLS); }
 "."             { return newSym(sym.DOT); }
-"true"          { return newSym(sym.BOOL_CONST, true); }
-"false"         { return newSym(sym.BOOL_CONST, false); }
-"return"        { return newSym(sym.RETURN); }
-"continue"      { return newSym(sym.CONTINUE); }
+{text_literal}  { return newSym(sym.TEXT_LITERAL, new String(yytext())); }
+true            { return newSym(sym.BOOL_CONST, true); }
+false           { return newSym(sym.BOOL_CONST, false); }
+return          { return newSym(sym.RETURN); }
 {integer}       { return newSym(sym.INT_CONST, new Integer(yytext())); }
 {real}          { return newSym(sym.REAL_CONST, new Double(yytext())); }
 {char}          { return newSym(sym.CHAR, new Character(yytext().charAt(1))); }
