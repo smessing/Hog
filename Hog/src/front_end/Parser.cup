@@ -206,7 +206,7 @@ MultiplicativeExpression::=
       RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.DIVIDE, m, c);
     :}
   |
-    MultiplicativeExpression MOD CastExpression
+    MultiplicativeExpression:m MOD CastExpression:c
     {:
       RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.MOD, m, c);
     :}
@@ -219,6 +219,9 @@ CastExpression::=
     :}
   |
     L_PAREN Type R_PAREN CastExpression
+    {:
+      RESULT = new CastExpressionNode
+    :}
   ;
 
 UnaryExpression::=

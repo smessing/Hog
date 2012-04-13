@@ -12,8 +12,8 @@ public class CastExpressionNode extends UnOpNode {
 
 	protected Type castType;
 	
-	public CastExpressionNode(ExpressionNode node, OpType opType, Type type) {
-		super(node, opType);
+	public CastExpressionNode(ExpressionNode node,Type type) {
+		super(node, UnOpNode.OpType.CAST);
 		this.type = type;
 	}
 	
