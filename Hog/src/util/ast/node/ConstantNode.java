@@ -9,23 +9,13 @@ import util.type.Types.Type;
  * A node representing a primitive constant in a parse tree.
  * 
  * @author sam
- *
- * @param <E>
  */
-public class ConstantNode<E> extends ExpressionNode {
+public abstract class ConstantNode extends ExpressionNode {
 
 	private E value;
 	
-	public ConstantNode() {
-		this(new ArrayList<Node>());
-	}
-	
-	public ConstantNode(List<Node> children) {
-		this(children, null);
-	}
-	
-	public ConstantNode(List<Node> children, Type type) {
-		this(children, type, null);
+	public ConstantNode(E value) {
+		this(null, null, value);
 	}
 	
 	public ConstantNode(List<Node> children, Type type, E value) {

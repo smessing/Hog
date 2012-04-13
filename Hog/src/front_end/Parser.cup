@@ -38,9 +38,9 @@ terminal ARROW, DOT;
 terminal String CHAR;
 terminal String TEXT_LITERAL;
 terminal String ID;
-terminal int INT_CONST;
-terminal double REAL_CONST;
-terminal boolean BOOL_CONST;
+terminal Integer INT_CONST;
+terminal Double REAL_CONST;
+terminal Boolean BOOL_CONST;
 terminal BREAK, CASE, DEFAULT;
 terminal AND, OR, NOT;
 terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
@@ -51,7 +51,8 @@ nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Redu
 nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, IterationStatement;
 nonterminal LabeledStatement, Expression, Type, LogicalExpression, UnaryExpression, LogicalTerm;
 nonterminal EqualityExpression, RelationalExpression, AdditiveExpression, MultiplicativeExpression;
-nonterminal CastExpression, PostfixExpression, PrimaryExpression, Parameters, Constant;
+nonterminal CastExpression, PostfixExpression, PrimaryExpression, Parameters;
+nonterminal ConstantNode Constant;
 nonterminal Statement, ElseIfStatement, ElseStatement;
 
 start with Program;
@@ -169,9 +170,7 @@ AdditiveExpression::=
   |
     AdditiveExpression:ae MINUS MultiplicativeExpression:me
     {: 
-       Node meNode = (Node) me;
-       Node aeNode = (Node) ae;
-       RESULT = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, ae, me); 
+
     :}
   ;
 
@@ -228,7 +227,7 @@ Parameters::=
 Constant::=
     INT_CONST:i
     {:
-      RESULT = i.value();
+      RESULT = new ConstantNode<Integer>(i);
     :}
   |
     REAL_CONST
