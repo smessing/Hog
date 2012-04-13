@@ -51,13 +51,14 @@ terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA
 
 nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Reduce, SectionType;
 nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, IterationStatement;
-nonterminal LabeledStatement, Expression, LogicalExpression, LogicalTerm;
+nonterminal LabeledStatement, LogicalExpression, LogicalTerm;
 nonterminal EqualityExpression, RelationalExpression;
 nonterminal Parameters, UnaryOperator;
 
 nonterminal Statement, ElseIfStatement, ElseStatement;
 
-nonterminal Expression AdditiveExpression;
+nonterminal ExpressionNode Expression;
+nonterminal ExpressionNode AdditiveExpression;
 nonterminal ExpressionNode MultiplicativeExpression;
 nonterminal UnOpNode CastExpression;
 nonterminal UnOpNode UnaryExpression;
@@ -220,12 +221,18 @@ UnaryOperator::=
 PostfixExpression::=
     PrimaryExpression:p
     {:
-      RESULT = p;
+      RESULT = new UnOpNode(p, UnOpNode.OpType.NONE);
     :}
   |
-    PostfixExpression INCR
+    PostfixExpression:p INCR
+    {:
+      RESULT = new UnOpNode(p, UnOpNode.OpType.INCR);
+    :}
   |
-    PostfixExpression DECR
+    PostfixExpression:p DECR
+    {:
+      RESULT = new UnOpNode(p, UnOpNode.OpType.DECR);
+    :}
   ;
 
 PrimaryExpression::=
@@ -236,9 +243,15 @@ PrimaryExpression::=
   |
     ID DOT ID L_PAREN Parameters R_PAREN
   |
-    Constant
+    Constant:c
+    {:
+      RESULT = c; 
+    :}
   |
-    L_PAREN Expression R_PAREN
+    L_PAREN Expression:e R_PAREN
+    {:
+      RESULT = e;
+    :}
   ;
 
 Parameters::=
