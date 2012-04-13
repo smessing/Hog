@@ -101,15 +101,21 @@ Main::=
   ;
 
 StatementList::=
-    ExpressionStatement
+    StatementList ExpressionStatement
   |
-    SelectionStatement
+    StatementList SelectionStatement
   |
-    IterationStatement
+    StatementList IterationStatement
   |
-    LabeledStatement
+    StatementList LabeledStatement
+  |
+    /* epsilon */
   |
     BREAK
+  |
+    CONTINUE
+  |
+    RETURN Expression
   ;
  
 ExpressionStatement::=
@@ -164,7 +170,11 @@ AdditiveExpression::=
     {: RESULT = new AdditiveExpressionNode(BiOpNode.OpType.PLUS, ae, me); :}
   |
     AdditiveExpression:ae MINUS MultiplicativeExpression:me
-    {: RESULT = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, ae, me); :}
+    {: 
+       Node meNode = (Node) me;
+       Node aeNode = (Node) ae;
+       RESULT = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, ae, me); 
+    :}
   ;
 
 MultiplicativeExpression::=
