@@ -38,9 +38,9 @@ terminal ARROW, DOT;
 terminal String CHAR;
 terminal String TEXT_LITERAL;
 terminal String ID;
-terminal String INT_CONST;
-terminal String REAL_CONST;
-terminal String BOOL_CONST;
+terminal int INT_CONST;
+terminal double REAL_CONST;
+terminal boolean BOOL_CONST;
 terminal BREAK, CASE, DEFAULT;
 terminal AND, OR, NOT;
 terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
@@ -226,7 +226,10 @@ Parameters::=
   ;
 
 Constant::=
-    INT_CONST
+    INT_CONST:i
+    {:
+      RESULT = i.value();
+    :}
   |
     REAL_CONST
   |
