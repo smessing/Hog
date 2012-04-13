@@ -238,8 +238,6 @@ PrimaryExpression::=
   |
     Constant
   |
-    TEXT_LITERAL
-  |
     L_PAREN Expression R_PAREN
   ;
 
@@ -263,6 +261,11 @@ Constant::=
     BOOL_CONST:b
     {:
       RESULT = new ConstantNode(Types.Type.BOOL, b);
+    :}
+  |
+    TEXT_LITERAL:t
+    {:
+      RESULT = new ConstantNode(Types.Type.TEXT, t);
     :}
   ;
 
@@ -300,12 +303,27 @@ LabeledStatement::=
 
 Type::=
     VOID
+    {:
+      RESULT = Types.Type.VOID;
+    :}
   |
     TEXT
+    {:
+      RESULT = Types.Type.TEXT;
+    :}
   |
     BOOL
+    {:
+      RESULT = Types.Type.BOOL;
+    :}
   |
     INT
+    {:
+      RESULT = Types.Type.INT;
+    :}
   |
     REAL
+    {:
+      RESULT = Types.Type.REAL;
+    :}
   ;
