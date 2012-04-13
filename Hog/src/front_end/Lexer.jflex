@@ -66,6 +66,7 @@ else            { return newSym(sym.ELSE); }
 elseif          { return newSym(sym.ELSEIF); }
 if              { return newSym(sym.IF); }
 or              { return newSym(sym.OR); }
+foreach         { return newSym(sym.FOREACH); }
 for             { return newSym(sym.FOR); }
 while           { return newSym(sym.WHILE); }
 in              { return newSym(sym.IN); }
@@ -77,6 +78,8 @@ list            { return newSym(sym.LIST); }
 void            { return newSym(sym.VOID); }
 not             { return newSym(sym.NOT); }
 switch          { return newSym(sym.SWITCH); }
+case            { return newSym(sym.CASE); }
+default         { return newSym(sym.DEFAULT); }
 @Functions      { return newSym(sym.FUNCTIONS); }
 @Map            { return newSym(sym.MAP); }
 @Reduce         { return newSym(sym.REDUCE); }
