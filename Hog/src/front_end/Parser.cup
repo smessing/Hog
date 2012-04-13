@@ -53,7 +53,7 @@ nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Redu
 nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, IterationStatement;
 nonterminal LabeledStatement, LogicalExpression, LogicalTerm;
 nonterminal EqualityExpression, RelationalExpression;
-nonterminal Parameters, UnaryOperator;
+nonterminal Parameters;
 
 nonterminal Statement, ElseIfStatement, ElseStatement;
 
@@ -66,6 +66,7 @@ nonterminal ExpressionNode PostfixExpression;
 nonterminal ExpressionNode PrimaryExpression;
 nonterminal ExpressionNode Constant;
 nonterminal Types.Type Type;
+nonterminal UnOpNode.OpType UnaryOperator;
 
 precedence left MINUS, PLUS;
 precedence right UMINUS;
@@ -190,32 +191,59 @@ AdditiveExpression::=
   ;
 
 MultiplicativeExpression::=
-    CastExpression
+    CastExpression:c
+    {:
+      RESULT = c;
+    :}
   |
-    MultiplicativeExpression TIMES CastExpression
+    MultiplicativeExpression:m TIMES CastExpression:c
+    {:
+      RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, m, c); 
+    :}
   |
-    MultiplicativeExpression DIVIDE CastExpression
+    MultiplicativeExpression:m DIVIDE CastExpression:c
+    {:
+      RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.DIVIDE, m, c);
+    :}
   |
     MultiplicativeExpression MOD CastExpression
+    {:
+      RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.MOD, m, c);
+    :}
   ;
 
 CastExpression::=
-    UnaryExpression
+    UnaryExpression:u
+    {:
+      RESULT = u;
+    :}
   |
     L_PAREN Type R_PAREN CastExpression
   ;
 
 UnaryExpression::=
-    UnaryOperator CastExpression
+    UnaryOperator:u CastExpression:c
+    {:
+      RESULT = new UnaryExpressionNode(c, u);
+    :}
   |
-    PostfixExpression
+    PostfixExpression:p
+    {:
+      RESULT = p;
+    :}
   ;
   
 UnaryOperator::=
     MINUS 
+    {:
+      RESULT = UnOpNode.OpType.UMINUS;
+    :}
     %prec UMINUS
   |
     NOT
+    {:
+      RESULT = UnOpNode.OpType.NOT;
+    :}
   ;
 
 PostfixExpression::=
@@ -238,6 +266,7 @@ PostfixExpression::=
 PrimaryExpression::=
     ID:i
     {:
+      RESULT = new IdNode(i);
     :}
   |
     ID DOT ID L_PAREN Parameters R_PAREN
