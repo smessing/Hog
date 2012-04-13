@@ -31,10 +31,11 @@ scan with
     return lexer.next_token();
   :};
 
-terminal UMINUS, DECR, INCR, RETURN, CONTINUE;
-terminal MINUS, PLUS, TIMES, DIVIDE, MOD;
+terminal DECR, INCR, RETURN, CONTINUE;
+terminal TIMES, DIVIDE, MOD;
 terminal LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, ASSIGN;
 terminal TEXT, BOOL, INT, REAL, LIST, VOID;
+terminal MINUS, UMINUS, PLUS;
 terminal ARROW, DOT;
 terminal String CHAR;
 terminal String TEXT_LITERAL;
@@ -50,9 +51,9 @@ terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA
 
 nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Reduce, SectionType;
 nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, IterationStatement;
-nonterminal LabeledStatement, Expression, Type, LogicalExpression, UnaryExpression, LogicalTerm;
-nonterminal EqualityExpression, RelationalExpression, AdditiveExpression, MultiplicativeExpression;
-nonterminal CastExpression, PostfixExpression, PrimaryExpression, Parameters;
+nonterminal LabeledStatement, Expression, LogicalExpression, LogicalTerm;
+nonterminal EqualityExpression, RelationalExpression;
+nonterminal Parameters, UnaryOperator;
 
 nonterminal Statement, ElseIfStatement, ElseStatement;
 
@@ -64,6 +65,9 @@ nonterminal UnOpNode PostfixExpression;
 nonterminal ExpressionNode PrimaryExpression;
 nonterminal ConstantNode Constant;
 nonterminal Types.Type Type;
+
+precedence left MINUS, PLUS;
+precedence right UMINUS;
 
 start with Program;
 
@@ -201,11 +205,16 @@ CastExpression::=
   ;
 
 UnaryExpression::=
-    MINUS CastExpression
-  |
-    NOT CastExpression
+    UnaryOperator CastExpression
   |
     PostfixExpression
+  ;
+  
+UnaryOperator::=
+    MINUS 
+    %prec UMINUS
+  |
+    NOT
   ;
 
 PostfixExpression::=
