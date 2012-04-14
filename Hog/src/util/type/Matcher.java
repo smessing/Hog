@@ -1,7 +1,7 @@
 
 
 public interface Matcher<T> {
-    T instantiate(T matched) throws SemanticException;
+    T instantiate(T matched);
 
     boolean visit(Type t);
    
