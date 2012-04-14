@@ -1,7 +1,5 @@
 package util.ast.node;
 
-import java.util.ArrayList;
-import java.util.List;
 import util.type.Types;
 
 /**
@@ -19,7 +17,7 @@ import util.type.Types;
 public abstract class BiOpNode extends ExpressionNode {
 
 	public static enum OpType {
-		MINUS, PLUS, DIVIDE, TIMES, MOD
+		MINUS, PLUS, DIVIDE, TIMES, MOD, LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS
 	}
 
 	protected OpType opType;

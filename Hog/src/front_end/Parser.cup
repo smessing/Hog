@@ -57,6 +57,7 @@ nonterminal Parameters;
 
 nonterminal Statement, ElseIfStatement, ElseStatement;
 
+nonterminal ExpressionNode RelationalExpression;
 nonterminal ExpressionNode Expression;
 nonterminal ExpressionNode AdditiveExpression;
 nonterminal ExpressionNode MultiplicativeExpression;
@@ -160,33 +161,63 @@ LogicalTerm::=
   ;
 
 EqualityExpression::=
-    RelationalExpression
+    RelationalExpression:r
+    {: 
+      RESULT = r; 
+    :}
   |
-    EqualityExpression DBL_EQLS RelationalExpression
+    EqualityExpression:e DBL_EQLS RelationalExpression:r
+    {:
+      RESULT = new EqualityExpressionNode(BiOpType.OpType.DBL_EQLS, e, r);
+    :}
   |
-    EqualityExpression NOT_EQLS RelationalExpression
+    EqualityExpression:e NOT_EQLS RelationalExpression:r
+    {:
+      RESULT = new EqualityExpressionNode(BiOpType.OpType.NOT_EQLS, e, r);
+    :}
   ;
 
 RelationalExpression::=
-    AdditiveExpression
+    AdditiveExpression:a
+    {:
+      RESULT = a;
+    :}
   |
-    RelationalExpression LESS AdditiveExpression
+    RelationalExpression:r LESS AdditiveExpression:a
+    {:
+      RESULT = new RelationalExpressionNode(BiOpType.OpType.LESS, r, a);
+    :}
   |
-    RelationalExpression GRTR AdditiveExpression
+    RelationalExpression:r GRTR AdditiveExpression:a
+    {:
+      RESULT = new RelationalExpressionNode(BiOpType.OpType.GRTR, r, a);
+    :}
   |
-    RelationalExpression LESS_EQL AdditiveExpression
+    RelationalExpression:r LESS_EQL AdditiveExpression:a
+    {:
+      RESULT = new RelationalExpressionNode(BiOpType.OpType.LESS_EQL, r, a);
+    :}
   |
-    RelationalExpression GRTR_EQL AdditiveExpression
+    RelationalExpression:r GRTR_EQL AdditiveExpression:a
+    {:
+      RESULT = new RelationalExpressionNode(BiOpType.OpType.GRTR_EQL, r, a);
+    :}
   ;
 
 AdditiveExpression::=
-    MultiplicativeExpression:me
+    MultiplicativeExpression:m
+    {:
+      RESULT = m;
+    :}
   |
-    AdditiveExpression PLUS MultiplicativeExpression
+    AdditiveExpression:a PLUS MultiplicativeExpression:m
+    {:
+      RESULT = new AdditiveExpressionNode(BiOpNode.OpType.PLUS, a, m);
+    :}
   |
-    AdditiveExpression:ae MINUS MultiplicativeExpression:me
+    AdditiveExpression:a MINUS MultiplicativeExpression:m
     {: 
-      
+      RESULT = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, a, m);
     :}
   ;
 

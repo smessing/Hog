@@ -2,17 +2,16 @@ package util.ast.node;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import back_end.Visitor;
 
 /**
- * A node representing the MultiplicativeExpression nonterminal in a parse tree.
+ * A node representing an EqualityExpression nonterminal
  * 
- * @author sam & ben
- * 
+ * @author ben
+ *
  */
-public class MultiplicativeExpressionNode extends BiOpNode {
-	
+public class EqualityExpressionNode extends BiOpNode {
+
 	/**
 	 * Define acceptable BiOpNode.OpType's for this node
 	 */
@@ -20,22 +19,21 @@ public class MultiplicativeExpressionNode extends BiOpNode {
 	
 	static {
 		acceptedOpTypes = new HashSet<BiOpNode.OpType>();
-		acceptedOpTypes.add(OpType.TIMES);
-		acceptedOpTypes.add(OpType.DIVIDE);
-		acceptedOpTypes.add(OpType.MOD);
+		acceptedOpTypes.add(OpType.DBL_EQLS);
+		acceptedOpTypes.add(OpType.NOT_EQLS);
 	}
 
-	public MultiplicativeExpressionNode(OpType type, ExpressionNode left, ExpressionNode right) {
+	public EqualityExpressionNode(OpType type, ExpressionNode left, ExpressionNode right) {
 		super(type, left, right);
 		
 		// check if OpType is allowable
 		if(!acceptedOpTypes.contains(type))
-			throw new UnsupportedOperationException("MultiplicativeExpressionNode initialized with unacceptable OpType: " + type.toString());
+			throw new UnsupportedOperationException("EqualityExpressionNode initialized with unacceptable OpType: " + type.toString());
 	}
 
 	@Override
 	public String getName() {
-		return "MultiplicativeExpressionNode<" + this.getTypeName() + ","
+		return "EqualityExpressionNode<" + this.getTypeName() + ","
 				+ this.opType.toString() + ">";
 	}
 	
@@ -43,6 +41,5 @@ public class MultiplicativeExpressionNode extends BiOpNode {
 	public void visit(Visitor v) {
 		v.visitMultiplicativeExpressionNode();
 	}
-	
 
 }
