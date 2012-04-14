@@ -31,5 +31,45 @@ public abstract class AbstractSyntaxTree {
 				TreeTraversalBuilder.traversalOrder.POSTORDER);
 
 	}
+	
+	public String toLatex() {
+		
+		if (root.getChildren() == null || root.getChildren().size() == 0) {
+			return "[.{" + root.getName() + "} ]";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("\\Tree[.{" + root.getName() + "}");
+		
+		for (Node child : root.getChildren()) {
+			sb.append(toLatexAux(child));
+		}
+		
+		sb.append(" ]");
+		
+		return sb.toString();
+	}
+	
+	private String toLatexAux(Node node) {
+		
+		// base case
+		if (node.getChildren() == null || node.getChildren().size() == 0) {
+			return "[.{" + node.getName() + "} ]";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("[.{" + node.getName() + "}");
+		
+		for (Node child : node.getChildren()) {
+			sb.append(toLatexAux(child));
+		}
+		
+		sb.append(" ]");
+		
+		return sb.toString();
+		
+	}
 
 }

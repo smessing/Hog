@@ -1,8 +1,5 @@
 package util.ast.node;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import back_end.Visitor;
 
 import util.type.Types.Type;
