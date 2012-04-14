@@ -3,6 +3,8 @@ package util.ast.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import back_end.Visitor;
+
 /**
  * A node within an AST.
  * 
@@ -21,6 +23,8 @@ public abstract class Node implements Comparable<Node> {
 	public Node() {
 		this(new ArrayList<Node>());
 	}
+	
+	public abstract void visit(Visitor v);
 
 	/**
 	 * Construct a new node with parent as it's parent.
