@@ -38,8 +38,8 @@ public class EqualityExpressionNode extends BiOpNode {
 	}
 	
 	@Override
-	public void visit(Visitor v) {
-		v.visitMultiplicativeExpressionNode();
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 
 }

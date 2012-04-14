@@ -39,8 +39,8 @@ public class AdditiveExpressionNode extends BiOpNode {
 	}
 	
 	@Override
-	public void visit(Visitor v) {
-		// TODO Auto-generated method stub
+	public void accept(Visitor v) {
+		v.visit(this);
 
 	}
 
