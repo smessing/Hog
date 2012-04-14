@@ -14,7 +14,7 @@ public class MockExpressionNode extends ExpressionNode {
 	}
 	
 	@Override
-	public void visit(Visitor v) {
+	public void accept(Visitor v) {
 		// do nothing
 	}
 	

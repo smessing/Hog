@@ -20,8 +20,8 @@ public class PostfixExpressionNode extends UnOpNode {
 	}
 	
 	@Override
-	public void visit(Visitor v) {
-		v.visitPostfixExpressionNode();
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 	
 }

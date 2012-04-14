@@ -28,8 +28,8 @@ public class CastExpressionNode extends UnOpNode {
 	}
 	
 	@Override
-	public void visit(Visitor v) {
-		v.visitCastExpressionNode();
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 	
 

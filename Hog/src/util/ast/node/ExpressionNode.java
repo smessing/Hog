@@ -4,6 +4,8 @@ import util.type.Types.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import back_end.Visitor;
+
 /**
  * An abstract class inherited by all expression classes, specifying type information.
  * 
@@ -54,6 +56,12 @@ public abstract class ExpressionNode extends Node {
 			return type.toString();
 		}
 		return "unknown";
+	}
+	
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 
 }

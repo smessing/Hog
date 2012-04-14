@@ -2,6 +2,8 @@ package util.ast.node;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import back_end.Visitor;
 import util.type.Types;
 
 /**
@@ -44,6 +46,11 @@ public abstract class BiOpNode extends ExpressionNode {
 	@Override
 	public String getName() {
 		return opType.toString() + "<" + this.getTypeName() + ">";
+	}
+	
+	@Override
+	public void accept(Visitor v){
+		v.visit(this);
 	}
 
 }

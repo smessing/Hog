@@ -24,7 +24,7 @@ public abstract class Node implements Comparable<Node> {
 		this(new ArrayList<Node>());
 	}
 	
-	public abstract void visit(Visitor v);
+	public abstract void accept(Visitor v);
 
 	/**
 	 * Construct a new node with parent as it's parent.
@@ -141,5 +141,7 @@ public abstract class Node implements Comparable<Node> {
 	public int compareTo(Node that) {
 		return this.getName().compareTo(that.getName());
 	}
+	
+
 
 }
