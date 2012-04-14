@@ -28,7 +28,7 @@ public class EqualityExpressionNode extends BiOpNode {
 		
 		// check if OpType is allowable
 		if(!acceptedOpTypes.contains(type))
-			throw new UnsupportedOperationException("EqualityExpressionNode initialized with unacceptable OpType: " + type.toString());
+			throw new IllegalArgumentException("EqualityExpressionNode initialized with unacceptable OpType: " + type.toString());
 	}
 
 	@Override

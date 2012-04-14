@@ -30,7 +30,7 @@ public class MultiplicativeExpressionNode extends BiOpNode {
 		
 		// check if OpType is allowable
 		if(!acceptedOpTypes.contains(type))
-			throw new UnsupportedOperationException("MultiplicativeExpressionNode initialized with unacceptable OpType: " + type.toString());
+			throw new IllegalArgumentException("MultiplicativeExpressionNode initialized with unacceptable OpType: " + type.toString());
 	}
 
 	@Override

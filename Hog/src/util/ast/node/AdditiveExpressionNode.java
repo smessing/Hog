@@ -29,7 +29,7 @@ public class AdditiveExpressionNode extends BiOpNode {
 		
 		// check if OpType is allowable
 		if(!acceptedOpTypes.contains(type))
-			throw new UnsupportedOperationException("AdditiveExpressionNode initialized with unacceptable OpType: " + type.toString());
+			throw new IllegalArgumentException("AdditiveExpressionNode initialized with unacceptable OpType: " + type.toString());
 	}
 	
 	@Override

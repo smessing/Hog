@@ -51,12 +51,14 @@ terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA
 
 nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Reduce, SectionType;
 nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, IterationStatement;
-nonterminal LabeledStatement, LogicalExpression, LogicalTerm;
-nonterminal EqualityExpression, RelationalExpression;
+nonterminal LabeledStatement;
 nonterminal Parameters;
 
 nonterminal Statement, ElseIfStatement, ElseStatement;
 
+nonterminal ExpressionNode EqualityExpression;
+nonterminal ExpressionNode LogicalExpression;
+nonterminal ExpressionNode LogicalTerm;
 nonterminal ExpressionNode RelationalExpression;
 nonterminal ExpressionNode Expression;
 nonterminal ExpressionNode AdditiveExpression;
@@ -149,15 +151,27 @@ Expression::=
   ;
 
 LogicalExpression::=
-    LogicalExpression OR LogicalTerm
+    LogicalExpression:le OR LogicalTerm:lt
+    {:
+      RESULT = new LogicalExpressionNode(le, lt);
+    :}
   |
-    LogicalTerm
+    LogicalTerm:l
+    {:
+      RESULT = l;
+    :}
   ;
 
 LogicalTerm::=
-    LogicalTerm AND EqualityExpression
+    LogicalTerm:l AND EqualityExpression:e
+    {:
+      RESULT = new LogicalTermNode(l,e);
+    :}
   |
-    EqualityExpression
+    EqualityExpression:e
+    {:
+      RESULT = e;
+    :}
   ;
 
 EqualityExpression::=
@@ -168,12 +182,12 @@ EqualityExpression::=
   |
     EqualityExpression:e DBL_EQLS RelationalExpression:r
     {:
-      RESULT = new EqualityExpressionNode(BiOpType.OpType.DBL_EQLS, e, r);
+      RESULT = new EqualityExpressionNode(BiOpNode.OpType.DBL_EQLS, e, r);
     :}
   |
     EqualityExpression:e NOT_EQLS RelationalExpression:r
     {:
-      RESULT = new EqualityExpressionNode(BiOpType.OpType.NOT_EQLS, e, r);
+      RESULT = new EqualityExpressionNode(BiOpNode.OpType.NOT_EQLS, e, r);
     :}
   ;
 
@@ -185,22 +199,22 @@ RelationalExpression::=
   |
     RelationalExpression:r LESS AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpType.OpType.LESS, r, a);
+      RESULT = new RelationalExpressionNode(BiOpNode.OpType.LESS, r, a);
     :}
   |
     RelationalExpression:r GRTR AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpType.OpType.GRTR, r, a);
+      RESULT = new RelationalExpressionNode(BiOpNode.OpType.GRTR, r, a);
     :}
   |
     RelationalExpression:r LESS_EQL AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpType.OpType.LESS_EQL, r, a);
+      RESULT = new RelationalExpressionNode(BiOpNode.OpType.LESS_EQL, r, a);
     :}
   |
     RelationalExpression:r GRTR_EQL AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpType.OpType.GRTR_EQL, r, a);
+      RESULT = new RelationalExpressionNode(BiOpNode.OpType.GRTR_EQL, r, a);
     :}
   ;
 

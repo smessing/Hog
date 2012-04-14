@@ -30,7 +30,7 @@ public class RelationalExpressionNode extends BiOpNode {
 		
 		// check if OpType is allowable
 		if(!acceptedOpTypes.contains(type))
-			throw new UnsupportedOperationException("RelationalExpressionNode initialized with unacceptable OpType: " + type.toString());
+			throw new IllegalArgumentException("RelationalExpressionNode initialized with unacceptable OpType: " + type.toString());
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class RelationalExpressionNode extends BiOpNode {
 	
 	@Override
 	public void visit(Visitor v) {
-		v.visitMultiplicativeExpressionNode();
+		// TODO Auto-generated method stub
 	}
 
 
