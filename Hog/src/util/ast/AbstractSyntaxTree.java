@@ -48,19 +48,19 @@ public abstract class AbstractSyntaxTree {
 		
 		sb.append(" ]");
 		
-		return sb.toString();
+		return sb.toString().replaceAll("<", "\\$<\\$").replaceAll(">", "\\$>\\$");
 	}
 	
 	private String toLatexAux(Node node) {
 		
 		// base case
 		if (node.getChildren() == null || node.getChildren().size() == 0) {
-			return "[.{" + node.getName() + "} ]";
+			return " [.{" + node.getName() + "} ]";
 		}
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("[.{" + node.getName() + "}");
+		sb.append(" [.{" + node.getName() + "}");
 		
 		for (Node child : node.getChildren()) {
 			sb.append(toLatexAux(child));
