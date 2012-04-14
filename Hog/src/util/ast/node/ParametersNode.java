@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import back_end.Visitor;
+
 /**
  * A node representing the Parameters nonterminal in a parse tree.
  * 
@@ -12,5 +14,11 @@ public class ParametersNode extends ExpressionNode {
 	public String getName() {
 		return "ParemetersNode<" + this.getTypeName() + ">";
 	}
+	
+	@Override
+	public void visit(Visitor v) {
+		v.visitParemetersNode();
+	}
+	
 	
 }

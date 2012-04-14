@@ -3,6 +3,8 @@ package util.ast.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import back_end.Visitor;
+
 /**
  * MockNode class, a stripped down implementation of the Node class used for testing.
  * @author sam
@@ -46,6 +48,11 @@ public class MockNode extends Node {
 			return compareTo((MockNode) that);
 		}
 		return -1;
+	}
+
+	@Override
+	public void visit(Visitor v) {
+		// do nothing
 	}
 	
 	

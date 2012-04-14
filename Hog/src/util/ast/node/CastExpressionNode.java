@@ -1,5 +1,6 @@
 package util.ast.node;
 
+import back_end.Visitor;
 import util.type.Types.Type;
 
 /**
@@ -25,5 +26,11 @@ public class CastExpressionNode extends UnOpNode {
 	public String getName() {
 		return "CastExpressionNode<" + this.getTypeName() + ">";
 	}
+	
+	@Override
+	public void visit(Visitor v) {
+		v.visitCastExpressionNode();
+	}
+	
 
 }

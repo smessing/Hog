@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import back_end.Visitor;
+
 /**
  * A node representing the MultiplicativeExpression nonterminal in a parse tree.
  * 
@@ -17,5 +19,11 @@ public class MultiplicativeExpressionNode extends BiOpNode {
 		return "MultiplicativeExpressionNode<" + this.getTypeName() + ","
 				+ this.opType.toString() + ">";
 	}
+	
+	@Override
+	public void visit(Visitor v) {
+		v.visitMultiplicativeExpressionNode();
+	}
+	
 
 }

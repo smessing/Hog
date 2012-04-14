@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import back_end.Visitor;
+
 /**
  * A node representing the UnaryExpression nonterminal in a parse tree.
  * 
@@ -16,5 +18,11 @@ public class UnaryExpressionNode extends UnOpNode {
 	public String getName() {
 		return "UnaryExpressionNode<" + this.getTypeName() + ">";
 	}
+	
+	@Override
+	public void visit(Visitor v) {
+		v.visitUnaryExpressionNode();
+	}
+	
 
 }

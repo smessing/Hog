@@ -3,6 +3,8 @@ package util.ast.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import back_end.Visitor;
+
 import util.type.Types;
 import util.type.Types.Type;
 
@@ -28,5 +30,11 @@ public class ConstantNode extends ExpressionNode {
 	public String getName() {
 		return "ConstantNode<" + this.getTypeName() + ">";
 	}
+	
+	@Override
+	public void visit(Visitor v) {
+		v.visitConstantNode();
+	}
+	
 	
 }

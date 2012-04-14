@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import back_end.Visitor;
+
 /**
  * A node representing the PostfixExpression nonterminal in a parse tree.
  * 
@@ -16,4 +18,10 @@ public class PostfixExpressionNode extends UnOpNode {
 	public String getName() {
 		return "PostfixExpressionNode<" + this.getTypeName() + ">";
 	}
+	
+	@Override
+	public void visit(Visitor v) {
+		v.visitPostfixExpressionNode();
+	}
+	
 }

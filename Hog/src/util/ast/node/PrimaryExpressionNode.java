@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import back_end.Visitor;
+
 /**
  * A node representing the PrimaryExpression nonterminal in a parse tree.
  * 
@@ -12,5 +14,11 @@ public class PrimaryExpressionNode extends ExpressionNode {
 	public String getName() {
 		return "PrimaryExpressionNode<" + this.getTypeName() + ">";
 	}
+	
+	@Override
+	public void visit(Visitor v) {
+		v.visitPrimaryExpressionNode();
+	}
+	
 	
 }

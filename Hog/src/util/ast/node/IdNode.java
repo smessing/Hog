@@ -3,6 +3,8 @@ package util.ast.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import back_end.Visitor;
+
 import util.type.Types.Type;
 
 /**
@@ -38,5 +40,11 @@ public class IdNode extends ExpressionNode {
 		return "IdNode<" + this.getTypeName() + "," + this.getIdentifier()
 				+ ">";
 	}
+	
+	@Override
+	public void visit(Visitor v) {
+		v.visitIdNode();
+	}
+	
 
 }

@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import back_end.Visitor;
+
 public class MockExpressionNode extends ExpressionNode {
 
 	/*public MockExpressionNode() {
@@ -10,5 +12,11 @@ public class MockExpressionNode extends ExpressionNode {
 	public String getName() {
 		return "MockExpressionNode<" + this.getTypeName() + ">";
 	}
+	
+	@Override
+	public void visit(Visitor v) {
+		// do nothing
+	}
+	
 	
 }
