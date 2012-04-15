@@ -16,8 +16,8 @@ public class PrimaryExpressionNode extends ExpressionNode {
 	}
 	
 	@Override
-	public void visit(Visitor v) {
-		v.visitPrimaryExpressionNode();
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 	
 	

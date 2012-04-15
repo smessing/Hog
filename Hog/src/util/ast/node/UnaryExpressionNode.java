@@ -20,8 +20,8 @@ public class UnaryExpressionNode extends UnOpNode {
 	}
 	
 	@Override
-	public void visit(Visitor v) {
-		v.visitUnaryExpressionNode();
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 	
 

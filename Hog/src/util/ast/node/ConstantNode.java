@@ -32,8 +32,8 @@ public class ConstantNode extends ExpressionNode {
 	}
 	
 	@Override
-	public void visit(Visitor v) {
-		v.visitConstantNode();
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 	
 	

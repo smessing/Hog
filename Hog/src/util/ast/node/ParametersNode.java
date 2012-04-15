@@ -16,8 +16,8 @@ public class ParametersNode extends ExpressionNode {
 	}
 	
 	@Override
-	public void visit(Visitor v) {
-		v.visitParemetersNode();
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 	
 	
