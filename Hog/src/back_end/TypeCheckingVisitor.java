@@ -79,7 +79,7 @@ public class TypeCheckingVisitor extends Visitor{
 	@Override
 	public void visit(MockNode node){
 		//node specific type checking operations here
-		System.out.println("type checking id node");
+		System.out.println("type checking mock node");
 	}
 	
 	@Override

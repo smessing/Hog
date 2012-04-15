@@ -31,3 +31,4 @@ public class TypedAbstractSyntaxTree extends AbstractSyntaxTree {
 	}
 
 }
+	

@@ -39,6 +39,7 @@ public class ConstantNode extends ExpressionNode {
 	@Override
 	public int visitorTest(Visitor v){
 		v.visit(this);
+		System.out.println("in constant node");
 		return 3;
 	}
 }
