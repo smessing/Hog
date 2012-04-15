@@ -2,6 +2,8 @@ package util.ast.node;
 
 import java.util.ArrayList;
 
+import back_end.Visitor;
+
 import util.type.Types.Type;
 
 /**
@@ -42,4 +44,14 @@ public abstract class UnOpNode extends ExpressionNode {
 		return opType.toString() + "<" + this.getTypeName() + ">";
 	}
 
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
+	
+	@Override
+	public int visitorTest(Visitor v){
+		v.visit(this);
+		return 17;
+	}
 }

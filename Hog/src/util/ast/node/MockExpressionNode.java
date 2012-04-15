@@ -18,5 +18,9 @@ public class MockExpressionNode extends ExpressionNode {
 		// do nothing
 	}
 	
-	
+	@Override
+	public int visitorTest(Visitor v){
+		v.visit(this);
+		return 9;
+	}
 }

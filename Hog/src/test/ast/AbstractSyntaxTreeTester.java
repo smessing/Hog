@@ -12,10 +12,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import back_end.TypeCheckingVisitor;
 import util.ast.AbstractSyntaxTree;
 import util.ast.UntypedAbstractSyntaxTree;
+import util.ast.node.ConstantNode;
+import util.ast.node.IdNode;
 import util.ast.node.MockNode;
 import util.ast.node.Node;
+import util.type.Types.Type;
+
 
 /**
  * 
@@ -32,7 +37,7 @@ public class AbstractSyntaxTreeTester {
 	private Node D;
 	private Node E;
 	private Node F;
-	private Node G;
+	private MockNode G;
 	private AbstractSyntaxTree tree;
 
 	@BeforeClass
@@ -128,6 +133,33 @@ public class AbstractSyntaxTreeTester {
 			index++;
 		}
 
+	}
+	
+
+	/**
+	 * Tests to make sure the correct visit methods are being called 
+	 * by the nodes
+	 */
+	@Test
+	public void typeCheckingVisitorTest() {
+		
+		Iterator<Node> postOrderTraversal = tree.postOrderTraversal();
+		TypeCheckingVisitor v = new TypeCheckingVisitor();
+
+		while (postOrderTraversal.hasNext()) {
+			Node nextNode = postOrderTraversal.next();
+			assertEquals(
+					"It should call the appropriate visit methods for each node",
+					nextNode.visitorTest(v), 10);
+		}
+		
+		ConstantNode n = new ConstantNode(Type.TEXT, "hello");
+		assertEquals(
+				"It should call the appropriate visit methods for each node",
+				n.getValue(), "hello");
+		assertEquals(
+				"It should call the appropriate visit methods for each node",
+				n.visitorTest(v), 3);
 	}
 
 }

@@ -43,5 +43,10 @@ public class IdNode extends ExpressionNode {
 		v.visit(this);
 	}
 	
-
+	@Override
+	public int visitorTest(Visitor v){
+		v.visit(this);
+		System.out.println("here in id node");
+		return 6;
+	}
 }

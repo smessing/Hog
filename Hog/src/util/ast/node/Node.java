@@ -25,6 +25,7 @@ public abstract class Node implements Comparable<Node> {
 	}
 	
 	public abstract void accept(Visitor v);
+	public abstract int visitorTest(Visitor v);
 
 	/**
 	 * Construct a new node with parent as it's parent.

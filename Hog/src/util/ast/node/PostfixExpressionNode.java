@@ -24,4 +24,9 @@ public class PostfixExpressionNode extends UnOpNode {
 		v.visit(this);
 	}
 	
+	@Override
+	public int visitorTest(Visitor v){
+		v.visit(this);
+		return 13;
+	}
 }

@@ -26,4 +26,9 @@ public class LogicalTermNode extends BiOpNode {
 		v.visit(this);
 	}
 
+	@Override
+	public int visitorTest(Visitor v){
+		v.visit(this);
+		return 8;
+	}
 }
