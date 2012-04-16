@@ -21,4 +21,8 @@ public class SelectionStatementNode extends ExpressionNode {
 		this.addChild(ifCondFalse);
 	}
 	
+	public ExpressionNode getCondition() {
+		return condition;
+	}
+	
 }

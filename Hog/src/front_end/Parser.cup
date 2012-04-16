@@ -454,7 +454,8 @@ Constant::=
 SelectionStatement::=
     IF L_PAREN Expression:e R_PAREN Statement:s ElseIfStatement:elif ElseStatement:el
     {:
-      RESULT = new SelectionStatementNode(e, s, el);
+      SelectionStatementNode elseIfAndElse = new SelectionStatementNode(elif.getCondition(), elif, el);
+      RESULT = new SelectionStatementNode(e, s, elseIfAndElse);
     :}
   |
     SWITCH L_PAREN Expression:e R_PAREN Statement:s
