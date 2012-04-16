@@ -50,12 +50,14 @@ terminal FUNCTIONS, MAIN, MAP, REDUCE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
 
 nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Reduce, SectionType;
-nonterminal Main, SelectionStatement, IterationStatement;
-nonterminal LabeledStatement;
+nonterminal Main;
 nonterminal Parameters;
 
 nonterminal StatementNode Statement;
 nonterminal StatementNode ExpressionStatement;
+nonterminal StatementNode IterationStatement;
+nonterminal StatementNode LabeledStatement;
+nonterminal StatementNode SelectionStatement;
 nonterminal StatementNode StatementList;
 nonterminal ElseIfStatementNode ElseIfStatement;
 nonterminal ElseStatementNode ElseStatement;
@@ -126,7 +128,7 @@ Main::=
 StatementList::=
     StatementList:sl ExpressionStatement:es
     {:
-      List<Node> children = new ArrayList();
+      List<Node> children = new ArrayList<Node>();
       children.add(sl);
       children.add(es);
       RESULT = new StatementNode(children);
@@ -134,7 +136,7 @@ StatementList::=
   |
     StatementList:sl SelectionStatement:ss
     {:
-      List<Node> children = new ArrayList();
+      List<Node> children = new ArrayList<Node>();
       children.add(sl);
       children.add(ss);
       RESULT = new StatementNode(children);
@@ -142,13 +144,19 @@ StatementList::=
   |
     StatementList:sl IterationStatement:is
     {:
-      List<Node> children = new ArrayList();
+      List<Node> children = new ArrayList<Node>();
       children.add(sl);
       children.add(is);
       RESULT = new StatementNode(children);
     :}
   |
-    StatementList LabeledStatement
+    StatementList:sl LabeledStatement:ls
+    {:
+      List<Node> children = new ArrayList<Node>();
+      children.add(sl);
+      children.add(ls);
+      RESULT = new StatementNode(children);
+    :}
   |
     /* epsilon */
   |
@@ -156,7 +164,10 @@ StatementList::=
   |
     CONTINUE
   |
-    RETURN Expression
+    RETURN Expression:e
+    {:
+      RESULT = new UnOpNode(UnOpNode.OpType.RETURN, e);
+    :}
   ;
  
 ExpressionStatement::=
