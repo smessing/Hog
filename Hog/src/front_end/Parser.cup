@@ -124,7 +124,10 @@ Reduce::=
   ;
 
 SectionType::=
-    L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN
+    L_PAREN Type:t1 ID COMMA Type:t2 ID R_PAREN ARROW L_PAREN Type:t3 COMMA Type:t4 R_PAREN
+    {:
+      RESULT = new SectionTypeNode(t1, t2, t3, t4);
+    :}
   ;
 
 Main::=
