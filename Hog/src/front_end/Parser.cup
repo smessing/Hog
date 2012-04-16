@@ -48,9 +48,14 @@ terminal BREAK, DEFAULT;
 terminal AND, OR, NOT;
 terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
+terminal L_ANGLE, R_ANGLE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
+terminal LIST, ITER, DICT, MULTISET, SET;
 
 nonterminal JumpStatement;
+nonterminal ArgumentExpressionList;
+nonterminal ArgumentExpression;
+nonterminal DerivedType;
 
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
@@ -393,6 +398,12 @@ PostfixExpression::=
       RESULT = p;
     :}
   |
+    PostfixExpression L_BRKT Expression R_BRKT
+  |
+    PostfixExpression DOT ID
+  |
+    PostfixExpression L_PAREN  ArgumentExpressionList R_PAREN
+  |
     PostfixExpression:p INCR
     {:
       RESULT = new UnOpNode(UnOpNode.OpType.INCR, p);
@@ -403,6 +414,12 @@ PostfixExpression::=
       RESULT = new UnOpNode(UnOpNode.OpType.DECR, p);
     :}
   ;
+
+ArgumentExpressionList::=
+    AssignmentExpression
+  |
+    ArgumentExpressionList COMMA AssignmentExpression
+  :
 
 PrimaryExpression::=
     ID:i
@@ -420,18 +437,6 @@ PrimaryExpression::=
     L_PAREN Expression:e R_PAREN
     {:
       RESULT = e;
-    :}
-  ;
-
-Parameters::=
-    ID:i
-    {:
-      RESULT = new ParametersNode(Types.Type.UNKNOWN, i);
-    :}
-  | 
-    ID:i COMMA Parameters:p
-    {:
-      RESULT = new ParametersNode(Types.Type.UNKNOWN, i, p);
     :}
   ;
 
@@ -497,7 +502,7 @@ IterationStatement::=
   ;
  
 LabeledStatement::=
-    CASE:c COL Statement:s
+    CASE ConditionalExpression COL Statement:s
   |
     DEFAULT:d COL Statement:s 
   ;
@@ -527,4 +532,20 @@ Type::=
     {:
       RESULT = Types.Type.REAL;
     :}
+  |
+    DerivedType
+  ;
+
+DerivedType::=
+    DerivedType L_ANGLE Type R_ANGLE;
+  |
+    LIST
+  |
+    ITER
+  |
+    DICT
+  |
+    MULTISET
+  |
+    SET
   ;
