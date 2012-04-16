@@ -3,7 +3,7 @@ package util.ast.node;
 import java.util.HashSet;
 import java.util.Set;
 
-import util.ast.node.BiOpNode.OpType;
+import back_end.Visitor;
 
 public class ReturnExpressionNode extends UnOpNode {
 
@@ -26,5 +26,21 @@ public class ReturnExpressionNode extends UnOpNode {
 					"AdditiveExpressionNode initialized with unacceptable OpType: "
 							+ type.toString());
 	}
+	
+	@Override 
+	public String getName() {
+		return "ReturnExpressionNode<" + this.getType() + ">";
+	}
+	
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
+	
+	@Override
+	public int visitorTest(Visitor v) {
+		return 0;
+	}
+	
 
 }
