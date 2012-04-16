@@ -132,9 +132,21 @@ StatementList::=
       RESULT = new StatementNode(children);
     :}
   |
-    StatementList SelectionStatement
+    StatementList:sl SelectionStatement:ss
+    {:
+      List<Node> children = new ArrayList();
+      children.add(sl);
+      children.add(ss);
+      RESULT = new StatementNode(children);
+    :}
   |
-    StatementList IterationStatement
+    StatementList:sl IterationStatement:is
+    {:
+      List<Node> children = new ArrayList();
+      children.add(sl);
+      children.add(is);
+      RESULT = new StatementNode(children);
+    :}
   |
     StatementList LabeledStatement
   |

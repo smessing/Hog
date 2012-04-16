@@ -1479,10 +1479,10 @@ class CUP$Parser$actions {
 		int esright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		StatementNode es = (StatementNode)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-      List<Node> children = Arrays.asList(sl, es);
+      List<Node> children = new ArrayList<Node>();
       children.add(sl);
       children.add(es);
-      RESULT = new StatementNode(Arrays.asList(sl, es));
+      RESULT = new StatementNode(children);
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("StatementList",15, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

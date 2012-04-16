@@ -6,7 +6,7 @@ import back_end.Visitor;
 
 public class StatementNode extends Node {
 
-	public StatementNode(List<? extends Node> children) {
+	public StatementNode(List<Node> children) {
 		super(children);
 	}
 	

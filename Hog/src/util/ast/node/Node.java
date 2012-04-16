@@ -15,7 +15,7 @@ public abstract class Node implements Comparable<Node> {
 
 	protected Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
-	protected List<? extends Node> children;
+	protected List<Node> children;
 
 	/**
 	 * Construct a new node.
@@ -33,7 +33,7 @@ public abstract class Node implements Comparable<Node> {
 	 * @param parent
 	 *            the node that will become the parent of this node.
 	 */
-	public Node(List<? extends Node> children) {
+	public Node(List<Node> children) {
 		this.parent = null;
 		this.children = children;
 	}
@@ -43,7 +43,7 @@ public abstract class Node implements Comparable<Node> {
 	 * 
 	 * @return a list of all children of this node.
 	 */
-	public List<? extends Node> getChildren() {
+	public List<Node> getChildren() {
 		return children;
 	}
 
