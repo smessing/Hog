@@ -49,12 +49,15 @@ terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
 
-nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Reduce, SectionType;
-nonterminal Main;
-nonterminal Parameters;
-
+nonterminal Node Program;
+nonterminal SectionNode Functions;
+nonterminal SectionNode Main;
+nonterminal SectionNode Map;
+nonterminal SectionNode Reduce;
+nonterminal SectionTypeNode SectionType;
 nonterminal StatementNode Statement;
 nonterminal StatementNode ExpressionStatement;
+nonterminal StatementNode FunctionList;
 nonterminal StatementNode IterationStatement;
 nonterminal StatementNode LabeledStatement;
 nonterminal StatementNode SelectionStatement;
@@ -73,6 +76,9 @@ nonterminal ExpressionNode UnaryExpression;
 nonterminal ExpressionNode PostfixExpression;
 nonterminal ExpressionNode PrimaryExpression;
 nonterminal ExpressionNode Constant;
+nonterminal FunctionNode Function;
+nonterminal ParameterNode ParameterList;
+nonterminal ParameterNode Parameters;
 nonterminal Types.Type Type;
 nonterminal UnOpNode.OpType UnaryOperator;
 
