@@ -50,6 +50,8 @@ terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
 
+nonterminal JumpStatement;
+
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
 nonterminal SectionNode Main;
@@ -127,7 +129,7 @@ Function::=
   ;
 
 ParameterList::=
-    Type:t ID:i COMMA ParameterList:pl
+    ParameterList:pl COMMA Type:t ID:i
     {:
       RESULT = new ParametersNode(t, i, pl);
     :}
@@ -169,48 +171,51 @@ Main::=
   ;
 
 StatementList::=
-    StatementList:sl ExpressionStatement:es
+    Statement
+  |
+    StatementList Statement
+  :
+
+Statement::=
+    ExpressionStatement:es
     {:
       List<Node> children = new ArrayList<Node>();
-      children.add(sl);
       children.add(es);
       RESULT = new StatementNode(children);
     :}
   |
-    StatementList:sl SelectionStatement:ss
+   SelectionStatement:ss
     {:
       List<Node> children = new ArrayList<Node>();
-      children.add(sl);
       children.add(ss);
       RESULT = new StatementNode(children);
     :}
   |
-    StatementList:sl IterationStatement:is
+    IterationStatement:is
     {:
       List<Node> children = new ArrayList<Node>();
-      children.add(sl);
       children.add(is);
       RESULT = new StatementNode(children);
     :}
   |
-    StatementList:sl LabeledStatement:ls
+    LabeledStatement:ls
     {:
       List<Node> children = new ArrayList<Node>();
-      children.add(sl);
       children.add(ls);
       RESULT = new StatementNode(children);
     :}
   |
-    /* epsilon */
+    JumpStatement
+  ;
+ 
+JumpStatement::=
+    CONTINUE NEWLINE
   |
-    BREAK
+    BREAK NEWLINE
   |
-    CONTINUE
+    RETURN Expression
   |
-    RETURN Expression:e
-    {:
-      RESULT = new UnOpNode(UnOpNode.OpType.RETURN, e);
-    :}
+    RETURN NEWLINE
   ;
  
 ExpressionStatement::=
@@ -475,7 +480,7 @@ ElseIfStatement::=
   ;
 
 ElseStatement::=
-    ELSE Statement:s
+    ELSE StatementList:s
     {:
       RESULT = new SelectionStatementNode(null, s, null);
     :}
@@ -484,7 +489,7 @@ ElseStatement::=
   ;
 
 IterationStatement::=
-    WHILE L_PAREN Expression R_PAREN Statement
+    WHILE L_PAREN Expression R_PAREN Statement:s
   |
     FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement
   |
