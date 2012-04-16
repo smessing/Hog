@@ -20,7 +20,7 @@ import util.type.Types;
  * @author sam
  * 
  */
-public abstract class BiOpNode extends ExpressionNode {
+public class BiOpNode extends ExpressionNode {
 
 	public static enum OpType {
 		ASSIGN, MINUS, PLUS, DIVIDE, TIMES, MOD, LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, OR, AND

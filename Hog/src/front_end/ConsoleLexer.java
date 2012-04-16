@@ -5,12 +5,10 @@ import java.io.IOException;
 import util.ast.AbstractSyntaxTree;
 import util.ast.UntypedAbstractSyntaxTree;
 import util.ast.node.BiOpNode;
-import util.ast.node.CastExpressionNode;
 import util.ast.node.ExpressionNode;
 import util.ast.node.IdNode;
 import util.ast.node.MockExpressionNode;
 import util.ast.node.MockNode;
-import util.ast.node.MultiplicativeExpressionNode;
 import util.ast.node.Node;
 import util.type.Types;
 
