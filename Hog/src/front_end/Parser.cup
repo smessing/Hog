@@ -54,8 +54,9 @@ nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, Iterat
 nonterminal LabeledStatement;
 nonterminal Parameters;
 
-nonterminal Statement, ElseIfStatement, ElseStatement;
-
+nonterminal StatementNode Statement;
+nonterminal ElseIfStatementNode ElseIfStatement;
+nonterminal ElseStatment ElseStatement;
 nonterminal ExpressionNode EqualityExpression;
 nonterminal ExpressionNode LogicalExpression;
 nonterminal ExpressionNode LogicalTerm;
@@ -140,8 +141,15 @@ StatementList::=
  
 ExpressionStatement::=
     NEWLINE
+    {:
+      /* TODO is this correct? */
+      RESULT = null;  
+    :}
   |
-    Expression NEWLINE
+    Expression:e NEWLINE
+    {:
+      RESULT = e;
+    :}
   ;
 
 Expression::=
