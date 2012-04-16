@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import java.util.ArrayList;
+
 import back_end.Visitor;
 
 import util.type.Types.Type;
@@ -19,7 +21,7 @@ public class IdNode extends ExpressionNode {
 	}
 
 	public IdNode(String id, Type type) {
-		super(null, type);
+		super(new ArrayList<Node>(), type);
 		this.setIdentifier(id);
 		this.type = type;
 	}
