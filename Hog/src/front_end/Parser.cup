@@ -62,8 +62,8 @@ nonterminal StatementNode IterationStatement;
 nonterminal StatementNode LabeledStatement;
 nonterminal StatementNode SelectionStatement;
 nonterminal StatementNode StatementList;
-nonterminal ElseIfStatementNode ElseIfStatement;
-nonterminal ElseStatementNode ElseStatement;
+nonterminal SelectionStatementNode ElseIfStatement;
+nonterminal SelectionStatementNode ElseStatement;
 nonterminal ExpressionNode EqualityExpression;
 nonterminal ExpressionNode LogicalExpression;
 nonterminal ExpressionNode LogicalTerm;
@@ -454,7 +454,7 @@ Constant::=
 SelectionStatement::=
     IF L_PAREN Expression:e R_PAREN Statement:s ElseIfStatement:elif ElseStatement:el
     {:
-      RESULT = new SelectionStatementNode();
+      RESULT = new SelectionStatementNode(e, s, el);
     :}
   |
     SWITCH L_PAREN Expression:e R_PAREN Statement:s
@@ -475,7 +475,7 @@ ElseIfStatement::=
 ElseStatement::=
     ELSE Statement:s
     {:
-      RESULT = new SelectionStatementNode(null, e, null);
+      RESULT = new SelectionStatementNode(null, s, null);
     :}
   |
     /* epsilon */
