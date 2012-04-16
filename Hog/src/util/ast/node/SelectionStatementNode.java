@@ -1,14 +1,17 @@
 package util.ast.node;
 
+import java.util.ArrayList;
+
 import util.type.Types;
 
-public class SelectionStatementNode extends ExpressionNode {
+public class SelectionStatementNode extends StatementNode {
 
 	protected StatementNode ifCondTrue;
 	protected StatementNode ifCondFalse;
 	protected ExpressionNode condition;
 	
 	public SelectionStatementNode(ExpressionNode condition, StatementNode ifCondTrue, StatementNode ifCondFalse) {
+		super(new ArrayList<Node>());
 		this.ifCondTrue = ifCondTrue;
 		this.ifCondFalse = ifCondFalse;
 		if (condition == null) {
