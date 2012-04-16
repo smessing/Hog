@@ -145,9 +145,15 @@ ExpressionStatement::=
   ;
 
 Expression::=
-    LogicalExpression
+    LogicalExpression:le
+    {:
+      RESULT = le;
+    :}
   |
-    UnaryExpression ASSIGN Expression
+    UnaryExpression:ue ASSIGN Expression:e
+    {:
+      RESULT = new AssignmentExpressionNode(BiOpNode.OpType.ASSIGN, ue, e);
+    :}
   ;
 
 LogicalExpression::=
