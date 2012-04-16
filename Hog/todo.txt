@@ -21,7 +21,11 @@ SelectionStatementNodes [has: ExpressionNode, StatementNodes]:
   - IfStatementNode
   - ElseIfStatementNode
   - ElseStatementNode (if clause is trivially true)
+
+IterationStatementNode [has: ExpressionNode, StatementNode]
   - WhileStatementNode
+  - ForStatementNode
+  - ForEachStatementNode   
 
 FunctionNode [has: Parameters]
 

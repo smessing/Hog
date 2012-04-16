@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import util.type.Types;
+
 public class SelectionStatementNode extends ExpressionNode {
 
 	protected StatementNode ifCondTrue;
@@ -9,6 +11,10 @@ public class SelectionStatementNode extends ExpressionNode {
 	public SelectionStatementNode(ExpressionNode condition, StatementNode ifCondTrue, StatementNode ifCondFalse) {
 		this.ifCondTrue = ifCondTrue;
 		this.ifCondFalse = ifCondFalse;
+		if (condition == null) {
+			// if condition was null, we make it trivially true:
+			condition = new ConstantNode(Types.Type.BOOL, "true");
+		}
 		this.condition = condition;
 		this.addChild(condition);
 		this.addChild(ifCondTrue);

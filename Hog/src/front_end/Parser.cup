@@ -452,19 +452,31 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement
+    IF L_PAREN Expression:e R_PAREN Statement:s ElseIfStatement:elif ElseStatement:el
+    {:
+      RESULT = new SelectionStatementNode();
+    :}
   |
-    SWITCH L_PAREN Expression R_PAREN Statement
+    SWITCH L_PAREN Expression:e R_PAREN Statement:s
+    {:
+      
+    :}
   ;
 
 ElseIfStatement::=
-    ELSEIF L_PAREN Expression R_PAREN ElseIfStatement
+    ELSEIF L_PAREN Expression:e R_PAREN ElseIfStatement:elif
+    {:
+      RESULT = new SelectionStatementNode(e, elif, null);
+    :}
   |
     /* epsilon */
   ;
 
 ElseStatement::=
-    ELSE Statement
+    ELSE Statement:s
+    {:
+      RESULT = new SelectionStatementNode(null, e, null);
+    :}
   |
     /* epsilon */
   ;
