@@ -7,7 +7,7 @@ public class FunctionNode extends ExpressionNode {
 
 	protected ParametersNode parameters;
 	
-	public FunctionNode(Types.Type type, ParametersNode parameters, SectionNode instructions) {
+	public FunctionNode(Types.Type type, ParametersNode parameters, StatementNode instructions) {
 		super(type);
 		this.parameters = parameters;
 		this.addChild(instructions);

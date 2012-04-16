@@ -13,12 +13,12 @@ public class ParametersNode extends ExpressionNode {
 	
 	protected String identifier;
 	
-	public ParametersNode(String identifier, Types.Type type) {
+	public ParametersNode(Types.Type type, String identifier) {
 		super(type);
 		this.identifier = identifier;
 	}
 	
-	public ParametersNode(String identifier, Types.Type type, ParametersNode child) {
+	public ParametersNode(Types.Type type, String identifier, ParametersNode child) {
 		super(type);
 		this.addChild(child);
 		this.identifier = identifier;
