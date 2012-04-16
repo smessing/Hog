@@ -56,7 +56,7 @@ nonterminal Parameters;
 
 nonterminal StatementNode Statement;
 nonterminal ElseIfStatementNode ElseIfStatement;
-nonterminal ElseStatment ElseStatement;
+nonterminal ElseStatementNode ElseStatement;
 nonterminal ExpressionNode EqualityExpression;
 nonterminal ExpressionNode LogicalExpression;
 nonterminal ExpressionNode LogicalTerm;
