@@ -95,7 +95,10 @@ Program::=
   ;
 
 Functions::=
-    FUNCTIONS L_BRACE FunctionList R_BRACE
+    FUNCTIONS L_BRACE FunctionList:fl R_BRACE
+    {:
+      RESULT = new SectionNode(fl);
+    :}
   |
     /* epsilon */
   ; 
@@ -125,7 +128,10 @@ Function::=
 ParameterList::=
     Type ID COMMA ParameterList
   |
-    Type ID
+    Type:t ID:i
+    {:
+      RESULT = new ParametersNode(t, i);
+    :}
   |
     /* epsilon */
   ;
