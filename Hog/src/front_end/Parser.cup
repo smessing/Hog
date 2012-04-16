@@ -208,7 +208,7 @@ StatementList::=
   |
     RETURN Expression:e
     {:
-      RESULT = new ReturnExpressionNode(e, UnOpNode.OpType.RETURN);
+      RESULT = new UnOpNode(UnOpNode.OpType.RETURN, e);
     :}
   ;
  
@@ -352,14 +352,14 @@ CastExpression::=
   |
     L_PAREN Type:t R_PAREN CastExpression:c
     {:
-      RESULT = new CastExpressionNode(c, t);
+      RESULT = new UnOpNode(UnOpNode.OpType.CAST, c, t);
     :}
   ;
 
 UnaryExpression::=
     UnaryOperator:u CastExpression:c
     {:
-      RESULT = new UnaryExpressionNode(c, u);
+      RESULT = new UnOpNode(u, c);
     :}
   |
     PostfixExpression:p
@@ -389,12 +389,12 @@ PostfixExpression::=
   |
     PostfixExpression:p INCR
     {:
-      RESULT = new PostfixExpressionNode(p, UnOpNode.OpType.INCR);
+      RESULT = new UnOpNode(UnOpNode.OpType.INCR, p);
     :}
   |
     PostfixExpression:p DECR
     {:
-      RESULT = new PostfixExpressionNode(p, UnOpNode.OpType.DECR);
+      RESULT = new UnOpNode(UnOpNode.OpType.DECR, p);
     :}
   ;
 
