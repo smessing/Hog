@@ -33,6 +33,7 @@ ExpressionNode [has: Type, String value]:
   - FunctionNode
   - ParametersNode
   - PrimaryExpressionNode
+  - SelectionStatementNode
 
 Node:
   - SectionNode
