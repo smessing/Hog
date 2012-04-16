@@ -34,7 +34,7 @@ scan with
 terminal DECR, INCR, RETURN, CONTINUE;
 terminal TIMES, DIVIDE, MOD;
 terminal LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, ASSIGN;
-terminal TEXT, BOOL, INT, REAL, LIST, VOID;
+terminal TEXT, BOOL, INT, REAL, VOID;
 terminal MINUS, UMINUS, PLUS;
 terminal ARROW, DOT;
 terminal String CHAR;
@@ -54,7 +54,6 @@ terminal LIST, ITER, DICT, MULTISET, SET;
 
 nonterminal JumpStatement;
 nonterminal ArgumentExpressionList;
-nonterminal ArgumentExpression;
 nonterminal DerivedType;
 
 nonterminal ProgramNode Program;
@@ -86,7 +85,6 @@ nonterminal ExpressionNode PrimaryExpression;
 nonterminal ExpressionNode Constant;
 nonterminal FunctionNode Function;
 nonterminal ParametersNode ParameterList;
-nonterminal ParametersNode Parameters;
 nonterminal Types.Type Type;
 nonterminal UnOpNode.OpType UnaryOperator;
 
@@ -179,7 +177,7 @@ StatementList::=
     Statement
   |
     StatementList Statement
-  :
+  ;
 
 Statement::=
     ExpressionStatement:es
@@ -219,8 +217,6 @@ JumpStatement::=
     BREAK NEWLINE
   |
     RETURN Expression
-  |
-    RETURN NEWLINE
   ;
  
 ExpressionStatement::=
@@ -402,7 +398,9 @@ PostfixExpression::=
   |
     PostfixExpression DOT ID
   |
-    PostfixExpression L_PAREN  ArgumentExpressionList R_PAREN
+    PostfixExpression L_ANGLE R_ANGLE
+  |
+    PostfixExpression L_ANGLE ArgumentExpressionList R_ANGLE
   |
     PostfixExpression:p INCR
     {:
@@ -416,18 +414,16 @@ PostfixExpression::=
   ;
 
 ArgumentExpressionList::=
-    AssignmentExpression
+    Expression
   |
-    ArgumentExpressionList COMMA AssignmentExpression
-  :
+    ArgumentExpressionList COMMA Expression
+  ;
 
 PrimaryExpression::=
     ID:i
     {:
       RESULT = new IdNode(i);
     :}
-  |
-    ID DOT ID L_PAREN Parameters R_PAREN
   |
     Constant:c
     {:
@@ -485,7 +481,7 @@ ElseIfStatement::=
   ;
 
 ElseStatement::=
-    ELSE StatementList:s
+    ELSE Statement:s
     {:
       RESULT = new SelectionStatementNode(null, s, null);
     :}
@@ -502,7 +498,7 @@ IterationStatement::=
   ;
  
 LabeledStatement::=
-    CASE ConditionalExpression COL Statement:s
+    CASE LogicalExpression COL Statement:s
   |
     DEFAULT:d COL Statement:s 
   ;
@@ -537,7 +533,7 @@ Type::=
   ;
 
 DerivedType::=
-    DerivedType L_ANGLE Type R_ANGLE;
+    DerivedType L_ANGLE Type R_ANGLE
   |
     LIST
   |
