@@ -252,7 +252,7 @@ LogicalExpression::=
 LogicalTerm::=
     LogicalTerm:l AND EqualityExpression:e
     {:
-      RESULT = new BiOpNode(BiOpNode.OpType.AND, le, lt);
+      RESULT = new BiOpNode(BiOpNode.OpType.AND, l, e);
     :}
   |
     EqualityExpression:e
@@ -291,7 +291,7 @@ RelationalExpression::=
   |
     RelationalExpression:r GRTR AdditiveExpression:a
     {:
-      RESULT = new BiOpNode(BiOpNode.OpType.GRTR, r a);
+      RESULT = new BiOpNode(BiOpNode.OpType.GRTR, r, a);
     :}
   |
     RelationalExpression:r LESS_EQL AdditiveExpression:a
