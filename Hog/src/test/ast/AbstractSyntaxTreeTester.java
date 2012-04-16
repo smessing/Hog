@@ -15,9 +15,14 @@ import org.junit.Test;
 import back_end.TypeCheckingVisitor;
 import util.ast.AbstractSyntaxTree;
 import util.ast.UntypedAbstractSyntaxTree;
+import util.ast.node.AdditiveExpressionNode;
+import util.ast.node.BiOpNode;
 import util.ast.node.ConstantNode;
+import util.ast.node.ExpressionNode;
 import util.ast.node.IdNode;
+import util.ast.node.MockExpressionNode;
 import util.ast.node.MockNode;
+import util.ast.node.MultiplicativeExpressionNode;
 import util.ast.node.Node;
 import util.type.Types.Type;
 
@@ -31,13 +36,13 @@ import util.type.Types.Type;
  */
 public class AbstractSyntaxTreeTester {
 
-	private Node A;
-	private Node B;
-	private Node C;
-	private Node D;
-	private Node E;
-	private Node F;
-	private MockNode G;
+	private ExpressionNode A;
+	private ExpressionNode B;
+	private ExpressionNode C;
+	private ExpressionNode D;
+	private ExpressionNode E;
+	private ExpressionNode F;
+	private ExpressionNode G;
 	private AbstractSyntaxTree tree;
 
 	@BeforeClass
@@ -50,22 +55,22 @@ public class AbstractSyntaxTreeTester {
 
 	@Before
 	public void setUp() {
-		A = new MockNode();
-		B = new MockNode();
-		C = new MockNode();
-		D = new MockNode();
-		E = new MockNode();
-		F = new MockNode();
-		G = new MockNode();
+		D = new MockExpressionNode();
+		E = new MockExpressionNode();
+		F = new MockExpressionNode();
+		G = new MockExpressionNode();
+		B = new AdditiveExpressionNode(BiOpNode.OpType.PLUS, D, E);
+		C = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, F, G);
+		A = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, B, C);
 		// A is root of tree, with children B, C
 		// B has children D, E
 		// C has children F, G
-		A.addChild(B);
+		/*A.addChild(B);
 		A.addChild(C);
 		B.addChild(D);
 		B.addChild(E);
 		C.addChild(F);
-		C.addChild(G);
+		C.addChild(G);*/
 		tree = new UntypedAbstractSyntaxTree(A);
 	}
 
