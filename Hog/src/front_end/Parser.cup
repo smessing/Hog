@@ -166,7 +166,7 @@ StatementList::=
   |
     RETURN Expression:e
     {:
-      RESULT = new UnOpNode(UnOpNode.OpType.RETURN, e);
+      RESULT = new ReturnExpressionNode(e, UnOpNode.OpType.RETURN);
     :}
   ;
  
