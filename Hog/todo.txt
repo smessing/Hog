@@ -1,0 +1,43 @@
+BiOpNodes [has: OpType, ExpressionNode(2)]:
+  - MultiplicativeExpressionNode
+  - AdditiveExpressionNode
+  - LogicalTermNode
+  - LogicalExpressionNode
+  - EqualityExpressionNode
+  - AssignmentExpressionNode
+
+UnOpNodes [has: OpType, ExpressionNode]:
+  - CastExpressionNode
+  - ReturnExpressionNode
+  - UnaryExpressionNode
+  - PostfixExpressionNode
+
+SectionNodes [has: SectionTypeNode, StatementNodes]:
+
+StatementNodes [has: StatementNodes]:
+  - ExpressionNode
+
+SelectionStatementNodes [has: ExpressionNode, StatementNodes]:
+  - IfStatementNode
+  - ElseIfStatementNode
+  - ElseStatementNode (if clause is trivially true)
+  - WhileStatementNode
+
+FunctionNode [has: Parameters]
+
+ExpressionNode [has: Type, String value]:
+  - IdNode
+  - BiOpNode
+  - UnOpNode
+  - ConstantNode
+  - FunctionNode
+  - ParametersNode
+  - PrimaryExpressionNode
+
+Node:
+  - SectionNode
+  - StatementNode
+  - SectionTypeNode
+  - ProgramNode
+
+NOTE: need to think about emit
