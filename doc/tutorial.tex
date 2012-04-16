@@ -37,6 +37,8 @@ For a programmer new to the idea of distributed computation, MapReduce may appea
 \item Having identified the parallelizable component, check for hidden dependencies between the subproblems by analyzing whether reassembling the smaller components in different ways may produce different answers. If this happens, the reduce phase can not properly be completed.
 \end{enumerate}
 
+Once the map (breaking up the problem into chunks) and the reduce (recombining the solutions of the subproblems) phases have been clearly understood, one is ready to write a Hog program.
+
 \subsection*{Program Structure} % (fold)
 \label{sub:program_structure}
 Every Hog program has four sections, defined in the following order:
