@@ -77,8 +77,8 @@ nonterminal ExpressionNode PostfixExpression;
 nonterminal ExpressionNode PrimaryExpression;
 nonterminal ExpressionNode Constant;
 nonterminal FunctionNode Function;
-nonterminal ParameterNode ParameterList;
-nonterminal ParameterNode Parameters;
+nonterminal ParametersNode ParameterList;
+nonterminal ParametersNode Parameters;
 nonterminal Types.Type Type;
 nonterminal UnOpNode.OpType UnaryOperator;
 
