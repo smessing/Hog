@@ -18,6 +18,12 @@ public class ParametersNode extends ExpressionNode {
 		this.identifier = identifier;
 	}
 	
+	public ParametersNode(String identifier, Types.Type type, ParametersNode child) {
+		super(type);
+		this.addChild(child);
+		this.identifier = identifier;
+	}
+	
 	@Override
 	public String getName() {
 		return "ParemetersNode<" + this.getTypeName() + ">";

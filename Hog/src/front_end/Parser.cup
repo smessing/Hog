@@ -126,7 +126,10 @@ Function::=
   ;
 
 ParameterList::=
-    Type ID COMMA ParameterList
+    Type:t ID:i COMMA ParameterList:pl
+    {:
+      RESULT = new ParametersNode(t, i, pl);
+    :}
   |
     Type:t ID:i
     {:
