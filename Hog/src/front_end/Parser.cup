@@ -43,7 +43,8 @@ terminal String ID;
 terminal String INT_CONST;
 terminal String REAL_CONST;
 terminal String BOOL_CONST;
-terminal BREAK, CASE, DEFAULT;
+terminal String CASE;
+terminal BREAK, DEFAULT;
 terminal AND, OR, NOT;
 terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
@@ -491,9 +492,9 @@ IterationStatement::=
   ;
  
 LabeledStatement::=
-    CASE COL Statement
+    CASE:c COL Statement:s
   |
-    DEFAULT COL Statement 
+    DEFAULT:d COL Statement:s 
   ;
 
 Type::=
