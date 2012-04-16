@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import back_end.Visitor;
 
+import util.type.Types;
 import util.type.Types.Type;
 
 /**
@@ -20,6 +21,10 @@ public class UnOpNode extends ExpressionNode {
 	}
 	
 	protected OpType opType;
+	
+	public UnOpNode(OpType opType, ExpressionNode child) {
+		this(opType, child, Type.UNKNOWN);
+	}
 	
 	public UnOpNode(OpType opType, ExpressionNode child, Type type) {
 		super(type);
