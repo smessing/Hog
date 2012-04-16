@@ -418,9 +418,15 @@ PrimaryExpression::=
   ;
 
 Parameters::=
-    ID
+    ID:i
+    {:
+      RESULT = new ParametersNode(Types.Type.UNKNOWN, i);
+    :}
   | 
-    ID COMMA Parameters
+    ID:i COMMA Parameters:p
+    {:
+      RESULT = new ParametersNode(Types.Type.UNKNOWN, i, p);
+    :}
   ;
 
 Constant::=
