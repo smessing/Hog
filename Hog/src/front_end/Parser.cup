@@ -90,6 +90,9 @@ nonterminal UnOpNode.OpType UnaryOperator;
 
 precedence left MINUS, PLUS;
 precedence right UMINUS;
+precedence right ELSE;
+precedence right ELSEIF;
+precedence right L_PAREN;
 
 start with Program;
 
@@ -398,9 +401,9 @@ PostfixExpression::=
   |
     PostfixExpression DOT ID
   |
-    PostfixExpression L_ANGLE R_ANGLE
+    PostfixExpression L_PAREN R_PAREN
   |
-    PostfixExpression L_ANGLE ArgumentExpressionList R_ANGLE
+    PostfixExpression L_PAREN ArgumentExpressionList R_PAREN
   |
     PostfixExpression:p INCR
     {:
