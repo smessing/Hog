@@ -50,11 +50,13 @@ terminal FUNCTIONS, MAIN, MAP, REDUCE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
 
 nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Reduce, SectionType;
-nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, IterationStatement;
+nonterminal Main, SelectionStatement, IterationStatement;
 nonterminal LabeledStatement;
 nonterminal Parameters;
 
 nonterminal StatementNode Statement;
+nonterminal StatementNode ExpressionStatement;
+nonterminal StatementNode StatementList;
 nonterminal ElseIfStatementNode ElseIfStatement;
 nonterminal ElseStatementNode ElseStatement;
 nonterminal ExpressionNode EqualityExpression;
@@ -122,7 +124,13 @@ Main::=
   ;
 
 StatementList::=
-    StatementList ExpressionStatement
+    StatementList:sl ExpressionStatement:es
+    {:
+      List<Node> children = new ArrayList();
+      children.add(sl);
+      children.add(es);
+      RESULT = new StatementNode(children);
+    :}
   |
     StatementList SelectionStatement
   |
