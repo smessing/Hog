@@ -40,4 +40,4 @@ Node:
   - SectionTypeNode
   - ProgramNode
 
-NOTE: need to think about emi
+NOTE: need to think about emit
