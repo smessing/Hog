@@ -104,7 +104,10 @@ FunctionList::=
   ;
 
 Function::=
-    Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE
+    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new FunctionNode(pl, sl); 
+    :}
   ;
 
 ParameterList::=
@@ -116,13 +119,16 @@ ParameterList::=
   ;
 
 Map::=
-    MAP SectionType L_BRACE StatementList R_BRACE
+    MAP SectionType:st L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new SectionNode(st, sl);
+    :}
   ;
 
 Reduce::=
     REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
-      
+      RESULT = new SectionNode(st, sl);
     :}
   ;
 
