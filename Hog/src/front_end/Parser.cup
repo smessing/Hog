@@ -161,7 +161,10 @@ SectionType::=
   ;
 
 Main::=
-    MAIN L_BRACE StatementList R_BRACE
+    MAIN L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new SectionNode(sl);
+    :}
   ;
 
 StatementList::=
