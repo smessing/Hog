@@ -110,7 +110,7 @@ Program::=
   ;
 
 Functions::=
-    FUNCTIONS L_BRACE NEWLINE FunctionList:fl R_BRACE NEWLINE
+    FUNCTIONS L_BRACE NEWLINE FunctionList:fl R_BRACE
     {:
      // RESULT = new SectionNode(fl);
      System.out.println("Functions -> FUNCTIONS L_BRACE FunctionList R_BRACE");
@@ -137,7 +137,7 @@ FunctionList::=
   ;
 
 Function::=
-    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE NEWLINE StatementList:sl R_BRACE NEWLINE
+    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE NEWLINE StatementList:sl R_BRACE
     {:
       // RESULT = new FunctionNode(t, pl, sl); 
       System.out.println("Function -> Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE");
@@ -556,7 +556,7 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF L_PAREN Expression:e R_PAREN L_BRACE Statement:s R_BRACE ElseIfStatement:elif ElseStatement:el
+    IF L_PAREN Expression:e R_PAREN L_BRACE StatementList R_BRACE ElseIfStatement:elif ElseStatement:el
     {:
       // SelectionStatementNode elseIfAndElse = new SelectionStatementNode(elif.getCondition(), elif, el);
       // RESULT = new SelectionStatementNode(e, s, elseIfAndElse);
@@ -570,7 +570,7 @@ SelectionStatement::=
   ;
 
 ElseIfStatement::=
-    ELSEIF L_PAREN Expression:e R_PAREN L_BRACE Statement:s R_BRACE ElseIfStatement:elif 
+    ELSEIF L_PAREN Expression:e R_PAREN L_BRACE StatementList NEWLINE ElseIfStatement:elif R_BRACE
     {:
       // RESULT = new SelectionStatementNode(e, elif, null);
       System.out.println("ElseIfStatement -> ELSEIF L_PAREN Expression R_PAREN ElseIfStatement");
@@ -583,7 +583,7 @@ ElseIfStatement::=
   ;
 
 ElseStatement::=
-    ELSE L_BRACE Statement:s R_BRACE
+    ELSE L_BRACE NEWLINE StatementList R_BRACE NEWLINE
     {:
       // RESULT = new SelectionStatementNode(null, s, null);
     :}
