@@ -12,7 +12,7 @@ action code
 
 parser code
   {:
-    private Lexer lexer;
+    Lexer lexer;
     private File file;
     public Parser( File file ) {
       this();
@@ -23,6 +23,11 @@ parser code
       catch ( IOException exception ) {
         throw new Error( "Unable to open file \"" + file + "\"" );
       }
+    }
+    
+    public Parser(Lexer l) {
+      super();
+      lexer=l;
     }
   :};
 

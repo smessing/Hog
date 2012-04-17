@@ -54,7 +54,7 @@ rightbrace      = \}
 nonrightbrace   = [^}]
 comment_body    = {nonrightbrace}*
 comment         = {commentlbrace}{comment_body}{commentrbrace}
-whitespace      = [ \n\t]
+whitespace      = [ \t]
 
 
 %%
@@ -119,6 +119,7 @@ return          { return newSym(sym.RETURN); }
 {real}          { return newSym(sym.REAL_CONST, new String(yytext())); }
 {comment}       { /* For this stand-alone lexer, print out comments. */
                   System.out.println("Recognized comment: " + yytext()); }
+"\n"            { return newSym(sym.NEWLINE); }
 {whitespace}    { /* Ignore whitespace. */ }
 {identifier}    { return newSym(sym.ID, new String(yytext())); }
 .               { System.out.println("Illegal char, '" + yytext() +

@@ -1,7 +1,5 @@
 @Map (int lineNum, text line)  ->  (text, int) {
-    foreach word in line.tokenize(" ") {
-          emit(word, 1)
-    }
+  int a = 5
 }
 
 @Reduce (text word, iter<int> values) -> (text, int) {

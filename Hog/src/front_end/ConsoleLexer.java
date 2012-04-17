@@ -35,11 +35,16 @@ public class ConsoleLexer {
 	public static void main(String[] args) throws IOException {
 		
 		String filename = "testWordCountProg";
-		File testFile = new File(filename);
+		FileReader fileReader = new FileReader(new File(filename));
 	    try {
-	        //Parser p = new Parser(new Lexer(new FileReader(filename)));
-	    	Parser p = new Parser(testFile);
-	        Object result = p.parse().value;
+	        //Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	p.debug_parse();
+	    	/*System.out.println(p.scan());
+	    	System.out.println(p.scan());
+	    	System.out.println(p.scan());
+	    	System.out.println(p.scan());*/
+	    	
 	      }
 	      catch (FileNotFoundException e) {
 	    	  System.out.println("file not found.");
