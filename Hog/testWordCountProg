@@ -9,7 +9,6 @@
     }
   }
 }
-
 @Map (int lineNum, text line)  ->  (text, int) {
   int a = 5
 }

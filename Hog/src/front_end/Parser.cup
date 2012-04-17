@@ -110,7 +110,7 @@ Program::=
   ;
 
 Functions::=
-    FUNCTIONS L_BRACE FunctionList:fl NEWLINE R_BRACE NEWLINE
+    FUNCTIONS L_BRACE FunctionList:fl NEWLINE R_BRACE
     {:
      // RESULT = new SectionNode(fl);
      System.out.println("Functions -> FUNCTIONS L_BRACE FunctionList R_BRACE");
