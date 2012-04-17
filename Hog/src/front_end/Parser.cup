@@ -137,7 +137,7 @@ FunctionList::=
   ;
 
 Function::=
-    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE NEWLINE StatementList:sl R_BRACE
+    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
     {:
       // RESULT = new FunctionNode(t, pl, sl); 
       System.out.println("Function -> Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE");
@@ -261,13 +261,13 @@ JumpStatement::=
   ;
  
 ExpressionStatement::=
-    NEWLINE
+    /* epsilon */
     {:
       /* TODO is this correct? */
       System.out.println("ExpressionStatement -> NEWLINE");
     :}
   |
-    NEWLINE Expression:e
+    Expression:e
     {:
       // RESULT = e;
       System.out.println("ExpressionStatement -> Expression NEWLINE");
@@ -570,7 +570,7 @@ SelectionStatement::=
   ;
 
 ElseIfStatement::=
-    ELSEIF L_PAREN Expression:e R_PAREN L_BRACE StatementList NEWLINE ElseIfStatement:elif R_BRACE
+    ELSEIF L_PAREN Expression:e R_PAREN L_BRACE StatementList ElseIfStatement:elif R_BRACE
     {:
       // RESULT = new SelectionStatementNode(e, elif, null);
       System.out.println("ElseIfStatement -> ELSEIF L_PAREN Expression R_PAREN ElseIfStatement");
@@ -583,7 +583,7 @@ ElseIfStatement::=
   ;
 
 ElseStatement::=
-    ELSE L_BRACE NEWLINE StatementList R_BRACE NEWLINE
+    ELSE L_BRACE StatementList R_BRACE NEWLINE
     {:
       // RESULT = new SelectionStatementNode(null, s, null);
     :}
