@@ -39,7 +39,7 @@ public class ConsoleLexer {
 	    try {
 	        // Parser p = new Parser(new Lexer(System.in));
 	    	Parser p = new Parser(new Lexer(fileReader));
-	    	p.parse();
+	    	p.debug_parse();
 	    	/*System.out.println(p.scan());
 	    	System.out.println(p.scan());
 	    	System.out.println(p.scan());
@@ -50,7 +50,6 @@ public class ConsoleLexer {
 	    	  System.out.println("file not found.");
 	      }
 	      catch (Exception ex) {
-	    	  System.out.println("some other exception.");
 	    	  ex.printStackTrace();
 	      }
 	}
