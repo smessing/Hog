@@ -9,9 +9,11 @@
     }
   }
 }
+
 @Map (int lineNum, text line)  ->  (text, int) {
   int a = 5
 }
+
 @Reduce (text word, iter<int> values) -> (text, int) {
     int count = 0
     while (values.hasNext()) {
@@ -19,6 +21,7 @@
     }
     emit(count, word)
 }
+
 @Main {
     mapReduce()
 }
