@@ -1,0 +1,17 @@
+@Map (int lineNum, text line)  ->  (text, int) {
+    foreach word in line.tokenize(" ") {
+          emit(word, 1)
+    }
+}
+
+@Reduce (text word, iter<int> values) -> (text, int) {
+    int count = 0
+    while (values.hasNext()) {
+          count = count + values.next()
+    }
+    emit(count, word)
+}
+
+@Main {
+    mapReduce()
+}
