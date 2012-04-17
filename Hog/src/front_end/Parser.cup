@@ -102,7 +102,7 @@ precedence right L_PAREN;
 start with Program;
 
 Program::=
-    Functions:f Map:m Reduce:r Main:n
+    Functions:f NEWLINE Map:m NEWLINE Reduce:r NEWLINE Main:n
     {:
       // RESULT = new ProgramNode(f, m, r, n);
       System.out.println("PROGRAM");
@@ -110,7 +110,7 @@ Program::=
   ;
 
 Functions::=
-    FUNCTIONS L_BRACE NEWLINE FunctionList:fl R_BRACE
+    FUNCTIONS L_BRACE FunctionList:fl NEWLINE R_BRACE
     {:
      // RESULT = new SectionNode(fl);
      System.out.println("Functions -> FUNCTIONS L_BRACE FunctionList R_BRACE");
@@ -120,13 +120,13 @@ Functions::=
   ; 
  
 FunctionList::=
-    Function:f
+    NEWLINE Function:f
     {:
       // RESULT = f;
       System.out.println("FunctionList -> Function");
     :}
   |
-    FunctionList:fl Function:f
+    NEWLINE FunctionList:fl Function:f
     {:
       // List<Node> children = new ArrayList<Node>();
       // children.add(fl);
@@ -161,7 +161,7 @@ ParameterList::=
   ;
 
 Map::=
-    MAP SectionType:st L_BRACE StatementList:sl R_BRACE
+    MAP SectionType:st L_BRACE StatementList:sl NEWLINE R_BRACE
     {:
       // RESULT = new SectionNode(st, sl);
       System.out.println("Map -> MAP SectionType L_BRACE StatementList R_BRACE");
@@ -583,7 +583,7 @@ ElseIfStatement::=
   ;
 
 ElseStatement::=
-    ELSE L_BRACE StatementList R_BRACE NEWLINE
+    ELSE L_BRACE StatementList R_BRACE
     {:
       // RESULT = new SelectionStatementNode(null, s, null);
     :}
