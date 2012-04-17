@@ -267,7 +267,7 @@ ExpressionStatement::=
       System.out.println("ExpressionStatement -> NEWLINE");
     :}
   |
-    Expression:e NEWLINE
+    NEWLINE Expression:e
     {:
       // RESULT = e;
       System.out.println("ExpressionStatement -> Expression NEWLINE");
