@@ -137,7 +137,7 @@ FunctionList::=
   ;
 
 Function::=
-    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
+    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE NEWLINE StatementList:sl R_BRACE
     {:
       // RESULT = new FunctionNode(t, pl, sl); 
       System.out.println("Function -> Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE");
@@ -148,13 +148,13 @@ ParameterList::=
     ParameterList:pl COMMA Type:t ID:i
     {:
       // RESULT = new ParametersNode(t, i, pl);
-      System.out.println("ParameterList -> ParameterList COMMA Type ID");
+      System.out.println("ParameterList -> ParameterList COMMA Type ID: " + i);
     :}
   |
     Type:t ID:i
     {:
       // RESULT = new ParametersNode(t, i);
-      System.out.println("Type ID");
+      System.out.println("Type ID: " + i);
     :}
   |
     /* epsilon */
@@ -244,12 +244,12 @@ Statement::=
   ;
  
 JumpStatement::=
-    CONTINUE NEWLINE
+    CONTINUE
     {:
       System.out.println("JumpStatement -> CONTINUE NEWLINE");
     :}
   |
-    BREAK NEWLINE
+    BREAK
     {:
       System.out.println("JumpStatement -> BREAK NEWLINE");
     :}
@@ -469,9 +469,9 @@ PostfixExpression::=
       System.out.println("PostfixExpression -> PostfixExpression L_BRKT Expression R_BRKT"); 
     :}
   |
-    PostfixExpression DOT ID
+    PostfixExpression DOT ID:i
     {:
-      System.out.println("PostfixExpression -> PostfixExpression DOT ID"); 
+      System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
     :}
   |
     PostfixExpression L_PAREN R_PAREN
@@ -513,7 +513,7 @@ PrimaryExpression::=
     ID:i
     {:
       // RESULT = new IdNode(i);
-      System.out.println("PrimaryExpression -> ID");
+      System.out.println("PrimaryExpression -> ID: " + i);
     :}
   |
     Constant:c
@@ -533,7 +533,7 @@ Constant::=
     INT_CONST:i
     {:
       // RESULT = new ConstantNode(Types.Type.INT, i);
-      System.out.println("Constant -> INT_CONST");
+      System.out.println("Constant -> INT_CONST: " + i);
     :}
   |
     REAL_CONST:d
@@ -556,7 +556,7 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF L_PAREN Expression:e R_PAREN Statement:s ElseIfStatement:elif ElseStatement:el
+    IF L_PAREN Expression:e R_PAREN L_BRACE NEWLINE Statement:s NEWLINE R_BRACE ElseIfStatement:elif ElseStatement:el
     {:
       // SelectionStatementNode elseIfAndElse = new SelectionStatementNode(elif.getCondition(), elif, el);
       // RESULT = new SelectionStatementNode(e, s, elseIfAndElse);
@@ -570,7 +570,7 @@ SelectionStatement::=
   ;
 
 ElseIfStatement::=
-    ELSEIF L_PAREN Expression:e R_PAREN ElseIfStatement:elif
+    ELSEIF L_PAREN Expression:e R_PAREN L_BRACE NEWLINE ElseIfStatement:elif R_BRACE 
     {:
       // RESULT = new SelectionStatementNode(e, elif, null);
       System.out.println("ElseIfStatement -> ELSEIF L_PAREN Expression R_PAREN ElseIfStatement");
@@ -583,29 +583,29 @@ ElseIfStatement::=
   ;
 
 ElseStatement::=
-    ELSE Statement:s
+    ELSE L_BRACE NEWLINE Statement:s R_BRACE NEWLINE
     {:
       // RESULT = new SelectionStatementNode(null, s, null);
     :}
   |
-    /* epsilon */
+    NEWLINE
     {:
       System.out.println("ElseStatement -> epsilon");
     :}
   ;
 
 IterationStatement::=
-    WHILE L_PAREN Expression R_PAREN Statement:s
+    WHILE L_PAREN Expression R_PAREN L_BRACE NEWLINE Statement:s R_BRACE NEWLINE
     {:
       System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
     :}
   |
-    FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement
+    FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN L_BRACE NEWLINE Statement R_BRACE NEWLINE
     {:
       System.out.println("FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement");
     :}
   |
-    FOREACH L_PAREN Expression IN Expression R_PAREN Statement
+    FOREACH L_PAREN Expression IN Expression R_PAREN L_BRACE NEWLINE Statement R_BRACE NEWLINE
     {:
       System.out.println("FOREACH L_PAREN Expression IN Expression R_PAREN Statement"); 
     :}
@@ -642,7 +642,7 @@ Type::=
       System.out.println("Type -> BOOL");
     :}
   |
-    INT
+    INT:i
     {:
       // RESULT = Types.Type.INT;
       System.out.println("Type -> INT");
