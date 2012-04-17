@@ -39,7 +39,7 @@ public class ConsoleLexer {
 	    try {
 	        // Parser p = new Parser(new Lexer(System.in));
 	    	Parser p = new Parser(new Lexer(fileReader));
-	    	p.debug_parse();
+	    	p.parse();
 	    	/*System.out.println(p.scan());
 	    	System.out.println(p.scan());
 	    	System.out.println(p.scan());
