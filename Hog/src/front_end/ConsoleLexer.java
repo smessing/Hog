@@ -37,7 +37,7 @@ public class ConsoleLexer {
 		String filename = "testWordCountProg";
 		FileReader fileReader = new FileReader(new File(filename));
 	    try {
-	        //Parser p = new Parser(new Lexer(System.in));
+	        // Parser p = new Parser(new Lexer(System.in));
 	    	Parser p = new Parser(new Lexer(fileReader));
 	    	p.debug_parse();
 	    	/*System.out.println(p.scan());
