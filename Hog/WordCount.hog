@@ -13,14 +13,24 @@
 @Map (int lineNum, text line) -> (text, int) {
   #{ this is a 
        block comment }#
-  foreach word in line.tokenize(" ") {
-    emit(word, 1)
-  }
+  int count = 1
+  # uncommenting the following line makes @map bleed into @reduce
+  # print("x")
+  #while values.hasNext() {
+  #  print("this is never going to end")
+  #}
+  #foreach word in line.tokenize(" ") {
+  #  emit(word, 1)
+  #}
 }
 
 @Reduce (text word, iter<int> values) -> (text, int) {
   # this is a line comment:
-  int count
+  int count = 0
+  #switch(count) {
+  #  case 1: print("one")
+  #          break
+  #}
   list<text> textList(5) 
   list<list<text>> doubleList
   list<list<text>> anotherDoubleList = doubleList

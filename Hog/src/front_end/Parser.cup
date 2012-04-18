@@ -617,17 +617,17 @@ ElseStatement::=
 IterationStatement::=
     WHILE Expression L_BRACE StatementList:s R_BRACE
     {:
-      System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
+      System.out.println("IterationStatement -> WHILE L_PAREN Expression R_PAREN StatementList");
     :}
   |
     FOR Expression SEMICOL Expression SEMICOL Expression L_BRACE StatementList R_BRACE
     {:
-      System.out.println("FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement");
+      System.out.println("IterationStatement -> FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN StatementList");
     :}
   |
     FOREACH Expression IN Expression L_BRACE StatementList R_BRACE
     {:
-      System.out.println("FOREACH L_PAREN Expression IN Expression R_PAREN Statement"); 
+      System.out.println("IterationStatement -> FOREACH L_PAREN Expression IN Expression R_PAREN StatementList"); 
     :}
   ;
  
