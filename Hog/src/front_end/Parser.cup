@@ -42,7 +42,6 @@ terminal LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, ASSIGN;
 terminal TEXT, BOOL, INT, REAL, VOID;
 terminal MINUS, UMINUS, PLUS;
 terminal ARROW, DOT;
-terminal String CHAR;
 terminal String TEXT_LITERAL;
 terminal String ID;
 terminal String INT_CONST;
@@ -53,7 +52,6 @@ terminal BREAK, DEFAULT;
 terminal AND, OR, NOT;
 terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
-terminal L_ANGLE, R_ANGLE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
 terminal LIST, ITER, DICT, MULTISET, SET;
 
@@ -240,6 +238,22 @@ Statement::=
     JumpStatement
     {:
       System.out.println("Statement -> JumpStatement");
+    :}
+  | DeclarationStatement
+    {:
+      System.out.println("Statement -> DeclarationStatement");
+    :}
+  ;
+
+DeclarationStatement::=
+    Type ID
+    {:
+      System.out.println("DeclarationStatement -> Type ID");
+    :}
+  |
+    Type ID ASSIGN Expression
+    {:
+      System.out.println("DeclarationStatement -> Type ID ASSIGN Expression");
     :}
   ;
  
