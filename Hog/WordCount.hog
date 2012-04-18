@@ -19,7 +19,7 @@
 }
 
 @Reduce (text word, iter<int> values) -> (text, int) {
-  # the following line breaks the grammar:
+  # this is a line comment:
   int count = 0
   while values.hasNext() {
     count = count + values.next()

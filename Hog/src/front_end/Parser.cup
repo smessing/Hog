@@ -58,6 +58,7 @@ terminal LIST, ITER, DICT, MULTISET, SET;
 nonterminal JumpStatement;
 nonterminal ArgumentExpressionList;
 nonterminal DerivedType;
+nonterminal DeclarationStatement;
 
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
@@ -100,7 +101,7 @@ precedence right L_PAREN;
 start with Program;
 
 Program::=
-    Functions:f NEWLINE Map:m NEWLINE Reduce:r NEWLINE Main:n
+    Functions:f NEWLINE Map:m NEWLINE Reduce:r NEWLINE Main:n NEWLINE
     {:
       // RESULT = new ProgramNode(f, m, r, n);
       System.out.println("PROGRAM");
