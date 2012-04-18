@@ -22,6 +22,8 @@ import util.ast.node.IdNode;
 import util.ast.node.MockExpressionNode;
 import util.ast.node.MockNode;
 import util.ast.node.Node;
+import util.ast.node.RelationalExpressionNode;
+import util.ast.node.UnOpNode;
 import util.type.Types.Type;
 
 
@@ -29,7 +31,7 @@ import util.type.Types.Type;
  * 
  * Tests for the functionality provided by the AbstractSyntaxTree class.
  * 
- * @author sam
+ * @author sam, jason
  * 
  */
 public class AbstractSyntaxTreeTester {
@@ -41,6 +43,9 @@ public class AbstractSyntaxTreeTester {
 	private ExpressionNode E;
 	private ExpressionNode F;
 	private ExpressionNode G;
+	private ExpressionNode H;
+	private ExpressionNode I;
+	private ExpressionNode J;
 	private AbstractSyntaxTree tree;
 
 	@BeforeClass
@@ -57,8 +62,11 @@ public class AbstractSyntaxTreeTester {
 		E = new MockExpressionNode();
 		F = new MockExpressionNode();
 		G = new MockExpressionNode();
-		B = new BiOpNode(BiOpNode.OpType.PLUS, D, E);
-		C = new BiOpNode(BiOpNode.OpType.MINUS, F, G);
+		J = new MockExpressionNode();
+		H = new UnOpNode(UnOpNode.OpType.UMINUS, G);
+		I = new RelationalExpressionNode(BiOpNode.OpType.LESS, E, J);
+		B = new BiOpNode(BiOpNode.OpType.PLUS, D, I);
+		C = new BiOpNode(BiOpNode.OpType.MINUS, F, H);
 		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
 		// A is root of tree, with children B, C
 		// B has children D, E
@@ -88,9 +96,12 @@ public class AbstractSyntaxTreeTester {
 		correctPreOrderTraversal.add(A);
 		correctPreOrderTraversal.add(B);
 		correctPreOrderTraversal.add(D);
+		correctPreOrderTraversal.add(I);
 		correctPreOrderTraversal.add(E);
+		correctPreOrderTraversal.add(J);
 		correctPreOrderTraversal.add(C);
 		correctPreOrderTraversal.add(F);
+		correctPreOrderTraversal.add(H);
 		correctPreOrderTraversal.add(G);
 
 		Iterator<Node> preOrderTraversal = tree.preOrderTraversal();
@@ -118,9 +129,12 @@ public class AbstractSyntaxTreeTester {
 
 		correctPostOrderTraversal.add(D);
 		correctPostOrderTraversal.add(E);
+		correctPostOrderTraversal.add(J);
+		correctPostOrderTraversal.add(I);
 		correctPostOrderTraversal.add(B);
 		correctPostOrderTraversal.add(F);
 		correctPostOrderTraversal.add(G);
+		correctPostOrderTraversal.add(H);
 		correctPostOrderTraversal.add(C);
 		correctPostOrderTraversal.add(A);
 
@@ -144,25 +158,62 @@ public class AbstractSyntaxTreeTester {
 	 * by the nodes
 	 */
 	@Test
-	public void typeCheckingVisitorTest() {
+	public void nodeTypeCheckTest() {
 		
-		Iterator<Node> postOrderTraversal = tree.postOrderTraversal();
+		//Iterator<Node> postOrderTraversal = tree.postOrderTraversal();
 		TypeCheckingVisitor v = new TypeCheckingVisitor();
 
-		while (postOrderTraversal.hasNext()) {
-			Node nextNode = postOrderTraversal.next();
-			assertEquals(
-					"It should call the appropriate visit methods for each node",
-					nextNode.visitorTest(v), 10);
-		}
+		//while (postOrderTraversal.hasNext()) {
+			//Node nextNode = postOrderTraversal.next();
+			//assertEquals(
+				//	"It should call the appropriate visit methods for each node",
+		//			nextNode.visitorTest(v), 9);
+	//	}
 		
 		ConstantNode n = new ConstantNode(Type.TEXT, "hello");
 		assertEquals(
-				"It should call the appropriate visit methods for each node",
-				n.getValue(), "hello");
-		assertEquals(
-				"It should call the appropriate visit methods for each node",
+				"It should call the appropriate visit methods for ConstantNode",
 				n.visitorTest(v), 3);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for BiOpNode",
+				A.visitorTest(v), 19);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for BiOpNode",
+				B.visitorTest(v), 19);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for BiOpNode",
+				C.visitorTest(v), 19);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for MockExpressionNode",
+				D.visitorTest(v), 9);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for MockExpressionNode",
+				E.visitorTest(v), 9);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for MockExpressionNode",
+				F.visitorTest(v), 9);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for MockExpressionNode",
+				G.visitorTest(v), 9);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for UnOpNode",
+				H.visitorTest(v), 17);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for RelationalExpressionNode",
+				I.visitorTest(v), 15);
+		
+		assertEquals(
+				"It should call the appropriate visit methods for MockExpressionNode",
+				J.visitorTest(v), 9);
 	}
 
 }
