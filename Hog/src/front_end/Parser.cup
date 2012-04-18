@@ -264,12 +264,12 @@ DeclarationStatement::=
   ;
  
 JumpStatement::=
-    CONTINUE SEMICOL
+    CONTINUE
     {:
       System.out.println("JumpStatement -> CONTINUE NEWLINE");
     :}
   |
-    BREAK SEMICOL
+    BREAK
     {:
       System.out.println("JumpStatement -> BREAK NEWLINE");
     :}
@@ -281,13 +281,13 @@ JumpStatement::=
   ;
  
 ExpressionStatement::=
-    SEMICOL
+    /* epsilon */
     {:
       /* TODO is this correct? */
       System.out.println("ExpressionStatement -> NEWLINE");
     :}
   |
-    Expression:e SEMICOL
+    Expression:e
     {:
       // RESULT = e;
       System.out.println("ExpressionStatement -> Expression NEWLINE");
@@ -618,7 +618,7 @@ IterationStatement::=
     WHILE Expression L_BRACE StatementList:s R_BRACE
     {:
       System.out.println("IterationStatement -> WHILE L_PAREN Expression R_PAREN StatementList");
-    :}  
+    :}
   |
     FOR Expression SEMICOL Expression SEMICOL Expression L_BRACE StatementList R_BRACE
     {:
