@@ -20,7 +20,8 @@
 
 @Reduce (text word, iter<int> values) -> (text, int) {
   # this is a line comment:
-  int count = 0
+  int count
+  list<text> textList(5) 
   while values.hasNext() {
     count = count + values.next()
   }

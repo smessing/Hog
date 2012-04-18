@@ -256,6 +256,11 @@ DeclarationStatement::=
     {:
       System.out.println("DeclarationStatement -> Type ID ASSIGN Expression");
     :}
+  |
+    Type ID L_PAREN ArgumentExpressionList R_PAREN
+    {:
+      System.out.println("DeclarationStatement -> Type ID Expression L_PAREN ArgumentExpressionList R_PAREN");
+    :}
   ;
  
 JumpStatement::=
