@@ -79,6 +79,12 @@
 
 	<target name="compile" depends="clean, dev-frontend">
 		<echo>${welcome.message}</echo>
+		<echo>Authors:</echo>
+		<echo>Jason Halpern (Testing/Validation)</echo>
+		<echo>Samuel Messing (Project Manager)</echo>
+	  <echo>Benjamin Rapaport (System Architect)</echo>
+	  <echo>Kurry Tran (System Integrator)</echo>
+	  <echo>Paul Tylkin (Language Guru)</echo>
 		<mkdir dir="${classes.dir}" />
 		<mkdir dir="${jar.dir}" />
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="${java.source.version}" 

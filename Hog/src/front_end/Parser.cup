@@ -126,7 +126,7 @@ FunctionList::=
       System.out.println("FunctionList -> Function");
     :}
   |
-    NEWLINE FunctionList:fl Function:f
+    FunctionList:fl NEWLINE Function:f
     {:
       // List<Node> children = new ArrayList<Node>();
       // children.add(fl);
@@ -161,7 +161,7 @@ ParameterList::=
   ;
 
 Map::=
-    MAP SectionType:st L_BRACE StatementList:sl R_BRACE NEWLINE
+    MAP SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
       // RESULT = new SectionNode(st, sl);
       System.out.println("Map -> MAP SectionType L_BRACE StatementList R_BRACE");
@@ -169,7 +169,7 @@ Map::=
   ;
 
 Reduce::=
-    REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE NEWLINE
+    REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
       // RESULT = new SectionNode(st, sl);
       System.out.println("Reduce -> REDUCE SectionType L_BRACE StatementList R_BRACE");
@@ -595,17 +595,17 @@ ElseStatement::=
   ;
 
 IterationStatement::=
-    WHILE L_PAREN Expression R_PAREN L_BRACE NEWLINE Statement:s R_BRACE NEWLINE
+    WHILE Expression L_BRACE StatementList:s R_BRACE NEWLINE
     {:
       System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
     :}
   |
-    FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN L_BRACE NEWLINE Statement R_BRACE NEWLINE
+    FOR Expression SEMICOL Expression SEMICOL Expression L_BRACE StatementList R_BRACE NEWLINE
     {:
       System.out.println("FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement");
     :}
   |
-    FOREACH L_PAREN Expression IN Expression R_PAREN L_BRACE NEWLINE Statement R_BRACE NEWLINE
+    FOREACH Expression IN Expression L_BRACE StatementList R_BRACE NEWLINE
     {:
       System.out.println("FOREACH L_PAREN Expression IN Expression R_PAREN Statement"); 
     :}
