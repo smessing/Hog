@@ -11,12 +11,15 @@
 }
 
 @Map (int lineNum, text line) -> (text, int) {
+  #{ this is a 
+       block comment }#
   foreach word in line.tokenize(" ") {
     emit(word, 1)
   }
 }
 
 @Reduce (text word, iter<int> values) -> (text, int) {
+  # the following line breaks the grammar:
   int count = 0
   while values.hasNext() {
     count = count + values.next()
