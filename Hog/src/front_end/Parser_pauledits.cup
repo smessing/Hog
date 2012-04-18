@@ -42,6 +42,7 @@ terminal LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, ASSIGN;
 terminal TEXT, BOOL, INT, REAL, VOID;
 terminal MINUS, UMINUS, PLUS;
 terminal ARROW, DOT;
+terminal String CHAR;
 terminal String TEXT_LITERAL;
 terminal String ID;
 terminal String INT_CONST;
@@ -52,13 +53,20 @@ terminal BREAK, DEFAULT;
 terminal AND, OR, NOT;
 terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
+terminal L_ANGLE, R_ANGLE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
 terminal LIST, ITER, DICT, MULTISET, SET;
+terminal TRY, CATCH, FINALLY;
 
 nonterminal JumpStatement;
 nonterminal ArgumentExpressionList;
 nonterminal DerivedType;
-nonterminal DeclarationStatement;
+
+nonterminal StatementNode GuardingStatement;
+nonterminal Catches;
+nonterminal Catch;
+nonterminal CatchHeader;
+nonterminal Finally;
 
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
@@ -101,7 +109,7 @@ precedence right L_PAREN;
 start with Program;
 
 Program::=
-    Functions:f NEWLINE Map:m NEWLINE Reduce:r NEWLINE Main:n NEWLINE
+    Functions:f NEWLINE Map:m NEWLINE Reduce:r NEWLINE Main:n
     {:
       // RESULT = new ProgramNode(f, m, r, n);
       System.out.println("PROGRAM");
@@ -125,7 +133,7 @@ FunctionList::=
       System.out.println("FunctionList -> Function");
     :}
   |
-    FunctionList:fl NEWLINE Function:f
+    NEWLINE FunctionList:fl Function:f
     {:
       // List<Node> children = new ArrayList<Node>();
       // children.add(fl);
@@ -160,7 +168,7 @@ ParameterList::=
   ;
 
 Map::=
-    MAP SectionType:st L_BRACE StatementList:sl R_BRACE
+    MAP SectionType:st L_BRACE StatementList:sl R_BRACE NEWLINE
     {:
       // RESULT = new SectionNode(st, sl);
       System.out.println("Map -> MAP SectionType L_BRACE StatementList R_BRACE");
@@ -168,7 +176,7 @@ Map::=
   ;
 
 Reduce::=
-    REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
+    REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE NEWLINE
     {:
       // RESULT = new SectionNode(st, sl);
       System.out.println("Reduce -> REDUCE SectionType L_BRACE StatementList R_BRACE");
@@ -240,21 +248,9 @@ Statement::=
     {:
       System.out.println("Statement -> JumpStatement");
     :}
-  | DeclarationStatement
+  | GuardingStatement
     {:
-      System.out.println("Statement -> DeclarationStatement");
-    :}
-  ;
-
-DeclarationStatement::=
-    Type ID
-    {:
-      System.out.println("DeclarationStatement -> Type ID");
-    :}
-  |
-    Type ID ASSIGN Expression
-    {:
-      System.out.println("DeclarationStatement -> Type ID ASSIGN Expression");
+      System.out.println("Statement -> GuardingStatement");
     :}
   ;
  
@@ -274,7 +270,41 @@ JumpStatement::=
       System.out.println("JumpStatement -> RETURN Expression");
     :}
   ;
- 
+
+GuardingStatement::=
+    L_PAREN Expression R_PAREN
+   | 
+    TRY Block Finally
+   |
+    TRY Block Catches
+   | 
+    TRY Block Catches Finally
+;
+
+Block::=
+ StatementList
+;
+
+Finally::=
+  FINALLY Block
+;
+
+Catches::=
+    Catch
+   | 
+    Catches Catch 
+;
+
+Catch::=
+   CatchHeader Block
+  ;
+
+CatchHeader::=
+   CATCH L_PAREN Type ID R_PAREN
+  |
+   CATCH L_PAREN Type R_PAREN
+  ;
+
 ExpressionStatement::=
     /* epsilon */
     {:
@@ -571,21 +601,21 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF Expression:e L_BRACE StatementList R_BRACE ElseIfStatement:elif ElseStatement:el
+    IF L_PAREN Expression:e R_PAREN L_BRACE StatementList R_BRACE ElseIfStatement:elif ElseStatement:el
     {:
       // SelectionStatementNode elseIfAndElse = new SelectionStatementNode(elif.getCondition(), elif, el);
       // RESULT = new SelectionStatementNode(e, s, elseIfAndElse);
       System.out.println("SelectionStatement -> IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement");
     :}
   |
-    SWITCH Expression:e L_BRACE StatementList:s R_BRACE
+    SWITCH L_PAREN Expression:e R_PAREN Statement:s
     {:
       System.out.println("SelectionStatement -> SWITCH L_PAREN Expression R_PAREN Statement");
     :}
   ;
 
 ElseIfStatement::=
-    ELSEIF Expression:e L_BRACE StatementList ElseIfStatement:elif R_BRACE
+    ELSEIF L_PAREN Expression:e R_PAREN L_BRACE StatementList ElseIfStatement:elif R_BRACE
     {:
       // RESULT = new SelectionStatementNode(e, elif, null);
       System.out.println("ElseIfStatement -> ELSEIF L_PAREN Expression R_PAREN ElseIfStatement");
@@ -610,17 +640,17 @@ ElseStatement::=
   ;
 
 IterationStatement::=
-    WHILE Expression L_BRACE StatementList:s R_BRACE
+    WHILE L_PAREN Expression R_PAREN L_BRACE NEWLINE Statement:s R_BRACE NEWLINE
     {:
       System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
     :}
   |
-    FOR Expression SEMICOL Expression SEMICOL Expression L_BRACE StatementList R_BRACE
+    FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN L_BRACE NEWLINE Statement R_BRACE NEWLINE
     {:
       System.out.println("FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement");
     :}
   |
-    FOREACH Expression IN Expression L_BRACE StatementList R_BRACE
+    FOREACH L_PAREN Expression IN Expression R_PAREN L_BRACE NEWLINE Statement R_BRACE NEWLINE
     {:
       System.out.println("FOREACH L_PAREN Expression IN Expression R_PAREN Statement"); 
     :}
@@ -676,7 +706,7 @@ Type::=
   ;
 
 DerivedType::=
-    DerivedType LESS Type GRTR
+    DerivedType L_ANGLE Type R_ANGLE
     {:
       System.out.println("DerivedType -> DerivedType L_ANGLE Type R_ANGLE");
     :}

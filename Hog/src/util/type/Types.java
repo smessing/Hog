@@ -29,4 +29,24 @@ public class Types {
 
 	}
 
+	public static boolean isInt(Type type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public static boolean isReal(Type type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public static boolean isBool(Type type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public static boolean isText(Type type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
