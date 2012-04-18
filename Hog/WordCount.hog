@@ -1,8 +1,8 @@
 @Functions {
   int fib(int n) {
-    if (n == 0) {
+    if n == 0 {
       return 0
-    } elseif (n == 1) {
+    } elseif n == 1 {
       return 1
     } else {
       return fib(n-1) + fib(n-2)
@@ -10,7 +10,7 @@
   }
 }
 
-@Map (int lineNum, iter<text> line) -> (text, int) {
+@Map (int lineNum, text line) -> (text, int) {
   foreach word in line.tokenize(" ") {
     emit(word, 1)
   }

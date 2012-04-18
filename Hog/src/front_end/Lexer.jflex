@@ -83,6 +83,7 @@ case            { return newSym(sym.CASE); }
 default         { return newSym(sym.DEFAULT); }
 continue        { return newSym(sym.CONTINUE); }
 return          { return newSym(sym.RETURN); }
+iter            { return newSym(sym.ITER); }
 @Functions      { return newSym(sym.FUNCTIONS); }
 @Map            { return newSym(sym.MAP); }
 @Reduce         { return newSym(sym.REDUCE); }

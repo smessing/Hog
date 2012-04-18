@@ -556,21 +556,21 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF L_PAREN Expression:e R_PAREN L_BRACE StatementList R_BRACE ElseIfStatement:elif ElseStatement:el
+    IF Expression:e L_BRACE StatementList R_BRACE ElseIfStatement:elif ElseStatement:el
     {:
       // SelectionStatementNode elseIfAndElse = new SelectionStatementNode(elif.getCondition(), elif, el);
       // RESULT = new SelectionStatementNode(e, s, elseIfAndElse);
       System.out.println("SelectionStatement -> IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement");
     :}
   |
-    SWITCH L_PAREN Expression:e R_PAREN Statement:s
+    SWITCH Expression:e L_BRACE StatementList:s R_BRACE
     {:
       System.out.println("SelectionStatement -> SWITCH L_PAREN Expression R_PAREN Statement");
     :}
   ;
 
 ElseIfStatement::=
-    ELSEIF L_PAREN Expression:e R_PAREN L_BRACE StatementList ElseIfStatement:elif R_BRACE
+    ELSEIF Expression:e L_BRACE StatementList ElseIfStatement:elif R_BRACE
     {:
       // RESULT = new SelectionStatementNode(e, elif, null);
       System.out.println("ElseIfStatement -> ELSEIF L_PAREN Expression R_PAREN ElseIfStatement");
@@ -595,17 +595,17 @@ ElseStatement::=
   ;
 
 IterationStatement::=
-    WHILE Expression L_BRACE StatementList:s R_BRACE NEWLINE
+    WHILE Expression L_BRACE StatementList:s R_BRACE
     {:
       System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
     :}
   |
-    FOR Expression SEMICOL Expression SEMICOL Expression L_BRACE StatementList R_BRACE NEWLINE
+    FOR Expression SEMICOL Expression SEMICOL Expression L_BRACE StatementList R_BRACE
     {:
       System.out.println("FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement");
     :}
   |
-    FOREACH Expression IN Expression L_BRACE StatementList R_BRACE NEWLINE
+    FOREACH Expression IN Expression L_BRACE StatementList R_BRACE
     {:
       System.out.println("FOREACH L_PAREN Expression IN Expression R_PAREN Statement"); 
     :}
@@ -661,7 +661,7 @@ Type::=
   ;
 
 DerivedType::=
-    DerivedType L_ANGLE Type R_ANGLE
+    DerivedType LESS Type GRTR
     {:
       System.out.println("DerivedType -> DerivedType L_ANGLE Type R_ANGLE");
     :}
