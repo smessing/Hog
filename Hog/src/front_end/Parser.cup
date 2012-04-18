@@ -274,7 +274,7 @@ JumpStatement::=
       System.out.println("JumpStatement -> BREAK NEWLINE");
     :}
   |
-    RETURN Expression
+    RETURN ExpressionStatement
     {:
       System.out.println("JumpStatement -> RETURN Expression");
     :}

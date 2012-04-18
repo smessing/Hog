@@ -22,10 +22,16 @@
   # this is a line comment:
   int count
   list<text> textList(5) 
+  list<list<text>> doubleList
+  list<list<text>> anotherDoubleList = doubleList
   while values.hasNext() {
     count = count + values.next()
+    int face = 5
   }
   emit(count, word)
+  if quit == (5 > 2) {
+    return
+  }
 }
 
 @Main {
