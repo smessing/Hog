@@ -34,7 +34,7 @@ public class ConsoleLexer {
 	 * */
 	public static void main(String[] args) throws IOException {
 		
-		String filename = "testWordCountProg";
+		String filename = "wordCount.hog";
 		FileReader fileReader = new FileReader(new File(filename));
 	    try {
 	        // Parser p = new Parser(new Lexer(System.in));
