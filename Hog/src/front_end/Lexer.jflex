@@ -53,7 +53,7 @@ leftbrace       = \{
 rightbrace      = \}
 nonrightbrace   = [^}]
 comment_body    = {nonrightbrace}*
-comment         = {commentlbrace}{comment_body}{commentrbrace}
+comment         = ({commentlbrace}{comment_body}{commentrbrace}|\#.*\n)
 newline         = [\n]+
 whitespace      = [ \t]
 
