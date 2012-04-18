@@ -208,7 +208,7 @@ StatementList::=
   |
     RETURN Expression:e
     {:
-      RESULT = new ReturnExpressionNode(e, UnOpNode.OpType.RETURN);
+      RESULT = new UnOpNode(UnOpNode.OpType.RETURN, e);
     :}
   ;
  
@@ -233,14 +233,14 @@ Expression::=
   |
     UnaryExpression:ue ASSIGN Expression:e
     {:
-      RESULT = new AssignmentExpressionNode(BiOpNode.OpType.ASSIGN, ue, e);
+      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, ue, e);
     :}
   ;
 
 LogicalExpression::=
     LogicalExpression:le OR LogicalTerm:lt
     {:
-      RESULT = new LogicalExpressionNode(le, lt);
+      RESULT = new BiOpNode(BiOpNode.OpType.OR, le, lt);
     :}
   |
     LogicalTerm:l
@@ -252,7 +252,7 @@ LogicalExpression::=
 LogicalTerm::=
     LogicalTerm:l AND EqualityExpression:e
     {:
-      RESULT = new LogicalTermNode(l,e);
+      RESULT = new BiOpNode(BiOpNode.OpType.AND, l, e);
     :}
   |
     EqualityExpression:e
@@ -269,12 +269,12 @@ EqualityExpression::=
   |
     EqualityExpression:e DBL_EQLS RelationalExpression:r
     {:
-      RESULT = new EqualityExpressionNode(BiOpNode.OpType.DBL_EQLS, e, r);
+      RESULT = new BiOpNode(BiOpNode.OpType.DBL_EQLS, e, r);
     :}
   |
     EqualityExpression:e NOT_EQLS RelationalExpression:r
     {:
-      RESULT = new EqualityExpressionNode(BiOpNode.OpType.NOT_EQLS, e, r);
+      RESULT = new BiOpNode(BiOpNode.OpType.NOT_EQLS, e, r);
     :}
   ;
 
@@ -286,22 +286,22 @@ RelationalExpression::=
   |
     RelationalExpression:r LESS AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpNode.OpType.LESS, r, a);
+      RESULT = new BiOpNode(BiOpNode.OpType.LESS, r, a);
     :}
   |
     RelationalExpression:r GRTR AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpNode.OpType.GRTR, r, a);
+      RESULT = new BiOpNode(BiOpNode.OpType.GRTR, r, a);
     :}
   |
     RelationalExpression:r LESS_EQL AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpNode.OpType.LESS_EQL, r, a);
+      RESULT = new BiOpNode(BiOpNode.OpType.LESS_EQL, r, a);
     :}
   |
     RelationalExpression:r GRTR_EQL AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpNode.OpType.GRTR_EQL, r, a);
+      RESULT = new BiOpNode(BiOpNode.OpType.GRTR_EQL, r, a);
     :}
   ;
 
@@ -313,12 +313,12 @@ AdditiveExpression::=
   |
     AdditiveExpression:a PLUS MultiplicativeExpression:m
     {:
-      RESULT = new AdditiveExpressionNode(BiOpNode.OpType.PLUS, a, m);
+      RESULT = new BiOpNode(BiOpNode.OpType.PLUS, a, m);
     :}
   |
     AdditiveExpression:a MINUS MultiplicativeExpression:m
     {: 
-      RESULT = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, a, m);
+      RESULT = new BiOpNode(BiOpNode.OpType.MINUS, a, m);
     :}
   ;
 
@@ -330,17 +330,17 @@ MultiplicativeExpression::=
   |
     MultiplicativeExpression:m TIMES CastExpression:c
     {:
-      RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, m, c); 
+      RESULT = new BiOpNode(BiOpNode.OpType.TIMES, m, c);
     :}
   |
     MultiplicativeExpression:m DIVIDE CastExpression:c
     {:
-      RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.DIVIDE, m, c);
+      RESULT = new BiOpNode(BiOpNode.OpType.DIVIDE, m, c);
     :}
   |
     MultiplicativeExpression:m MOD CastExpression:c
     {:
-      RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.MOD, m, c);
+      RESULT = new BiOpNode(BiOpNode.OpType.MOD, m, c);
     :}
   ;
 
@@ -352,14 +352,14 @@ CastExpression::=
   |
     L_PAREN Type:t R_PAREN CastExpression:c
     {:
-      RESULT = new CastExpressionNode(c, t);
+      RESULT = new UnOpNode(UnOpNode.OpType.CAST, c, t);
     :}
   ;
 
 UnaryExpression::=
     UnaryOperator:u CastExpression:c
     {:
-      RESULT = new UnaryExpressionNode(c, u);
+      RESULT = new UnOpNode(u, c);
     :}
   |
     PostfixExpression:p
@@ -389,12 +389,12 @@ PostfixExpression::=
   |
     PostfixExpression:p INCR
     {:
-      RESULT = new PostfixExpressionNode(p, UnOpNode.OpType.INCR);
+      RESULT = new UnOpNode(UnOpNode.OpType.INCR, p);
     :}
   |
     PostfixExpression:p DECR
     {:
-      RESULT = new PostfixExpressionNode(p, UnOpNode.OpType.DECR);
+      RESULT = new UnOpNode(UnOpNode.OpType.DECR, p);
     :}
   ;
 
@@ -452,19 +452,31 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement
+    IF L_PAREN Expression:e R_PAREN Statement:s ElseIfStatement:elif ElseStatement:el
+    {:
+      RESULT = new SelectionStatementNode();
+    :}
   |
-    SWITCH L_PAREN Expression R_PAREN Statement
+    SWITCH L_PAREN Expression:e R_PAREN Statement:s
+    {:
+      
+    :}
   ;
 
 ElseIfStatement::=
-    ELSEIF L_PAREN Expression R_PAREN ElseIfStatement
+    ELSEIF L_PAREN Expression:e R_PAREN ElseIfStatement:elif
+    {:
+      RESULT = new SelectionStatementNode(e, elif, null);
+    :}
   |
     /* epsilon */
   ;
 
 ElseStatement::=
-    ELSE Statement
+    ELSE Statement:s
+    {:
+      RESULT = new SelectionStatementNode(null, e, null);
+    :}
   |
     /* epsilon */
   ;

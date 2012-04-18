@@ -17,6 +17,11 @@
 # tmp:
 *~
 
+# Auto-generated:
+*Parser.java
+*Lexer.java
+*sym.java
+
 # Libraries:
 lib/jflex-1.4.3/*
 lib/jFlex/*
