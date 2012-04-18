@@ -15,14 +15,12 @@ import org.junit.Test;
 import back_end.TypeCheckingVisitor;
 import util.ast.AbstractSyntaxTree;
 import util.ast.UntypedAbstractSyntaxTree;
-import util.ast.node.AdditiveExpressionNode;
 import util.ast.node.BiOpNode;
 import util.ast.node.ConstantNode;
 import util.ast.node.ExpressionNode;
 import util.ast.node.IdNode;
 import util.ast.node.MockExpressionNode;
 import util.ast.node.MockNode;
-import util.ast.node.MultiplicativeExpressionNode;
 import util.ast.node.Node;
 import util.type.Types.Type;
 
@@ -59,9 +57,9 @@ public class AbstractSyntaxTreeTester {
 		E = new MockExpressionNode();
 		F = new MockExpressionNode();
 		G = new MockExpressionNode();
-		B = new AdditiveExpressionNode(BiOpNode.OpType.PLUS, D, E);
-		C = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, F, G);
-		A = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, B, C);
+		B = new BiOpNode(BiOpNode.OpType.PLUS, D, E);
+		C = new BiOpNode(BiOpNode.OpType.MINUS, F, G);
+		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
 		// A is root of tree, with children B, C
 		// B has children D, E
 		// C has children F, G

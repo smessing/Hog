@@ -12,7 +12,7 @@ import back_end.Visitor;
  * @author sam
  *
  */
-public abstract class ExpressionNode extends Node {
+public abstract class ExpressionNode extends StatementNode {
 	
 	protected Type type;
 	

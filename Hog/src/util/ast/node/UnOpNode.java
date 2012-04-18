@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import back_end.Visitor;
 
+import util.type.Types;
 import util.type.Types.Type;
 
 /**
@@ -12,7 +13,7 @@ import util.type.Types.Type;
  * @author sam
  *
  */
-public abstract class UnOpNode extends ExpressionNode {
+public class UnOpNode extends ExpressionNode {
 	
 	// note: NONE means no unary operator applied.
 	public static enum OpType {
@@ -21,19 +22,17 @@ public abstract class UnOpNode extends ExpressionNode {
 	
 	protected OpType opType;
 	
-	public UnOpNode(ExpressionNode child, OpType opType) {
-		this.children = new ArrayList<Node>();
+	public UnOpNode(OpType opType, ExpressionNode child) {
+		this(opType, child, Type.UNKNOWN);
+	}
+	
+	public UnOpNode(OpType opType, ExpressionNode child, Type type) {
+		super(type);
 		// note implicitly sets child.parent = this
 		this.addChild(child);
 		this.opType = opType;
 	}
 	
-	public UnOpNode(ExpressionNode child, Type type) {
-		this.children = new ArrayList<Node>();
-		this.addChild(child);
-		this.opType = OpType.CAST;
-		this.type = type;
-	}
 	
 	public OpType getOpType() {
 		return opType;

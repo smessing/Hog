@@ -49,13 +49,21 @@ terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
 
-nonterminal Program, Functions, FunctionList, Function, ParameterList, Map, Reduce, SectionType;
-nonterminal Main, StatementList, ExpressionStatement, SelectionStatement, IterationStatement;
-nonterminal LabeledStatement;
-nonterminal Parameters;
-
-nonterminal Statement, ElseIfStatement, ElseStatement;
-
+nonterminal ProgramNode Program;
+nonterminal SectionNode Functions;
+nonterminal SectionNode Main;
+nonterminal SectionNode Map;
+nonterminal SectionNode Reduce;
+nonterminal SectionTypeNode SectionType;
+nonterminal StatementNode Statement;
+nonterminal StatementNode ExpressionStatement;
+nonterminal StatementNode FunctionList;
+nonterminal StatementNode IterationStatement;
+nonterminal StatementNode LabeledStatement;
+nonterminal StatementNode SelectionStatement;
+nonterminal StatementNode StatementList;
+nonterminal ElseIfStatementNode ElseIfStatement;
+nonterminal ElseStatementNode ElseStatement;
 nonterminal ExpressionNode EqualityExpression;
 nonterminal ExpressionNode LogicalExpression;
 nonterminal ExpressionNode LogicalTerm;
@@ -68,6 +76,9 @@ nonterminal ExpressionNode UnaryExpression;
 nonterminal ExpressionNode PostfixExpression;
 nonterminal ExpressionNode PrimaryExpression;
 nonterminal ExpressionNode Constant;
+nonterminal FunctionNode Function;
+nonterminal ParametersNode ParameterList;
+nonterminal ParametersNode Parameters;
 nonterminal Types.Type Type;
 nonterminal UnOpNode.OpType UnaryOperator;
 
@@ -77,57 +88,117 @@ precedence right UMINUS;
 start with Program;
 
 Program::=
-    Functions Map Reduce Main
+    Functions:f Map:m Reduce:r Main:n
+    {:
+      RESULT = new ProgramNode(f, m, r, n);
+    :}
   ;
 
 Functions::=
-    FUNCTIONS L_BRACE FunctionList R_BRACE
+    FUNCTIONS L_BRACE FunctionList:fl R_BRACE
+    {:
+      RESULT = new SectionNode(fl);
+    :}
   |
     /* epsilon */
   ; 
  
 FunctionList::=
-    Function
+    Function:f
+    {:
+      RESULT = f;
+    :}
   |
-    FunctionList Function
+    FunctionList:fl Function:f
+    {:
+      List<Node> children = new ArrayList<Node>();
+      children.add(fl);
+      children.add(f);
+      RESULT = new StatementNode(children);
+    :}
   ;
 
 Function::=
-    Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE
+    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new FunctionNode(t, pl, sl); 
+    :}
   ;
 
 ParameterList::=
-    Type ID COMMA ParameterList
+    Type:t ID:i COMMA ParameterList:pl
+    {:
+      RESULT = new ParametersNode(t, i, pl);
+    :}
   |
-    Type ID
+    Type:t ID:i
+    {:
+      RESULT = new ParametersNode(t, i);
+    :}
   |
     /* epsilon */
   ;
 
 Map::=
-    MAP SectionType L_BRACE StatementList R_BRACE
+    MAP SectionType:st L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new SectionNode(st, sl);
+    :}
   ;
 
 Reduce::=
-    REDUCE SectionType L_BRACE StatementList R_BRACE
+    REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new SectionNode(st, sl);
+    :}
   ;
 
 SectionType::=
-    L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN
+    L_PAREN Type:t1 ID COMMA Type:t2 ID R_PAREN ARROW L_PAREN Type:t3 COMMA Type:t4 R_PAREN
+    {:
+      RESULT = new SectionTypeNode(t1, t2, t3, t4);
+    :}
   ;
 
 Main::=
-    MAIN L_BRACE StatementList R_BRACE
+    MAIN L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new SectionNode(sl);
+    :}
   ;
 
 StatementList::=
-    StatementList ExpressionStatement
+    StatementList:sl ExpressionStatement:es
+    {:
+      List<Node> children = new ArrayList<Node>();
+      children.add(sl);
+      children.add(es);
+      RESULT = new StatementNode(children);
+    :}
   |
-    StatementList SelectionStatement
+    StatementList:sl SelectionStatement:ss
+    {:
+      List<Node> children = new ArrayList<Node>();
+      children.add(sl);
+      children.add(ss);
+      RESULT = new StatementNode(children);
+    :}
   |
-    StatementList IterationStatement
+    StatementList:sl IterationStatement:is
+    {:
+      List<Node> children = new ArrayList<Node>();
+      children.add(sl);
+      children.add(is);
+      RESULT = new StatementNode(children);
+    :}
   |
-    StatementList LabeledStatement
+    StatementList:sl LabeledStatement:ls
+    {:
+      List<Node> children = new ArrayList<Node>();
+      children.add(sl);
+      children.add(ls);
+      RESULT = new StatementNode(children);
+    :}
   |
     /* epsilon */
   |
@@ -135,25 +206,41 @@ StatementList::=
   |
     CONTINUE
   |
-    RETURN Expression
+    RETURN Expression:e
+    {:
+      RESULT = new UnOpNode(UnOpNode.OpType.RETURN, e);
+    :}
   ;
  
 ExpressionStatement::=
     NEWLINE
+    {:
+      /* TODO is this correct? */
+      RESULT = null;  
+    :}
   |
-    Expression NEWLINE
+    Expression:e NEWLINE
+    {:
+      RESULT = e;
+    :}
   ;
 
 Expression::=
-    LogicalExpression
+    LogicalExpression:le
+    {:
+      RESULT = le;
+    :}
   |
-    UnaryExpression ASSIGN Expression
+    UnaryExpression:ue ASSIGN Expression:e
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, ue, e);
+    :}
   ;
 
 LogicalExpression::=
     LogicalExpression:le OR LogicalTerm:lt
     {:
-      RESULT = new LogicalExpressionNode(le, lt);
+      RESULT = new BiOpNode(BiOpNode.OpType.OR, le, lt);
     :}
   |
     LogicalTerm:l
@@ -165,7 +252,7 @@ LogicalExpression::=
 LogicalTerm::=
     LogicalTerm:l AND EqualityExpression:e
     {:
-      RESULT = new LogicalTermNode(l,e);
+      RESULT = new BiOpNode(BiOpNode.OpType.AND, l, e);
     :}
   |
     EqualityExpression:e
@@ -182,12 +269,12 @@ EqualityExpression::=
   |
     EqualityExpression:e DBL_EQLS RelationalExpression:r
     {:
-      RESULT = new EqualityExpressionNode(BiOpNode.OpType.DBL_EQLS, e, r);
+      RESULT = new BiOpNode(BiOpNode.OpType.DBL_EQLS, e, r);
     :}
   |
     EqualityExpression:e NOT_EQLS RelationalExpression:r
     {:
-      RESULT = new EqualityExpressionNode(BiOpNode.OpType.NOT_EQLS, e, r);
+      RESULT = new BiOpNode(BiOpNode.OpType.NOT_EQLS, e, r);
     :}
   ;
 
@@ -199,22 +286,22 @@ RelationalExpression::=
   |
     RelationalExpression:r LESS AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpNode.OpType.LESS, r, a);
+      RESULT = new BiOpNode(BiOpNode.OpType.LESS, r, a);
     :}
   |
     RelationalExpression:r GRTR AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpNode.OpType.GRTR, r, a);
+      RESULT = new BiOpNode(BiOpNode.OpType.GRTR, r, a);
     :}
   |
     RelationalExpression:r LESS_EQL AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpNode.OpType.LESS_EQL, r, a);
+      RESULT = new BiOpNode(BiOpNode.OpType.LESS_EQL, r, a);
     :}
   |
     RelationalExpression:r GRTR_EQL AdditiveExpression:a
     {:
-      RESULT = new RelationalExpressionNode(BiOpNode.OpType.GRTR_EQL, r, a);
+      RESULT = new BiOpNode(BiOpNode.OpType.GRTR_EQL, r, a);
     :}
   ;
 
@@ -226,12 +313,12 @@ AdditiveExpression::=
   |
     AdditiveExpression:a PLUS MultiplicativeExpression:m
     {:
-      RESULT = new AdditiveExpressionNode(BiOpNode.OpType.PLUS, a, m);
+      RESULT = new BiOpNode(BiOpNode.OpType.PLUS, a, m);
     :}
   |
     AdditiveExpression:a MINUS MultiplicativeExpression:m
     {: 
-      RESULT = new AdditiveExpressionNode(BiOpNode.OpType.MINUS, a, m);
+      RESULT = new BiOpNode(BiOpNode.OpType.MINUS, a, m);
     :}
   ;
 
@@ -243,17 +330,17 @@ MultiplicativeExpression::=
   |
     MultiplicativeExpression:m TIMES CastExpression:c
     {:
-      RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.TIMES, m, c); 
+      RESULT = new BiOpNode(BiOpNode.OpType.TIMES, m, c);
     :}
   |
     MultiplicativeExpression:m DIVIDE CastExpression:c
     {:
-      RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.DIVIDE, m, c);
+      RESULT = new BiOpNode(BiOpNode.OpType.DIVIDE, m, c);
     :}
   |
     MultiplicativeExpression:m MOD CastExpression:c
     {:
-      RESULT = new MultiplicativeExpressionNode(BiOpNode.OpType.MOD, m, c);
+      RESULT = new BiOpNode(BiOpNode.OpType.MOD, m, c);
     :}
   ;
 
@@ -265,14 +352,14 @@ CastExpression::=
   |
     L_PAREN Type:t R_PAREN CastExpression:c
     {:
-      RESULT = new CastExpressionNode(c, t);
+      RESULT = new UnOpNode(UnOpNode.OpType.CAST, c, t);
     :}
   ;
 
 UnaryExpression::=
     UnaryOperator:u CastExpression:c
     {:
-      RESULT = new UnaryExpressionNode(c, u);
+      RESULT = new UnOpNode(u, c);
     :}
   |
     PostfixExpression:p
@@ -302,12 +389,12 @@ PostfixExpression::=
   |
     PostfixExpression:p INCR
     {:
-      RESULT = new PostfixExpressionNode(p, UnOpNode.OpType.INCR);
+      RESULT = new UnOpNode(UnOpNode.OpType.INCR, p);
     :}
   |
     PostfixExpression:p DECR
     {:
-      RESULT = new PostfixExpressionNode(p, UnOpNode.OpType.DECR);
+      RESULT = new UnOpNode(UnOpNode.OpType.DECR, p);
     :}
   ;
 
@@ -331,9 +418,15 @@ PrimaryExpression::=
   ;
 
 Parameters::=
-    ID
+    ID:i
+    {:
+      RESULT = new ParametersNode(Types.Type.UNKNOWN, i);
+    :}
   | 
-    ID COMMA Parameters
+    ID:i COMMA Parameters:p
+    {:
+      RESULT = new ParametersNode(Types.Type.UNKNOWN, i, p);
+    :}
   ;
 
 Constant::=
@@ -359,19 +452,31 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement
+    IF L_PAREN Expression:e R_PAREN Statement:s ElseIfStatement:elif ElseStatement:el
+    {:
+      RESULT = new SelectionStatementNode();
+    :}
   |
-    SWITCH L_PAREN Expression R_PAREN Statement
+    SWITCH L_PAREN Expression:e R_PAREN Statement:s
+    {:
+      
+    :}
   ;
 
 ElseIfStatement::=
-    ELSEIF L_PAREN Expression R_PAREN ElseIfStatement
+    ELSEIF L_PAREN Expression:e R_PAREN ElseIfStatement:elif
+    {:
+      RESULT = new SelectionStatementNode(e, elif, null);
+    :}
   |
     /* epsilon */
   ;
 
 ElseStatement::=
-    ELSE Statement
+    ELSE Statement:s
+    {:
+      RESULT = new SelectionStatementNode(null, e, null);
+    :}
   |
     /* epsilon */
   ;

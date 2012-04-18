@@ -1,5 +1,6 @@
 package util.ast.node;
 
+import util.type.Types;
 import back_end.Visitor;
 
 /**
@@ -9,6 +10,19 @@ import back_end.Visitor;
  *
  */
 public class ParametersNode extends ExpressionNode {
+	
+	protected String identifier;
+	
+	public ParametersNode(Types.Type type, String identifier) {
+		super(type);
+		this.identifier = identifier;
+	}
+	
+	public ParametersNode(Types.Type type, String identifier, ParametersNode child) {
+		super(type);
+		this.addChild(child);
+		this.identifier = identifier;
+	}
 	
 	@Override
 	public String getName() {
