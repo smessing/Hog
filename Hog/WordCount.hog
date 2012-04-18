@@ -1,11 +1,11 @@
 @Functions {
   int fib(int n) {
     if n == 0 {
-      return 0
+      return 0;
     } elseif n == 1 {
-      return 1
+      return 1;
     } else {
-      return fib(n-1) + fib(n-2)
+      return fib(n-1) + fib(n-2);
     }
   }
 }
@@ -13,7 +13,7 @@
 @Map (int lineNum, text line) -> (text, int) {
   #{ this is a 
        block comment }#
-  int count = 1
+  int count = 1;
   # uncommenting the following line makes @map bleed into @reduce
   # print("x")
   #while values.hasNext() {
@@ -26,24 +26,24 @@
 
 @Reduce (text word, iter<int> values) -> (text, int) {
   # this is a line comment:
-  int count = 0
+  int count = 0;
   #switch(count) {
   #  case 1: print("one")
   #          break
   #}
-  list<text> textList(5) 
-  list<list<text>> doubleList
-  list<list<text>> anotherDoubleList = doubleList
+  list<text> textList; 
+  list<list<text>> doubleList;
+  list<list<text>> anotherDoubleList = doubleList;
   while values.hasNext() {
-    count = count + values.next()
-    int face = 5
+    count = count + values.next();
+    int face = 5;
   }
-  emit(count, word)
+  emit(count, word);
   if quit == (5 > 2) {
-    return
+    return;
   }
 }
 
 @Main {
-  mapReduce()
+  mapReduce();
 }
