@@ -488,14 +488,16 @@ PostfixExpression::=
     PostfixExpression:p DOT ID:i
     {:
       // object method call no params
-      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.METHOD_NO_PARAMS, p, i);
+      IdNode idNode = new IdNode(i);
+      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.METHOD_NO_PARAMS, p, idNode);
       System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
     :}
   |
-    PostfixExpression:p DOT ID:i L_PAREN ArgumentsExpressionList:a R_PAREN
+    PostfixExpression:p DOT ID:i L_PAREN ArgumentExpressionList:a R_PAREN
     {:
       // object method call with params
-      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.METHOD_WITH_PARAMS, p, i, a);
+      IdNode idNode = new IdNode(i);
+      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.METHOD_WITH_PARAMS, p, idNode, a);
       System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
     :}
   |

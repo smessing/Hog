@@ -1,8 +1,10 @@
 package front_end;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import util.ast.AbstractSyntaxTree;
@@ -13,6 +15,7 @@ import util.ast.node.IdNode;
 import util.ast.node.MockExpressionNode;
 import util.ast.node.MockNode;
 import util.ast.node.Node;
+import util.ast.node.ProgramNode;
 import util.type.Types;
 
 import java_cup.parser;
@@ -37,14 +40,15 @@ public class ConsoleLexer {
 	 * */
 	public static void main(String[] args) throws IOException {
 		
+		
 		LOGGER.info("Entering ConsoleLexer main()");
 		String filename = "WordCount.hog";
+		ProgramNode root = null;
 		FileReader fileReader = new FileReader(new File(filename));
 	    try {
 	        // Parser p = new Parser(new Lexer(System.in));
 	    	Parser p = new Parser(new Lexer(fileReader));
-	    	p.debug_parse();
-
+	    	root = (ProgramNode) p.parse().value;
 	    	
 	      }
 	      catch (FileNotFoundException e) {
@@ -53,5 +57,15 @@ public class ConsoleLexer {
 	      catch (Exception ex) {
 	    	  ex.printStackTrace();
 	      }
+	    
+	    AbstractSyntaxTree ast = new UntypedAbstractSyntaxTree(root);
+	    String latexString = ast.toLatex();
+	    
+	    FileWriter fstream = new FileWriter("AST_output.tex");
+	    BufferedWriter bout = new BufferedWriter(fstream);
+	    bout.write(latexString);
+	    bout.close();
+	    
+	    
 	}
 }

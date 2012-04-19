@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import back_end.Visitor;
 
+import util.type.Types;
 import util.type.Types.Type;
 
 /**
@@ -17,9 +18,7 @@ public class IdNode extends ExpressionNode {
 	private String identifier;
 
 	public IdNode(String id) {
-		super();
-		this.setIdentifier(id);
-		//this(id, null);
+		this(id, Types.Type.UNKNOWN);
 	}
 
 	public IdNode(String id, Type type) {
