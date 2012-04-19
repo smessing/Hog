@@ -55,6 +55,11 @@ public class MockNode extends Node {
 		v.visit(this);
 	}
 	
-	
+	@Override
+	public int visitorTest(Visitor v){
+		v.visit(this);
+		System.out.println("here in mock node");
+		return 10;
+	}
 	
 }

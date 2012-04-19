@@ -20,5 +20,9 @@ public class PrimaryExpressionNode extends ExpressionNode {
 		v.visit(this);
 	}
 	
-	
+	@Override
+	public int visitorTest(Visitor v){
+		v.visit(this);
+		return 14;
+	}
 }

@@ -27,6 +27,18 @@ pairs by key, and outputs a final set of key-value pairs. This model of computat
 has been widely adopted for distributing large computations that might be
 considered ``embarassingly parallelizable.''
 
+\subsection*{Thinking in MapReduce}
+\label{sec:mapreduce_intro}
+For a programmer new to the idea of distributed computation, MapReduce may appear to offer almost limitless possibilities. Part of the challenge of learning to use a MapReduce framework is to clearly understand its limitations. Intuitively, MapReduce can solve a problem only if there is an explicit parallelizable component. For example, finding the maximum value in a large unsorted list of numbers, computing a Fast Fourier Transform, and counting the occurrence of words in a large amount of text are problems with an easy-to-see parallelizable component. Here are the basic steps that can guide the programmer in identifying problems that are candidates for solution via MapReduce:
+\begin{enumerate}
+\item Construct a non-parallel solution to the problem.
+\item Is there a component in the solution that can be broken up into smaller chunks that are not mutually dependent (the ``map'' phase)? If not, then MapReduce likely will not help.
+\item Can the results of the computations of the independent smaller chunks be reassembled to produce a solution to a larger subproblem (the ``reduce'' phase)? If not, then MapReduce will not be able to build the solution to larger problems from smaller ones, and will not be useful.
+\item Having identified the parallelizable component, check for hidden dependencies between the subproblems by analyzing whether reassembling the smaller components in different ways may produce different answers. If this happens, the reduce phase can not properly be completed.
+\end{enumerate}
+
+Once the map (breaking up the problem into chunks) and the reduce (recombining the solutions of the subproblems) phases have been clearly understood, one is ready to write a Hog program.
+
 \subsection*{Program Structure} % (fold)
 \label{sub:program_structure}
 Every Hog program has four sections, defined in the following order:

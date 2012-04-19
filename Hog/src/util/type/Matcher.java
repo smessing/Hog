@@ -1,3 +1,7 @@
+package util.type;
+
+import util.type.Types.Type;
+
 
 
 public interface Matcher<T> {
@@ -5,7 +9,7 @@ public interface Matcher<T> {
 
     boolean visit(Type t);
    
-    Name name();
+    //Name name();
     String signature();
 
     /** Key used for cache lookups, or null if cannot be cached. */

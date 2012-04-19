@@ -12,7 +12,7 @@ import back_end.Visitor;
  * @author sam
  *
  */
-public abstract class ExpressionNode extends Node {
+public abstract class ExpressionNode extends StatementNode {
 	
 	protected Type type;
 	
@@ -64,4 +64,9 @@ public abstract class ExpressionNode extends Node {
 		v.visit(this);
 	}
 
+	@Override
+	public int visitorTest(Visitor v){
+		v.visit(this);
+		return 5;
+	}
 }

@@ -1,0 +1,32 @@
+@Functions {
+  int fib(int n) {
+    if n == 0 {
+      return 0
+    } elseif n == 1 {
+      return 1
+    } else {
+      return fib(n-1) + fib(n-2)
+    }
+  }
+}
+
+@Map (int lineNum, text line) -> (text, int) {
+  #{ this is a 
+       block comment }#
+  int count = 1
+  foreach word in line.tokenize(" ") {
+    emit(word, 1)
+  }
+}
+
+@Reduce (text word, int values) -> (text, int) {
+  int count = 0
+  while values.hasNext() {
+    count = count + values.next()
+  }
+  emit(count, word)
+}
+
+@Main {
+  mapReduce()
+}

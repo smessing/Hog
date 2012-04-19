@@ -9,7 +9,7 @@ public class Types {
 	}
 
 	public static enum Derived {
-		LIST, ITER
+		LIST, ITER, DICT, MULTISET, SET
 	}
 
 	public static boolean isSameType(ExpressionNode one, ExpressionNode two) {
@@ -27,6 +27,26 @@ public class Types {
 		else
 			return Type.UNKNOWN;
 
+	}
+
+	public static boolean isInt(Type type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public static boolean isReal(Type type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public static boolean isBool(Type type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public static boolean isText(Type type) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

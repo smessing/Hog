@@ -20,20 +20,23 @@ import util.type.Types;
  * @author sam
  * 
  */
-public abstract class BiOpNode extends ExpressionNode {
+public class BiOpNode extends ExpressionNode {
 
 	public static enum OpType {
-		MINUS, PLUS, DIVIDE, TIMES, MOD, LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, OR, AND
+		ASSIGN, MINUS, PLUS, DIVIDE, TIMES, MOD, LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, OR, AND
 	}
 
 	protected OpType opType;
 
 	public BiOpNode(OpType type, ExpressionNode left, ExpressionNode right) {
 		// note implicitly sets children.parent = this
+		super();
+		BiOpNode.LOGGER.info("Constucting BiOpNode");
+		this.opType = type;
 		this.addChild(left);
 		this.addChild(right);
-		this.opType = type;
 		this.type = Types.getHigherType(left.getType(), right.getType());
+		
 	}
 
 
@@ -47,7 +50,7 @@ public abstract class BiOpNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return opType.toString() + "<" + this.getTypeName() + ">";
+		return "BiOpNode<" + opType.toString() + ">";
 	}
 	
 	@Override
