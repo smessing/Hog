@@ -670,14 +670,14 @@ Type::=
       System.out.println("Type -> REAL");
     :}
   |
-    DerivedType
+    DerivedType:d
     {:
       System.out.println("Type -> DerivedType");
     :}
   ;
 
 DerivedType::=
-    DerivedType LESS Type GRTR
+    DerivedType:d LESS Type:t GRTR
     {:
       System.out.println("DerivedType -> DerivedType L_ANGLE Type R_ANGLE");
     :}
