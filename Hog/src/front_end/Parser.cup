@@ -58,7 +58,7 @@ terminal LIST, ITER, DICT, MULTISET, SET;
 nonterminal JumpStatement;
 nonterminal ArgumentExpressionList;
 nonterminal DerivedType;
-nonterminal DeclarationStatement;
+
 
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
@@ -72,6 +72,7 @@ nonterminal StatementNode FunctionList;
 nonterminal StatementNode IterationStatement;
 nonterminal StatementNode LabeledStatement;
 nonterminal StatementNode SelectionStatement;
+nonterminal StatementNode DeclarationStatement;
 nonterminal StatementNode StatementList;
 nonterminal SelectionStatementNode ElseIfStatement;
 nonterminal SelectionStatementNode ElseStatement;
@@ -103,7 +104,7 @@ start with Program;
 Program::=
     Functions:f NEWLINE Map:m NEWLINE Reduce:r NEWLINE Main:n NEWLINE
     {:
-      // RESULT = new ProgramNode(f, m, r, n);
+      RESULT = new ProgramNode(f, m, r, n);
       System.out.println("PROGRAM");
     :}
   ;
@@ -111,7 +112,7 @@ Program::=
 Functions::=
     FUNCTIONS L_BRACE FunctionList:fl NEWLINE R_BRACE
     {:
-     // RESULT = new SectionNode(fl);
+     RESULT = new SectionNode(fl);
      System.out.println("Functions -> FUNCTIONS L_BRACE FunctionList R_BRACE");
     :}
   |
@@ -121,16 +122,16 @@ Functions::=
 FunctionList::=
     NEWLINE Function:f
     {:
-      // RESULT = f;
+      RESULT = f;
       System.out.println("FunctionList -> Function");
     :}
   |
     FunctionList:fl NEWLINE Function:f
     {:
-      // List<Node> children = new ArrayList<Node>();
-      // children.add(fl);
-      // children.add(f);
-      // RESULT = new StatementNode(children);
+      List<Node> children = new ArrayList<Node>();
+      children.add(fl);
+      children.add(f);
+      RESULT = new StatementNode(children);
       System.out.println("FunctionList -> FunctionList Function");
     :}
   ;
@@ -138,7 +139,7 @@ FunctionList::=
 Function::=
     Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
     {:
-      // RESULT = new FunctionNode(t, pl, sl); 
+      RESULT = new FunctionNode(t, pl, sl); 
       System.out.println("Function -> Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE");
     :}
   ;
@@ -146,14 +147,14 @@ Function::=
 ParameterList::=
     ParameterList:pl COMMA Type:t ID:i
     {:
-      // RESULT = new ParametersNode(t, i, pl);
+      RESULT = new ParametersNode(t, i, pl);
       System.out.println("ParameterList -> ParameterList COMMA Type ID: " + i);
     :}
   |
     Type:t ID:i
     {:
-      // RESULT = new ParametersNode(t, i);
-      System.out.println("Type ID: " + i);
+      RESULT = new ParametersNode(t, i);
+      System.out.println("ParameterList -> Type ID: " + i);
     :}
   |
     /* epsilon */
@@ -162,7 +163,7 @@ ParameterList::=
 Map::=
     MAP SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
-      // RESULT = new SectionNode(st, sl);
+      RESULT = new SectionNode(st, sl);
       System.out.println("Map -> MAP SectionType L_BRACE StatementList R_BRACE");
     :}
   ;
@@ -170,15 +171,15 @@ Map::=
 Reduce::=
     REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
-      // RESULT = new SectionNode(st, sl);
+      RESULT = new SectionNode(st, sl);
       System.out.println("Reduce -> REDUCE SectionType L_BRACE StatementList R_BRACE");
     :}
   ;
 
 SectionType::=
-    L_PAREN Type:t1 ID COMMA Type:t2 ID R_PAREN ARROW L_PAREN Type:t3 COMMA Type:t4 R_PAREN
+    L_PAREN Type:t1 ID:i1 COMMA Type:t2 ID:i2 R_PAREN ARROW L_PAREN Type:t3 COMMA Type:t4 R_PAREN
     {:
-     // RESULT = new SectionTypeNode(t1, t2, t3, t4);
+     RESULT = new SectionTypeNode(new IdNode(i1, t1), new IdNode(i2, t2), t3, t4);
      System.out.println("SectionType -> L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN");
     :}
   ;
@@ -186,19 +187,21 @@ SectionType::=
 Main::=
     MAIN L_BRACE StatementList:sl R_BRACE
     {:
-      // RESULT = new SectionNode(sl);
+      RESULT = new SectionNode(sl);
       System.out.println("Main -> MAIN L_BRACE StatementList R_BRACE");
     :}
   ;
 
 StatementList::=
-    NEWLINE Statement
+    NEWLINE Statement:s
     {:
+      RESULT = s;
       System.out.println("StatementList -> Statement");
     :}
   |
-    StatementList NEWLINE Statement
+    StatementList:sl NEWLINE Statement:s
     {:
+      RESULT = new StatementNode(sl, s);
       System.out.println("StatementList -> StatementList Statement");
     :}
   ;
@@ -206,60 +209,51 @@ StatementList::=
 Statement::=
     ExpressionStatement:es
     {:
-      // List<Node> children = new ArrayList<Node>();
-      // children.add(es);
-      // RESULT = new StatementNode(children);
+      RESULT = es;
       System.out.println("Statement -> ExpressionStatement");
     :}
   |
    SelectionStatement:ss
     {:
-      // List<Node> children = new ArrayList<Node>();
-      // children.add(ss);
-      // RESULT = new StatementNode(children);
+      RESULT = ss;
       System.out.println("Statement -> SelectionStatement");
     :}
   |
     IterationStatement:is
     {:
-      // List<Node> children = new ArrayList<Node>();
-      // children.add(is);
-      // RESULT = new StatementNode(children);
+      RESULT = is;
       System.out.println("Statement -> IterationStatement");
     :}
   |
     LabeledStatement:ls
     {:
-     // List<Node> children = new ArrayList<Node>();
-     // children.add(ls);
-     // RESULT = new StatementNode(children);
+     //RESULT = ls;
      System.out.println("Statement -> LabeledStatement");
     :}
   |
-    JumpStatement
+    JumpStatement:js
     {:
+      //RESULT = js;
       System.out.println("Statement -> JumpStatement");
     :}
-  | DeclarationStatement
+  | DeclarationStatement:ds
     {:
+      RESULT = ds;
       System.out.println("Statement -> DeclarationStatement");
     :}
   ;
-
+ 
 DeclarationStatement::=
-    Type ID
+    Type:t ID:i
     {:
+      RESULT = new IdNode(i, t);
       System.out.println("DeclarationStatement -> Type ID");
     :}
   |
-    Type ID ASSIGN Expression
+    Type:t ID:i ASSIGN Expression:e
     {:
+      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, new IdNode(i,t), e);
       System.out.println("DeclarationStatement -> Type ID ASSIGN Expression");
-    :}
-  |
-    Type ID L_PAREN ArgumentExpressionList R_PAREN
-    {:
-      System.out.println("DeclarationStatement -> Type ID Expression L_PAREN ArgumentExpressionList R_PAREN");
     :}
   ;
  
@@ -289,7 +283,7 @@ ExpressionStatement::=
   |
     Expression:e
     {:
-      // RESULT = e;
+      RESULT = e;
       System.out.println("ExpressionStatement -> Expression NEWLINE");
     :}
   ;
@@ -297,13 +291,13 @@ ExpressionStatement::=
 Expression::=
     LogicalExpression:le
     {:
-     // RESULT = le;
+     RESULT = le;
      System.out.println("Expression -> LogicalExpression");
     :}
   |
     UnaryExpression:ue ASSIGN Expression:e
     {:
-      // RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, ue, e);
+      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, ue, e);
       System.out.println("Expression -> UnaryExpression ASSIGN Expression");
     :}
   ;
@@ -311,13 +305,13 @@ Expression::=
 LogicalExpression::=
     LogicalExpression:le OR LogicalTerm:lt
     {:
-      // RESULT = new BiOpNode(BiOpNode.OpType.OR, le, lt);
+      RESULT = new BiOpNode(BiOpNode.OpType.OR, le, lt);
       System.out.println("LogicalExpression -> LogicalExpression OR LogicalTerm");
     :}
   |
     LogicalTerm:l
     {:
-      // RESULT = l;
+      RESULT = l;
       System.out.println("LogicalExpression -> LogicalTerm");
     :}
   ;
@@ -325,13 +319,13 @@ LogicalExpression::=
 LogicalTerm::=
     LogicalTerm:l AND EqualityExpression:e
     {:
-      // RESULT = new BiOpNode(BiOpNode.OpType.AND, l, e);
+      RESULT = new BiOpNode(BiOpNode.OpType.AND, l, e);
       System.out.println("LogicalTerm -> LogicalTerm AND EqualityExpression");
     :}
   |
     EqualityExpression:e
     {:
-      // RESULT = e;
+      RESULT = e;
       System.out.println("LogicalTerm -> EqualityExpression");
     :}
   ;
@@ -339,19 +333,19 @@ LogicalTerm::=
 EqualityExpression::=
     RelationalExpression:r
     {: 
-      // RESULT = r; 
+      RESULT = r; 
       System.out.println("EqualityExpression -> RelationalExpression");
     :}
   |
     EqualityExpression:e DBL_EQLS RelationalExpression:r
     {:
-      // RESULT = new BiOpNode(BiOpNode.OpType.DBL_EQLS, e, r);
+      RESULT = new BiOpNode(BiOpNode.OpType.DBL_EQLS, e, r);
       System.out.println("EqualityExpression -> EqualityExpression DBL_EQLS RelationalExpression");
     :}
   |
     EqualityExpression:e NOT_EQLS RelationalExpression:r
     {:
-      // RESULT = new BiOpNode(BiOpNode.OpType.NOT_EQLS, e, r);
+      RESULT = new BiOpNode(BiOpNode.OpType.NOT_EQLS, e, r);
       System.out.println("EqualityExpression -> EqualityExpression NOT_EQLS RelationalExpression");
     :}
   ;
@@ -646,31 +640,31 @@ LabeledStatement::=
 Type::=
     VOID
     {:
-      // RESULT = Types.Type.VOID;
+      RESULT = Types.Type.VOID;
       System.out.println("Type -> VOID");
     :}
   |
     TEXT
     {:
-      // RESULT = Types.Type.TEXT;
+      RESULT = Types.Type.TEXT;
       System.out.println("Type -> TEXT");
     :}
   |
     BOOL
     {:
-      // RESULT = Types.Type.BOOL;
+      RESULT = Types.Type.BOOL;
       System.out.println("Type -> BOOL");
     :}
   |
     INT:i
     {:
-      // RESULT = Types.Type.INT;
+      RESULT = Types.Type.INT;
       System.out.println("Type -> INT");
     :}
   |
     REAL
     {:
-      // RESULT = Types.Type.REAL;
+      RESULT = Types.Type.REAL;
       System.out.println("Type -> REAL");
     :}
   |

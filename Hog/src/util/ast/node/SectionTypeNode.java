@@ -5,21 +5,22 @@ import back_end.Visitor;
 
 public class SectionTypeNode extends Node {
 
-	protected Types.Type inputKey;
-	protected Types.Type inputValue;
+	protected IdNode inputKeyIdNode;
+	protected IdNode inputValueIdNode;
 	protected Types.Type returnKey;
 	protected Types.Type returnValue;
 
-	public SectionTypeNode(Types.Type inputKey, Types.Type inputValue,
-			Types.Type returnKey, Types.Type returnValue) {
-		this.inputKey = inputKey;
-		this.inputValue = inputValue;
+
+	public SectionTypeNode(IdNode inputKeyIdNode, IdNode inputValueIdNode, Types.Type returnKey,
+			               Types.Type returnValue) {
+		this.inputKeyIdNode = inputKeyIdNode;
+		this.inputValueIdNode = inputValueIdNode;
 		this.returnKey = returnKey;
 		this.returnValue = returnValue;
 	}
 
 	public String getType() {
-		return this.inputKey.toString() + ", " + this.inputValue.toString()
+		return this.inputKeyIdNode.toString() + ", " + this.inputValueIdNode.toString()
 				+ " -> " + this.returnKey.toString()
 				+ this.returnValue.toString();
 	}
