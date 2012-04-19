@@ -478,27 +478,32 @@ PostfixExpression::=
       System.out.println("PostfixExpression -> PrimaryExpression");
     :}
   |
-    PostfixExpression L_BRKT Expression R_BRKT
+    PostfixExpression:p L_BRKT Expression:e R_BRKT
     {:
       // array indexing
+      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.ARRAY_INDEX, p, e);
       System.out.println("PostfixExpression -> PostfixExpression L_BRKT Expression R_BRKT"); 
     :}
   |
-    PostfixExpression DOT ID:i
+    PostfixExpression:p DOT ID:i
     {:
-      // object method call
+      // object method call no params
+      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.METHOD_NO_PARAMS, p, i);
       System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
     :}
   |
-    PostfixExpression L_PAREN R_PAREN
+    PostfixExpression:p DOT ID:i L_PAREN ArgumentsExpressionList:a R_PAREN
     {:
-      //function call with no params
-      System.out.println("PostfixExpression -> PostfixExpression L_PAREN R_PAREN"); 
+      // object method call with params
+      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.METHOD_WITH_PARAMS, p, i, a);
+      System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
     :}
   |
-    PostfixExpression L_PAREN ArgumentExpressionList R_PAREN
+  
+    PostfixExpression:p L_PAREN ArgumentExpressionList:a R_PAREN
     {:
-      //function call with params
+      //function call
+      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.FUNCTION_CALL, p, a);
       System.out.println("PostfixExpression -> PostfixExpression L_PAREN ArgumentExpressionList R_PAREN"); 
     :}
   |
@@ -527,7 +532,13 @@ ArgumentExpressionList::=
       RESULT = new ArgumentsNode(a,e);
       System.out.println("ArgumentExpressionList -> ArgumentExpressionList COMMA Expression");
     :}
-  ;
+  |
+    /* epsilon */
+    {:
+      System.out.println("ArgumentExpressionList -> epsilon");
+    :}
+ 
+ ;
 
 PrimaryExpression::=
     ID:i
