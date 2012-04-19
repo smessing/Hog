@@ -20,6 +20,7 @@ public class ConstantNode extends ExpressionNode {
 	public ConstantNode(Types.Type type, String value) {
 		super(null, type);
 		this.value = value;
+		ConstantNode.LOGGER.info("Constructing ConstantNode");
 	}
 	
 	public String getValue() {

@@ -20,6 +20,7 @@ import java_cup.runtime.Scanner;
 import java_cup.runtime.Symbol;
 import front_end.*;
 
+import java.util.logging.*;
 /**
  * A console front-end to the Lexer class for dynamically testing the Lexer.
  * 
@@ -28,22 +29,22 @@ import front_end.*;
  */
 @SuppressWarnings("unused")
 public class ConsoleLexer {
+	
+	private final static Logger LOGGER = Logger.getLogger(ConsoleLexer.class.getName());
 
 	/**
 	 * @param args
 	 * */
 	public static void main(String[] args) throws IOException {
 		
-		String filename = "simpleHogProgram.hog";
+		LOGGER.info("Entering ConsoleLexer main()");
+		String filename = "WordCount.hog";
 		FileReader fileReader = new FileReader(new File(filename));
 	    try {
 	        // Parser p = new Parser(new Lexer(System.in));
 	    	Parser p = new Parser(new Lexer(fileReader));
 	    	p.debug_parse();
-	    	/*System.out.println(p.scan());
-	    	System.out.println(p.scan());
-	    	System.out.println(p.scan());
-	    	System.out.println(p.scan());*/
+
 	    	
 	      }
 	      catch (FileNotFoundException e) {

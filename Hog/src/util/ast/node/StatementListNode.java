@@ -9,8 +9,12 @@ import back_end.Visitor;
  */
 public class StatementListNode extends Node {
 	
+	public StatementListNode(StatementNode statement) {
+		super();
+		this.addChild(statement);
+	}
 	
-	public StatementListNode(Node list, StatementNode statement) {
+	public StatementListNode(StatementListNode list, StatementNode statement) {
 		super();
 		this.addChild(list);
 		this.addChild(statement);

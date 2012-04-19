@@ -2,6 +2,9 @@ package util.ast.node;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+import front_end.ConsoleLexer;
 
 import back_end.Visitor;
 
@@ -12,6 +15,9 @@ import back_end.Visitor;
  * 
  */
 public abstract class Node implements Comparable<Node> {
+	
+	// logger used for all nodes
+	protected final static Logger LOGGER = Logger.getLogger(ConsoleLexer.class.getName());
 
 	protected Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
@@ -64,11 +70,20 @@ public abstract class Node implements Comparable<Node> {
 	 *            - the node to be added.
 	 */
 	public void addChild(Node child) {
+		//Node.LOGGER.info("Before adding child to Node: " + this.toString());
 		if (children == null) {
 			children = new ArrayList<Node>();
 		}
-		children.add(child);
-		child.setParent(this);
+		
+		// don't add a null child
+		if (child == null) {
+			Node.LOGGER.info(this.toString() + " is  adding " +
+					"a null child in addChild");
+		}
+		else {
+			children.add(child);
+			child.setParent(this);
+		}
 	}
 
 	/**

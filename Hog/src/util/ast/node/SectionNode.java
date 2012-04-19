@@ -18,14 +18,16 @@ public class SectionNode extends Node {
 	protected SectionTypeNode type;
 
 	// use this constructor for @functions and @Main sections
-	public SectionNode(StatementNode list) {
+	public SectionNode(Node list) {
 		super();
+		SectionNode.LOGGER.info("adding list child to @Functions or @Main SectionNode");
 		this.addChild(list);
 	}
 
 	// use this constructor for @map and @reduce sections
-	public SectionNode(SectionTypeNode type, StatementNode list) {
+	public SectionNode(SectionTypeNode type, StatementListNode list) {
 		this.children = new ArrayList<Node>();
+		SectionNode.LOGGER.info("adding list child to @Map or @Reduce SectionNode");
 		this.addChild(list);
 		this.type = type;
 	}

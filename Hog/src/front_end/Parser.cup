@@ -72,7 +72,7 @@ nonterminal StatementNode IterationStatement;
 nonterminal StatementNode LabeledStatement;
 nonterminal StatementNode SelectionStatement;
 nonterminal StatementNode DeclarationStatement;
-nonterminal StatementNode StatementList;
+nonterminal StatementListNode StatementList;
 nonterminal SelectionStatementNode ElseIfStatement;
 nonterminal SelectionStatementNode ElseStatement;
 nonterminal ExpressionNode EqualityExpression;
@@ -195,13 +195,13 @@ Main::=
 StatementList::=
     NEWLINE Statement:s
     {:
-      RESULT = s;
+      RESULT = new StatementListNode(s);
       System.out.println("StatementList -> Statement");
     :}
   |
     StatementList:sl NEWLINE Statement:s
     {:
-      RESULT = new StatementNode(sl, s);
+      RESULT = new StatementListNode(sl, s);
       System.out.println("StatementList -> StatementList Statement");
     :}
   ;
@@ -480,21 +480,25 @@ PostfixExpression::=
   |
     PostfixExpression L_BRKT Expression R_BRKT
     {:
+      // array indexing
       System.out.println("PostfixExpression -> PostfixExpression L_BRKT Expression R_BRKT"); 
     :}
   |
     PostfixExpression DOT ID:i
     {:
+      // object method call
       System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
     :}
   |
     PostfixExpression L_PAREN R_PAREN
     {:
+      //function call with no params
       System.out.println("PostfixExpression -> PostfixExpression L_PAREN R_PAREN"); 
     :}
   |
     PostfixExpression L_PAREN ArgumentExpressionList R_PAREN
     {:
+      //function call with params
       System.out.println("PostfixExpression -> PostfixExpression L_PAREN ArgumentExpressionList R_PAREN"); 
     :}
   |

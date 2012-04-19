@@ -23,6 +23,7 @@ public class IterationStatementNode extends StatementNode {
 		super(new ArrayList<Node>());
 		this.addChild(E);
 		this.addChild(S);
+		IterationStatementNode.LOGGER.info("Constructing WHILE loop IterationStatementNode");
 	}
 	
 	/**
@@ -38,6 +39,7 @@ public class IterationStatementNode extends StatementNode {
 		this.addChild(E2);
 		this.addChild(E3);
 		this.addChild(S);
+		IterationStatementNode.LOGGER.info("Constructing FOR loop IterationStatementNode");
 	}
 	
 	/**
@@ -51,6 +53,7 @@ public class IterationStatementNode extends StatementNode {
 		this.addChild(E1);
 		this.addChild(E2);
 		this.addChild(S);
+		IterationStatementNode.LOGGER.info("Constructing FOREACH loop IterationStatementNode");
 	}
 	
 }

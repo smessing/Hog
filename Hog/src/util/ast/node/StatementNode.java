@@ -16,12 +16,14 @@ public class StatementNode extends Node {
 		super(children);
 	}
 	
-	// used for production
-	public StatementNode(StatementNode s1, StatementNode s2) {
-		super();
-		this.addChild(s1);
-		this.addChild(s2);
-	}
+//	// for production StatementList -> StatementList Statement
+//	public StatementNode(StatementNode s1, StatementNode s2) {
+//		super();
+//		StatementNode.LOGGER.info("Before adding StatementNode s1 to StatementNode Children list");
+//		this.addChild(s1);
+//		StatementNode.LOGGER.info("Before adding StatementNode s2 to StatementNode Children list");
+//		this.addChild(s2);
+//	}
 	
 	@Override
 	public void accept(Visitor v) {

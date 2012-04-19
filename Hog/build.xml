@@ -87,7 +87,7 @@
 	  <echo>Paul Tylkin (Language Guru)</echo>
 		<mkdir dir="${classes.dir}" />
 		<mkdir dir="${jar.dir}" />
-		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="${java.source.version}" 
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="${java.source.version}"  debug="true"
 			target="${java.target.version}" includeantruntime="false">
 			<classpath refid="lib" />
 		</javac>

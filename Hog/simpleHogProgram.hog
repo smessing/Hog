@@ -1,12 +1,12 @@
 
 @Map (int lineNum, text line) -> (text, int) {
-
+  print("fun")
 }
 
 @Reduce (text word, int value) -> (text, int) {
-
+  value = 7
 }
 
 @Main {
-
+  print("seven")
 }

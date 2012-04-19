@@ -17,13 +17,16 @@ public class IdNode extends ExpressionNode {
 	private String identifier;
 
 	public IdNode(String id) {
-		this(id, null);
+		super();
+		this.setIdentifier(id);
+		//this(id, null);
 	}
 
 	public IdNode(String id, Type type) {
 		super(new ArrayList<Node>(), type);
 		this.setIdentifier(id);
 		this.type = type;
+		IdNode.LOGGER.info("Constructing IdNode");
 	}
 
 	public void setIdentifier(String identifier) {

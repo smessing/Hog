@@ -14,6 +14,7 @@ public class ArgumentsNode extends ExpressionNode {
 		super();
 		this.addChild(args);
 		this.addChild(exp);
+		ArgumentsNode.LOGGER.info("Constructing ArgumentsNode");
 	}
 	
 	@Override
