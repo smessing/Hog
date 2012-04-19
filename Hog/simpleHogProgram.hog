@@ -1,0 +1,12 @@
+
+@Map (int lineNum, text line) -> (text, int) {
+
+}
+
+@Reduce (text word, int value) -> (text, int) {
+
+}
+
+@Main {
+
+}

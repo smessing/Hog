@@ -9,7 +9,7 @@ public class Types {
 	}
 
 	public static enum Derived {
-		LIST, ITER
+		LIST, ITER, DICT, MULTISET, SET
 	}
 
 	public static boolean isSameType(ExpressionNode one, ExpressionNode two) {

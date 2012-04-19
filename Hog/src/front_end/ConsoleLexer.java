@@ -34,12 +34,12 @@ public class ConsoleLexer {
 	 * */
 	public static void main(String[] args) throws IOException {
 		
-		String filename = "WordCount.hog";
+		String filename = "simpleHogProgram.hog";
 		FileReader fileReader = new FileReader(new File(filename));
 	    try {
 	        // Parser p = new Parser(new Lexer(System.in));
 	    	Parser p = new Parser(new Lexer(fileReader));
-	    	p.parse();
+	    	p.debug_parse();
 	    	/*System.out.println(p.scan());
 	    	System.out.println(p.scan());
 	    	System.out.println(p.scan());

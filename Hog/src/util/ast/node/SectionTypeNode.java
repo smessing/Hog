@@ -18,6 +18,7 @@ public class SectionTypeNode extends Node {
 		this.returnKey = returnKey;
 		this.returnValue = returnValue;
 	}
+	
 
 	public String getType() {
 		return this.inputKeyIdNode.toString() + ", " + this.inputValueIdNode.toString()

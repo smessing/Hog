@@ -19,8 +19,8 @@ public class SectionNode extends Node {
 
 	// use this constructor for @functions and @Main sections
 	public SectionNode(StatementNode list) {
-		this(new SectionTypeNode(null, null,
-				Types.Type.NONE, Types.Type.NONE), list);
+		super();
+		this.addChild(list);
 	}
 
 	// use this constructor for @map and @reduce sections
