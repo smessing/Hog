@@ -6,8 +6,9 @@ import back_end.Visitor;
 public class FunctionNode extends ExpressionNode {
 
 	protected ParametersNode parameters;
+	protected String name;
 	
-	public FunctionNode(Types.Type type, ParametersNode parameters, StatementListNode instructions) {
+	public FunctionNode(Types.Type type, String name, ParametersNode parameters, StatementListNode instructions) {
 		super(type);
 		this.parameters = parameters;
 		this.addChild(instructions);
@@ -21,7 +22,7 @@ public class FunctionNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "FunctionNode";
+		return "FunctionNode-" + name;
 	}
 
 	@Override
