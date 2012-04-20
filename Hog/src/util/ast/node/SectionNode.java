@@ -14,22 +14,30 @@ import back_end.Visitor;
  */
 public class SectionNode extends Node {
 
+	public static enum SectionName {
+		FUNCTIONS, MAP, REDUCE, MAIN;
+		}
+	
+	// name of section, ie, main, map, reduce, functions
+	protected SectionName sectionName;
+	
 	// Used to defined key-value pair types for input and ouput
 	protected SectionTypeNode type;
 
 	// use this constructor for @functions and @Main sections
-	public SectionNode(Node list) {
-		super();
+	public SectionNode(Node list, SectionName sectionName) {
 		SectionNode.LOGGER.info("adding list child to @Functions or @Main SectionNode");
 		this.addChild(list);
+		this.sectionName = sectionName;
 	}
 
 	// use this constructor for @map and @reduce sections
-	public SectionNode(SectionTypeNode type, StatementListNode list) {
+	public SectionNode(SectionTypeNode type, StatementListNode list, SectionName sectionName) {
 		this.children = new ArrayList<Node>();
 		SectionNode.LOGGER.info("adding list child to @Map or @Reduce SectionNode");
 		this.addChild(type);
 		this.addChild(list);
+		this.sectionName = sectionName;
 	}
 
 	@Override
@@ -39,7 +47,7 @@ public class SectionNode extends Node {
 
 	@Override
 	public String getName() {
-		return "SectionNode";
+		return "SectionNode: " + sectionName;
 	}
 
 	@Override
