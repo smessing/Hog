@@ -1,5 +1,6 @@
 package util.ast.node;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import back_end.Visitor;
@@ -11,6 +12,10 @@ import back_end.Visitor;
  *
  */
 public class StatementNode extends Node {
+	
+	public StatementNode() {
+		this(new ArrayList<Node>());
+	}
 
 	public StatementNode(List<Node> children) {
 		super(children);
