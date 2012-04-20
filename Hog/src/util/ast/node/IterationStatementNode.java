@@ -19,10 +19,10 @@ public class IterationStatementNode extends StatementNode {
 	 * @param E
 	 * @param S
 	 */
-	public IterationStatementNode(ExpressionNode E, StatementNode S) {
+	public IterationStatementNode(ExpressionNode e, StatementListNode s) {
 		super(new ArrayList<Node>());
-		this.addChild(E);
-		this.addChild(S);
+		this.addChild(e);
+		this.addChild(s);
 		IterationStatementNode.LOGGER.info("Constructing WHILE loop IterationStatementNode");
 	}
 	
@@ -33,12 +33,12 @@ public class IterationStatementNode extends StatementNode {
 	 * @param E3
 	 * @param S
 	 */
-	public IterationStatementNode(ExpressionNode E1, ExpressionNode E2, ExpressionNode E3, StatementNode S ) {
+	public IterationStatementNode(ExpressionNode e1, ExpressionNode e2, ExpressionNode e3, StatementListNode s ) {
 		super(new ArrayList<Node>());
-		this.addChild(E1);
-		this.addChild(E2);
-		this.addChild(E3);
-		this.addChild(S);
+		this.addChild(e1);
+		this.addChild(e2);
+		this.addChild(e3);
+		this.addChild(s);
 		IterationStatementNode.LOGGER.info("Constructing FOR loop IterationStatementNode");
 	}
 	
@@ -48,11 +48,11 @@ public class IterationStatementNode extends StatementNode {
 	 * @param E2
 	 * @param S
 	 */
-	public IterationStatementNode(ExpressionNode E1, ExpressionNode E2, StatementNode S) {
+	public IterationStatementNode(ExpressionNode e1, ExpressionNode e2, StatementListNode s) {
 		super(new ArrayList<Node>());
-		this.addChild(E1);
-		this.addChild(E2);
-		this.addChild(S);
+		this.addChild(e1);
+		this.addChild(e2);
+		this.addChild(s);
 		IterationStatementNode.LOGGER.info("Constructing FOREACH loop IterationStatementNode");
 	}
 	
