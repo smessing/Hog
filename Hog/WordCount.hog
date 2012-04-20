@@ -19,7 +19,7 @@
   }
 }
 
-@Reduce (text word, int values) -> (text, int) {
+@Reduce (text word, iter<int> values) -> (text, int) {
   int count = 0
   while values.hasNext() {
     count = count + values.next()

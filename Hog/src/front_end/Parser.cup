@@ -701,26 +701,31 @@ DerivedType::=
   |
     LIST
     {:
+      RESULT = Types.Derived.LIST;
       System.out.println("DerivedType -> LIST");
     :}
   |
     ITER
     {:
+      RESULT = Types.Derived.ITER;
       System.out.println("DerivedType -> ITER");
     :}
   |
     DICT
     {:
+      RESULT = Types.Derived.DICT;
       System.out.println("DerivedType -> DICT");
     :}
   |
     MULTISET
     {:
+      RESULT = Types.Derived.MULTISET;
       System.out.println("DerivedType -> MULTISET");
     :}
   |
     SET
     {:
+      RESULT = Types.Derived.SET;
       System.out.println("DerivedType -> SET");
     :}
   ;
