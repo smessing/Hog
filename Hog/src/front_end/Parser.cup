@@ -73,7 +73,7 @@ nonterminal StatementNode LabeledStatement;
 nonterminal SelectionStatementNode SelectionStatement;
 nonterminal StatementNode DeclarationStatement;
 nonterminal StatementListNode StatementList;
-nonterminal IfElseStatementNode ElseIfStatement;
+nonterminal ElseIfStatementNode ElseIfStatement;
 nonterminal ElseStatementNode ElseStatement;
 nonterminal ExpressionNode EqualityExpression;
 nonterminal ExpressionNode LogicalExpression;
@@ -592,7 +592,7 @@ SelectionStatement::=
     IF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif ElseStatement:el
     {:
       //SelectionStatementNode elseIfAndElse = new SelectionStatementNode(elif.getCondition(), elif, el);
-     // RESULT = new IfElseStatementNode(e, s, elif, el);
+      RESULT = new IfElseStatementNode(e, s, elif, el);
       System.out.println("SelectionStatement -> IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement");
     :}
   |
@@ -605,7 +605,7 @@ SelectionStatement::=
 ElseIfStatement::=
     ELSEIF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif
     {:
-     // RESULT = new IfElseStatementNode(e, s, elif, null);
+     RESULT = new ElseIfStatementNode(e, s, elif);
       System.out.println("ElseIfStatement -> ELSEIF L_PAREN Expression R_PAREN ElseIfStatement");
     :}
   |
@@ -618,7 +618,8 @@ ElseIfStatement::=
 ElseStatement::=
     ELSE L_BRACE StatementList:s R_BRACE
     {:
-      //RESULT = new SelectionStatementNode(s);
+      RESULT = new ElseStatementNode(s);
+      System.out.println("ElseStatement -> ELSE L_BRACE StatmentList R_BRACE");
     :}
   |
     NEWLINE

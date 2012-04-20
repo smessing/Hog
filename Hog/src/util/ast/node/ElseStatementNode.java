@@ -2,7 +2,7 @@ package util.ast.node;
 
 public class ElseStatementNode extends StatementNode {
 
-	ElseStatementNode(StatementListNode child) {
+	public ElseStatementNode(StatementListNode child) {
 		this.addChild(child);
 	}
 
