@@ -54,12 +54,12 @@ public abstract class AbstractSyntaxTree {
 			sb.append(toLatexAux(child));
 		}
 		
-		sb.append(" ]\n");
+		sb.append(" ]\n}\n");
 		
 		sb.append("\\end{landscape}\n");
 		sb.append("\\end{document}\n");
 		
-		return sb.toString().replaceAll("<", "\\$<\\$").replaceAll(">", "\\$>\\$").replaceAll("_", "\\_");
+		return sb.toString().replaceAll("<", "\\$<\\$").replaceAll(">", "\\$>\\$").replaceAll("_", "-");
 	}
 	
 	private String toLatexAux(Node node) {
