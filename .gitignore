@@ -2,6 +2,7 @@
 *.aux
 *.log
 *.synctex.gz
+AST_output.tex
 
 # Bibtex:
 *.bbl
