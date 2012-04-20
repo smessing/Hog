@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import java.util.List;
+
 import back_end.Visitor;
 
 /**Represents the production for StatementList
@@ -9,9 +11,8 @@ import back_end.Visitor;
  */
 public class StatementListNode extends Node {
 	
-	public StatementListNode(StatementNode statement) {
-		super();
-		this.addChild(statement);
+	public StatementListNode(List<Node> children) {
+		this.children = children;
 	}
 	
 	public StatementListNode(StatementListNode list, StatementNode statement) {

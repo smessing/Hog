@@ -11,7 +11,7 @@ import back_end.Visitor;
  * @author ben
  *
  */
-public class StatementNode extends Node {
+public class StatementNode extends StatementListNode {
 	
 	public StatementNode() {
 		this(new ArrayList<Node>());

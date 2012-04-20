@@ -195,7 +195,7 @@ Main::=
 StatementList::=
     NEWLINE Statement:s
     {:
-      RESULT = new StatementListNode(s);
+      RESULT = s;
       System.out.println("StatementList -> Statement");
     :}
   |
