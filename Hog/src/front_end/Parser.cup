@@ -589,10 +589,10 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF Expression:e L_BRACE StatementList R_BRACE ElseIfStatement:elif ElseStatement:el
+    IF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif ElseStatement:el
     {:
-      // SelectionStatementNode elseIfAndElse = new SelectionStatementNode(elif.getCondition(), elif, el);
-      // RESULT = new SelectionStatementNode(e, s, elseIfAndElse);
+      //SelectionStatementNode elseIfAndElse = new SelectionStatementNode(elif.getCondition(), elif, el);
+      //RESULT = new SelectionStatementNode(e, s, elif, el);
       System.out.println("SelectionStatement -> IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement");
     :}
   |
@@ -616,9 +616,9 @@ ElseIfStatement::=
   ;
 
 ElseStatement::=
-    ELSE L_BRACE StatementList R_BRACE
+    ELSE L_BRACE StatementList:s R_BRACE
     {:
-      // RESULT = new SelectionStatementNode(null, s, null);
+      RESULT = new SelectionStatementNode(s);
     :}
   |
     NEWLINE
