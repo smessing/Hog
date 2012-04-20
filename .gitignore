@@ -2,6 +2,8 @@
 *.aux
 *.log
 *.synctex.gz
+AST_output.pdf
+AST_output.tex
 
 # Bibtex:
 *.bbl
