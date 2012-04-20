@@ -137,9 +137,9 @@ FunctionList::=
   ;
 
 Function::=
-    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
+    Type:t ID:i L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
     {:
-      RESULT = new FunctionNode(t, pl, sl); 
+      RESULT = new FunctionNode(t, i, pl, sl); 
       System.out.println("Function -> Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE");
     :}
   ;
