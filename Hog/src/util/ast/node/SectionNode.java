@@ -28,8 +28,8 @@ public class SectionNode extends Node {
 	public SectionNode(SectionTypeNode type, StatementListNode list) {
 		this.children = new ArrayList<Node>();
 		SectionNode.LOGGER.info("adding list child to @Map or @Reduce SectionNode");
+		this.addChild(type);
 		this.addChild(list);
-		this.type = type;
 	}
 
 	@Override

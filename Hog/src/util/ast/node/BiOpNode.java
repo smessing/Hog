@@ -57,5 +57,11 @@ public class BiOpNode extends ExpressionNode {
 	public void accept(Visitor v){
 		v.visit(this);
 	}
+	
+	@Override
+	public int visitorTest(Visitor v) {
+		// TODO Auto-generated method stub
+		return 42;
+	}
 
 }

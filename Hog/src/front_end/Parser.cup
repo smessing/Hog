@@ -628,18 +628,21 @@ ElseStatement::=
   ;
 
 IterationStatement::=
-    WHILE Expression L_BRACE StatementList:s R_BRACE
+    WHILE Expression:e L_BRACE StatementList:s R_BRACE
     {:
+      RESULT = new IterationStatementNode(e,s);
       System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
     :}
   |
-    FOR Expression SEMICOL Expression SEMICOL Expression L_BRACE StatementList R_BRACE
+    FOR Expression:e1 SEMICOL Expression:e2 SEMICOL Expression:e3 L_BRACE StatementList:s R_BRACE
     {:
+      RESULT = new IterationStatementNode(e1,e2,e3,s);
       System.out.println("FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement");
     :}
   |
-    FOREACH Expression IN Expression L_BRACE StatementList R_BRACE
+    FOREACH Expression:e1 IN Expression:e2 L_BRACE StatementList:s R_BRACE
     {:
+      RESULT = new IterationStatementNode(e1,e2,s);
       System.out.println("FOREACH L_PAREN Expression IN Expression R_PAREN Statement"); 
     :}
   ;
