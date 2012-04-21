@@ -36,11 +36,13 @@
     face++;
     print("count equals something else");
   }
+  list<int> face;
   try {
-    list<int> face;
     face.get(0);
-  } catch (OutOfBoundsException oobe) {
-    print(oobe);
+  } catch (int  exception) {
+    print(exception);
+  } catch (bool exception) {
+    print (exception);
   }
 }
 
