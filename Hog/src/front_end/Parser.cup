@@ -52,7 +52,7 @@ terminal BREAK, DEFAULT;
 terminal AND, OR, NOT;
 terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
-terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA, NEWLINE;
+terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA;
 terminal LIST, ITER, DICT, MULTISET, SET;
 
 nonterminal JumpStatement;
@@ -102,7 +102,7 @@ precedence right L_PAREN;
 start with Program;
 
 Program::=
-    Functions:f NEWLINE Map:m NEWLINE Reduce:r NEWLINE Main:n NEWLINE
+    Functions:f Map:m Reduce:r Main:n
     {:
       RESULT = new ProgramNode(f, m, r, n);
       System.out.println("PROGRAM");
@@ -110,7 +110,7 @@ Program::=
   ;
 
 Functions::=
-    FUNCTIONS L_BRACE FunctionList:fl NEWLINE R_BRACE
+    FUNCTIONS L_BRACE FunctionList:fl R_BRACE
     {:
      RESULT = new SectionNode(fl, SectionNode.SectionName.FUNCTIONS);
      System.out.println("Functions -> FUNCTIONS L_BRACE FunctionList R_BRACE");
@@ -120,13 +120,13 @@ Functions::=
   ; 
  
 FunctionList::=
-    NEWLINE Function:f
+    Function:f
     {:
       RESULT = f;
       System.out.println("FunctionList -> Function");
     :}
   |
-    FunctionList:fl NEWLINE Function:f
+    FunctionList:fl Function:f
     {:
       List<Node> children = new ArrayList<Node>();
       children.add(fl);
@@ -193,13 +193,13 @@ Main::=
   ;
 
 StatementList::=
-    NEWLINE Statement:s
+    Statement:s
     {:
       RESULT = s;
       System.out.println("StatementList -> Statement");
     :}
   |
-    StatementList:sl NEWLINE Statement:s
+    StatementList:sl Statement:s
     {:
       RESULT = new StatementListNode(sl, s);
       System.out.println("StatementList -> StatementList Statement");
@@ -275,13 +275,13 @@ JumpStatement::=
   ;
  
 ExpressionStatement::=
-    /* epsilon */
+    SEMICOL
     {:
       /* TODO is this correct? */
       System.out.println("ExpressionStatement -> NEWLINE");
     :}
   |
-    Expression:e
+    Expression:e SEMICOL
     {:
       RESULT = e;
       System.out.println("ExpressionStatement -> Expression NEWLINE");
@@ -618,10 +618,10 @@ ElseStatement::=
     ELSE L_BRACE StatementList:s R_BRACE
     {:
       RESULT = new ElseStatementNode(s);
-      System.out.println("ElseStatement -> ELSE L_BRACE StatmentList R_BRACE");
+      System.out.println("ElseStatement -> ELSE L_BRACE StatementList R_BRACE");
     :}
   |
-    NEWLINE
+    /* */
     {:
       System.out.println("ElseStatement -> epsilon");
     :}
