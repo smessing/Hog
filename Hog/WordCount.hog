@@ -26,6 +26,9 @@
   foreach word in line.tokenize(" ") {
     emit(word, 1);
   }
+  if (count == 2) {
+    print("count equals 2!");
+  }
 }
 
 @Reduce (text word, iter<int> values) -> (text, int) {

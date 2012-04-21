@@ -633,7 +633,7 @@ Constant::=
     TEXT_LITERAL:t
     {:
       // RESULT = new ConstantNode(Types.Type.TEXT, t);
-      System.out.println("Constant -> TEXT_LITERAL");
+      System.out.println("Constant -> TEXT_LITERAL-" + t);
     :}
   ;
 
