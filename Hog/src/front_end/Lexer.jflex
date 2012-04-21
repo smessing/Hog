@@ -82,6 +82,8 @@ default         { return newSym(sym.DEFAULT); }
 continue        { return newSym(sym.CONTINUE); }
 return          { return newSym(sym.RETURN); }
 iter            { return newSym(sym.ITER); }
+try             { return newSym(sym.TRY); }
+catch           { return newSym(sym.CATCH); }
 @Functions      { return newSym(sym.FUNCTIONS); }
 @Map            { return newSym(sym.MAP); }
 @Reduce         { return newSym(sym.REDUCE); }
