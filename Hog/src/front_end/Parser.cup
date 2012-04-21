@@ -260,12 +260,12 @@ DeclarationStatement::=
 JumpStatement::=
     CONTINUE
     {:
-      System.out.println("JumpStatement -> CONTINUE NEWLINE");
+      System.out.println("JumpStatement -> CONTINUE");
     :}
   |
     BREAK
     {:
-      System.out.println("JumpStatement -> BREAK NEWLINE");
+      System.out.println("JumpStatement -> BREAK");
     :}
   |
     RETURN ExpressionStatement
@@ -277,14 +277,13 @@ JumpStatement::=
 ExpressionStatement::=
     SEMICOL
     {:
-      /* TODO is this correct? */
-      System.out.println("ExpressionStatement -> NEWLINE");
+      System.out.println("ExpressionStatement -> SEMICOL");
     :}
   |
     Expression:e SEMICOL
     {:
       RESULT = e;
-      System.out.println("ExpressionStatement -> Expression NEWLINE");
+      System.out.println("ExpressionStatement -> Expression SEMICOL");
     :}
   ;
 
