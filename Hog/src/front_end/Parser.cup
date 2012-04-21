@@ -70,11 +70,11 @@ nonterminal StatementNode ExpressionStatement;
 nonterminal StatementNode FunctionList;
 nonterminal StatementNode IterationStatement;
 nonterminal StatementNode LabeledStatement;
-nonterminal StatementNode SelectionStatement;
+nonterminal SelectionStatementNode SelectionStatement;
 nonterminal StatementNode DeclarationStatement;
 nonterminal StatementListNode StatementList;
-nonterminal SelectionStatementNode ElseIfStatement;
-nonterminal SelectionStatementNode ElseStatement;
+nonterminal ElseIfStatementNode ElseIfStatement;
+nonterminal ElseStatementNode ElseStatement;
 nonterminal ExpressionNode EqualityExpression;
 nonterminal ExpressionNode LogicalExpression;
 nonterminal ExpressionNode LogicalTerm;
@@ -112,7 +112,7 @@ Program::=
 Functions::=
     FUNCTIONS L_BRACE FunctionList:fl NEWLINE R_BRACE
     {:
-     RESULT = new SectionNode(fl);
+     RESULT = new SectionNode(fl, SectionNode.SectionName.FUNCTIONS);
      System.out.println("Functions -> FUNCTIONS L_BRACE FunctionList R_BRACE");
     :}
   |
@@ -137,9 +137,9 @@ FunctionList::=
   ;
 
 Function::=
-    Type:t ID L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
+    Type:t ID:i L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
     {:
-      RESULT = new FunctionNode(t, pl, sl); 
+      RESULT = new FunctionNode(t, i, pl, sl); 
       System.out.println("Function -> Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE");
     :}
   ;
@@ -163,7 +163,7 @@ ParameterList::=
 Map::=
     MAP SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
-      RESULT = new SectionNode(st, sl);
+      RESULT = new SectionNode(st, sl, SectionNode.SectionName.MAP);
       System.out.println("Map -> MAP SectionType L_BRACE StatementList R_BRACE");
     :}
   ;
@@ -171,7 +171,7 @@ Map::=
 Reduce::=
     REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
-      RESULT = new SectionNode(st, sl);
+      RESULT = new SectionNode(st, sl, SectionNode.SectionName.REDUCE);
       System.out.println("Reduce -> REDUCE SectionType L_BRACE StatementList R_BRACE");
     :}
   ;
@@ -187,7 +187,7 @@ SectionType::=
 Main::=
     MAIN L_BRACE StatementList:sl R_BRACE
     {:
-      RESULT = new SectionNode(sl);
+      RESULT = new SectionNode(sl, SectionNode.SectionName.MAIN);
       System.out.println("Main -> MAIN L_BRACE StatementList R_BRACE");
     :}
   ;
@@ -195,7 +195,7 @@ Main::=
 StatementList::=
     NEWLINE Statement:s
     {:
-      RESULT = new StatementListNode(s);
+      RESULT = s;
       System.out.println("StatementList -> Statement");
     :}
   |
@@ -589,10 +589,9 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF Expression:e L_BRACE StatementList R_BRACE ElseIfStatement:elif ElseStatement:el
+    IF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif ElseStatement:el
     {:
-      // SelectionStatementNode elseIfAndElse = new SelectionStatementNode(elif.getCondition(), elif, el);
-      // RESULT = new SelectionStatementNode(e, s, elseIfAndElse);
+      RESULT = new IfElseStatementNode(e, s, elif, el);
       System.out.println("SelectionStatement -> IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement");
     :}
   |
@@ -603,9 +602,9 @@ SelectionStatement::=
   ;
 
 ElseIfStatement::=
-    ELSEIF Expression:e L_BRACE StatementList ElseIfStatement:elif R_BRACE
+    ELSEIF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif
     {:
-      // RESULT = new SelectionStatementNode(e, elif, null);
+     RESULT = new ElseIfStatementNode(e, s, elif);
       System.out.println("ElseIfStatement -> ELSEIF L_PAREN Expression R_PAREN ElseIfStatement");
     :}
   |
@@ -616,9 +615,10 @@ ElseIfStatement::=
   ;
 
 ElseStatement::=
-    ELSE L_BRACE StatementList R_BRACE
+    ELSE L_BRACE StatementList:s R_BRACE
     {:
-      // RESULT = new SelectionStatementNode(null, s, null);
+      RESULT = new ElseStatementNode(s);
+      System.out.println("ElseStatement -> ELSE L_BRACE StatmentList R_BRACE");
     :}
   |
     NEWLINE
@@ -628,18 +628,21 @@ ElseStatement::=
   ;
 
 IterationStatement::=
-    WHILE Expression L_BRACE StatementList:s R_BRACE
+    WHILE Expression:e L_BRACE StatementList:s R_BRACE
     {:
+      RESULT = new IterationStatementNode(e,s);
       System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
     :}
   |
-    FOR Expression SEMICOL Expression SEMICOL Expression L_BRACE StatementList R_BRACE
+    FOR Expression:e1 SEMICOL Expression:e2 SEMICOL Expression:e3 L_BRACE StatementList:s R_BRACE
     {:
+      RESULT = new IterationStatementNode(e1,e2,e3,s);
       System.out.println("FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement");
     :}
   |
-    FOREACH Expression IN Expression L_BRACE StatementList R_BRACE
+    FOREACH Expression:e1 IN Expression:e2 L_BRACE StatementList:s R_BRACE
     {:
+      RESULT = new IterationStatementNode(e1,e2,s);
       System.out.println("FOREACH L_PAREN Expression IN Expression R_PAREN Statement"); 
     :}
   ;
