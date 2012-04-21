@@ -118,7 +118,7 @@ return          { return newSym(sym.RETURN); }
 {real}          { return newSym(sym.REAL_CONST, new String(yytext())); }
 {comment}       { /* For this stand-alone lexer, print out comments. */
                   System.out.println("Recognized comment: " + yytext()); }
-{newline}       { return newSym(sym.NEWLINE); }
+{newline}       { /* Ignore newlines. */ }
 {whitespace}    { /* Ignore whitespace. */ }
 {identifier}    { return newSym(sym.ID, new String(yytext())); }
 .               { System.out.println("Illegal char, '" + yytext() +
