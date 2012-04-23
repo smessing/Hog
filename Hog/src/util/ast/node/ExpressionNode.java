@@ -1,6 +1,6 @@
 package util.ast.node;
 
-import util.type.Types.Type;
+import util.type.Types.Primitive;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +14,7 @@ import back_end.Visitor;
  */
 public abstract class ExpressionNode extends StatementNode {
 	
-	protected Type type;
+	protected TypeNode type;
 	
 	
 	public ExpressionNode() {
@@ -25,16 +25,16 @@ public abstract class ExpressionNode extends StatementNode {
 		this(children, null);
 	}
 	
-	public ExpressionNode(Type type) {
+	public ExpressionNode(TypeNode type) {
 		this(new ArrayList<Node>(), type);
 	}
 	
-	public ExpressionNode(List<Node> children, Type type) {
+	public ExpressionNode(List<Node> children, TypeNode type) {
 		super(children);
 		this.type = type;
 	}
 	
-	public Type getType() {
+	public TypeNode getType() {
 		return type;
 	}
 	
@@ -42,7 +42,7 @@ public abstract class ExpressionNode extends StatementNode {
 		throw new UnsupportedOperationException("TODO");
 	}
 	
-	public void setType(Type type) {
+	public void setType(TypeNode type) {
 		this.type = type;
 	}
 	
