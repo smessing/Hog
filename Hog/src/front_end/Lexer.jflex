@@ -42,7 +42,8 @@ letter          = [A-Za-z]
 digit           = [0-9]
 alphanumeric    = {letter}|{digit}
 other_id_char   = [_]
-text_literal    = [a-zA-Z_]?\"(\\.|[^\\'])*\" 
+text_literal_old    = [a-zA-Z_ ]?\"(\\.|[^\\'])*\" 
+text_literal       = \".*\"
 identifier      = {letter}({alphanumeric}|{other_id_char})*
 integer         = {digit}*
 real            = {integer}\.{integer}
@@ -81,6 +82,8 @@ default         { return newSym(sym.DEFAULT); }
 continue        { return newSym(sym.CONTINUE); }
 return          { return newSym(sym.RETURN); }
 iter            { return newSym(sym.ITER); }
+try             { return newSym(sym.TRY); }
+catch           { return newSym(sym.CATCH); }
 @Functions      { return newSym(sym.FUNCTIONS); }
 @Map            { return newSym(sym.MAP); }
 @Reduce         { return newSym(sym.REDUCE); }

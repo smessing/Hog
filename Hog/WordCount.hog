@@ -23,8 +23,28 @@
   #{ this is a 
        block comment }#
   int count = 1;
+  real face = 1.0;
   foreach word in line.tokenize(" ") {
     emit(word, 1);
+  }
+  if (count == 2) {
+    print("count equals 2!");
+  } elseif (count == 3) {
+    print("count equals 3!");
+  } else {
+    int face = 0;
+    int x = face + 1;
+    face++;
+    print("count equals something else");
+  }
+  
+  list<int> face;
+  try {
+    face.get(0);
+  } catch (int  exception) {
+    print(exception);
+  } catch (bool exception) {
+    print (exception);
   }
 }
 

@@ -1,5 +1,5 @@
 package util;
 
-public class SymbolTable {
+public abstract class SymbolTable {
 
 }

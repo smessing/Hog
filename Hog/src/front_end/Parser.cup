@@ -54,6 +54,14 @@ terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA;
 terminal LIST, ITER, DICT, MULTISET, SET;
+terminal TRY, CATCH, FINALLY;
+
+nonterminal GuardingStatement;
+nonterminal Catches;
+nonterminal Catch;
+nonterminal CatchHeader;
+nonterminal Finally;
+nonterminal Block;
 
 nonterminal JumpStatement;
 nonterminal DerivedType;
@@ -227,13 +235,13 @@ Statement::=
   |
     LabeledStatement:ls
     {:
-     //RESULT = ls;
+     RESULT = ls;
      System.out.println("Statement -> LabeledStatement");
     :}
   |
     JumpStatement:js
     {:
-      //RESULT = js;
+      RESULT = js;
       System.out.println("Statement -> JumpStatement");
     :}
   | DeclarationStatement:ds
@@ -241,6 +249,48 @@ Statement::=
       RESULT = ds;
       System.out.println("Statement -> DeclarationStatement");
     :}
+  | GuardingStatement
+    {:
+      System.out.println("Statement -> GuardingStatement");
+    :}
+  | Block
+    {:
+      System.out.println("Statement -> Block");
+    :}
+  ;
+
+GuardingStatement::=
+    TRY Block Finally
+   |
+    TRY Block Catches
+   | 
+    TRY Block Catches Finally
+;
+
+Block::=
+    L_BRACE StatementList R_BRACE
+  | 
+    L_BRACE R_BRACE
+;
+
+Finally::=
+  FINALLY Block
+;
+
+Catches::=
+    Catch
+   | 
+    Catches Catch 
+;
+
+Catch::=
+   CatchHeader Block
+  ;
+
+CatchHeader::=
+   CATCH L_PAREN Type ID R_PAREN
+  |
+   CATCH L_PAREN Type R_PAREN
   ;
  
 DeclarationStatement::=
@@ -260,12 +310,12 @@ DeclarationStatement::=
 JumpStatement::=
     CONTINUE
     {:
-      System.out.println("JumpStatement -> CONTINUE NEWLINE");
+      System.out.println("JumpStatement -> CONTINUE");
     :}
   |
     BREAK
     {:
-      System.out.println("JumpStatement -> BREAK NEWLINE");
+      System.out.println("JumpStatement -> BREAK");
     :}
   |
     RETURN ExpressionStatement
@@ -277,14 +327,13 @@ JumpStatement::=
 ExpressionStatement::=
     SEMICOL
     {:
-      /* TODO is this correct? */
-      System.out.println("ExpressionStatement -> NEWLINE");
+      System.out.println("ExpressionStatement -> SEMICOL");
     :}
   |
     Expression:e SEMICOL
     {:
       RESULT = e;
-      System.out.println("ExpressionStatement -> Expression NEWLINE");
+      System.out.println("ExpressionStatement -> Expression SEMICOL");
     :}
   ;
 
@@ -584,7 +633,7 @@ Constant::=
     TEXT_LITERAL:t
     {:
       RESULT = new ConstantNode(Types.Type.TEXT, t);
-      System.out.println("Constant -> TEXT_LITERAL");
+      System.out.println("Constant -> TEXT_LITERAL-" + t);
     :}
   ;
 
@@ -604,7 +653,7 @@ SelectionStatement::=
 ElseIfStatement::=
     ELSEIF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif
     {:
-     RESULT = new ElseIfStatementNode(e, s, elif);
+      RESULT = new ElseIfStatementNode(e, s, elif);
       System.out.println("ElseIfStatement -> ELSEIF L_PAREN Expression R_PAREN ElseIfStatement");
     :}
   |
