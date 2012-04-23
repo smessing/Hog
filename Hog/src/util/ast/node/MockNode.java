@@ -6,38 +6,41 @@ import java.util.List;
 import back_end.Visitor;
 
 /**
- * MockNode class, a stripped down implementation of the Node class used for testing.
+ * MockNode class, a stripped down implementation of the Node class used for
+ * testing.
+ * 
  * @author sam
- *
+ * 
  */
 public class MockNode extends Node {
 
 	protected static int mockNodeCount = 0;
 	protected int id;
-	
+
 	public MockNode() {
 		this(new ArrayList<Node>());
 	}
-	
+
 	public MockNode(List<Node> children) {
 		super(children);
 		this.id = mockNodeCount;
-		mockNodeCount++;	
+		mockNodeCount++;
 	}
-	
+
 	/**
 	 * Returns the unique id of this node.
+	 * 
 	 * @return the unique id of this node.
 	 */
 	public int getId() {
 		return this.id;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "MockNode-" + Integer.toString(this.id);
 	}
-	
+
 	protected int compareTo(MockNode that) {
 		return this.id - that.getId();
 	}
@@ -54,12 +57,12 @@ public class MockNode extends Node {
 	public void accept(Visitor v) {
 		v.visit(this);
 	}
-	
+
 	@Override
-	public int visitorTest(Visitor v){
+	public int visitorTest(Visitor v) {
 		v.visit(this);
 		System.out.println("here in mock node");
 		return 10;
 	}
-	
+
 }
