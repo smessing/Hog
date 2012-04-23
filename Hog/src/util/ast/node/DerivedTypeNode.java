@@ -12,6 +12,10 @@ public class DerivedTypeNode extends TypeNode {
 	protected Types.Derived localType;
 	protected TypeNode innerTypeNode;
 	
+	public DerivedTypeNode(Types.Derived localType) {
+		this(localType, null);
+	}
+	
 	public DerivedTypeNode(Types.Derived localType, TypeNode innerTypeNode) {
 		this.localType = localType;
 		this.innerTypeNode = innerTypeNode;

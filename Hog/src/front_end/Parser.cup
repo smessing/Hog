@@ -103,7 +103,7 @@ nonterminal ExpressionNode Constant;
 nonterminal ExpressionNode ArgumentExpressionList;
 nonterminal FunctionNode Function;
 nonterminal ParametersNode ParameterList;
-nonterminal Types.Type Type;
+nonterminal TypeNode Type;
 nonterminal UnOpNode.OpType UnaryOperator;
 
 precedence left MINUS, PLUS;
@@ -192,7 +192,7 @@ Reduce::=
 SectionType::=
     L_PAREN Type:t1 ID:i1 COMMA Type:t2 ID:i2 R_PAREN ARROW L_PAREN Type:t3 COMMA Type:t4 R_PAREN
     {:
-     RESULT = new SectionTypeNode(new IdNode(i1, t1), new IdNode(i2, t2), t3, t4);
+     RESULT = new SectionTypeNode(new IdNode(t1, i1), new IdNode(t2, i2), t3, t4);
      System.out.println("SectionType -> L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN");
     :}
   ;
@@ -301,13 +301,13 @@ CatchHeader::=
 DeclarationStatement::=
     Type:t ID:i
     {:
-      RESULT = new IdNode(i, t);
+      RESULT = new IdNode(t, i);
       System.out.println("DeclarationStatement -> Type ID");
     :}
   |
     Type:t ID:i ASSIGN Expression:e
     {:
-      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, new IdNode(i,t), e);
+      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, new IdNode(t,i), e);
       System.out.println("DeclarationStatement -> Type ID ASSIGN Expression");
     :}
   ;
@@ -494,7 +494,7 @@ CastExpression::=
   |
     L_PAREN Type:t R_PAREN CastExpression:c
     {:
-      RESULT = new UnOpNode(UnOpNode.OpType.CAST, c, t);
+      RESULT = new UnOpNode(t, UnOpNode.OpType.CAST, c);
       System.out.println("CastExpression -> L_PAREN Type R_PAREN CastExpression");
     :}
   ;
@@ -622,25 +622,25 @@ PrimaryExpression::=
 Constant::=
     INT_CONST:i
     {:
-      RESULT = new ConstantNode(Types.Type.INT, i);
+      RESULT = new ConstantNode(Types.Primitive.INT, i);
       System.out.println("Constant -> INT_CONST: " + i);
     :}
   |
     REAL_CONST:d
     {:
-      RESULT = new ConstantNode(Types.Type.REAL, d);
+      RESULT = new ConstantNode(Types.Primitive.REAL, d);
       System.out.println("Constant -> REAL_CONST");
     :}
   |
     BOOL_CONST:b
     {:
-      RESULT = new ConstantNode(Types.Type.BOOL, b);
+      RESULT = new ConstantNode(Types.Primitive.BOOL, b);
       System.out.println("Constant -> BOOL_CONST");
     :}
   |
     TEXT_LITERAL:t
     {:
-      RESULT = new ConstantNode(Types.Type.TEXT, t);
+      RESULT = new ConstantNode(Types.Primitive.TEXT, t);
       System.out.println("Constant -> TEXT_LITERAL-" + t);
     :}
   ;
@@ -763,73 +763,68 @@ LabeledStatement::=
 Type::=
     VOID
     {:
-      RESULT = Types.Type.VOID;
+      RESULT = Types.Primitive.VOID;
       System.out.println("Type -> VOID");
     :}
   |
     TEXT
     {:
-      RESULT = Types.Type.TEXT;
+      RESULT = Types.Primitive.TEXT;
       System.out.println("Type -> TEXT");
     :}
   |
     BOOL
     {:
-      RESULT = Types.Type.BOOL;
+      RESULT = Types.Primitive.BOOL;
       System.out.println("Type -> BOOL");
     :}
   |
     INT:i
     {:
-      RESULT = Types.Type.INT;
+      RESULT = Types.Primitive.INT;
       System.out.println("Type -> INT");
     :}
   |
     REAL
     {:
-      RESULT = Types.Type.REAL;
+      RESULT = Types.Primitive.REAL;
       System.out.println("Type -> REAL");
     :}
   |
-    DerivedType:d
+    DerivedType:d LESS Type:t GRTR
     {:
       System.out.println("Type -> DerivedType");
     :}
   ;
 
 DerivedType::=
-    DerivedType:d LESS Type:t GRTR
-    {:
-      System.out.println("DerivedType -> DerivedType L_ANGLE Type R_ANGLE");
-    :}
-  |
     LIST
     {:
-      RESULT = Types.Derived.LIST;
+      //RESULT = new DerivedTypeNode(Types.Derived.LIST);
       System.out.println("DerivedType -> LIST");
     :}
   |
     ITER
     {:
-      RESULT = Types.Derived.ITER;
+      // RESULT = new DerivedTypeNode(Types.Derived.ITER);
       System.out.println("DerivedType -> ITER");
     :}
   |
     DICT
     {:
-      RESULT = Types.Derived.DICT;
+      // RESULT = Types.Derived.DICT;
       System.out.println("DerivedType -> DICT");
     :}
   |
     MULTISET
     {:
-      RESULT = Types.Derived.MULTISET;
+      // RESULT = Types.Derived.MULTISET;
       System.out.println("DerivedType -> MULTISET");
     :}
   |
     SET
     {:
-      RESULT = Types.Derived.SET;
+      // RESULT = Types.Derived.SET;
       System.out.println("DerivedType -> SET");
     :}
   ;
