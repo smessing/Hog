@@ -793,6 +793,7 @@ Type::=
   |
     DerivedType:d LESS Type:t GRTR
     {:
+      RESULT = new DerivedTypeNode(d, t);
       System.out.println("Type -> DerivedType");
     :}
   ;
@@ -800,7 +801,7 @@ Type::=
 DerivedType::=
     LIST
     {:
-      //RESULT = new DerivedTypeNode(Types.Derived.LIST);
+      RESULT = Types.Derived.LIST;
       System.out.println("DerivedType -> LIST");
     :}
   |
