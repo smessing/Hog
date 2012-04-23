@@ -63,7 +63,7 @@ nonterminal CatchHeader;
 nonterminal Finally;
 nonterminal Block;
 
-nonterminal JumpStatement;
+
 nonterminal DerivedType;
 
 
@@ -83,6 +83,7 @@ nonterminal StatementNode DeclarationStatement;
 nonterminal StatementListNode StatementList;
 nonterminal ElseIfStatementNode ElseIfStatement;
 nonterminal ElseStatementNode ElseStatement;
+nonterminal JumpStatementNode JumpStatement;
 nonterminal ExpressionNode EqualityExpression;
 nonterminal ExpressionNode LogicalExpression;
 nonterminal ExpressionNode LogicalTerm;
@@ -310,16 +311,19 @@ DeclarationStatement::=
 JumpStatement::=
     CONTINUE
     {:
+      RESULT = new JumpStatementNode(JumpStatementNode.JumpType.CONTINUE);
       System.out.println("JumpStatement -> CONTINUE");
     :}
   |
     BREAK
     {:
+      RESULT = new JumpStatementNode(JumpStatementNode.JumpType.BREAK);
       System.out.println("JumpStatement -> BREAK");
     :}
   |
-    RETURN ExpressionStatement
+    RETURN ExpressionStatement:es
     {:
+      RESULT = new JumpStatementNode(JumpStatementNode.JumpType.RETURN, es);
       System.out.println("JumpStatement -> RETURN Expression");
     :}
   ;
@@ -530,7 +534,7 @@ PostfixExpression::=
     PostfixExpression:p L_BRKT Expression:e R_BRKT
     {:
       // array indexing
-      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.ARRAY_INDEX, p, e);
+      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.ARRAY_INDEX, p, e);
       System.out.println("PostfixExpression -> PostfixExpression L_BRKT Expression R_BRKT"); 
     :}
   |
@@ -538,7 +542,7 @@ PostfixExpression::=
     {:
       // object method call no params
       IdNode idNode = new IdNode(i);
-      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.METHOD_NO_PARAMS, p, idNode);
+      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_NO_PARAMS, p, idNode);
       System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
     :}
   |
@@ -546,7 +550,7 @@ PostfixExpression::=
     {:
       // object method call with params
       IdNode idNode = new IdNode(i);
-      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.METHOD_WITH_PARAMS, p, idNode, a);
+      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, p, idNode, a);
       System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
     :}
   |
@@ -554,7 +558,7 @@ PostfixExpression::=
     PostfixExpression:p L_PAREN ArgumentExpressionList:a R_PAREN
     {:
       //function call
-      RESULT = new PostFixExpressionNode(PostFixExpressionNode.PostFixType.FUNCTION_CALL, p, a);
+      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.FUNCTION_CALL, p, a);
       System.out.println("PostfixExpression -> PostfixExpression L_PAREN ArgumentExpressionList R_PAREN"); 
     :}
   |
