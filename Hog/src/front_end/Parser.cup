@@ -68,9 +68,6 @@ nonterminal ForInit;
 nonterminal ForIncr;
 
 
-nonterminal DerivedType;
-
-
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
 nonterminal SectionNode Main;
@@ -105,6 +102,7 @@ nonterminal FunctionNode Function;
 nonterminal ParametersNode ParameterList;
 nonterminal TypeNode Type;
 nonterminal UnOpNode.OpType UnaryOperator;
+nonterminal Types.Derived DerivedType;
 
 precedence left MINUS, PLUS;
 precedence right UMINUS;
@@ -763,31 +761,31 @@ LabeledStatement::=
 Type::=
     VOID
     {:
-      RESULT = Types.Primitive.VOID;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.VOID);
       System.out.println("Type -> VOID");
     :}
   |
     TEXT
     {:
-      RESULT = Types.Primitive.TEXT;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.TEXT);
       System.out.println("Type -> TEXT");
     :}
   |
     BOOL
     {:
-      RESULT = Types.Primitive.BOOL;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.BOOL);
       System.out.println("Type -> BOOL");
     :}
   |
     INT:i
     {:
-      RESULT = Types.Primitive.INT;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.INT);
       System.out.println("Type -> INT");
     :}
   |
     REAL
     {:
-      RESULT = Types.Primitive.REAL;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.REAL);
       System.out.println("Type -> REAL");
     :}
   |
@@ -807,25 +805,25 @@ DerivedType::=
   |
     ITER
     {:
-      // RESULT = new DerivedTypeNode(Types.Derived.ITER);
+      RESULT = Types.Derived.ITER;
       System.out.println("DerivedType -> ITER");
     :}
   |
     DICT
     {:
-      // RESULT = Types.Derived.DICT;
+      RESULT = Types.Derived.DICT;
       System.out.println("DerivedType -> DICT");
     :}
   |
     MULTISET
     {:
-      // RESULT = Types.Derived.MULTISET;
+      RESULT = Types.Derived.MULTISET;
       System.out.println("DerivedType -> MULTISET");
     :}
   |
     SET
     {:
-      // RESULT = Types.Derived.SET;
+      RESULT = Types.Derived.SET;
       System.out.println("DerivedType -> SET");
     :}
   ;
