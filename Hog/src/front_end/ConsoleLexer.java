@@ -48,7 +48,7 @@ public class ConsoleLexer {
 	    try {
 	        // Parser p = new Parser(new Lexer(System.in));
 	    	Parser p = new Parser(new Lexer(fileReader));
-	    	root = (ProgramNode) p.debug_parse().value;
+	    	root = (ProgramNode) p.parse().value;
 	    	
 	      }
 	      catch (FileNotFoundException e) {

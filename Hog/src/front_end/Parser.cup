@@ -685,19 +685,19 @@ ElseStatement::=
   ;
 
 IterationStatement::=
-    WHILE Expression:e L_BRACE StatementList:s R_BRACE
+    WHILE L_PAREN Expression:e R_PAREN L_BRACE StatementList:s R_BRACE
     {:
       RESULT = new IterationStatementNode(e,s);
       System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
     :}
   |
-    FOR ForInit:e1 ForExpr:e2 ForIncr:e3 L_BRACE StatementList:s R_BRACE
+    FOR L_PAREN ForInit:e1 ForExpr:e2 ForIncr:e3 R_PAREN L_BRACE StatementList:s R_BRACE
     {:
       //RESULT = new IterationStatementNode(e1,e2,e3,s);
       System.out.println("FOR ForInit ForExpr ForInc L_BRACE StatementList:s R_BRACE");
     :}
   |
-    FOR ForInit ForExpr L_BRACE StatementList R_BRACE
+    FOR L_PAREN ForInit ForExpr R_PAREN L_BRACE StatementList R_BRACE
     {:
       System.out.println("FOR ForInit ForExpr L_BRACE StatementList R_BRACE");
       //RESULT = new IterationStatementNode(e1,e2,e3,s);
