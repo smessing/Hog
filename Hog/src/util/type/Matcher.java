@@ -1,13 +1,13 @@
 package util.type;
 
-import util.type.Types.Type;
+import util.type.Types.Primitive;
 
 
 
 public interface Matcher<T> {
     T instantiate(T matched);
 
-    boolean visit(Type t);
+    boolean visit(Primitive t);
    
     //Name name();
     String signature();

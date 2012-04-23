@@ -27,22 +27,22 @@ public class Types {
 
 	}
 
-	public static boolean isInt(TypeNode type) {
+	public static boolean isInt(Primitive type) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public static boolean isReal(TypeNode type) {
+	public static boolean isReal(Primitive type) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public static boolean isBool(TypeNode type) {
+	public static boolean isBool(Primitive type) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public static boolean isText(TypeNode type) {
+	public static boolean isText(Primitive type) {
 		// TODO Auto-generated method stub
 		return false;
 	}
