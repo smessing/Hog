@@ -22,14 +22,14 @@ public abstract class ExpressionNode extends StatementNode {
 	}
 	
 	public ExpressionNode(List<Node> children) {
-		this(children, null);
+		this(null, children);
 	}
 	
 	public ExpressionNode(TypeNode type) {
-		this(new ArrayList<Node>(), type);
+		this(type, new ArrayList<Node>());
 	}
 	
-	public ExpressionNode(List<Node> children, TypeNode type) {
+	public ExpressionNode(TypeNode type, List<Node> children) {
 		super(children);
 		this.type = type;
 	}

@@ -6,7 +6,6 @@ import java.util.List;
 import back_end.Visitor;
 
 import util.type.Types;
-import util.type.Types.Type;
 
 /**
  * A node representing a primitive constant in a parse tree.
@@ -17,8 +16,8 @@ public class ConstantNode extends ExpressionNode {
 
 	protected String value;
 	
-	public ConstantNode(Types.Type type, String value) {
-		super(null, type);
+	public ConstantNode(Types.Primitive type, String value) {
+		super(new ArrayList<Node>(), new PrimitiveTypeNode(type));
 		this.value = value;
 		ConstantNode.LOGGER.info("Constructing ConstantNode");
 	}
