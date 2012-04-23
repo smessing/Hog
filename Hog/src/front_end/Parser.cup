@@ -62,6 +62,10 @@ nonterminal Catch;
 nonterminal CatchHeader;
 nonterminal Finally;
 nonterminal Block;
+nonterminal ExpressionStatements;
+nonterminal ForExpr;
+nonterminal ForInit;
+nonterminal ForIncr;
 
 nonterminal JumpStatement;
 nonterminal DerivedType;
@@ -683,16 +687,59 @@ IterationStatement::=
       System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
     :}
   |
-    FOR Expression:e1 SEMICOL Expression:e2 SEMICOL Expression:e3 L_BRACE StatementList:s R_BRACE
+    FOR ForInit ForExpr ForIncr L_BRACE StatementList:s R_BRACE
     {:
       //RESULT = new IterationStatementNode(e1,e2,e3,s);
-      System.out.println("FOR L_PAREN Expression SEMICOL Expression SEMICOL Expression R_PAREN Statement");
+      System.out.println("FOR ForInit ForExpr ForInc L_BRACE StatementList:s R_BRACE");
+    :}
+  |
+    FOR ForInit ForExpr L_BRACE StatementList R_BRACE
+    {:
+      System.out.println("FOR ForInit ForExpr L_BRACE StatementList R_BRACE");
     :}
   |
     FOREACH Expression:e1 IN Expression:e2 L_BRACE StatementList:s R_BRACE
     {:
       //RESULT = new IterationStatementNode(e1,e2,s);
       System.out.println("FOREACH L_PAREN Expression IN Expression R_PAREN Statement"); 
+    :}
+  ;
+
+ForInit::=
+    ExpressionStatements
+    {:
+      System.out.println("ForInit -> ExpressionStatements");
+    :}
+  |
+    DeclarationStatement
+    {:
+      System.out.println("ForInit -> DeclarationStatement");
+    :}
+  ;
+
+ForExpr::=
+    ExpressionStatement
+    {:
+      System.out.println("ForExpr -> ExpressionStatement");
+    :}
+  ;
+
+ForIncr::=
+    ExpressionStatements
+    {:
+      System.out.println("ForIncr -> ExpressionStatements");
+    :}
+  ;
+
+ExpressionStatements::=
+    ExpressionStatement
+    {:
+      System.out.println("ExpressionStatements -> Expression");
+    :}
+  |
+    ExpressionStatements COMMA ExpressionStatement
+    {:
+      System.out.println("ExpressionStatements -> ExpressionStatements COMMA Expression");
     :}
   ;
  
