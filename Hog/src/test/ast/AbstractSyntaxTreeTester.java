@@ -24,7 +24,7 @@ import util.ast.node.MockNode;
 import util.ast.node.Node;
 import util.ast.node.RelationalExpressionNode;
 import util.ast.node.UnOpNode;
-import util.type.Types.Type;
+import util.type.Types;
 
 
 /**
@@ -170,7 +170,7 @@ public class AbstractSyntaxTreeTester {
 		//			nextNode.visitorTest(v), 9);
 	//	}
 		
-		ConstantNode n = new ConstantNode(Type.TEXT, "hello");
+		ConstantNode n = new ConstantNode(Types.Primitive.TEXT, "hello");
 		assertEquals(
 				"It should call the appropriate visit methods for ConstantNode",
 				n.visitorTest(v), 3);
