@@ -4,8 +4,8 @@ import util.ast.node.ExpressionNode;
 
 public class Types {
 
-	public static enum Type {
-		BOOL, TEXT, VOID, INT, REAL, DERIVED, UNKNOWN, NONE
+	public static enum Primitive {
+		BOOL, TEXT, VOID, INT, REAL
 	}
 
 	public static enum Derived {
