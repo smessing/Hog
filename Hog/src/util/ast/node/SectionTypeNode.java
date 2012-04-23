@@ -13,6 +13,7 @@ public class SectionTypeNode extends Node {
 
 	public SectionTypeNode(IdNode inputKeyIdNode, IdNode inputValueIdNode, Types.Type returnKey,
 			               Types.Type returnValue) {
+		super();
 		this.inputKeyIdNode = inputKeyIdNode;
 		this.inputValueIdNode = inputValueIdNode;
 		this.returnKey = returnKey;

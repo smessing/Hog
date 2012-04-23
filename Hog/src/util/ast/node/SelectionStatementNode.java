@@ -1,7 +1,5 @@
 package util.ast.node;
 
-import java.util.ArrayList;
-
 import util.type.Types;
 
 public class SelectionStatementNode extends StatementNode {
@@ -11,7 +9,7 @@ public class SelectionStatementNode extends StatementNode {
 	protected ExpressionNode condition;
 	
 	public SelectionStatementNode(ExpressionNode condition, StatementNode ifCondTrue, StatementNode ifCondFalse) {
-		super(new ArrayList<Node>());
+		super();
 		this.ifCondTrue = ifCondTrue;
 		this.ifCondFalse = ifCondFalse;
 		if (condition == null) {
