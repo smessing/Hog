@@ -45,6 +45,9 @@
   } catch (bool exception) {
     print (exception);
   }
+  for int i = 0; i < 4; i++ {
+    print(i);
+  }
 }
 
 @Reduce (text word, iter<int> values) -> (text, int) {

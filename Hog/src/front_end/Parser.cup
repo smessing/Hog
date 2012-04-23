@@ -711,9 +711,9 @@ ForInit::=
       System.out.println("ForInit -> ExpressionStatements");
     :}
   |
-    DeclarationStatement
+    DeclarationStatement SEMICOL
     {:
-      System.out.println("ForInit -> DeclarationStatement");
+      System.out.println("ForInit -> DeclarationStatement SEMICOL");
     :}
   ;
 
