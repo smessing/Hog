@@ -11,6 +11,10 @@ public class Types {
 	public static enum Derived {
 		LIST, ITER, DICT, MULTISET, SET
 	}
+	
+	public static enum Exception {
+		// TODO add exception type
+	}
 
 	public static boolean isSameType(ExpressionNode one, ExpressionNode two) {
 		throw new UnsupportedOperationException("TODO");

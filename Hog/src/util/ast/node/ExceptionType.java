@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package util.ast.node;
 
 import back_end.Visitor;
@@ -7,16 +10,12 @@ import util.type.Types;
  * @author ben
  *
  */
-public class PrimitiveTypeNode extends TypeNode {
+public class ExceptionType extends TypeNode {
+
+	protected Types.Exception localType;
 	
-	protected Types.Primitive localType;
-	
-	public PrimitiveTypeNode(Types.Primitive type) {
-		localType = type;
-	}
-	
-	public Types.Primitive getType() {
-		return localType;
+	public ExceptionType(Types.Exception localType) {
+		this.localType = localType;
 	}
 	
 	@Override
@@ -33,7 +32,6 @@ public class PrimitiveTypeNode extends TypeNode {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "Primitive Type: " + localType.toString();
+		return "Exception Type: " + localType.toString();
 	}
-
 }
