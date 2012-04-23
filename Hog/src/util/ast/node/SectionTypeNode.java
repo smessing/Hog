@@ -7,12 +7,12 @@ public class SectionTypeNode extends Node {
 
 	protected IdNode inputKeyIdNode;
 	protected IdNode inputValueIdNode;
-	protected Types.Type returnKey;
-	protected Types.Type returnValue;
+	protected TypeNode returnKey;
+	protected TypeNode returnValue;
 
 
-	public SectionTypeNode(IdNode inputKeyIdNode, IdNode inputValueIdNode, Types.Type returnKey,
-			               Types.Type returnValue) {
+	public SectionTypeNode(IdNode inputKeyIdNode, IdNode inputValueIdNode, TypeNode returnKey,
+			               TypeNode returnValue) {
 		super();
 		this.inputKeyIdNode = inputKeyIdNode;
 		this.inputValueIdNode = inputValueIdNode;

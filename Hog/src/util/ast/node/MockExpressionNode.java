@@ -4,22 +4,22 @@ import back_end.Visitor;
 
 public class MockExpressionNode extends ExpressionNode {
 
-	/*public MockExpressionNode() {
-		super();
-	}*/
-	
+	/*
+	 * public MockExpressionNode() { super(); }
+	 */
+
 	@Override
 	public String getName() {
 		return "MockExpressionNode<" + this.getTypeName() + ">";
 	}
-	
+
 	@Override
 	public void accept(Visitor v) {
 		// do nothing
 	}
-	
+
 	@Override
-	public int visitorTest(Visitor v){
+	public int visitorTest(Visitor v) {
 		v.visit(this);
 		return 9;
 	}

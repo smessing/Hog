@@ -1,6 +1,7 @@
 package util.type;
 
 import util.ast.node.ExpressionNode;
+import util.ast.node.TypeNode;
 
 public class Types {
 
@@ -20,35 +21,28 @@ public class Types {
 		throw new UnsupportedOperationException("TODO");
 	}
 
-	public static Type getHigherType(Type typeOne, Type typeTwo) {
+	public static TypeNode getHigherType(TypeNode typeOne, TypeNode typeTwo) {
 
-		if (typeOne == Type.REAL || typeTwo == Type.REAL)
-			return Type.REAL;
-		else if (typeOne == Type.INT || typeTwo == Type.INT)
-			return Type.INT;
-		else if (typeOne == Type.TEXT || typeTwo == Type.TEXT)
-			return Type.TEXT;
-		else
-			return Type.UNKNOWN;
+		throw new UnsupportedOperationException("TODO");
 
 	}
 
-	public static boolean isInt(Type type) {
+	public static boolean isInt(TypeNode type) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public static boolean isReal(Type type) {
+	public static boolean isReal(TypeNode type) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public static boolean isBool(Type type) {
+	public static boolean isBool(TypeNode type) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public static boolean isText(Type type) {
+	public static boolean isText(TypeNode type) {
 		// TODO Auto-generated method stub
 		return false;
 	}

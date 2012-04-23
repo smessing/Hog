@@ -38,7 +38,7 @@ class TreeTraversalBuilder {
 			return subTree;
 		}
 		
-		if (order == traversalOrder.PREORDER){
+		if (order == traversalOrder.PREORDER) {
 			subTree.add(root);
 		}
 		
@@ -46,7 +46,7 @@ class TreeTraversalBuilder {
 			subTree.addAll(buildTraversal(child, order));
 		}
 		
-		if (order == traversalOrder.POSTORDER){
+		if (order == traversalOrder.POSTORDER) {
 			subTree.add(root);
 		}
 		

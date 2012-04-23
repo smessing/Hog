@@ -35,7 +35,6 @@ public class BiOpNode extends ExpressionNode {
 		this.opType = type;
 		this.addChild(left);
 		this.addChild(right);
-		this.type = Types.getHigherType(left.getType(), right.getType());
 		
 	}
 
