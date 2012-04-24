@@ -464,26 +464,25 @@ RelationalExpression::=
     RelationalExpression:r LESS AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.LESS, r, a);
-      
-      System.out.println("RelationalExpression -> RelationalExpression LESS AdditiveExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression LESS AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r GRTR AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.GRTR, r, a);
-      System.out.println("RelationalExpression -> RelationalExpression GRTR AdditiveExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression GRTR AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r LESS_EQL AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.LESS_EQL, r, a);
-      System.out.println("RelationalExpression -> RelationalExpression LESS_EQL AdditiveExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression LESS_EQL AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r GRTR_EQL AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.GRTR_EQL, r, a);
-      System.out.println("RelationalExpression -> RelationalExpression GRTR_EQL AdditiveExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression GRTR_EQL AdditiveExpression -> RelationalExpression");
     :}
   ;
 
@@ -491,19 +490,19 @@ AdditiveExpression::=
     MultiplicativeExpression:m
     {:
       RESULT = m;
-      System.out.println("AdditiveExpression -> MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.info("MultiplicativeExpreesion -> AdditiveExpression");
     :}
   |
     AdditiveExpression:a PLUS MultiplicativeExpression:m
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.PLUS, a, m);
-      System.out.println("AdditiveExpression -> AdditiveExpression PLUS MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.info("AdditiveExpression PLUS MultiplicativeExpression -> AdditiveExpression");
     :}
   |
     AdditiveExpression:a MINUS MultiplicativeExpression:m
     {: 
       RESULT = new BiOpNode(BiOpNode.OpType.MINUS, a, m);
-      System.out.println("AdditiveExpression -> AdditiveExpression MINUS MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.info("AdditiveExpression MINUS MultiplicativeExpression -> AdditiveExpression");
     :}
   ;
 
@@ -511,25 +510,25 @@ MultiplicativeExpression::=
     CastExpression:c
     {:
       RESULT = c;
-      System.out.println("MultiplicativeExpression -> CastExpression");
+      CUP$Parser$actions.LOGGER.info("CastExpression -> MultiplicativeExpression");
     :}
   |
     MultiplicativeExpression:m TIMES CastExpression:c
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.TIMES, m, c);
-      System.out.println("MultiplicativeExpression -> MultiplicativeExpression TIMES CastExpression");
+      CUP$Parser$actions.LOGGER.info("MultipliativeExpression TIMES CastExpression -> MultiplicativeExpression");
     :}
   |
     MultiplicativeExpression:m DIVIDE CastExpression:c
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.DIVIDE, m, c);
-      System.out.println("MultiplicativeExpression -> MultiplicativeExpression DIVIDE CastExpression");
+      CUP$Parser$actions.LOGGER.info("MultipliativeExpression DIVIDE CastExpression -> MultiplicativeExpression");
     :}
   |
     MultiplicativeExpression:m MOD CastExpression:c
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.MOD, m, c);
-      System.out.println("MultiplicativeExpression -> MultiplicativeExpression MOD CastExpression");
+      CUP$Parser$actions.LOGGER.info("MultipliativeExpression MOD CastExpression -> MultiplicativeExpression");
     :}
   ;
 
@@ -537,13 +536,13 @@ CastExpression::=
     UnaryExpression:u
     {:
       RESULT = u;
-      System.out.println("CastExpression -> UnaryExpression");
+      CUP$Parser$actions.LOGGER.info("UnaryExpression -> CastExpression");
     :}
   |
     L_PAREN Type:t R_PAREN CastExpression:c
     {:
       RESULT = new UnOpNode(t, UnOpNode.OpType.CAST, c);
-      System.out.println("CastExpression -> L_PAREN Type R_PAREN CastExpression");
+      CUP$Parser$actions.LOGGER.info("L_PAREN Type R_PAREN CastExpression -> CastExpression");
     :}
   ;
 
@@ -551,13 +550,13 @@ UnaryExpression::=
     UnaryOperator:u CastExpression:c
     {:
       RESULT = new UnOpNode(u, c);
-      System.out.println("UnaryExpression -> UnaryOperator CastExpression");
+      CUP$Parser$actions.LOGGER.info("UnaryOperator CastExpression -> UnaryExpression");
     :}
   |
     PostfixExpression:p
     {:
       RESULT = p;
-      System.out.println("UnaryExpression -> PostfixExpression");
+      CUP$Parser$actions.LOGGER.info("PostfixExpression -> UnaryExpression");
     :}
   ;
   
@@ -565,14 +564,14 @@ UnaryOperator::=
     MINUS 
     {:
       RESULT = UnOpNode.OpType.UMINUS;
-      System.out.println("UnaryOperator -> UMINUS");
+      CUP$Parser$actions.LOGGER.info("UMINUS -> UnaryOperator");
     :}
     %prec UMINUS
   |
     NOT
     {:
       RESULT = UnOpNode.OpType.NOT;
-      System.out.println("UnaryOperator -> NOT");
+      CUP$Parser$actions.LOGGER.info("NOT -> UnaryOperator");
     :}
   ;
 
@@ -580,14 +579,14 @@ PostfixExpression::=
     PrimaryExpression:p
     {:
       RESULT = p;
-      System.out.println("PostfixExpression -> PrimaryExpression");
+      CUP$Parser$actions.LOGGER.info("PrimaryExpression -> PostFixExpression");
     :}
   |
     PostfixExpression:p L_BRKT Expression:e R_BRKT
     {:
       // array indexing
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.ARRAY_INDEX, p, e);
-      System.out.println("PostfixExpression -> PostfixExpression L_BRKT Expression R_BRKT"); 
+      CUP$Parser$actions.LOGGER.info("PostfixExpression L_BRKT Expression R_BRKT -> PostFixExpression");
     :}
   |
     PostfixExpression:p DOT ID:i
@@ -595,7 +594,7 @@ PostfixExpression::=
       // object method call no params
       IdNode idNode = new IdNode(i);
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_NO_PARAMS, p, idNode);
-      System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
+      CUP$Parser$actions.LOGGER.info("PostfixExpression DOT ID: " + i + " -> PostFixExpression");
     :}
   |
     PostfixExpression:p DOT ID:i L_PAREN ArgumentExpressionList:a R_PAREN
@@ -603,7 +602,7 @@ PostfixExpression::=
       // object method call with params
       IdNode idNode = new IdNode(i);
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, p, idNode, a);
-      System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
+      CUP$Parser$actions.LOGGER.info("PostfixExpression DOT ID: " + i + "L_PAREN ArgumentList R_PAREN -> PostFixExpression");
     :}
   |
   
@@ -611,19 +610,19 @@ PostfixExpression::=
     {:
       //function call
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.FUNCTION_CALL, p, a);
-      System.out.println("PostfixExpression -> PostfixExpression L_PAREN ArgumentExpressionList R_PAREN"); 
+      CUP$Parser$actions.LOGGER.info("PostfixExpression L_PAREN ArgumentExpressionList R_PAREN -> PostFixExpression");
     :}
   |
     PostfixExpression:p INCR
     {:
       RESULT = new UnOpNode(UnOpNode.OpType.INCR, p);
-      System.out.println("PostfixExpression -> PostfixExpression INCR");
+      CUP$Parser$actions.LOGGER.info("PostfixExpression INCR -> PostFixExpression");
     :}
   |
     PostfixExpression:p DECR
     {:
       RESULT = new UnOpNode(UnOpNode.OpType.DECR, p);
-      System.out.println("PostfixExpression -> PostfixExpression DECR");
+      CUP$Parser$actions.LOGGER.info("PostfixExpression DECR -> PostFixExpression");
     :}
   ;
 
