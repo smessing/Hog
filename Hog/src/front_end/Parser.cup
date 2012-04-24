@@ -9,7 +9,7 @@ import java.util.logging.*;
 action code
   {:
     Hashtable table = new Hashtable();
-    protected final static Logger LOGGER = Logger.getLogger(ConsoleLexer.class
+    protected final static Logger LOGGER = Logger.getLogger(Parser.class
             .getName());
   :};
 
@@ -119,7 +119,7 @@ Program::=
     Functions:f Map:m Reduce:r Main:n
     {:
       RESULT = new ProgramNode(f, m, r, n);
-      CUP$Parser$actions.LOGGER.debug("Functions Map Reduce Main -> Program");
+      CUP$Parser$actions.LOGGER.info("Functions Map Reduce Main -> Program");
     :}
   ;
 
@@ -127,7 +127,7 @@ Functions::=
     FUNCTIONS L_BRACE FunctionList:fl R_BRACE
     {:
      RESULT = new SectionNode(fl, SectionNode.SectionName.FUNCTIONS);
-     CUP$Parser$actions.LOGGER.debug("FUNCTIONS L_BRACE FunctionList R_BRACE -> Functions");
+     CUP$Parser$actions.LOGGER.info("FUNCTIONS L_BRACE FunctionList R_BRACE -> Functions");
     :}
   |
     /* epsilon */
@@ -137,7 +137,7 @@ FunctionList::=
     Function:f
     {:
       RESULT = f;
-      CUP$Parser$actions.LOGGER.debug("Function -> FunctionList");
+      CUP$Parser$actions.LOGGER.info("Function -> FunctionList");
     :}
   |
     FunctionList:fl Function:f
@@ -146,7 +146,7 @@ FunctionList::=
       children.add(fl);
       children.add(f);
       RESULT = new StatementNode(children);
-      CUP$Parser$actions.LOGGER.debug("FunctionList Function -> FunctionList");
+      CUP$Parser$actions.LOGGER.info("FunctionList Function -> FunctionList");
     :}
   ;
 
@@ -154,7 +154,7 @@ Function::=
     Type:t ID:i L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new FunctionNode(t, i, pl, sl); 
-      CUP$Parser$actions.LOGGER.debug("Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE -> Function");
+      CUP$Parser$actions.LOGGER.info("Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE -> Function");
     :}
   ;
 
@@ -162,13 +162,13 @@ ParameterList::=
     ParameterList:pl COMMA Type:t ID:i
     {:
       RESULT = new ParametersNode(t, i, pl);
-      CUP$Parser$actions.LOGGER.debug("ParameterList COMMA Type ID: " + i -> ParameterList");
+      CUP$Parser$actions.LOGGER.info("ParameterList COMMA Type ID: " + i + " -> ParameterList");
     :}
   |
     Type:t ID:i
     {:
       RESULT = new ParametersNode(t, i);
-      CUP$Parser$actions.LOGGER.debug("Type ID: " + i + " -> ParameterList");
+      CUP$Parser$actions.LOGGER.info("Type ID: " + i + " -> ParameterList");
     :}
   |
     /* epsilon */
@@ -178,7 +178,7 @@ Map::=
     MAP SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new SectionNode(st, sl, SectionNode.SectionName.MAP);
-      CUP$Parser$actions.LOGGER.debug("MAP SectionType L_BRACE StatementList R_BRACE -> Map");
+      CUP$Parser$actions.LOGGER.info("MAP SectionType L_BRACE StatementList R_BRACE -> Map");
     :}
   ;
 
@@ -186,7 +186,7 @@ Reduce::=
     REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new SectionNode(st, sl, SectionNode.SectionName.REDUCE);
-      CUP$Parser$actions.LOGGER.debug("REDUCE SectionType L_BRACE StatementList R_BRACE -> Reduce");
+      CUP$Parser$actions.LOGGER.info("REDUCE SectionType L_BRACE StatementList R_BRACE -> Reduce");
     :}
   ;
 
@@ -194,7 +194,7 @@ SectionType::=
     L_PAREN Type:t1 ID:i1 COMMA Type:t2 ID:i2 R_PAREN ARROW L_PAREN Type:t3 COMMA Type:t4 R_PAREN
     {:
      RESULT = new SectionTypeNode(new IdNode(t1, i1), new IdNode(t2, i2), t3, t4);
-     CUP$Parser$actions.LOGGER.debug("L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN -> SectionType");
+     CUP$Parser$actions.LOGGER.info("L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN -> SectionType");
     :}
   ;
 
@@ -202,7 +202,7 @@ Main::=
     MAIN L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new SectionNode(sl, SectionNode.SectionName.MAIN);
-      CUP$Parser$actions.LOGGER.debug("MAIN L_BRACE StatementList R_BRACE -> Main");
+      CUP$Parser$actions.LOGGER.info("MAIN L_BRACE StatementList R_BRACE -> Main");
     :}
   ;
 
@@ -210,13 +210,13 @@ StatementList::=
     Statement:s
     {:
       RESULT = s;
-      CUP$Parser$actions.LOGGER.debug("Statement -> StatementList");
+      CUP$Parser$actions.LOGGER.info("Statement -> StatementList");
     :}
   |
     StatementList:sl Statement:s
     {:
       RESULT = new StatementListNode(sl, s);
-      CUP$Parser$actions.LOGGER.debug("StatementList Statement -> StatementList");
+      CUP$Parser$actions.LOGGER.info("StatementList Statement -> StatementList");
     :}
   ;
 
@@ -224,46 +224,46 @@ Statement::=
     ExpressionStatement:es
     {:
       RESULT = es;
-      CUP$Parser$actions.LOGGER.debug("ExpressionStatement -> Statement");
+      CUP$Parser$actions.LOGGER.info("ExpressionStatement -> Statement");
     :}
   |
    SelectionStatement:ss
     {:
       RESULT = ss;
-      CUP$Parser$actions.LOGGER.debug("SelectionStatement -> Statement");
+      CUP$Parser$actions.LOGGER.info("SelectionStatement -> Statement");
     :}
   |
     IterationStatement:is
     {:
       RESULT = is;
-      CUP$Parser$actions.LOGGER.debug("IterationStatement -> Statement");
+      CUP$Parser$actions.LOGGER.info("IterationStatement -> Statement");
     :}
   |
     LabeledStatement:ls
     {:
      RESULT = ls;
-     CUP$Parser$actions.LOGGER.debug("LabeledStatement -> Statement");
+     CUP$Parser$actions.LOGGER.info("LabeledStatement -> Statement");
     :}
   |
     JumpStatement:js
     {:
       RESULT = js;
-      CUP$Parser$actions.LOGGER.debug("JumpStatement -> Statement");
+      CUP$Parser$actions.LOGGER.info("JumpStatement -> Statement");
     :}
   | DeclarationStatement:ds
     {:
       RESULT = ds;
-      CUP$Parser$actions.LOGGER.debug("DeclarationStatement -> Statement");
+      CUP$Parser$actions.LOGGER.info("DeclarationStatement -> Statement");
     :}
   | GuardingStatement
     {:
       //TODO implement GuardingStatement
-      CUP$Parser$actions.LOGGER.debug("GuardingStatement -> Statement: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("GuardingStatement -> Statement: NOT IMPLEMENTED");
     :}
   | Block
     {:
       //TODO implement Block
-      CUP$Parser$actions.LOGGER.debug("Block -> Statement: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("Block -> Statement: NOT IMPLEMENTED");
     :}
   ;
 
@@ -271,19 +271,19 @@ GuardingStatement::=
     TRY Block Finally
     {:
       // TODO implement GuardingStatement
-      CUP$Parser$actions.LOGGER.debug("TRY Block Finally -> GuardingStatment: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("TRY Block Finally -> GuardingStatment: NOT IMPLEMENTED");
     :}
    |
     TRY Block Catches
     {:
       // TODO implement GuardingStatement
-      CUP$Parser$actions.LOGGER.debug("TRY Block Catches -> GuardingStatment: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("TRY Block Catches -> GuardingStatment: NOT IMPLEMENTED");
     :}
    | 
     TRY Block Catches Finally
     {:
       // TODO implement GuardingStatement
-      CUP$Parser$actions.LOGGER.debug("TRY Block Catches Finally -> GuardingStatment: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("TRY Block Catches Finally -> GuardingStatment: NOT IMPLEMENTED");
     :}
 ;
 
@@ -291,13 +291,13 @@ Block::=
     L_BRACE StatementList R_BRACE
     {:
       // TODO implement Block
-      CUP$Parser$actions.LOGGER.debug("L_BRACE StatementList R_BRACE -> Block: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("L_BRACE StatementList R_BRACE -> Block: NOT IMPLEMENTED");
     :}
   | 
     L_BRACE R_BRACE
     {:
       // TODO implement Block
-      CUP$Parser$actions.LOGGER.debug("L_BRACE R_BRACE -> Block: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("L_BRACE R_BRACE -> Block: NOT IMPLEMENTED");
     :}
 ;
 
@@ -305,7 +305,7 @@ Finally::=
     FINALLY Block
     {:
       // TODO implement Finally
-      CUP$Parser$actions.LOGGER.debug("FINALLY Block -> Finally: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("FINALLY Block -> Finally: NOT IMPLEMENTED");
     :}
 ;
 
@@ -313,13 +313,13 @@ Catches::=
     Catch
     {:
       // TODO implement Catches
-      CUP$Parser$actions.LOGGER.debug("Catch -> Catches: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("Catch -> Catches: NOT IMPLEMENTED");
     :}
    | 
     Catches Catch 
     {:
       // TODO implement Catches
-      CUP$Parser$actions.LOGGER.debug("Catches Catch -> Catches: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("Catches Catch -> Catches: NOT IMPLEMENTED");
     :}
 ;
 
@@ -327,7 +327,7 @@ Catch::=
    CatchHeader Block
     {:
       // TODO implement Catch
-      CUP$Parser$actions.LOGGER.debug("CatchHeader Block -> Catch: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("CatchHeader Block -> Catch: NOT IMPLEMENTED");
     :}
   ;
 
@@ -335,13 +335,13 @@ CatchHeader::=
    CATCH L_PAREN Type ID R_PAREN
    {:
       // TODO implement CatchHeader
-      CUP$Parser$actions.LOGGER.debug("CATCH L_PAREN Type ID R_PAREN -> CatchHeader: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader: NOT IMPLEMENTED");
    :}
   |
    CATCH L_PAREN Type R_PAREN
    {:
       // TODO implement CatchHeader
-      CUP$Parser$actions.LOGGER.debug("CATCH L_PAREN Type R_PAREN -> CatchHeader: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type R_PAREN -> CatchHeader: NOT IMPLEMENTED");
    :}
   ;
  
@@ -349,13 +349,13 @@ DeclarationStatement::=
     Type:t ID:i
     {:
       RESULT = new IdNode(t, i);
-      CUP$Parser$actions.LOGGER.debug("Type ID -> DeclarationStatement");
+      CUP$Parser$actions.LOGGER.info("Type ID -> DeclarationStatement");
     :}
   |
     Type:t ID:i ASSIGN Expression:e
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, new IdNode(t,i), e);
-      CUP$Parser$actions.LOGGER.debug("Type ID ASSIGN Expression -> DeclarationStatement");
+      CUP$Parser$actions.LOGGER.info("Type ID ASSIGN Expression -> DeclarationStatement");
     :}
   ;
  
@@ -363,32 +363,32 @@ JumpStatement::=
     CONTINUE
     {:
       RESULT = new JumpStatementNode(JumpStatementNode.JumpType.CONTINUE);
-      CUP$Parser$actions.LOGGER.debug("CONTINUE -> JumpStatement");
+      CUP$Parser$actions.LOGGER.info("CONTINUE -> JumpStatement");
     :}
   |
     BREAK
     {:
       RESULT = new JumpStatementNode(JumpStatementNode.JumpType.BREAK);
-      CUP$Parser$actions.LOGGER.debug("BREAK -> JumpStatement");
+      CUP$Parser$actions.LOGGER.info("BREAK -> JumpStatement");
     :}
   |
     RETURN ExpressionStatement:es
     {:
       RESULT = new JumpStatementNode(JumpStatementNode.JumpType.RETURN, es);
-      CUP$Parser$actions.LOGGER.debug("RETURN Expression -> JumpStatement");
+      CUP$Parser$actions.LOGGER.info("RETURN Expression -> JumpStatement");
     :}
   ;
  
 ExpressionStatement::=
     SEMICOL
     {:
-      CUP$Parser$actions.LOGGER.debug("SEMICOL -> ExpressionStatement: NO RESULT STATEMENT");
+      CUP$Parser$actions.LOGGER.info("SEMICOL -> ExpressionStatement: NO RESULT STATEMENT");
     :}
   |
     Expression:e SEMICOL
     {:
       RESULT = e;
-      CUP$Parser$actions.LOGGER.debug("Expression SEMICOL -> ExpressionStatement");
+      CUP$Parser$actions.LOGGER.info("Expression SEMICOL -> ExpressionStatement");
     :}
   ;
 
@@ -396,13 +396,13 @@ Expression::=
     LogicalExpression:le
     {:
      RESULT = le;
-     CUP$Parser$actions.LOGGER.debug("LogicalExpression -> Expression");
+     CUP$Parser$actions.LOGGER.info("LogicalExpression -> Expression");
     :}
   |
     UnaryExpression:ue ASSIGN Expression:e
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, ue, e);
-      CUP$Parser$actions.LOGGER.debug("UnaryExpression ASSIGN Expression -> Expression");
+      CUP$Parser$actions.LOGGER.info("UnaryExpression ASSIGN Expression -> Expression");
     :}
   ;
 
@@ -410,13 +410,13 @@ LogicalExpression::=
     LogicalExpression:le OR LogicalTerm:lt
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.OR, le, lt);
-      CUP$Parser$actions.LOGGER.debug("LogicalExpression OR LogicalTerm -> LogicalExpression");
+      CUP$Parser$actions.LOGGER.info("LogicalExpression OR LogicalTerm -> LogicalExpression");
     :}
   |
     LogicalTerm:l
     {:
       RESULT = l;
-      CUP$Parser$actions.LOGGER.debug("LogicalTerm -> LogicalExpression");
+      CUP$Parser$actions.LOGGER.info("LogicalTerm -> LogicalExpression");
     :}
   ;
 
@@ -424,13 +424,13 @@ LogicalTerm::=
     LogicalTerm:l AND EqualityExpression:e
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.AND, l, e);
-      CUP$Parser$actions.LOGGER.debug("LogicalTerm AND EqualityExpression -> LogicalTerm");
+      CUP$Parser$actions.LOGGER.info("LogicalTerm AND EqualityExpression -> LogicalTerm");
     :}
   |
     EqualityExpression:e
     {:
       RESULT = e;
-      CUP$Parser$actions.LOGGER.debug("EqualityExpression -> LogicalTerm");
+      CUP$Parser$actions.LOGGER.info("EqualityExpression -> LogicalTerm");
     :}
   ;
 
@@ -438,19 +438,19 @@ EqualityExpression::=
     RelationalExpression:r
     {: 
       RESULT = r; 
-      CUP$Parser$actions.LOGGER.debug("RelationalExpression -> EqualityExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression -> EqualityExpression");
     :}
   |
     EqualityExpression:e DBL_EQLS RelationalExpression:r
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.DBL_EQLS, e, r);
-      CUP$Parser$actions.LOGGER.debug("EqualityExpression DBL_EQLS RelationalExpression -> EqualityExpression");
+      CUP$Parser$actions.LOGGER.info("EqualityExpression DBL_EQLS RelationalExpression -> EqualityExpression");
     :}
   |
     EqualityExpression:e NOT_EQLS RelationalExpression:r
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.NOT_EQLS, e, r);
-      CUP$Parser$actions.LOGGER.debug("EqualityExpression NOT_EQLS RelationalExpression -> EqualityExpression");
+      CUP$Parser$actions.LOGGER.info("EqualityExpression NOT_EQLS RelationalExpression -> EqualityExpression");
     :}
   ;
 
@@ -458,7 +458,7 @@ RelationalExpression::=
     AdditiveExpression:a
     {:
       RESULT = a;
-      CUP$Parser$actions.LOGGER.debug("AdditiveExpression -> RelationalExpression");
+      CUP$Parser$actions.LOGGER.info("AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r LESS AdditiveExpression:a

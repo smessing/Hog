@@ -12,7 +12,7 @@ public class FunctionNode extends ExpressionNode {
 		super(type);
 		this.parameters = parameters;
 		this.addChild(instructions);
-		FunctionNode.LOGGER.info("Constructing FunctionNode");
+		FunctionNode.LOGGER.fine("Constructing FunctionNode");
 	}
 
 	@Override
