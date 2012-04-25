@@ -131,6 +131,9 @@ Functions::=
     :}
   |
     /* epsilon */
+    {:
+     CUP$Parser$actions.LOGGER.info("epsilon -> Functions");
+    :}
   ; 
  
 FunctionList::=
@@ -630,18 +633,18 @@ ArgumentExpressionList::=
     Expression:e
     {:
       RESULT = e;
-      System.out.println("ArgumentExpressionList -> Expression");
+      CUP$Parser$actions.LOGGER.info("Expression -> ArgumentExpressionList");
     :}
   |
     ArgumentExpressionList:a COMMA Expression:e
     {:
       RESULT = new ArgumentsNode(a,e);
-      System.out.println("ArgumentExpressionList -> ArgumentExpressionList COMMA Expression");
+      CUP$Parser$actions.LOGGER.info("ArgumentExpressionList COMMA Expression -> ArgumentExpressionList");
     :}
   |
     /* epsilon */
     {:
-      System.out.println("ArgumentExpressionList -> epsilon");
+      CUP$Parser$actions.LOGGER.info("epsilon -> ArgumentExpressionList");
     :}
  
  ;
@@ -650,19 +653,19 @@ PrimaryExpression::=
     ID:i
     {:
       RESULT = new IdNode(i);
-      System.out.println("PrimaryExpression -> ID: " + i);
+      CUP$Parser$actions.LOGGER.info("ID: " + i + " -> PrimaryExpression");
     :}
   |
     Constant:c
     {:
       RESULT = c;
-      System.out.println("PrimaryExpression -> Constant"); 
+      CUP$Parser$actions.LOGGER.info("Constant -> PrimaryExpression");
     :}
   |
     L_PAREN Expression:e R_PAREN
     {:
       RESULT = e;
-      System.out.println("PrimaryExpression -> L_PAREN Expression R_PAREN");
+      CUP$Parser$actions.LOGGER.info("L_PAREN Expression R_PAREN -> PrimaryExpression");
     :}
   ;
 
@@ -670,25 +673,25 @@ Constant::=
     INT_CONST:i
     {:
       RESULT = new ConstantNode(Types.Primitive.INT, i);
-      System.out.println("Constant -> INT_CONST: " + i);
+      CUP$Parser$actions.LOGGER.info("INT_CONST: " + i + " -> Constant");
     :}
   |
     REAL_CONST:d
     {:
       RESULT = new ConstantNode(Types.Primitive.REAL, d);
-      System.out.println("Constant -> REAL_CONST");
+      CUP$Parser$actions.LOGGER.info("REAL_CONST: " + d + " -> Constant");
     :}
   |
     BOOL_CONST:b
     {:
       RESULT = new ConstantNode(Types.Primitive.BOOL, b);
-      System.out.println("Constant -> BOOL_CONST");
+      CUP$Parser$actions.LOGGER.info("BOOL_CONST: " + b + " -> Constant");
     :}
   |
     TEXT_LITERAL:t
     {:
       RESULT = new ConstantNode(Types.Primitive.TEXT, t);
-      System.out.println("Constant -> TEXT_LITERAL-" + t);
+      CUP$Parser$actions.LOGGER.info("TEXT_LITERAL: " + t + " -> Constant");
     :}
   ;
 
@@ -696,12 +699,15 @@ SelectionStatement::=
     IF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif ElseStatement:el
     {:
       RESULT = new IfElseStatementNode(e, s, elif, el);
-      System.out.println("SelectionStatement -> IF L_PAREN Expression R_PAREN Statement ElseIfStatement ElseStatement");
+      CUP$Parser$actions.LOGGER.info("IF Expression L_BRACE StatmentList R_BRACE " +
+                                      "ElseIfStatement ElseStatment -> SelectionStatement");
     :}
   |
     SWITCH Expression:e L_BRACE StatementList:s R_BRACE
     {:
-      System.out.println("SelectionStatement -> SWITCH L_PAREN Expression R_PAREN Statement");
+      //TODO implement
+      CUP$Parser$actions.LOGGER.info("SWITCH Expression L_BRACE " +
+                                      "StatementList R_BRACE -> SelectionStatement");
     :}
   ;
 
@@ -709,12 +715,13 @@ ElseIfStatement::=
     ELSEIF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif
     {:
       RESULT = new ElseIfStatementNode(e, s, elif);
-      System.out.println("ElseIfStatement -> ELSEIF L_PAREN Expression R_PAREN ElseIfStatement");
+      CUP$Parser$actions.LOGGER.info("ELSEIF L_PAREN Expression R_PAREN ElseIfStatement -> " +
+                                      "ElseIfStatement");
     :}
   |
     /* epsilon */
     {:
-      System.out.println("ElseIfStatement -> epsilon");
+      CUP$Parser$actions.LOGGER.info("epsilon -> ElseIfStatement");
     :}
   ;
 
@@ -722,12 +729,12 @@ ElseStatement::=
     ELSE L_BRACE StatementList:s R_BRACE
     {:
       RESULT = new ElseStatementNode(s);
-      System.out.println("ElseStatement -> ELSE L_BRACE StatementList R_BRACE");
+      CUP$Parser$actions.LOGGER.info("ELSE L_BRACE StatementList R_BRACE -> ElseStatement");
     :}
   |
-    /* */
+    /* epsilon */
     {:
-      System.out.println("ElseStatement -> epsilon");
+      CUP$Parser$actions.LOGGER.info("epsilon -> ElseStatement");
     :}
   ;
 
@@ -735,75 +742,80 @@ IterationStatement::=
     WHILE L_PAREN Expression:e R_PAREN L_BRACE StatementList:s R_BRACE
     {:
       RESULT = new IterationStatementNode(e,s);
-      System.out.println("WHILE L_PAREN Expression R_PAREN Statement");
+      CUP$Parser$actions.LOGGER.info("WHILE L_PAREN Expression R_PAREN L_BRACE " +
+                                      "StatementList R_BRACE -> IterationStatement");
     :}
   |
     FOR L_PAREN ForInit:e1 ForExpr:e2 ForIncr:e3 R_PAREN L_BRACE StatementList:s R_BRACE
     {:
       //RESULT = new IterationStatementNode(e1,e2,e3,s);
-      System.out.println("FOR ForInit ForExpr ForInc L_BRACE StatementList:s R_BRACE");
+      CUP$Parser$actions.LOGGER.info("FOR ForInit ForExpr ForInc L_BRACE StatementList " +
+                                      "R_BRACE -> IterationStatement");
     :}
   |
     FOR L_PAREN ForInit ForExpr R_PAREN L_BRACE StatementList R_BRACE
     {:
-      System.out.println("FOR ForInit ForExpr L_BRACE StatementList R_BRACE");
       //RESULT = new IterationStatementNode(e1,e2,e3,s);
+      CUP$Parser$actions.LOGGER.info("FOR L_BRACEN ForInit ForExpr R_PAREN L_BRACE " +
+                                      "StatementList R_BRACE -> IterationStatement");
     :}
   |
     FOREACH Expression:e1 IN Expression:e2 L_BRACE StatementList:s R_BRACE
     {:
       RESULT = new IterationStatementNode(e1,e2,s);
-      System.out.println("FOREACH L_PAREN Expression IN Expression R_PAREN Statement"); 
+      CUP$Parser$actions.LOGGER.info("FOREACH Expression IN Expression L_BRACE StatementList " +
+                                      "R_BRACE -> IterationStatement"); 
     :}
   ;
 
 ForInit::=
     ExpressionStatements
     {:
-      System.out.println("ForInit -> ExpressionStatements");
+      CUP$Parser$actions.LOGGER.info("ExpressionStatements -> ForInit");
     :}
   |
     DeclarationStatement SEMICOL
     {:
-      System.out.println("ForInit -> DeclarationStatement SEMICOL");
+      CUP$Parser$actions.LOGGER.info("DeclarationStatement SEMICOL -> ForInit");
     :}
   ;
 
 ForExpr::=
     ExpressionStatement
     {:
-      System.out.println("ForExpr -> ExpressionStatement");
+      CUP$Parser$actions.LOGGER.info("ExpressionStatement -> ForExpr");
     :}
   ;
 
 ForIncr::=
     ExpressionStatements
     {:
-      System.out.println("ForIncr -> ExpressionStatements");
+      CUP$Parser$actions.LOGGER.info("ExpressionStatements -> ForIncr");
     :}
   ;
 
 ExpressionStatements::=
     ExpressionStatement
     {:
-      System.out.println("ExpressionStatements -> Expression");
+      CUP$Parser$actions.LOGGER.info("ExpressionStatement -> ExpressionStatements");
     :}
   |
     ExpressionStatements COMMA ExpressionStatement
     {:
-      System.out.println("ExpressionStatements -> ExpressionStatements COMMA Expression");
+      CUP$Parser$actions.LOGGER.info("ExpressionStatements COMMA ExpressionStatement -> " +
+                                    "ExpressionStatements");
     :}
   ;
  
 LabeledStatement::=
     CASE LogicalExpression COL Statement:s
     {:
-      System.out.println("CASE LogicalExpression COL Statement");
+      CUP$Parser$actions.LOGGER.info("CASE LogicalExpression COL Statement -> LabeledStatement");
     :}
   |
     DEFAULT:d COL Statement:s
     {:
-      System.out.println("DEFAULT COL Statement");
+      CUP$Parser$actions.LOGGER.info("DEFAULT COL Statement");
     :} 
   ;
 
@@ -811,37 +823,37 @@ Type::=
     VOID
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.VOID);
-      System.out.println("Type -> VOID");
+      CUP$Parser$actions.LOGGER.info("VOID -> Type");
     :}
   |
     TEXT
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.TEXT);
-      System.out.println("Type -> TEXT");
+      CUP$Parser$actions.LOGGER.info("TEXT -> Type");
     :}
   |
     BOOL
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.BOOL);
-      System.out.println("Type -> BOOL");
+      CUP$Parser$actions.LOGGER.info("BOOL -> Type");
     :}
   |
     INT:i
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.INT);
-      System.out.println("Type -> INT");
+      CUP$Parser$actions.LOGGER.info("INT -> Type");
     :}
   |
     REAL
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.REAL);
-      System.out.println("Type -> REAL");
+      CUP$Parser$actions.LOGGER.info("REAL -> Type");
     :}
   |
     DerivedType:d LESS Type:t GRTR
     {:
       RESULT = new DerivedTypeNode(d, t);
-      System.out.println("Type -> DerivedType");
+      CUP$Parser$actions.LOGGER.info("DerivedType LESS Type GRTR -> Type");
     :}
   ;
 
@@ -849,30 +861,30 @@ DerivedType::=
     LIST
     {:
       RESULT = Types.Derived.LIST;
-      System.out.println("DerivedType -> LIST");
+      CUP$Parser$actions.LOGGER.info("LIST -> DerivedType");
     :}
   |
     ITER
     {:
       RESULT = Types.Derived.ITER;
-      System.out.println("DerivedType -> ITER");
+      CUP$Parser$actions.LOGGER.info("ITER -> DerivedType");
     :}
   |
     DICT
     {:
       RESULT = Types.Derived.DICT;
-      System.out.println("DerivedType -> DICT");
+      CUP$Parser$actions.LOGGER.info("DICT -> DerivedType");
     :}
   |
     MULTISET
     {:
       RESULT = Types.Derived.MULTISET;
-      System.out.println("DerivedType -> MULTISET");
+      CUP$Parser$actions.LOGGER.info("MULTISET -> DerivedType");
     :}
   |
     SET
     {:
       RESULT = Types.Derived.SET;
-      System.out.println("DerivedType -> SET");
+      CUP$Parser$actions.LOGGER.info("SET -> DerivedType");
     :}
   ;
