@@ -14,7 +14,7 @@ public class Types {
 	}
 
 	public static enum Exception {
-		FILE_NOT_FOUND, FILE_LOAD, ARRAY_OUT_OF_BOUNDS, INCORRECT_ARGUMENT, TYPE_MISMATCH, HOG_MAP, HOG_REDUCE, NULL_REFERENCE
+		FILE_NOT_FOUND, FILE_LOAD, ARRAY_OUT_OF_BOUNDS, INCORRECT_ARGUMENT, TYPE_MISMATCH, NULL_REFERENCE, ARITHMETIC
 	}
 
 	public static boolean isSameType(ExpressionNode one, ExpressionNode two) {
