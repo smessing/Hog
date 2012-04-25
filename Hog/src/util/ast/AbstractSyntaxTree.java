@@ -10,11 +10,11 @@ import util.ast.node.Node;
  * @author sam
  * 
  */
-public abstract class AbstractSyntaxTree {
+public class AbstractSyntaxTree {
 
 	protected Node root;
 
-	protected AbstractSyntaxTree(Node root) {
+	public AbstractSyntaxTree(Node root) {
 		this.root = root;
 	}
 	

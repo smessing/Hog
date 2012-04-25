@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import util.ast.AbstractSyntaxTree;
-import util.ast.UntypedAbstractSyntaxTree;
 import util.ast.node.BiOpNode;
 import util.ast.node.ExpressionNode;
 import util.ast.node.IdNode;
@@ -59,7 +58,7 @@ public class ConsoleLexer {
 	    	  ex.printStackTrace();
 	      }
 	    
-	    AbstractSyntaxTree ast = new UntypedAbstractSyntaxTree(root);
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
 	    
 	    Iterator<Node> postOrder = ast.postOrderTraversal();
 	    
