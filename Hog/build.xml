@@ -79,7 +79,7 @@
 		<delete file="${src.dir}/front_end/Lexer.java~" />
 	</target>
     
-	<target name="compile" depends="">
+	<target name="compile" depends="clean, dev-frontend">
 		<echo>${welcome.message}</echo>
 		<echo>Authors:</echo>
 		<echo>Jason Halpern (Testing/Validation)</echo>
@@ -95,7 +95,7 @@
 		</javac>
 	</target>
 
-	<target name="jar" depends="">
+	<target name="jar" depends="compile">
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
 			<zipfileset includes="**/*.class" src="lib/java-cup-11a.jar" />
 			<manifest>
@@ -104,7 +104,7 @@
 		</jar>
 	</target>
 
-	<target name="run" depends="">
+	<target name="run" depends="jar">
 		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" >
 		    <sysproperty key="java.util.logging.config.file" value="${logging.properties}"/>
 		</java>
@@ -112,7 +112,7 @@
 
 	<target name="clean-build" depends="" />
 
-	<target name="main" depends="clean,run" />
+	<target name="main" depends="jar" />
 
 	<!-- developer builds -->
 	<target name="dev-frontend" depends="">

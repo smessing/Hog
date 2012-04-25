@@ -106,6 +106,17 @@ public class NodeTester {
 	}
 
 	@Test
+	public void removeChildTest() {
+		A.removeChild(C);
+		assertEquals("removeChild should properly remove a child", 1, A
+				.getChildren().size());
+		assertEquals("removeChild should properly remove a child", false, A
+				.hasChild(C));
+		assertEquals("removeChild should properly unset childs parent", null, C
+				.getParent());
+	}
+
+	@Test
 	public void setUnsetParentTest() {
 		MockNode parent = new MockNode();
 		MockNode child = new MockNode();
