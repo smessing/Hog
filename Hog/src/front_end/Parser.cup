@@ -58,6 +58,7 @@ terminal FUNCTIONS, MAIN, MAP, REDUCE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA;
 terminal LIST, ITER, DICT, MULTISET, SET;
 terminal TRY, CATCH, FINALLY;
+terminal ExceptionTypeNode EXCEPTION;
 
 nonterminal GuardingStatementNode GuardingStatement;
 nonterminal CatchesNode Catches;
@@ -336,17 +337,10 @@ Catch::=
   ;
 
 CatchHeader::=
-   CATCH L_PAREN Type:t ID:i R_PAREN
+   CATCH L_PAREN EXCEPTION:ex ID:i R_PAREN
    {:
-      RESULT = new IdNode(t, i);
+      RESULT = new IdNode(ex, i);
       CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader");
-   :}
-  |
-   CATCH L_PAREN Type:t R_PAREN
-   {:
-      // TODO is the fix below too weird?
-      RESULT = new IdNode(t, "");
-      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type R_PAREN -> CatchHeader");
    :}
   ;
  
