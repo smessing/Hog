@@ -60,8 +60,8 @@ terminal LIST, ITER, DICT, MULTISET, SET;
 terminal TRY, CATCH, FINALLY;
 
 nonterminal GuardingStatementNode GuardingStatement;
-nonterminal Catches;
-nonterminal Catch;
+nonterminal CatchesNode Catches;
+nonterminal CatchesNode Catch;
 nonterminal IdNode CatchHeader;
 nonterminal StatementListNode Finally;
 nonterminal StatementListNode Block;
@@ -317,7 +317,11 @@ Catches::=
    | 
     Catches:cs Catch:c
     {:
-      RESULT = new CatchesNode(cs.getHeader(), cs.getBlock(), c);
+      IdNode header = cs.getHeader();
+      StatementListNode block = cs.getBlock();
+      header.unsetParent();
+      block.unsetParent();
+      RESULT = new CatchesNode(header, block, c);
       CUP$Parser$actions.LOGGER.info("Catches Catch -> Catches: NOT IMPLEMENTED");
     :}
 ;
@@ -333,14 +337,14 @@ Catch::=
 CatchHeader::=
    CATCH L_PAREN Type:t ID:i R_PAREN
    {:
-      result = new IdNode(t, i);
+      RESULT = new IdNode(t, i);
       CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader: NOT IMPLEMENTED");
    :}
   |
    CATCH L_PAREN Type:t R_PAREN
    {:
       // TODO is the fix below too weird?
-      result = new IdNode(t, "");
+      RESULT = new IdNode(t, "");
       CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type R_PAREN -> CatchHeader: NOT IMPLEMENTED");
    :}
   ;

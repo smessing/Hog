@@ -63,6 +63,10 @@ public abstract class Node implements Comparable<Node> {
 	public Node getParent() {
 		return parent;
 	}
+	
+	public void unsetParent() {
+		parent = null;
+	}
 
 	/**
 	 * Add a child to this node. The new child will always been the rightmost
