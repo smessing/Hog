@@ -258,12 +258,12 @@ Statement::=
   | GuardingStatement:gs
     {:
       RESULT = gs;
-      CUP$Parser$actions.LOGGER.info("GuardingStatement -> Statement: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("GuardingStatement -> Statement");
     :}
-  | Block
+  | Block:b
     {:
-      //TODO implement Block
-      CUP$Parser$actions.LOGGER.info("Block -> Statement: NOT IMPLEMENTED");
+      RESULT = b;
+      CUP$Parser$actions.LOGGER.info("Block -> Statement");
     :}
   ;
 
@@ -271,19 +271,19 @@ GuardingStatement::=
     TRY Block:b Finally:f
     {:
       RESULT = new GuardingStatementNode(b, f);
-      CUP$Parser$actions.LOGGER.info("TRY Block Finally -> GuardingStatment: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("TRY Block Finally -> GuardingStatment");
     :}
    |
     TRY Block:b Catches:c
     {:
       RESULT = new GuardingStatementNode(b, c);
-      CUP$Parser$actions.LOGGER.info("TRY Block Catches -> GuardingStatment: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("TRY Block Catches -> GuardingStatment);
     :}
    | 
     TRY Block:b Catches:c Finally:f
     {:
       RESULT = new GuardingStatementNode(b, c, f);
-      CUP$Parser$actions.LOGGER.info("TRY Block Catches Finally -> GuardingStatment: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("TRY Block Catches Finally -> GuardingStatment");
     :}
 ;
 
@@ -304,7 +304,7 @@ Finally::=
     FINALLY Block:b
     {:
       RESULT = b;
-      CUP$Parser$actions.LOGGER.info("FINALLY Block -> Finally: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("FINALLY Block -> Finally");
     :}
 ;
 
@@ -312,7 +312,7 @@ Catches::=
     Catch:c
     {:
       RESULT = c;
-      CUP$Parser$actions.LOGGER.info("Catch -> Catches: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("Catch -> Catches");
     :}
    | 
     Catches:cs Catch:c
@@ -323,7 +323,7 @@ Catches::=
       header.unsetParent();
       block.unsetParent();
       RESULT = new CatchesNode(header, block, c);
-      CUP$Parser$actions.LOGGER.info("Catches Catch -> Catches: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("Catches Catch -> Catches");
     :}
 ;
 
@@ -331,7 +331,7 @@ Catch::=
    CatchHeader:c Block:b
     {:
       RESULT = new CatchesNode(c, b);
-      CUP$Parser$actions.LOGGER.info("CatchHeader Block -> Catch: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("CatchHeader Block -> Catch");
     :}
   ;
 
@@ -339,14 +339,14 @@ CatchHeader::=
    CATCH L_PAREN Type:t ID:i R_PAREN
    {:
       RESULT = new IdNode(t, i);
-      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader");
    :}
   |
    CATCH L_PAREN Type:t R_PAREN
    {:
       // TODO is the fix below too weird?
       RESULT = new IdNode(t, "");
-      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type R_PAREN -> CatchHeader: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type R_PAREN -> CatchHeader");
    :}
   ;
  
