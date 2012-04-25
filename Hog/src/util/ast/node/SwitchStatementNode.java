@@ -7,21 +7,16 @@ import back_end.Visitor;
  * @author sam
  * 
  */
-public class SwitchStatementNode extends StatementNode {
+public class SwitchStatementNode extends SelectionStatementNode {
 
-	protected ExpressionNode expression;
 	protected StatementListNode statements;
 
 	public SwitchStatementNode(ExpressionNode expression,
 			StatementListNode statements) {
-		this.expression = expression;
+		super(expression);
 		this.statements = statements;
 		this.addChild(expression);
 		this.addChild(statements);
-	}
-
-	public ExpressionNode getExpression() {
-		return this.expression;
 	}
 
 	public StatementListNode getStatements() {
