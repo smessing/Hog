@@ -65,10 +65,10 @@ nonterminal CatchesNode Catch;
 nonterminal IdNode CatchHeader;
 nonterminal StatementListNode Finally;
 nonterminal StatementListNode Block;
-nonterminal ExpressionStatements;
-nonterminal ForExpr;
-nonterminal ForInit;
-nonterminal ForIncr;
+nonterminal StatementListNode ExpressionStatements;
+nonterminal ExpressionNode ForExpr;
+nonterminal StatementListNode ForInit;
+nonterminal StatementListNode ForIncr;
 
 
 nonterminal ProgramNode Program;
@@ -78,7 +78,7 @@ nonterminal SectionNode Map;
 nonterminal SectionNode Reduce;
 nonterminal SectionTypeNode SectionType;
 nonterminal StatementNode Statement;
-nonterminal StatementNode ExpressionStatement;
+nonterminal ExpressionNode ExpressionStatement;
 nonterminal StatementNode FunctionList;
 nonterminal StatementNode IterationStatement;
 nonterminal StatementNode LabeledStatement;
@@ -707,7 +707,7 @@ SelectionStatement::=
   |
     SWITCH Expression:e L_BRACE StatementList:s R_BRACE
     {:
-      //TODO implement
+      RESULT = new SwitchStatementNode(e, s);
       CUP$Parser$actions.LOGGER.info("SWITCH Expression L_BRACE " +
                                       "StatementList R_BRACE -> SelectionStatement");
     :}
@@ -748,9 +748,9 @@ IterationStatement::=
                                       "StatementList R_BRACE -> IterationStatement");
     :}
   |
-    FOR L_PAREN ForInit:e1 ForExpr:e2 ForIncr:e3 R_PAREN L_BRACE StatementList:s R_BRACE
+    FOR L_PAREN ForInit:init ForExpr:test ForIncr:incr R_PAREN L_BRACE StatementList:block R_BRACE
     {:
-      //RESULT = new IterationStatementNode(e1,e2,e3,s);
+      RESULT = new IterationStatementNode(init, test, incr, block);
       CUP$Parser$actions.LOGGER.info("FOR ForInit ForExpr ForInc L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement");
     :}
@@ -771,39 +771,48 @@ IterationStatement::=
   ;
 
 ForInit::=
-    ExpressionStatements
+    ExpressionStatements:es
     {:
+      RESULT = es;
       CUP$Parser$actions.LOGGER.info("ExpressionStatements -> ForInit");
     :}
   |
-    DeclarationStatement SEMICOL
+    DeclarationStatement:ds SEMICOL
     {:
+      RESULT = ds;
       CUP$Parser$actions.LOGGER.info("DeclarationStatement SEMICOL -> ForInit");
     :}
   ;
 
 ForExpr::=
-    ExpressionStatement
+    ExpressionStatement:es
     {:
+      RESULT = es;
       CUP$Parser$actions.LOGGER.info("ExpressionStatement -> ForExpr");
     :}
   ;
 
 ForIncr::=
-    ExpressionStatements
+    ExpressionStatements:es
     {:
+      RESULT = es;
       CUP$Parser$actions.LOGGER.info("ExpressionStatements -> ForIncr");
     :}
   ;
 
 ExpressionStatements::=
-    ExpressionStatement
+    ExpressionStatement:es
     {:
+      RESULT = es;
       CUP$Parser$actions.LOGGER.info("ExpressionStatement -> ExpressionStatements");
     :}
   |
-    ExpressionStatements COMMA ExpressionStatement
+    ExpressionStatements:e COMMA ExpressionStatement:es
     {:
+      List<Node> children = new ArrayList<Node>();
+      children.add(e);
+      children.add(es);
+      RESULT = new StatementListNode(children);
       CUP$Parser$actions.LOGGER.info("ExpressionStatements COMMA ExpressionStatement -> " +
                                     "ExpressionStatements");
     :}

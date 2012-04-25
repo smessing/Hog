@@ -11,7 +11,7 @@ import back_end.Visitor;
  * @author ben
  *
  */
-public class TypeNode extends Node {
+public abstract class TypeNode extends Node {
 
 	public TypeNode() {
 		// TODO Auto-generated constructor stub
