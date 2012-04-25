@@ -15,7 +15,6 @@ public class SwitchStatementNode extends SelectionStatementNode {
 			StatementListNode statements) {
 		super(expression);
 		this.statements = statements;
-		this.addChild(expression);
 		this.addChild(statements);
 	}
 
