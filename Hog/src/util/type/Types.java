@@ -12,9 +12,9 @@ public class Types {
 	public static enum Derived {
 		LIST, ITER, DICT, MULTISET, SET
 	}
-	
+
 	public static enum Exception {
-		// TODO add exception type
+		FILE_NOT_FOUND, FILE_LOAD, ARRAY_OUT_OF_BOUNDS, INCORRECT_ARGUMENT, TYPE_MISMATCH, HOG_MAP, HOG_REDUCE, NULL_REFERENCE
 	}
 
 	public static boolean isSameType(ExpressionNode one, ExpressionNode two) {
