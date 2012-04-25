@@ -11,5 +11,5 @@ Hadoop instance, and Hog will do the rest.
 * Sam (Project Manager)
 * Paul (Language Guru)
 * Ben (System Architect)
-* Kurry (Testing/Validation)
-* Jason (System Integrator)
+* Kurry (System Integrator)
+* Jason (Testing/Validation)
