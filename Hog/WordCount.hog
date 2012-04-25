@@ -41,9 +41,9 @@
   list<int> face;
   try {
     face.get(0);
-  } catch (int  exception) {
+  } catch (FileNotFoundException  exception) {
     print(exception);
-  } catch (bool exception) {
+  } catch (ArrayOutOfBoundsException exception) {
     print (exception);
   }
   for (int i = 0; i < 4; i++;) {

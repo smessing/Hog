@@ -1,6 +1,8 @@
 package front_end;
 
 import java_cup.runtime.*;
+import util.ast.node.ExceptionTypeNode;
+import util.type.Types;
 
 %%
 /**
@@ -123,7 +125,7 @@ ArrayOutOfBoundsException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(T
 IncorrectArgumentException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.INCORRECT_ARGUMENT)); }
 TypeMismatchException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.TYPE_MISMATCH)); }
 NullReferenceException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.NULL_REFERENCE)); }
-ArtihmeticException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.ARTIHMETIC)); }
+ArtihmeticException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.ARITHMETIC)); }
 {integer}       { return newSym(sym.INT_CONST, new String(yytext())); }
 {real}          { return newSym(sym.REAL_CONST, new String(yytext())); }
 {comment}       { /* For this stand-alone lexer, print out comments. */
