@@ -82,7 +82,7 @@ public class NodeTester {
 	public void doubleAddParentTest() {
 		// note that this.addChild(that) implicitly sets that's parent to be
 		// this. In this case, D already has it's parent set to B.
-		B.addChild(D);
+		B.setParent(D);
 	}
 
 	@Test

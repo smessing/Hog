@@ -117,6 +117,13 @@ catch           { return newSym(sym.CATCH); }
 true            { return newSym(sym.BOOL_CONST, new String("true")); }
 false           { return newSym(sym.BOOL_CONST, new String("false")); }
 return          { return newSym(sym.RETURN); }
+FileNotFoundException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.FILE_NOT_FOUND)); }
+FileLoadException  { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.FILE_LOAD)); }
+ArrayOutOfBoundsException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.ARRAY_OUT_OF_BOUNDS)); } 
+IncorrectArgumentException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.INCORRECT_ARGUMENT)); }
+TypeMismatchException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.TYPE_MISMATCH)); }
+NullReferenceException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.NULL_REFERENCE)); }
+ArtihmeticException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.ARTIHMETIC)); }
 {integer}       { return newSym(sym.INT_CONST, new String(yytext())); }
 {real}          { return newSym(sym.REAL_CONST, new String(yytext())); }
 {comment}       { /* For this stand-alone lexer, print out comments. */
