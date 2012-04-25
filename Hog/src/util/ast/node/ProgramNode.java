@@ -13,11 +13,11 @@ public class ProgramNode extends Node {
 
 	public ProgramNode(SectionNode functions, SectionNode map,
 			SectionNode reduce, SectionNode main) {
+		super();
 		this.functions = functions;
 		this.map = map;
 		this.reduce = reduce;
 		this.main = main;
-		this.children = new ArrayList<Node>();
 		children.add(functions);
 		children.add(map);
 		children.add(reduce);

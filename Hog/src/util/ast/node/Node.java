@@ -15,9 +15,10 @@ import back_end.Visitor;
  * 
  */
 public abstract class Node implements Comparable<Node> {
-	
+
 	// logger used for all nodes
-	protected final static Logger LOGGER = Logger.getLogger(ConsoleLexer.class.getName());
+	protected final static Logger LOGGER = Logger.getLogger(ConsoleLexer.class
+			.getName());
 
 	protected Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
@@ -29,8 +30,9 @@ public abstract class Node implements Comparable<Node> {
 	public Node() {
 		this(new ArrayList<Node>());
 	}
-	
+
 	public abstract void accept(Visitor v);
+
 	public abstract int visitorTest(Visitor v);
 
 	/**
@@ -70,17 +72,16 @@ public abstract class Node implements Comparable<Node> {
 	 *            - the node to be added.
 	 */
 	public void addChild(Node child) {
-		//Node.LOGGER.info("Before adding child to Node: " + this.toString());
+		// Node.LOGGER.info("Before adding child to Node: " + this.toString());
 		if (children == null) {
 			children = new ArrayList<Node>();
 		}
-		
+
 		// don't add a null child
 		if (child == null) {
-			Node.LOGGER.info(this.toString() + " is  adding " +
-					"a null child in addChild");
-		}
-		else {
+			Node.LOGGER.info(this.toString() + " is  adding "
+					+ "a null child in addChild");
+		} else {
 			children.add(child);
 			child.setParent(this);
 		}
@@ -123,13 +124,13 @@ public abstract class Node implements Comparable<Node> {
 	public String toString() {
 		return this.getName();
 	}
-	
+
 	public String getChildrenString() {
-		
+
 		StringBuilder stringBuilder = new StringBuilder();
 
 		stringBuilder.append(this.getName());
-		
+
 		stringBuilder.append(" Children: [");
 
 		for (Node child : children) {
@@ -143,9 +144,9 @@ public abstract class Node implements Comparable<Node> {
 		}
 
 		stringBuilder.append("]");
-		
+
 		return stringBuilder.toString();
-		
+
 	}
 
 	/**
@@ -157,7 +158,5 @@ public abstract class Node implements Comparable<Node> {
 	public int compareTo(Node that) {
 		return this.getName().compareTo(that.getName());
 	}
-	
-
 
 }

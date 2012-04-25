@@ -1,11 +1,13 @@
 package util.ast.node;
 
-import java.util.List;
+public class ElseStatementNode extends StatementNode {
 
-public class ElseStatementNode extends ElseIfStatementNode {
-
-	ElseStatementNode(List<Node> children) {
-		super(children);
+	public ElseStatementNode(StatementListNode child) {
+		this.addChild(child);
 	}
 
+	@Override
+	public String getName() {
+		return "ElseStatementNode";
+	}
 }

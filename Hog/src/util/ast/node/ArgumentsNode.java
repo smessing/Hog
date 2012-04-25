@@ -30,7 +30,7 @@ public class ArgumentsNode extends ExpressionNode {
 	@Override
 	public int visitorTest(Visitor v) {
 		// TODO Auto-generated method stub
-		return 0;
+		return 41;
 	}
 
 }

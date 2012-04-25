@@ -35,7 +35,6 @@ public class BiOpNode extends ExpressionNode {
 		this.opType = type;
 		this.addChild(left);
 		this.addChild(right);
-		this.type = Types.getHigherType(left.getType(), right.getType());
 		
 	}
 
@@ -56,6 +55,12 @@ public class BiOpNode extends ExpressionNode {
 	@Override
 	public void accept(Visitor v){
 		v.visit(this);
+	}
+	
+	@Override
+	public int visitorTest(Visitor v) {
+		// TODO Auto-generated method stub
+		return 42;
 	}
 
 }

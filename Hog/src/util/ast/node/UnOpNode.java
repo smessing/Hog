@@ -3,10 +3,6 @@ package util.ast.node;
 import java.util.ArrayList;
 
 import back_end.Visitor;
-
-import util.type.Types;
-import util.type.Types.Type;
-
 /**
  * A node representing the Unary Operator terminals in a parse tree.
  * 
@@ -23,10 +19,10 @@ public class UnOpNode extends ExpressionNode {
 	protected OpType opType;
 	
 	public UnOpNode(OpType opType, ExpressionNode child) {
-		this(opType, child, Type.UNKNOWN);
+		this(null, opType, child);
 	}
 	
-	public UnOpNode(OpType opType, ExpressionNode child, Type type) {
+	public UnOpNode(TypeNode type, OpType opType, ExpressionNode child) {
 		super(type);
 		// note implicitly sets child.parent = this
 		this.addChild(child);

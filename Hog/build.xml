@@ -44,12 +44,13 @@
 	<property name="jflex.main-class" value="JFlex.Main" />
 	<property name="cup.main-class" value="java_cup.Main" />
 	<property name="parser.specification" value="${front_end.dir}/Parser.cup" />
+	<property name="logging.properties" value="logging.properties" />
 
 	<!-- build tasks (ignore Eclipse warnings) -->
 
 	<taskdef name="jflex" classname="JFlex.anttask.JFlexTask">
 		<classpath refid="lib" />
-	</taskdef>
+	</taskdef>  
 
 	<taskdef name="cup" classname="java_cup.anttask.CUPTask">
 		<classpath refid="lib" />
@@ -76,7 +77,7 @@
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
-
+    
 	<target name="compile" depends="clean, dev-frontend">
 		<echo>${welcome.message}</echo>
 		<echo>Authors:</echo>
@@ -103,7 +104,9 @@
 	</target>
 
 	<target name="run" depends="jar">
-		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" />
+		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" >
+		    <sysproperty key="java.util.logging.config.file" value="${logging.properties}"/>
+		</java>
 	</target>
 
 	<target name="clean-build" depends="jar" />

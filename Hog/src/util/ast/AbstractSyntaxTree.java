@@ -40,15 +40,26 @@ public abstract class AbstractSyntaxTree {
 		
 		StringBuilder sb = new StringBuilder();
 		
+		sb.append("\\documentclass{article}\n");
+		sb.append("\\usepackage{graphicx, pdflscape}\n");
+		sb.append("\\usepackage{qtree}\n");
+		sb.append("\\begin{document}\n");
+		sb.append("\\begin{landscape}\n");
+		sb.append("\\thispagestyle{empty}\n");
+		sb.append("\\hspace*{-0.1\\linewidth}\\resizebox{1.2\\linewidth}{!}{%\n");
+		
 		sb.append("\\Tree[.{" + root.getName() + "}");
 		
 		for (Node child : root.getChildren()) {
 			sb.append(toLatexAux(child));
 		}
 		
-		sb.append(" ]");
+		sb.append(" ]\n}\n");
 		
-		return sb.toString().replaceAll("<", "\\$<\\$").replaceAll(">", "\\$>\\$");
+		sb.append("\\end{landscape}\n");
+		sb.append("\\end{document}\n");
+		
+		return sb.toString().replaceAll("<", "\\$<\\$").replaceAll(">", "\\$>\\$").replaceAll("_", "-");
 	}
 	
 	private String toLatexAux(Node node) {

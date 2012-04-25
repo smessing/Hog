@@ -45,8 +45,8 @@ public class ExpressionNodeTester {
 		// A (MultExprNode) -> B (MultExprNode) * C (idNode)
 		// B -> D * E
 		C = new IdNode("C");
-		D = new UnOpNode(UnOpNode.OpType.CAST, new MockExpressionNode(), Types.Type.BOOL);
-		E = new UnOpNode(UnOpNode.OpType.CAST, new MockExpressionNode(), Types.Type.BOOL);
+		D = new UnOpNode(UnOpNode.OpType.CAST, new MockExpressionNode());
+		E = new UnOpNode(UnOpNode.OpType.CAST, new MockExpressionNode());
 		B = new BiOpNode(BiOpNode.OpType.TIMES, D, E);
 		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
 	}
@@ -67,8 +67,6 @@ public class ExpressionNodeTester {
 	
 	@Test
 	public void toStringTest2() {
-
-		A.setType(util.type.Types.Type.REAL);
 		
 		String properName = "MultiplicativeExpressionNode<REAL,TIMES>";
 
