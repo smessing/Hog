@@ -43,12 +43,12 @@ public class IterationStatementNode extends StatementNode {
 	 * @param E3
 	 * @param S
 	 */
-	public IterationStatementNode(ExpressionNode e1, ExpressionNode e2,
-			ExpressionNode e3, StatementListNode s) {
+	public IterationStatementNode(ExpressionNode initial, ExpressionNode check,
+			ExpressionNode increment, StatementListNode s) {
 		super(new ArrayList<Node>());
-		this.addChild(e1);
-		this.addChild(e2);
-		this.addChild(e3);
+		this.addChild(initial);
+		this.addChild(check);
+		this.addChild(increment);
 		this.addChild(s);
 		this.iterationType = IterationType.FOR;
 		IterationStatementNode.LOGGER
@@ -62,12 +62,12 @@ public class IterationStatementNode extends StatementNode {
 	 * @param E2
 	 * @param S
 	 */
-	public IterationStatementNode(ExpressionNode e1, ExpressionNode e2,
-			StatementListNode s) {
+	public IterationStatementNode(ExpressionNode part, ExpressionNode whole,
+			StatementListNode block) {
 		super(new ArrayList<Node>());
-		this.addChild(e1);
-		this.addChild(e2);
-		this.addChild(s);
+		this.addChild(part);
+		this.addChild(whole);
+		this.addChild(block);
 		this.iterationType = IterationType.FOREACH;
 		IterationStatementNode.LOGGER
 				.fine("Constructing FOREACH loop IterationStatementNode");
@@ -80,7 +80,7 @@ public class IterationStatementNode extends StatementNode {
 
 	@Override
 	public String getName() {
-		return "IterationStatement: " + iterationType.toString() + " loop";
+	    return "IterationStatement: " + iterationType.toString() + " loop";
 	}
 
 	@Override
