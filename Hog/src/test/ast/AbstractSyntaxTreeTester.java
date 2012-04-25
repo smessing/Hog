@@ -58,6 +58,9 @@ public class AbstractSyntaxTreeTester {
 
 	@Before
 	public void setUp() {
+		// A is root of tree, with children B, C
+		// B has children D, E
+		// C has children F, G
 		D = new MockExpressionNode();
 		E = new MockExpressionNode();
 		F = new MockExpressionNode();
@@ -68,15 +71,6 @@ public class AbstractSyntaxTreeTester {
 		B = new BiOpNode(BiOpNode.OpType.PLUS, D, I);
 		C = new BiOpNode(BiOpNode.OpType.MINUS, F, H);
 		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
-		// A is root of tree, with children B, C
-		// B has children D, E
-		// C has children F, G
-		/*A.addChild(B);
-		A.addChild(C);
-		B.addChild(D);
-		B.addChild(E);
-		C.addChild(F);
-		C.addChild(G);*/
 		tree = new UntypedAbstractSyntaxTree(A);
 	}
 
@@ -157,7 +151,7 @@ public class AbstractSyntaxTreeTester {
 	 * Tests to make sure the correct visit methods are being called 
 	 * by the nodes
 	 */
-	@Test
+	//@Test
 	public void nodeTypeCheckTest() {
 		
 		//Iterator<Node> postOrderTraversal = tree.postOrderTraversal();

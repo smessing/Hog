@@ -23,6 +23,7 @@ import java_cup.runtime.Scanner;
 import java_cup.runtime.Symbol;
 import front_end.*;
 
+import java.util.Iterator;
 import java.util.logging.*;
 /**
  * A console front-end to the Lexer class for dynamically testing the Lexer.
@@ -59,6 +60,13 @@ public class ConsoleLexer {
 	      }
 	    
 	    AbstractSyntaxTree ast = new UntypedAbstractSyntaxTree(root);
+	    
+	    Iterator<Node> postOrder = ast.postOrderTraversal();
+	    
+	    while (postOrder.hasNext()) {
+	    	System.out.println(postOrder.next());
+	    }
+	    
 	    String latexString = ast.toLatex();
 	    
 	    FileWriter fstream = new FileWriter("AST_output.tex");
