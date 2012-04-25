@@ -59,12 +59,12 @@ terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA
 terminal LIST, ITER, DICT, MULTISET, SET;
 terminal TRY, CATCH, FINALLY;
 
-nonterminal GuardingStatement;
+nonterminal GuardingStatementNode GuardingStatement;
 nonterminal Catches;
 nonterminal Catch;
 nonterminal CatchHeader;
 nonterminal Finally;
-nonterminal Block;
+nonterminal StatementListNode Block;
 nonterminal ExpressionStatements;
 nonterminal ForExpr;
 nonterminal ForInit;
@@ -255,9 +255,9 @@ Statement::=
       RESULT = ds;
       CUP$Parser$actions.LOGGER.info("DeclarationStatement -> Statement");
     :}
-  | GuardingStatement
+  | GuardingStatement:gs
     {:
-      //TODO implement GuardingStatement
+      RESULT = gs;
       CUP$Parser$actions.LOGGER.info("GuardingStatement -> Statement: NOT IMPLEMENTED");
     :}
   | Block
@@ -268,36 +268,35 @@ Statement::=
   ;
 
 GuardingStatement::=
-    TRY Block Finally
+    TRY Block:b Finally:f
     {:
-      // TODO implement GuardingStatement
+      RESULT = new GuardingStatementNode(b, f);
       CUP$Parser$actions.LOGGER.info("TRY Block Finally -> GuardingStatment: NOT IMPLEMENTED");
     :}
    |
-    TRY Block Catches
+    TRY Block:b Catches:c
     {:
-      // TODO implement GuardingStatement
+      RESULT = new GuardingStatementNode(b, c);
       CUP$Parser$actions.LOGGER.info("TRY Block Catches -> GuardingStatment: NOT IMPLEMENTED");
     :}
    | 
-    TRY Block Catches Finally
+    TRY Block:b Catches:c Finally:f
     {:
-      // TODO implement GuardingStatement
+      RESULT = new GuardingStatementNode(b, c, f);
       CUP$Parser$actions.LOGGER.info("TRY Block Catches Finally -> GuardingStatment: NOT IMPLEMENTED");
     :}
 ;
 
 Block::=
-    L_BRACE StatementList R_BRACE
+    L_BRACE StatementList:sl R_BRACE
     {:
-      // TODO implement Block
-      CUP$Parser$actions.LOGGER.info("L_BRACE StatementList R_BRACE -> Block: NOT IMPLEMENTED");
+      RESULT = sl;
+      CUP$Parser$actions.LOGGER.info("L_BRACE StatementList R_BRACE -> Block");
     :}
   | 
     L_BRACE R_BRACE
     {:
-      // TODO implement Block
-      CUP$Parser$actions.LOGGER.info("L_BRACE R_BRACE -> Block: NOT IMPLEMENTED");
+      CUP$Parser$actions.LOGGER.info("L_BRACE R_BRACE -> Block");
     :}
 ;
 
@@ -310,21 +309,23 @@ Finally::=
 ;
 
 Catches::=
-    Catch
+    Catch:c
     {:
+      RESULT = c;
       // TODO implement Catches
       CUP$Parser$actions.LOGGER.info("Catch -> Catches: NOT IMPLEMENTED");
     :}
    | 
-    Catches Catch 
+    Catches:cs Catch:c
     {:
+      RESULT = new CatchesNode(cs, c);
       // TODO implement Catches
       CUP$Parser$actions.LOGGER.info("Catches Catch -> Catches: NOT IMPLEMENTED");
     :}
 ;
 
 Catch::=
-   CatchHeader Block
+   CatchHeader:c Block:b
     {:
       // TODO implement Catch
       CUP$Parser$actions.LOGGER.info("CatchHeader Block -> Catch: NOT IMPLEMENTED");
