@@ -31,7 +31,7 @@ public class BiOpNode extends ExpressionNode {
 	public BiOpNode(OpType type, ExpressionNode left, ExpressionNode right) {
 		// note implicitly sets children.parent = this
 		super();
-		BiOpNode.LOGGER.fine("Constucting BiOpNode");
+		BiOpNode.LOGGER.fine("Constructing BiOpNode");
 		this.opType = type;
 		this.addChild(left);
 		this.addChild(right);
