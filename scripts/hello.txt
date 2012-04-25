@@ -1,1 +1,0 @@
-scripts/scald.rb --local WordCountJob.scala --input someInputfile.txt --output ./someOutputFile.tsv
