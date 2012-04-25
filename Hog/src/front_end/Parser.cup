@@ -771,13 +771,15 @@ IterationStatement::=
   ;
 
 ForInit::=
-    ExpressionStatements
+    ExpressionStatements:es
     {:
+      RESULT = es;
       CUP$Parser$actions.LOGGER.info("ExpressionStatements -> ForInit");
     :}
   |
-    DeclarationStatement SEMICOL
+    DeclarationStatement:ds SEMICOL
     {:
+      RESULT = ds;
       CUP$Parser$actions.LOGGER.info("DeclarationStatement SEMICOL -> ForInit");
     :}
   ;
