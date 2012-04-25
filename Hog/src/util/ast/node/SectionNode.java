@@ -26,7 +26,7 @@ public class SectionNode extends Node {
 
 	// use this constructor for @functions and @Main sections
 	public SectionNode(Node list, SectionName sectionName) {
-		SectionNode.LOGGER.info("adding list child to @Functions or @Main SectionNode");
+		SectionNode.LOGGER.fine("adding list child to @Functions or @Main SectionNode");
 		this.addChild(list);
 		this.sectionName = sectionName;
 	}
@@ -34,7 +34,7 @@ public class SectionNode extends Node {
 	// use this constructor for @map and @reduce sections
 	public SectionNode(SectionTypeNode type, StatementListNode list, SectionName sectionName) {
 		this.children = new ArrayList<Node>();
-		SectionNode.LOGGER.info("adding list child to @Map or @Reduce SectionNode");
+		SectionNode.LOGGER.fine("adding list child to @Map or @Reduce SectionNode");
 		this.addChild(type);
 		this.addChild(list);
 		this.sectionName = sectionName;

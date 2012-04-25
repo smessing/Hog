@@ -4,10 +4,13 @@ import java.io.*;
 import java_cup.runtime.*;
 import util.ast.node.*;
 import util.type.*;
+import java.util.logging.*;
 
 action code
   {:
     Hashtable table = new Hashtable();
+    protected final static Logger LOGGER = Logger.getLogger(Parser.class
+            .getName());
   :};
 
 parser code
@@ -68,9 +71,6 @@ nonterminal ForInit;
 nonterminal ForIncr;
 
 
-nonterminal DerivedType;
-
-
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
 nonterminal SectionNode Main;
@@ -103,8 +103,9 @@ nonterminal ExpressionNode Constant;
 nonterminal ExpressionNode ArgumentExpressionList;
 nonterminal FunctionNode Function;
 nonterminal ParametersNode ParameterList;
-nonterminal Types.Type Type;
+nonterminal TypeNode Type;
 nonterminal UnOpNode.OpType UnaryOperator;
+nonterminal Types.Derived DerivedType;
 
 precedence left MINUS, PLUS;
 precedence right UMINUS;
@@ -118,7 +119,7 @@ Program::=
     Functions:f Map:m Reduce:r Main:n
     {:
       RESULT = new ProgramNode(f, m, r, n);
-      System.out.println("PROGRAM");
+      CUP$Parser$actions.LOGGER.info("Functions Map Reduce Main -> Program");
     :}
   ;
 
@@ -126,7 +127,7 @@ Functions::=
     FUNCTIONS L_BRACE FunctionList:fl R_BRACE
     {:
      RESULT = new SectionNode(fl, SectionNode.SectionName.FUNCTIONS);
-     System.out.println("Functions -> FUNCTIONS L_BRACE FunctionList R_BRACE");
+     CUP$Parser$actions.LOGGER.info("FUNCTIONS L_BRACE FunctionList R_BRACE -> Functions");
     :}
   |
     /* epsilon */
@@ -136,7 +137,7 @@ FunctionList::=
     Function:f
     {:
       RESULT = f;
-      System.out.println("FunctionList -> Function");
+      CUP$Parser$actions.LOGGER.info("Function -> FunctionList");
     :}
   |
     FunctionList:fl Function:f
@@ -145,7 +146,7 @@ FunctionList::=
       children.add(fl);
       children.add(f);
       RESULT = new StatementNode(children);
-      System.out.println("FunctionList -> FunctionList Function");
+      CUP$Parser$actions.LOGGER.info("FunctionList Function -> FunctionList");
     :}
   ;
 
@@ -153,7 +154,7 @@ Function::=
     Type:t ID:i L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new FunctionNode(t, i, pl, sl); 
-      System.out.println("Function -> Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE");
+      CUP$Parser$actions.LOGGER.info("Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE -> Function");
     :}
   ;
 
@@ -161,13 +162,13 @@ ParameterList::=
     ParameterList:pl COMMA Type:t ID:i
     {:
       RESULT = new ParametersNode(t, i, pl);
-      System.out.println("ParameterList -> ParameterList COMMA Type ID: " + i);
+      CUP$Parser$actions.LOGGER.info("ParameterList COMMA Type ID: " + i + " -> ParameterList");
     :}
   |
     Type:t ID:i
     {:
       RESULT = new ParametersNode(t, i);
-      System.out.println("ParameterList -> Type ID: " + i);
+      CUP$Parser$actions.LOGGER.info("Type ID: " + i + " -> ParameterList");
     :}
   |
     /* epsilon */
@@ -177,7 +178,7 @@ Map::=
     MAP SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new SectionNode(st, sl, SectionNode.SectionName.MAP);
-      System.out.println("Map -> MAP SectionType L_BRACE StatementList R_BRACE");
+      CUP$Parser$actions.LOGGER.info("MAP SectionType L_BRACE StatementList R_BRACE -> Map");
     :}
   ;
 
@@ -185,15 +186,15 @@ Reduce::=
     REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new SectionNode(st, sl, SectionNode.SectionName.REDUCE);
-      System.out.println("Reduce -> REDUCE SectionType L_BRACE StatementList R_BRACE");
+      CUP$Parser$actions.LOGGER.info("REDUCE SectionType L_BRACE StatementList R_BRACE -> Reduce");
     :}
   ;
 
 SectionType::=
     L_PAREN Type:t1 ID:i1 COMMA Type:t2 ID:i2 R_PAREN ARROW L_PAREN Type:t3 COMMA Type:t4 R_PAREN
     {:
-     RESULT = new SectionTypeNode(new IdNode(i1, t1), new IdNode(i2, t2), t3, t4);
-     System.out.println("SectionType -> L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN");
+     RESULT = new SectionTypeNode(new IdNode(t1, i1), new IdNode(t2, i2), t3, t4);
+     CUP$Parser$actions.LOGGER.info("L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN -> SectionType");
     :}
   ;
 
@@ -201,7 +202,7 @@ Main::=
     MAIN L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new SectionNode(sl, SectionNode.SectionName.MAIN);
-      System.out.println("Main -> MAIN L_BRACE StatementList R_BRACE");
+      CUP$Parser$actions.LOGGER.info("MAIN L_BRACE StatementList R_BRACE -> Main");
     :}
   ;
 
@@ -209,13 +210,13 @@ StatementList::=
     Statement:s
     {:
       RESULT = s;
-      System.out.println("StatementList -> Statement");
+      CUP$Parser$actions.LOGGER.info("Statement -> StatementList");
     :}
   |
     StatementList:sl Statement:s
     {:
       RESULT = new StatementListNode(sl, s);
-      System.out.println("StatementList -> StatementList Statement");
+      CUP$Parser$actions.LOGGER.info("StatementList Statement -> StatementList");
     :}
   ;
 
@@ -223,92 +224,138 @@ Statement::=
     ExpressionStatement:es
     {:
       RESULT = es;
-      System.out.println("Statement -> ExpressionStatement");
+      CUP$Parser$actions.LOGGER.info("ExpressionStatement -> Statement");
     :}
   |
    SelectionStatement:ss
     {:
       RESULT = ss;
-      System.out.println("Statement -> SelectionStatement");
+      CUP$Parser$actions.LOGGER.info("SelectionStatement -> Statement");
     :}
   |
     IterationStatement:is
     {:
       RESULT = is;
-      System.out.println("Statement -> IterationStatement");
+      CUP$Parser$actions.LOGGER.info("IterationStatement -> Statement");
     :}
   |
     LabeledStatement:ls
     {:
      RESULT = ls;
-     System.out.println("Statement -> LabeledStatement");
+     CUP$Parser$actions.LOGGER.info("LabeledStatement -> Statement");
     :}
   |
     JumpStatement:js
     {:
       RESULT = js;
-      System.out.println("Statement -> JumpStatement");
+      CUP$Parser$actions.LOGGER.info("JumpStatement -> Statement");
     :}
   | DeclarationStatement:ds
     {:
       RESULT = ds;
-      System.out.println("Statement -> DeclarationStatement");
+      CUP$Parser$actions.LOGGER.info("DeclarationStatement -> Statement");
     :}
   | GuardingStatement
     {:
-      System.out.println("Statement -> GuardingStatement");
+      //TODO implement GuardingStatement
+      CUP$Parser$actions.LOGGER.info("GuardingStatement -> Statement: NOT IMPLEMENTED");
     :}
   | Block
     {:
-      System.out.println("Statement -> Block");
+      //TODO implement Block
+      CUP$Parser$actions.LOGGER.info("Block -> Statement: NOT IMPLEMENTED");
     :}
   ;
 
 GuardingStatement::=
     TRY Block Finally
+    {:
+      // TODO implement GuardingStatement
+      CUP$Parser$actions.LOGGER.info("TRY Block Finally -> GuardingStatment: NOT IMPLEMENTED");
+    :}
    |
     TRY Block Catches
+    {:
+      // TODO implement GuardingStatement
+      CUP$Parser$actions.LOGGER.info("TRY Block Catches -> GuardingStatment: NOT IMPLEMENTED");
+    :}
    | 
     TRY Block Catches Finally
+    {:
+      // TODO implement GuardingStatement
+      CUP$Parser$actions.LOGGER.info("TRY Block Catches Finally -> GuardingStatment: NOT IMPLEMENTED");
+    :}
 ;
 
 Block::=
     L_BRACE StatementList R_BRACE
+    {:
+      // TODO implement Block
+      CUP$Parser$actions.LOGGER.info("L_BRACE StatementList R_BRACE -> Block: NOT IMPLEMENTED");
+    :}
   | 
     L_BRACE R_BRACE
+    {:
+      // TODO implement Block
+      CUP$Parser$actions.LOGGER.info("L_BRACE R_BRACE -> Block: NOT IMPLEMENTED");
+    :}
 ;
 
 Finally::=
-  FINALLY Block
+    FINALLY Block
+    {:
+      // TODO implement Finally
+      CUP$Parser$actions.LOGGER.info("FINALLY Block -> Finally: NOT IMPLEMENTED");
+    :}
 ;
 
 Catches::=
     Catch
+    {:
+      // TODO implement Catches
+      CUP$Parser$actions.LOGGER.info("Catch -> Catches: NOT IMPLEMENTED");
+    :}
    | 
     Catches Catch 
+    {:
+      // TODO implement Catches
+      CUP$Parser$actions.LOGGER.info("Catches Catch -> Catches: NOT IMPLEMENTED");
+    :}
 ;
 
 Catch::=
    CatchHeader Block
+    {:
+      // TODO implement Catch
+      CUP$Parser$actions.LOGGER.info("CatchHeader Block -> Catch: NOT IMPLEMENTED");
+    :}
   ;
 
 CatchHeader::=
    CATCH L_PAREN Type ID R_PAREN
+   {:
+      // TODO implement CatchHeader
+      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader: NOT IMPLEMENTED");
+   :}
   |
    CATCH L_PAREN Type R_PAREN
+   {:
+      // TODO implement CatchHeader
+      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type R_PAREN -> CatchHeader: NOT IMPLEMENTED");
+   :}
   ;
  
 DeclarationStatement::=
     Type:t ID:i
     {:
-      RESULT = new IdNode(i, t);
-      System.out.println("DeclarationStatement -> Type ID");
+      RESULT = new IdNode(t, i);
+      CUP$Parser$actions.LOGGER.info("Type ID -> DeclarationStatement");
     :}
   |
     Type:t ID:i ASSIGN Expression:e
     {:
-      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, new IdNode(i,t), e);
-      System.out.println("DeclarationStatement -> Type ID ASSIGN Expression");
+      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, new IdNode(t,i), e);
+      CUP$Parser$actions.LOGGER.info("Type ID ASSIGN Expression -> DeclarationStatement");
     :}
   ;
  
@@ -316,32 +363,32 @@ JumpStatement::=
     CONTINUE
     {:
       RESULT = new JumpStatementNode(JumpStatementNode.JumpType.CONTINUE);
-      System.out.println("JumpStatement -> CONTINUE");
+      CUP$Parser$actions.LOGGER.info("CONTINUE -> JumpStatement");
     :}
   |
     BREAK
     {:
       RESULT = new JumpStatementNode(JumpStatementNode.JumpType.BREAK);
-      System.out.println("JumpStatement -> BREAK");
+      CUP$Parser$actions.LOGGER.info("BREAK -> JumpStatement");
     :}
   |
     RETURN ExpressionStatement:es
     {:
       RESULT = new JumpStatementNode(JumpStatementNode.JumpType.RETURN, es);
-      System.out.println("JumpStatement -> RETURN Expression");
+      CUP$Parser$actions.LOGGER.info("RETURN Expression -> JumpStatement");
     :}
   ;
  
 ExpressionStatement::=
     SEMICOL
     {:
-      System.out.println("ExpressionStatement -> SEMICOL");
+      CUP$Parser$actions.LOGGER.info("SEMICOL -> ExpressionStatement: NO RESULT STATEMENT");
     :}
   |
     Expression:e SEMICOL
     {:
       RESULT = e;
-      System.out.println("ExpressionStatement -> Expression SEMICOL");
+      CUP$Parser$actions.LOGGER.info("Expression SEMICOL -> ExpressionStatement");
     :}
   ;
 
@@ -349,13 +396,13 @@ Expression::=
     LogicalExpression:le
     {:
      RESULT = le;
-     System.out.println("Expression -> LogicalExpression");
+     CUP$Parser$actions.LOGGER.info("LogicalExpression -> Expression");
     :}
   |
     UnaryExpression:ue ASSIGN Expression:e
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, ue, e);
-      System.out.println("Expression -> UnaryExpression ASSIGN Expression");
+      CUP$Parser$actions.LOGGER.info("UnaryExpression ASSIGN Expression -> Expression");
     :}
   ;
 
@@ -363,13 +410,13 @@ LogicalExpression::=
     LogicalExpression:le OR LogicalTerm:lt
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.OR, le, lt);
-      System.out.println("LogicalExpression -> LogicalExpression OR LogicalTerm");
+      CUP$Parser$actions.LOGGER.info("LogicalExpression OR LogicalTerm -> LogicalExpression");
     :}
   |
     LogicalTerm:l
     {:
       RESULT = l;
-      System.out.println("LogicalExpression -> LogicalTerm");
+      CUP$Parser$actions.LOGGER.info("LogicalTerm -> LogicalExpression");
     :}
   ;
 
@@ -377,13 +424,13 @@ LogicalTerm::=
     LogicalTerm:l AND EqualityExpression:e
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.AND, l, e);
-      System.out.println("LogicalTerm -> LogicalTerm AND EqualityExpression");
+      CUP$Parser$actions.LOGGER.info("LogicalTerm AND EqualityExpression -> LogicalTerm");
     :}
   |
     EqualityExpression:e
     {:
       RESULT = e;
-      System.out.println("LogicalTerm -> EqualityExpression");
+      CUP$Parser$actions.LOGGER.info("EqualityExpression -> LogicalTerm");
     :}
   ;
 
@@ -391,19 +438,19 @@ EqualityExpression::=
     RelationalExpression:r
     {: 
       RESULT = r; 
-      System.out.println("EqualityExpression -> RelationalExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression -> EqualityExpression");
     :}
   |
     EqualityExpression:e DBL_EQLS RelationalExpression:r
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.DBL_EQLS, e, r);
-      System.out.println("EqualityExpression -> EqualityExpression DBL_EQLS RelationalExpression");
+      CUP$Parser$actions.LOGGER.info("EqualityExpression DBL_EQLS RelationalExpression -> EqualityExpression");
     :}
   |
     EqualityExpression:e NOT_EQLS RelationalExpression:r
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.NOT_EQLS, e, r);
-      System.out.println("EqualityExpression -> EqualityExpression NOT_EQLS RelationalExpression");
+      CUP$Parser$actions.LOGGER.info("EqualityExpression NOT_EQLS RelationalExpression -> EqualityExpression");
     :}
   ;
 
@@ -411,31 +458,31 @@ RelationalExpression::=
     AdditiveExpression:a
     {:
       RESULT = a;
-      System.out.println("RelationalExpression -> AdditiveExpression");
+      CUP$Parser$actions.LOGGER.info("AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r LESS AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.LESS, r, a);
-      System.out.println("RelationalExpression -> RelationalExpression LESS AdditiveExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression LESS AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r GRTR AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.GRTR, r, a);
-      System.out.println("RelationalExpression -> RelationalExpression GRTR AdditiveExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression GRTR AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r LESS_EQL AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.LESS_EQL, r, a);
-      System.out.println("RelationalExpression -> RelationalExpression LESS_EQL AdditiveExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression LESS_EQL AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r GRTR_EQL AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.GRTR_EQL, r, a);
-      System.out.println("RelationalExpression -> RelationalExpression GRTR_EQL AdditiveExpression");
+      CUP$Parser$actions.LOGGER.info("RelationalExpression GRTR_EQL AdditiveExpression -> RelationalExpression");
     :}
   ;
 
@@ -443,19 +490,19 @@ AdditiveExpression::=
     MultiplicativeExpression:m
     {:
       RESULT = m;
-      System.out.println("AdditiveExpression -> MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.info("MultiplicativeExpreesion -> AdditiveExpression");
     :}
   |
     AdditiveExpression:a PLUS MultiplicativeExpression:m
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.PLUS, a, m);
-      System.out.println("AdditiveExpression -> AdditiveExpression PLUS MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.info("AdditiveExpression PLUS MultiplicativeExpression -> AdditiveExpression");
     :}
   |
     AdditiveExpression:a MINUS MultiplicativeExpression:m
     {: 
       RESULT = new BiOpNode(BiOpNode.OpType.MINUS, a, m);
-      System.out.println("AdditiveExpression -> AdditiveExpression MINUS MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.info("AdditiveExpression MINUS MultiplicativeExpression -> AdditiveExpression");
     :}
   ;
 
@@ -463,25 +510,25 @@ MultiplicativeExpression::=
     CastExpression:c
     {:
       RESULT = c;
-      System.out.println("MultiplicativeExpression -> CastExpression");
+      CUP$Parser$actions.LOGGER.info("CastExpression -> MultiplicativeExpression");
     :}
   |
     MultiplicativeExpression:m TIMES CastExpression:c
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.TIMES, m, c);
-      System.out.println("MultiplicativeExpression -> MultiplicativeExpression TIMES CastExpression");
+      CUP$Parser$actions.LOGGER.info("MultipliativeExpression TIMES CastExpression -> MultiplicativeExpression");
     :}
   |
     MultiplicativeExpression:m DIVIDE CastExpression:c
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.DIVIDE, m, c);
-      System.out.println("MultiplicativeExpression -> MultiplicativeExpression DIVIDE CastExpression");
+      CUP$Parser$actions.LOGGER.info("MultipliativeExpression DIVIDE CastExpression -> MultiplicativeExpression");
     :}
   |
     MultiplicativeExpression:m MOD CastExpression:c
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.MOD, m, c);
-      System.out.println("MultiplicativeExpression -> MultiplicativeExpression MOD CastExpression");
+      CUP$Parser$actions.LOGGER.info("MultipliativeExpression MOD CastExpression -> MultiplicativeExpression");
     :}
   ;
 
@@ -489,13 +536,13 @@ CastExpression::=
     UnaryExpression:u
     {:
       RESULT = u;
-      System.out.println("CastExpression -> UnaryExpression");
+      CUP$Parser$actions.LOGGER.info("UnaryExpression -> CastExpression");
     :}
   |
     L_PAREN Type:t R_PAREN CastExpression:c
     {:
-      RESULT = new UnOpNode(UnOpNode.OpType.CAST, c, t);
-      System.out.println("CastExpression -> L_PAREN Type R_PAREN CastExpression");
+      RESULT = new UnOpNode(t, UnOpNode.OpType.CAST, c);
+      CUP$Parser$actions.LOGGER.info("L_PAREN Type R_PAREN CastExpression -> CastExpression");
     :}
   ;
 
@@ -503,13 +550,13 @@ UnaryExpression::=
     UnaryOperator:u CastExpression:c
     {:
       RESULT = new UnOpNode(u, c);
-      System.out.println("UnaryExpression -> UnaryOperator CastExpression");
+      CUP$Parser$actions.LOGGER.info("UnaryOperator CastExpression -> UnaryExpression");
     :}
   |
     PostfixExpression:p
     {:
       RESULT = p;
-      System.out.println("UnaryExpression -> PostfixExpression");
+      CUP$Parser$actions.LOGGER.info("PostfixExpression -> UnaryExpression");
     :}
   ;
   
@@ -517,14 +564,14 @@ UnaryOperator::=
     MINUS 
     {:
       RESULT = UnOpNode.OpType.UMINUS;
-      System.out.println("UnaryOperator -> UMINUS");
+      CUP$Parser$actions.LOGGER.info("UMINUS -> UnaryOperator");
     :}
     %prec UMINUS
   |
     NOT
     {:
       RESULT = UnOpNode.OpType.NOT;
-      System.out.println("UnaryOperator -> NOT");
+      CUP$Parser$actions.LOGGER.info("NOT -> UnaryOperator");
     :}
   ;
 
@@ -532,14 +579,14 @@ PostfixExpression::=
     PrimaryExpression:p
     {:
       RESULT = p;
-      System.out.println("PostfixExpression -> PrimaryExpression");
+      CUP$Parser$actions.LOGGER.info("PrimaryExpression -> PostFixExpression");
     :}
   |
     PostfixExpression:p L_BRKT Expression:e R_BRKT
     {:
       // array indexing
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.ARRAY_INDEX, p, e);
-      System.out.println("PostfixExpression -> PostfixExpression L_BRKT Expression R_BRKT"); 
+      CUP$Parser$actions.LOGGER.info("PostfixExpression L_BRKT Expression R_BRKT -> PostFixExpression");
     :}
   |
     PostfixExpression:p DOT ID:i
@@ -547,7 +594,7 @@ PostfixExpression::=
       // object method call no params
       IdNode idNode = new IdNode(i);
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_NO_PARAMS, p, idNode);
-      System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
+      CUP$Parser$actions.LOGGER.info("PostfixExpression DOT ID: " + i + " -> PostFixExpression");
     :}
   |
     PostfixExpression:p DOT ID:i L_PAREN ArgumentExpressionList:a R_PAREN
@@ -555,7 +602,7 @@ PostfixExpression::=
       // object method call with params
       IdNode idNode = new IdNode(i);
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, p, idNode, a);
-      System.out.println("PostfixExpression -> PostfixExpression DOT ID: " + i); 
+      CUP$Parser$actions.LOGGER.info("PostfixExpression DOT ID: " + i + "L_PAREN ArgumentList R_PAREN -> PostFixExpression");
     :}
   |
   
@@ -563,19 +610,19 @@ PostfixExpression::=
     {:
       //function call
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.FUNCTION_CALL, p, a);
-      System.out.println("PostfixExpression -> PostfixExpression L_PAREN ArgumentExpressionList R_PAREN"); 
+      CUP$Parser$actions.LOGGER.info("PostfixExpression L_PAREN ArgumentExpressionList R_PAREN -> PostFixExpression");
     :}
   |
     PostfixExpression:p INCR
     {:
       RESULT = new UnOpNode(UnOpNode.OpType.INCR, p);
-      System.out.println("PostfixExpression -> PostfixExpression INCR");
+      CUP$Parser$actions.LOGGER.info("PostfixExpression INCR -> PostFixExpression");
     :}
   |
     PostfixExpression:p DECR
     {:
       RESULT = new UnOpNode(UnOpNode.OpType.DECR, p);
-      System.out.println("PostfixExpression -> PostfixExpression DECR");
+      CUP$Parser$actions.LOGGER.info("PostfixExpression DECR -> PostFixExpression");
     :}
   ;
 
@@ -622,25 +669,25 @@ PrimaryExpression::=
 Constant::=
     INT_CONST:i
     {:
-      RESULT = new ConstantNode(Types.Type.INT, i);
+      RESULT = new ConstantNode(Types.Primitive.INT, i);
       System.out.println("Constant -> INT_CONST: " + i);
     :}
   |
     REAL_CONST:d
     {:
-      RESULT = new ConstantNode(Types.Type.REAL, d);
+      RESULT = new ConstantNode(Types.Primitive.REAL, d);
       System.out.println("Constant -> REAL_CONST");
     :}
   |
     BOOL_CONST:b
     {:
-      RESULT = new ConstantNode(Types.Type.BOOL, b);
+      RESULT = new ConstantNode(Types.Primitive.BOOL, b);
       System.out.println("Constant -> BOOL_CONST");
     :}
   |
     TEXT_LITERAL:t
     {:
-      RESULT = new ConstantNode(Types.Type.TEXT, t);
+      RESULT = new ConstantNode(Types.Primitive.TEXT, t);
       System.out.println("Constant -> TEXT_LITERAL-" + t);
     :}
   ;
@@ -763,46 +810,42 @@ LabeledStatement::=
 Type::=
     VOID
     {:
-      RESULT = Types.Type.VOID;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.VOID);
       System.out.println("Type -> VOID");
     :}
   |
     TEXT
     {:
-      RESULT = Types.Type.TEXT;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.TEXT);
       System.out.println("Type -> TEXT");
     :}
   |
     BOOL
     {:
-      RESULT = Types.Type.BOOL;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.BOOL);
       System.out.println("Type -> BOOL");
     :}
   |
     INT:i
     {:
-      RESULT = Types.Type.INT;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.INT);
       System.out.println("Type -> INT");
     :}
   |
     REAL
     {:
-      RESULT = Types.Type.REAL;
+      RESULT = new PrimitiveTypeNode(Types.Primitive.REAL);
       System.out.println("Type -> REAL");
     :}
   |
-    DerivedType:d
+    DerivedType:d LESS Type:t GRTR
     {:
+      RESULT = new DerivedTypeNode(d, t);
       System.out.println("Type -> DerivedType");
     :}
   ;
 
 DerivedType::=
-    DerivedType:d LESS Type:t GRTR
-    {:
-      System.out.println("DerivedType -> DerivedType L_ANGLE Type R_ANGLE");
-    :}
-  |
     LIST
     {:
       RESULT = Types.Derived.LIST;

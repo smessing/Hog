@@ -19,7 +19,7 @@ public class ConstantNode extends ExpressionNode {
 	public ConstantNode(Types.Primitive type, String value) {
 		super(new PrimitiveTypeNode(type), new ArrayList<Node>());
 		this.value = value;
-		ConstantNode.LOGGER.info("Constructing ConstantNode");
+		ConstantNode.LOGGER.fine("Constructing ConstantNode");
 	}
 	
 	public String getValue() {

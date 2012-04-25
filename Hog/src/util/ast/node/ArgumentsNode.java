@@ -14,7 +14,7 @@ public class ArgumentsNode extends ExpressionNode {
 		super();
 		this.addChild(args);
 		this.addChild(exp);
-		ArgumentsNode.LOGGER.info("Constructing ArgumentsNode");
+		ArgumentsNode.LOGGER.fine("Constructing ArgumentsNode");
 	}
 	
 	@Override
@@ -24,7 +24,7 @@ public class ArgumentsNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "ExpressionNode";
+		return "ArgumentsNode";
 	}
 
 	@Override

@@ -70,7 +70,7 @@ public class IterationStatementNode extends StatementNode {
 		this.addChild(s);
 		this.iterationType = IterationType.FOREACH;
 		IterationStatementNode.LOGGER
-				.info("Constructing FOREACH loop IterationStatementNode");
+				.fine("Constructing FOREACH loop IterationStatementNode");
 	}
 
 	@Override

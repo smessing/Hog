@@ -17,7 +17,7 @@ public class ParametersNode extends ExpressionNode {
 		super(type);
 		this.identifier = identifier;
 		ParametersNode.LOGGER
-				.info("Constructing ParametersNode with one param");
+				.fine("Constructing ParametersNode with one param");
 	}
 
 	// deepest node in this chain is the first parameter in the list
@@ -27,7 +27,7 @@ public class ParametersNode extends ExpressionNode {
 		this.addChild(child);
 		this.identifier = identifier;
 		ParametersNode.LOGGER
-				.info("Constructing ParametersNode with multiple params");
+				.fine("Constructing ParametersNode with multiple params");
 	}
 
 	public String getIdentifier() {

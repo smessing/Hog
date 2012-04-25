@@ -79,7 +79,7 @@ public abstract class Node implements Comparable<Node> {
 
 		// don't add a null child
 		if (child == null) {
-			Node.LOGGER.info(this.toString() + " is  adding "
+			Node.LOGGER.fine(this.toString() + " is  adding "
 					+ "a null child in addChild");
 		} else {
 			children.add(child);

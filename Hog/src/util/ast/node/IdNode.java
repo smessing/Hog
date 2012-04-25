@@ -24,7 +24,7 @@ public class IdNode extends ExpressionNode {
 		super(type, new ArrayList<Node>());
 		this.setIdentifier(id);
 		this.type = type;
-		IdNode.LOGGER.info("Constructing IdNode");
+		IdNode.LOGGER.fine("Constructing IdNode");
 	}
 
 	public void setIdentifier(String identifier) {
