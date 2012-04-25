@@ -26,12 +26,13 @@ public class GuardingStatementNode extends StatementNode {
 	public GuardingStatementNode(StatementListNode block, CatchesNode catches,
 			StatementListNode finallyStatements) {
 		super();
-		this.addChild(block);
-		this.addChild(catches);
-		this.addChild(finallyStatements);
 		this.block = block;
 		this.catches = catches;
 		this.finallyStatements = finallyStatements;
+		this.addChild(block);
+		// protected against having nulls in child list:
+		if (this.hasCatches()) this.addChild(catches);
+		if (this.hasFinally()) this.addChild(finallyStatements);
 		
 	}
 	

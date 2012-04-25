@@ -62,8 +62,8 @@ terminal TRY, CATCH, FINALLY;
 nonterminal GuardingStatementNode GuardingStatement;
 nonterminal Catches;
 nonterminal Catch;
-nonterminal CatchHeader;
-nonterminal Finally;
+nonterminal IdNode CatchHeader;
+nonterminal StatementListNode Finally;
 nonterminal StatementListNode Block;
 nonterminal ExpressionStatements;
 nonterminal ForExpr;
@@ -301,9 +301,9 @@ Block::=
 ;
 
 Finally::=
-    FINALLY Block
+    FINALLY Block:b
     {:
-      // TODO implement Finally
+      RESULT = b;
       CUP$Parser$actions.LOGGER.info("FINALLY Block -> Finally: NOT IMPLEMENTED");
     :}
 ;
@@ -312,14 +312,12 @@ Catches::=
     Catch:c
     {:
       RESULT = c;
-      // TODO implement Catches
       CUP$Parser$actions.LOGGER.info("Catch -> Catches: NOT IMPLEMENTED");
     :}
    | 
     Catches:cs Catch:c
     {:
-      RESULT = new CatchesNode(cs, c);
-      // TODO implement Catches
+      RESULT = new CatchesNode(cs.getHeader(), cs.getBlock(), c);
       CUP$Parser$actions.LOGGER.info("Catches Catch -> Catches: NOT IMPLEMENTED");
     :}
 ;
@@ -327,21 +325,22 @@ Catches::=
 Catch::=
    CatchHeader:c Block:b
     {:
-      // TODO implement Catch
+      RESULT = new CatchesNode(c, b);
       CUP$Parser$actions.LOGGER.info("CatchHeader Block -> Catch: NOT IMPLEMENTED");
     :}
   ;
 
 CatchHeader::=
-   CATCH L_PAREN Type ID R_PAREN
+   CATCH L_PAREN Type:t ID:i R_PAREN
    {:
-      // TODO implement CatchHeader
+      result = new IdNode(t, i);
       CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader: NOT IMPLEMENTED");
    :}
   |
-   CATCH L_PAREN Type R_PAREN
+   CATCH L_PAREN Type:t R_PAREN
    {:
-      // TODO implement CatchHeader
+      // TODO is the fix below too weird?
+      result = new IdNode(t, "");
       CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type R_PAREN -> CatchHeader: NOT IMPLEMENTED");
    :}
   ;
