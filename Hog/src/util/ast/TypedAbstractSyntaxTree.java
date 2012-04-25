@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import util.SymbolTable;
-import util.SymbolTableImpl;
 import util.ast.node.Node;
 
 /**
@@ -23,11 +22,11 @@ public class TypedAbstractSyntaxTree extends AbstractSyntaxTree {
 	
 	private void buildFirstSymbolTable() {
 		scope = new HashMap<Node, SymbolTable>();
-		SymbolTable main = new SymbolTableImpl();
+		//SymbolTable main = new SymbolTableImpl();
 		
 		// populate symbol table with reserved words...
 		
-		scope.put(root, main);
+		//scope.put(root, main);
 	}
 
 }
