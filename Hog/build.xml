@@ -78,7 +78,7 @@
 		<delete dir="${build.dir}" />
 	</target>
     
-	<target name="compile" depends="clean, dev-frontend">
+	<target name="compile" depends="">
 		<echo>${welcome.message}</echo>
 		<echo>Authors:</echo>
 		<echo>Jason Halpern (Testing/Validation)</echo>
@@ -94,7 +94,7 @@
 		</javac>
 	</target>
 
-	<target name="jar" depends="compile">
+	<target name="jar" depends="">
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
 			<zipfileset includes="**/*.class" src="lib/java-cup-11a.jar" />
 			<manifest>
@@ -103,24 +103,24 @@
 		</jar>
 	</target>
 
-	<target name="run" depends="jar">
+	<target name="run" depends="">
 		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" >
 		    <sysproperty key="java.util.logging.config.file" value="${logging.properties}"/>
 		</java>
 	</target>
 
-	<target name="clean-build" depends="jar" />
+	<target name="clean-build" depends="" />
 
 	<target name="main" depends="clean,run" />
 
 	<!-- developer builds -->
-	<target name="dev-frontend" depends="clean">
+	<target name="dev-frontend" depends="">
 		<cup srcfile="${parser.specification}" destdir="${src.dir}" 
 			interface="true" parser="Parser" symbols="sym" force="true" />
 		<jflex file="${lexer.specification}" destdir="${src.dir}" />
 	</target>
 
-	<target name="dev-lexer" depends="compile">
+	<target name="dev-lexer" depends="">
 		<java classpath="${classes.dir}" classname="front_end.ConsoleLexer" fork="true">
 			<classpath>
 				<path id="jflex" location="${lib.dir}/JFlex.jar" />
@@ -129,7 +129,7 @@
 		</java>
 	</target>
 
-	<target name="dev-test" depends="jar">
+	<target name="dev-test" depends="">
 		<junit fork="yes" haltonfailure="yes">
 			<formatter type="plain" usefile="false" />
 			<classpath refid="test.classpath" />
