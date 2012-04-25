@@ -76,6 +76,7 @@
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
+		<delete file="${src.dir}/front_end/Lexer.java~" />
 	</target>
     
 	<target name="compile" depends="">

@@ -262,7 +262,7 @@ Statement::=
     :}
   | Block:b
     {:
-      RESULT = b;
+      //RESULT = b;
       CUP$Parser$actions.LOGGER.info("Block -> Statement");
     :}
   ;
@@ -277,7 +277,7 @@ GuardingStatement::=
     TRY Block:b Catches:c
     {:
       RESULT = new GuardingStatementNode(b, c);
-      CUP$Parser$actions.LOGGER.info("TRY Block Catches -> GuardingStatment);
+      CUP$Parser$actions.LOGGER.info("TRY Block Catches -> GuardingStatment");
     :}
    | 
     TRY Block:b Catches:c Finally:f
