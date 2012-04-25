@@ -707,7 +707,7 @@ SelectionStatement::=
   |
     SWITCH Expression:e L_BRACE StatementList:s R_BRACE
     {:
-      //TODO implement
+      RESULT = new SwitchStatementNode(e, s);
       CUP$Parser$actions.LOGGER.info("SWITCH Expression L_BRACE " +
                                       "StatementList R_BRACE -> SelectionStatement");
     :}
