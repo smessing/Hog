@@ -4,13 +4,16 @@ package util;
 import java.util.Map;
 import java.util.HashMap;
 
+import util.ast.node.TypeNode;
+
 
 public class SymbolTable implements Cloneable{
 
 	   //protected Map<Name, Identifier> variables;
-	   protected Map<String,Identifier> table;
+	   static SymbolTable root = new SymbolTable(null);
+	   static SymbolTable top = root;
+	   protected Map<String,TypeNode> table;
 	   protected SymbolTable outer;
-	   protected Identifier Identifier = null;
 
 	   /*
 	    * Note From Wikipedia: Not only do type classes permit multiple type
@@ -22,50 +25,70 @@ public class SymbolTable implements Cloneable{
 	    */
 
     public SymbolTable(SymbolTable prev){
-    	this.table = new HashMap<String, Identifier>();
+    	this.table = new HashMap<String, TypeNode>();
     	this.outer = prev;
     }
     
-    public SymbolTable moveToOuterScope(){
-    	return this.outer;
+    //move to symbol table in outer scope
+    public SymbolTable pop(){
+    	top = top.outer;
+    	return top;
     }
     
     /*
-     * Adds a symbol to the current scoping level.
+     * Adds a variable to the symbol table. 
+     * First checks to make sure it is not a reserved word by
+     * looking the name up in the reserved word symbol table and
+     * makes sure this table doesn't already have the symbol
      * 
      */
-    public void addVariable(String name, util.type.Types.Primitive t, String value){
-    	if(!ReservedSymTable.getReservedSymTable().containsKey(name)){
-    		Identifier token = new Identifier(t, value);
-    		this.table.put(name, token);
+    public static boolean addVariable(String name, TypeNode type){
+    	if(!ReservedSymTable.getReservedWordSymTable().containsKey(name)){
+    		if(!top.table.containsKey(name)){
+        		top.table.put(name, type);
+        		return true;
+    		}
     	}
+    	return false;
     }
+    
+    public static void push() {
+    	top = new SymbolTable(top); 
+      }
     
 
     /*
-     * Returns whether the particular symbol is defined locally. If it isn't
-     * in this scope, we ask the parent scope, but don't traverse to enclosing 
+     * Returns whether the particular symbol is defined in this scope. If it isn't
+     * in this direct local scope, we ask the parent scope, but don't traverse to enclosing 
      * blocks.
      * 
      */
-    public boolean isDefinedInScope(String name){
-       	if(this.table.containsKey(name)){
+    public static boolean isDefinedInScope(String name){
+       	if(top.table.containsKey(name)){
     		return true;
        	}
        	
-       	SymbolTable temp = outer;
+       	//hold a pointer to this table before moving outward
+       	SymbolTable topTable = top;
+       	
+       	//search all tables in this scope for this variable
+       	SymbolTable temp = top.outer;
        	while(temp != null){
-       		if(this.table.containsKey(name)){
+       		if(top.table.containsKey(name)){
         		return true;
            	}
-       		temp = this.moveToOuterScope();
+       		temp = top.pop();
        	}
+       	
+       	//reset
+       	top = topTable;
        	return false;
     }
     
-    public Identifier get(String name){
-       	for(SymbolTable st = this; st != null; st = st.outer){
-       		Identifier found = st.table.get(name);
+    //look for a specific variable in this scope
+    public TypeNode get(String name){
+       	for(SymbolTable st = top; st != null; st = st.outer){
+       		TypeNode found = st.table.get(name);
        		if(found != null) return found;
        	}
        	return null;
