@@ -145,10 +145,7 @@ FunctionList::=
   |
     FunctionList:fl Function:f
     {:
-      List<Node> children = new ArrayList<Node>();
-      children.add(fl);
-      children.add(f);
-      RESULT = new StatementNode(children);
+      RESULT = new StatementNode(fl, f);
       CUP$Parser$actions.LOGGER.info("FunctionList Function -> FunctionList");
     :}
   ;

@@ -16,6 +16,12 @@ public class StatementNode extends StatementListNode {
 	public StatementNode() {
 		this(new ArrayList<Node>());
 	}
+	
+	public StatementNode(StatementNode left, StatementNode right) {
+		super(new ArrayList<Node>());
+		this.addChild(left);
+		this.addChild(right);
+	}
 
 	public StatementNode(List<Node> children) {
 		super(children);
