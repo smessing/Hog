@@ -64,7 +64,26 @@ public abstract class Node implements Comparable<Node> {
 		return parent;
 	}
 	
+	/**
+	 * Sets the parent of this node to be the passed node, if this node doesn't
+	 * yet have a parent.
+	 * 
+	 * @param p
+	 *            - the proposed parent node
+	 * @throws UnsupportedOperationException
+	 *             if this node already has a parent.
+	 */
+	public void setParent(Node p) {
+		if (parent == null) {
+			parent = p;
+			return;
+		}
+		throw new UnsupportedOperationException(this.toString()
+				+ " already has a parent!");
+	}
+
 	public void unsetParent() {
+		parent.removeChild(this);
 		parent = null;
 	}
 
@@ -90,23 +109,12 @@ public abstract class Node implements Comparable<Node> {
 			child.setParent(this);
 		}
 	}
-
-	/**
-	 * Sets the parent of this node to be the passed node, if this node doesn't
-	 * yet have a parent.
-	 * 
-	 * @param p
-	 *            - the proposed parent node
-	 * @throws UnsupportedOperationException
-	 *             if this node already has a parent.
-	 */
-	public void setParent(Node p) {
-		if (parent == null) {
-			parent = p;
-			return;
+	
+	public boolean removeChild(Node child) {
+		if (children == null) {
+			return false;
 		}
-		throw new UnsupportedOperationException(this.toString()
-				+ " already has a parent!");
+		return children.remove(child);
 	}
 
 	/**
