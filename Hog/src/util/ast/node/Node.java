@@ -17,7 +17,7 @@ import back_end.Visitor;
 public abstract class Node implements Comparable<Node> {
 
 	// logger used for all nodes
-	protected final static Logger LOGGER = Logger.getLogger(ConsoleLexer.class
+	protected final static Logger LOGGER = Logger.getLogger(Node.class
 			.getName());
 
 	protected Node parent;
@@ -31,10 +31,6 @@ public abstract class Node implements Comparable<Node> {
 		this(new ArrayList<Node>());
 	}
 
-	public abstract void accept(Visitor v);
-
-	public abstract int visitorTest(Visitor v);
-
 	/**
 	 * Construct a new node with parent as it's parent.
 	 * 
@@ -46,46 +42,9 @@ public abstract class Node implements Comparable<Node> {
 		this.children = children;
 	}
 
-	/**
-	 * Get all the children of this node, sorted in left-> order.
-	 * 
-	 * @return a list of all children of this node.
-	 */
-	public List<Node> getChildren() {
-		return children;
-	}
+	public abstract void accept(Visitor v);
 
-	/**
-	 * Get the parent of this node.
-	 * 
-	 * @return the parent of this node.
-	 */
-	public Node getParent() {
-		return parent;
-	}
-	
-	/**
-	 * Sets the parent of this node to be the passed node, if this node doesn't
-	 * yet have a parent.
-	 * 
-	 * @param p
-	 *            - the proposed parent node
-	 * @throws UnsupportedOperationException
-	 *             if this node already has a parent.
-	 */
-	public void setParent(Node p) {
-		if (parent == null) {
-			parent = p;
-			return;
-		}
-		throw new UnsupportedOperationException(this.toString()
-				+ " already has a parent!");
-	}
-
-	public void unsetParent() {
-		parent.removeChild(this);
-		parent = null;
-	}
+	public abstract int visitorTest(Visitor v);
 
 	/**
 	 * Add a child to this node. The new child will always been the rightmost
@@ -109,12 +68,60 @@ public abstract class Node implements Comparable<Node> {
 			child.setParent(this);
 		}
 	}
-	
+
+	public boolean hasChild(Node child) {
+		if (children == null) {
+			return false;
+		}
+		return children.contains(child);
+	}
+
+	/**
+	 * Get all the children of this node, sorted in left-> order.
+	 * 
+	 * @return a list of all children of this node.
+	 */
+	public List<Node> getChildren() {
+		return children;
+	}
+
 	public boolean removeChild(Node child) {
 		if (children == null) {
 			return false;
 		}
 		return children.remove(child);
+	}
+
+	/**
+	 * Get the parent of this node.
+	 * 
+	 * @return the parent of this node.
+	 */
+	public Node getParent() {
+		return parent;
+	}
+
+	/**
+	 * Sets the parent of this node to be the passed node, if this node doesn't
+	 * yet have a parent.
+	 * 
+	 * @param p
+	 *            - the proposed parent node
+	 * @throws UnsupportedOperationException
+	 *             if this node already has a parent.
+	 */
+	public void setParent(Node p) {
+		if (parent == null) {
+			parent = p;
+			return;
+		}
+		throw new UnsupportedOperationException(this.toString()
+				+ " already has a parent!");
+	}
+
+	public void unsetParent() {
+		parent.removeChild(this);
+		parent = null;
 	}
 
 	/**
