@@ -6,6 +6,7 @@ NoSuchFunctionException
 UnsupportedOperationException
 UnreachableCodeException
 RedundantDeclarationException
+
 FileNotFoundException
 FileLoadException
 ArrayOutOfBoundsException
