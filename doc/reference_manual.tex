@@ -1432,7 +1432,7 @@ To throw an exception, a programmer uses the following pattern,
     }
 \end{verbatim}
 
-\subsection{Compile-time Exceptions} % (fold)
+\subsection{Compile-time Errors} % (fold)
 \label{sub:compile_time_exceptions}
 
 The primary cause of most compile­time exceptions in Hog are syntax errors. Such
@@ -1446,40 +1446,47 @@ of processing, that the compilers has incorrectly assumed what the user meant. T
 following are Hog compile­time exceptions:
 
 \begin{itemize}
-  \item[] \tt IncorrectArgumentException \rm
+  \item[] \tt IncorrectArgumentError \rm
   
   Thrown when a derived-type object is instantiated with invalid parameters, or a function is called with invalid parameters.
   
-  \item[] \tt TypeMismatchException \rm
+  \item[] \tt TypeMismatchError \rm
   
   Thrown when a program attempts to carry out an operation on a variable of the wrong type (like adding a \tt text \rm and an
   \tt int \rm together). This exception can be generated at compile-time or run-time.
   
-  \item[] \tt ProgramStructureException \rm
+  \item[] \tt ProgramStructureError \rm
   
   Thrown when a Hog program does not follow the structure described earlier in \S \ref{sec:program_structure}.
 
-  \item[] \tt NoSuchVariableException \rm
+  \item[] \tt NoSuchVariableError \rm
   
   Thrown when an attempt is made to use a variable that has not been declared yet.
 
-  \item[] \tt NoSuchFunctionException \rm
+  \item[] \tt NoSuchFunctionError \rm
   
   Thrown when a function is invoked that does not exist.
 
-  \item[] \tt UnsupportedOperationException \rm
+  \item[] \tt UnsupportedOperationError \rm
   
    Thrown when a variable invokes a function that is not supported for that type (i.e. when \tt tokenize() \rm is invoked by a
   variable of type \tt int\rm).
 
-  \item[] \tt UnreachableCodeException \rm
+  \item[] \tt UnreachableCodeError \rm
 
   Thrown when code is included in a part of a program that will never be executed (i.e. any code included after the emit function in the \tt @Map \rm and \tt @Reduce \rm sections).
 
-  \item[] \tt RedundantDeclarationException \rm
+  \item[] \tt RedundantDeclarationError \rm
 
   Thrown when a variable is redeclared in a program that it has previously been declared in.
 
+   \item[] \tt HogMapFunctionError \rm
+  
+  Thrown when a map function receives a key, value pair of the wrong type.
+  
+  \item[] \tt HogReduceError \rm
+  
+  Thrown when a reduce function receives a key, value pair of the wrong type.
 \end{itemize}
 
 % subsection compile_time_exceptions (end)
@@ -1513,16 +1520,8 @@ elements of different types into the same list) and parsing exceptions. The foll
   
   Thrown when a program attempts to carry out an operation on a variable of the wrong type (like adding a \tt text \rm and an
   \tt int \rm together).
-  
-  \item[] \tt HogMapFunctionException \rm
-  
-  Thrown when a map function receives a key, value pair of the wrong type.
-  
-  \item[] \tt HogReduceFunctionException \rm
-  
-  Thrown when a reduce function receives a key, value pair of the wrong type.
-  
-  \item[] \tt NullPointerException \rm
+    
+  \item[] \tt NullReferenceException \rm
   
   Thrown whenever the value of a variable cannot be \tt null \rm (e.g. in \tt myList.get(i)\rm, if \tt i \rm is \tt null\rm,
   the operation with throw a \tt NullPointerException\rm).
