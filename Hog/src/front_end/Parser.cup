@@ -317,6 +317,7 @@ Catches::=
    | 
     Catches:cs Catch:c
     {:
+      // TODO show the team this and see if it's too hacky
       IdNode header = cs.getHeader();
       StatementListNode block = cs.getBlock();
       header.unsetParent();
