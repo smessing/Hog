@@ -65,10 +65,10 @@ nonterminal CatchesNode Catch;
 nonterminal IdNode CatchHeader;
 nonterminal StatementListNode Finally;
 nonterminal StatementListNode Block;
-nonterminal ExpressionNode ExpressionStatements;
+nonterminal StatementListNode ExpressionStatements;
 nonterminal ExpressionNode ForExpr;
-nonterminal ExpressionNode ForInit;
-nonterminal ExpressionNode ForIncr;
+nonterminal StatementListNode ForInit;
+nonterminal StatementListNode ForIncr;
 
 
 nonterminal ProgramNode Program;
@@ -807,7 +807,10 @@ ExpressionStatements::=
   |
     ExpressionStatements:e COMMA ExpressionStatement:es
     {:
-      RESULT = new ExpressionNode(e, es);
+      List<Node> children = new ArrayList<Node>();
+      children.add(e);
+      children.add(es);
+      RESULT = new StatementListNode(children);
       CUP$Parser$actions.LOGGER.info("ExpressionStatements COMMA ExpressionStatement -> " +
                                     "ExpressionStatements");
     :}

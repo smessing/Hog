@@ -43,8 +43,8 @@ public class IterationStatementNode extends StatementNode {
 	 * @param E3
 	 * @param S
 	 */
-	public IterationStatementNode(ExpressionNode initial, ExpressionNode check,
-			ExpressionNode increment, StatementListNode s) {
+	public IterationStatementNode(StatementListNode initial, ExpressionNode check,
+			StatementListNode increment, StatementListNode s) {
 		super(new ArrayList<Node>());
 		this.addChild(initial);
 		this.addChild(check);
