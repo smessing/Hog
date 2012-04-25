@@ -30,13 +30,6 @@ public class BriefLogFormatter extends Formatter {
 		StringBuilder output = new StringBuilder()
 		    .append("[LOG] ")
 			.append(record.getMessage()).append(' ')
-//			.append("  [")
-//			.append(loggerName)
-//			.append(" | ")
-//			.append(record.getLevel()).append('|')
-//			.append(Thread.currentThread().getName()).append('|')
-//			.append(format.format(new Date(record.getMillis())))
-//			.append("]: ")
 			.append(lineSep);
 		return output.toString();		
 	}
