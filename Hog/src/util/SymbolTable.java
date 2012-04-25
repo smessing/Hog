@@ -34,7 +34,7 @@ public class SymbolTable implements Cloneable{
      * Adds a symbol to the current scoping level.
      * 
      */
-    public void addVariable(String name, util.type.Types t, String value){
+    public void addVariable(String name, util.type.Types.Primitive t, String value){
     	if(!ReservedSymTable.getReservedSymTable().containsKey(name)){
     		Identifier token = new Identifier(t, value);
     		this.table.put(name, token);

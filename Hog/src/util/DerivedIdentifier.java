@@ -8,18 +8,17 @@ import util.type.Types;
  * 
  */
 
-public class Identifier{
+public class DerivedIdentifier extends Identifier{
 	
-	Types.Primitive type;
-	String value;
+	Types.Derived derivedType;
 
 	//private int line;
 	//private int column;
 	//private int offset;
 
-	public Identifier(Types.Primitive type, String value){
-		this.type = type;
-		this.value = value;
+	public DerivedIdentifier(Types.Primitive primType, Types.Derived derType, String value){
+		super(primType, value);
+		this.derivedType = derType;
 	}
 
 	public boolean equals(Object o){
@@ -34,7 +33,7 @@ public class Identifier{
 	//}
 
 	public String toString(){
-		return type.toString() + " " + value;
+		return type.toString() + " " + derivedType.toString() + " " + value;
 	}
 
 	/*public int line(){
