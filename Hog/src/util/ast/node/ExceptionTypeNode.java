@@ -10,11 +10,11 @@ import util.type.Types;
  * @author ben
  *
  */
-public class ExceptionType extends TypeNode {
+public class ExceptionTypeNode extends TypeNode {
 
 	protected Types.Exception localType;
 	
-	public ExceptionType(Types.Exception localType) {
+	public ExceptionTypeNode(Types.Exception localType) {
 		this.localType = localType;
 	}
 	
