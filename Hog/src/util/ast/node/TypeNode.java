@@ -8,7 +8,7 @@ import java.util.List;
 import back_end.Visitor;
 
 /**
- * @author ben
+ * @author ben, paul
  *
  */
 public abstract class TypeNode extends Node {
@@ -23,21 +23,10 @@ public abstract class TypeNode extends Node {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public int visitorTest(Visitor v) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
