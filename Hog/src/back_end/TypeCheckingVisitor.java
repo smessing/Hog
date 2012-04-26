@@ -131,110 +131,110 @@ public class TypeCheckingVisitor extends Visitor{
 
 	@Override
 	public void visit(ElseIfStatementNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking ElseIfStatementNode");
 	}
 
 	@Override
 	public void visit(ElseStatementNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking ElseStatementNode");
 	}
 
 	@Override
 	public void visit(ExceptionTypeNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking ExceptionTypeNode");
 	}
 
 	@Override
 	public void visit(FunctionNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking FunctionNode");
 	}
 
 	@Override
 	public void visit(GuardingStatementNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking GuardingStatementNode");
 	}
 
 	@Override
 	public void visit(IfElseStatementNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking IfElseStatementNode");
 	}
 
 	@Override
 	public void visit(IterationStatementNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking IterationStatementNode");
 	}
 
 	@Override
 	public void visit(JumpStatementNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking JumpStatementNode");
 	}
 
 	@Override
 	public void visit(PostfixExpressionNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking PostfixExpressionNode");
 	}
 
 	@Override
 	public void visit(PrimitiveTypeNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking PrimitiveTypeNode");
 	}
 
 	@Override
 	public void visit(ProgramNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking ProgramNode");
 	}
 
 	@Override
 	public void visit(SectionNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking SectionNode");
 	}
 
 	@Override
 	public void visit(SectionTypeNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking SectionTypeNode");
 	}
 
 	@Override
 	public void visit(SelectionStatementNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking SelectionStatementNode");
 	}
 
 	@Override
 	public void visit(StatementListNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking StatementListNode");
 	}
 
 	@Override
 	public void visit(StatementNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking StatementNode");
 	}
 
 	@Override
 	public void visit(SwitchStatementNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking SwithStatementNode");
 	}
 
 	@Override
 	public void visit(TypeNode node) {
-		// TODO Auto-generated method stub
-		
+		//node specific type checking operations here
+		LOGGER.fine("Type-checking TypeNode");
 	}
 	
 }
