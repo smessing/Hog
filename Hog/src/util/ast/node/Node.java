@@ -88,8 +88,11 @@ public abstract class Node implements Comparable<Node> {
 	public boolean removeChild(Node child) {
 		if (children == null) {
 			return false;
+		} else if (!children.contains(child)) {
+			return false;
 		}
-		return children.remove(child);
+		child.unsetParent();
+		return true;
 	}
 
 	/**
@@ -120,7 +123,7 @@ public abstract class Node implements Comparable<Node> {
 	}
 
 	public void unsetParent() {
-		parent.removeChild(this);
+		parent.getChildren().remove(this);
 		parent = null;
 	}
 
