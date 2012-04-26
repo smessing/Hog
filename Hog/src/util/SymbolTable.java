@@ -2,12 +2,14 @@ package util;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
 import front_end.sym;
 
 import util.ast.node.*;
+import util.type.Types;
 
 
 public class SymbolTable implements Cloneable{
@@ -41,13 +43,16 @@ public class SymbolTable implements Cloneable{
     }
     
     public void reserveWord(String word){ 
-    	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(Types.Flags.RESERVED_WORD);
+    	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(util.type.Types.Flags.RESERVED_WORD);
 		this.table.put(word, new ReservedWordSymbol(typeNode));  
 	}
     
-    public void reserveFunction(String word){ 
-    	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(Types.Flags.RESERVED_WORD);
-		this.table.put(word, new FunctionSymbol(typeNode));  
+    public void reserveFunction(String word, TypeNode returnType, List<TypeNode> argumentList){ 
+		this.table.put(word, new FunctionSymbol(returnType, argumentList));  
+	}
+    
+    public void reserveFunction(String word, TypeNode returnType){ 
+		this.table.put(word, new FunctionSymbol(returnType));  
 	}
 	
     
@@ -87,7 +92,9 @@ public class SymbolTable implements Cloneable{
 		reserveWord("!=");
 		reserveWord(">=");
 		reserveWord("<=");
-		reserveFunction("list.add");
+		ArrayList<TypeNode> arguments = new ArrayList<TypeNode>();
+		arguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("list.add", new PrimitiveTypeNode(Types.Primitive.VOID), arguments);
 		reserveFunction("list.clear");
 		reserveFunction("list.get");
 		reserveFunction("list.iterator");
