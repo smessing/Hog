@@ -16,6 +16,10 @@ public class Types {
 	public static enum Exception {
 		FILE_NOT_FOUND, FILE_LOAD, ARRAY_OUT_OF_BOUNDS, INCORRECT_ARGUMENT, TYPE_MISMATCH, NULL_REFERENCE, ARITHMETIC
 	}
+	
+	public static enum Flags {
+		RESERVED_WORD, CHECK_INNER_TYPE
+	}
 
 	public static boolean isSameType(ExpressionNode one, ExpressionNode two) {
 		throw new UnsupportedOperationException("TODO");
