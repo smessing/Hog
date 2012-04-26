@@ -4,6 +4,9 @@ import back_end.Visitor;
 import util.type.Types;
 
 /**
+ * A DerivedTypeNode represents a derived type 
+ * which contains a local type, and an inner type.
+ * 
  * @author ben
  *
  */
@@ -11,6 +14,10 @@ public class DerivedTypeNode extends TypeNode {
 	
 	protected Types.Derived localType;
 	protected TypeNode innerTypeNode;
+	
+	public DerivedTypeNode() {
+		// empty method to satisfy java
+	}
 	
 	public DerivedTypeNode(Types.Derived localType, TypeNode innerTypeNode) {
 		this.localType = localType;
@@ -27,7 +34,7 @@ public class DerivedTypeNode extends TypeNode {
 	
 	@Override
 	public void accept(Visitor v) {
-		// TODO Auto-generated method stub
+		v.visit(this);
 	}
 
 	@Override

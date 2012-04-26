@@ -6,6 +6,12 @@ package util.ast.node;
 import back_end.Visitor;
 
 /**
+ * A GuardingStatement represents:
+ * 
+ * TRY Block:b Finally:f
+ * TRY Block:b Catches:c
+ * TRY Block:b Catches:c Finally:f
+ * 
  * @author sam
  *
  */

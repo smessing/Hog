@@ -23,6 +23,7 @@
   #{ this is a 
        block comment }#
   int count = 1;
+  dict<int, real> face;
   real face = 1.0;
   foreach word in line.tokenize(" ") {
     emit(word, 1);
