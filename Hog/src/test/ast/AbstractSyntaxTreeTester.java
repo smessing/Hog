@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import back_end.TypeCheckingVisitor;
 import util.ast.AbstractSyntaxTree;
-import util.ast.UntypedAbstractSyntaxTree;
 import util.ast.node.BiOpNode;
 import util.ast.node.ConstantNode;
 import util.ast.node.ExpressionNode;
@@ -71,7 +70,7 @@ public class AbstractSyntaxTreeTester {
 		B = new BiOpNode(BiOpNode.OpType.PLUS, D, I);
 		C = new BiOpNode(BiOpNode.OpType.MINUS, F, H);
 		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
-		tree = new UntypedAbstractSyntaxTree(A);
+		tree = new AbstractSyntaxTree(A);
 	}
 
 	@After

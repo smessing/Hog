@@ -50,26 +50,10 @@ public abstract class ExpressionNode extends StatementNode {
 		this.type = type;
 	}
 
-	@Override
-	public String getName() {
-		return "ExpressionNode<" + this.getTypeName() + ">";
-	}
-
 	public String getTypeName() {
 		if (type != null) {
 			return type.toString();
 		}
-		return "unknown";
-	}
-
-	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
-	}
-
-	@Override
-	public int visitorTest(Visitor v) {
-		v.visit(this);
-		return 5;
+		return "UNKNOWN";
 	}
 }

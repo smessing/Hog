@@ -15,6 +15,10 @@ public class DerivedTypeNode extends TypeNode {
 	protected Types.Derived localType;
 	protected TypeNode innerTypeNode;
 	
+	public DerivedTypeNode() {
+		// empty method to satisfy java
+	}
+	
 	public DerivedTypeNode(Types.Derived localType, TypeNode innerTypeNode) {
 		this.localType = localType;
 		this.innerTypeNode = innerTypeNode;
@@ -30,7 +34,7 @@ public class DerivedTypeNode extends TypeNode {
 	
 	@Override
 	public void accept(Visitor v) {
-		// TODO Auto-generated method stub
+		v.visit(this);
 	}
 
 	@Override

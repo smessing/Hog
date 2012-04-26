@@ -88,8 +88,11 @@ public abstract class Node implements Comparable<Node> {
 	public boolean removeChild(Node child) {
 		if (children == null) {
 			return false;
+		} else if (!children.contains(child)) {
+			return false;
 		}
-		return children.remove(child);
+		child.unsetParent();
+		return true;
 	}
 
 	/**
@@ -120,7 +123,7 @@ public abstract class Node implements Comparable<Node> {
 	}
 
 	public void unsetParent() {
-		parent.removeChild(this);
+		parent.getChildren().remove(this);
 		parent = null;
 	}
 
@@ -177,5 +180,29 @@ public abstract class Node implements Comparable<Node> {
 	public int compareTo(Node that) {
 		return this.getName().compareTo(that.getName());
 	}
+	
+	public void print() {
+        print("", true);
+    }
+
+	/**
+	 * A pretty printer for the subtree that this is a root of.
+	 * Code taken from:
+	 * http://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
+	 * 
+	 * @param prefix
+	 * @param isTail
+	 */
+    private void print(String prefix, boolean isTail) {
+        System.out.println(prefix + (isTail ? "L__ " : "|-- ") + this.getName());
+        if (children != null) {
+            for (int i = 0; i < children.size() - 1; i++) {
+                children.get(i).print(prefix + (isTail ? "    " : "|   "), false);
+            }
+            if (children.size() >= 1) {
+                children.get(children.size() - 1).print(prefix + (isTail ?"    " : "|   "), true);
+            }
+        }
+    }
 
 }

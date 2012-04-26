@@ -58,6 +58,7 @@ terminal FUNCTIONS, MAIN, MAP, REDUCE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA;
 terminal LIST, ITER, DICT, MULTISET, SET;
 terminal TRY, CATCH, FINALLY;
+terminal ExceptionTypeNode EXCEPTION;
 
 nonterminal GuardingStatementNode GuardingStatement;
 nonterminal CatchesNode Catches;
@@ -69,7 +70,7 @@ nonterminal StatementListNode ExpressionStatements;
 nonterminal ExpressionNode ForExpr;
 nonterminal StatementListNode ForInit;
 nonterminal StatementListNode ForIncr;
-
+nonterminal DerivedTypeNode DictType;
 
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
@@ -336,17 +337,10 @@ Catch::=
   ;
 
 CatchHeader::=
-   CATCH L_PAREN Type:t ID:i R_PAREN
+   CATCH L_PAREN EXCEPTION:ex ID:i R_PAREN
    {:
-      RESULT = new IdNode(t, i);
+      RESULT = new IdNode(ex, i);
       CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader");
-   :}
-  |
-   CATCH L_PAREN Type:t R_PAREN
-   {:
-      // TODO is the fix below too weird?
-      RESULT = new IdNode(t, "");
-      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type R_PAREN -> CatchHeader");
    :}
   ;
  
@@ -866,7 +860,40 @@ Type::=
       RESULT = new DerivedTypeNode(d, t);
       CUP$Parser$actions.LOGGER.info("DerivedType LESS Type GRTR -> Type");
     :}
+  |
+    DictType:m
+    {:
+      RESULT = m;
+      CUP$Parser$actions.LOGGER.info("DictType -> Type");
+    :}
   ;
+  
+DictType::=
+    DICT LESS INT COMMA Type:t GRTR
+    {:
+      RESULT = new DictTypeNode(Types.Primitive.INT, t);
+      CUP$Parser$actions.LOGGER.info("DICT LESS INT COMMA Type GRTR -> MapType");
+    :}
+  |
+    DICT LESS TEXT COMMA Type:t GRTR
+    {:
+      RESULT = new DictTypeNode(Types.Primitive.TEXT, t);
+      CUP$Parser$actions.LOGGER.info("DICT LESS TEXT COMMA Type GRTR -> MapType");
+    :}
+  |
+    DICT LESS BOOL COMMA Type:t GRTR
+    {:
+      RESULT = new DictTypeNode(Types.Primitive.BOOL, t);
+      CUP$Parser$actions.LOGGER.info("DICT LESS BOOL COMMA Type GRTR -> MapType");
+    :}
+  |
+    DICT LESS REAL COMMA Type:t GRTR
+    {:
+      RESULT = new DictTypeNode(Types.Primitive.REAL, t);
+      CUP$Parser$actions.LOGGER.info("DICT LESS REAL COMMA Type GRTR -> MapType");
+    :}
+  ;
+  
 
 DerivedType::=
     LIST
@@ -879,12 +906,6 @@ DerivedType::=
     {:
       RESULT = Types.Derived.ITER;
       CUP$Parser$actions.LOGGER.info("ITER -> DerivedType");
-    :}
-  |
-    DICT
-    {:
-      RESULT = Types.Derived.DICT;
-      CUP$Parser$actions.LOGGER.info("DICT -> DerivedType");
     :}
   |
     MULTISET

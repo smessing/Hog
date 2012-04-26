@@ -4,7 +4,7 @@ import back_end.Visitor;
 import util.type.Types;
 
 /**
- * @author ben
+ * @author ben, paul
  *
  */
 public class PrimitiveTypeNode extends TypeNode {
@@ -21,7 +21,7 @@ public class PrimitiveTypeNode extends TypeNode {
 	
 	@Override
 	public void accept(Visitor v) {
-		// TODO Auto-generated method stub
+		v.visit(this);
 	}
 
 	@Override
@@ -32,7 +32,6 @@ public class PrimitiveTypeNode extends TypeNode {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "Primitive Type: " + localType.toString();
 	}
 

@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import util.ast.AbstractSyntaxTree;
-import util.ast.UntypedAbstractSyntaxTree;
 import util.ast.node.BiOpNode;
 import util.ast.node.ExpressionNode;
 import util.ast.node.IdNode;
@@ -61,23 +60,16 @@ public class ConsoleLexer {
 	    	  ex.printStackTrace();
 	      }
 	    
+<<<<<<< HEAD
 	    AbstractSyntaxTree ast = new UntypedAbstractSyntaxTree(root);
 	    JavaGenerator j = new JavaGenerator(ast);
 	    
 	    //j.run();
+=======
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+>>>>>>> 61ea79bc26dedb49f6db4d7392679feb44d650cf
 	    
-	    Iterator<Node> postOrder = ast.postOrderTraversal();
-	    
-	    while (postOrder.hasNext()) {
-	    	System.out.println(postOrder.next());
-	    }
-	    
-	    String latexString = ast.toLatex();
-	    
-	    FileWriter fstream = new FileWriter("AST_output.tex");
-	    BufferedWriter bout = new BufferedWriter(fstream);
-	    bout.write(latexString);
-	    bout.close();
+	    root.print();
 	    
 	    
 	}

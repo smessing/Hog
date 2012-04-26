@@ -23,7 +23,7 @@ public class ExceptionTypeNode extends TypeNode {
 	
 	@Override
 	public void accept(Visitor v) {
-		// TODO Auto-generated method stub
+		v.visit(this);
 	}
 
 	@Override
@@ -34,7 +34,6 @@ public class ExceptionTypeNode extends TypeNode {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "Exception Type: " + localType.toString();
 	}
 }

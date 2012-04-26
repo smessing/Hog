@@ -1,6 +1,8 @@
 package front_end;
 
 import java_cup.runtime.*;
+import util.ast.node.ExceptionTypeNode;
+import util.type.Types;
 
 %%
 /**
@@ -74,6 +76,10 @@ bool            { return newSym(sym.BOOL); }
 int             { return newSym(sym.INT); }
 real            { return newSym(sym.REAL); }
 list            { return newSym(sym.LIST); }
+dict            { return newSym(sym.DICT); }
+set             { return newSym(sym.SET); }
+iter            { return newSym(sym.ITER); }
+multiset        { return newSym(sym.MULTISET); }
 void            { return newSym(sym.VOID); }
 not             { return newSym(sym.NOT); }
 switch          { return newSym(sym.SWITCH); }
@@ -117,6 +123,13 @@ catch           { return newSym(sym.CATCH); }
 true            { return newSym(sym.BOOL_CONST, new String("true")); }
 false           { return newSym(sym.BOOL_CONST, new String("false")); }
 return          { return newSym(sym.RETURN); }
+FileNotFoundException      { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.FILE_NOT_FOUND)); }
+FileLoadException          { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.FILE_LOAD)); }
+ArrayOutOfBoundsException  { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.ARRAY_OUT_OF_BOUNDS)); } 
+IncorrectArgumentException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.INCORRECT_ARGUMENT)); }
+TypeMismatchException      { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.TYPE_MISMATCH)); }
+NullReferenceException     { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.NULL_REFERENCE)); }
+ArithmeticException        { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.ARITHMETIC)); }
 {integer}       { return newSym(sym.INT_CONST, new String(yytext())); }
 {real}          { return newSym(sym.REAL_CONST, new String(yytext())); }
 {comment}       { /* For this stand-alone lexer, print out comments. */

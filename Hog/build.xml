@@ -76,7 +76,6 @@
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
-		<delete file="${src.dir}/front_end/Lexer.java~" />
 	</target>
     
 	<target name="compile" depends="clean, dev-frontend">
@@ -119,6 +118,7 @@
 		<cup srcfile="${parser.specification}" destdir="${src.dir}" 
 			interface="true" parser="Parser" symbols="sym" force="true" />
 		<jflex file="${lexer.specification}" destdir="${src.dir}" />
+		<delete file="${src.dir}/front_end/Lexer.java~" />
 	</target>
 
 	<target name="dev-lexer" depends="">
