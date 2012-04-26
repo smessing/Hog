@@ -50,6 +50,6 @@ public abstract class ExpressionNode extends StatementNode {
 		if (type != null) {
 			return type.toString();
 		}
-		return "unknown";
+		return "UNKNOWN";
 	}
 }

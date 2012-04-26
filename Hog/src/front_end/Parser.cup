@@ -860,6 +860,8 @@ Type::=
       RESULT = new DerivedTypeNode(d, t);
       CUP$Parser$actions.LOGGER.info("DerivedType LESS Type GRTR -> Type");
     :}
+  |
+    MAP LESS Type:one COMMA Type:two GRTR
   ;
 
 DerivedType::=
