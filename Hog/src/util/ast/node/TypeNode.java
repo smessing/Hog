@@ -22,11 +22,5 @@ public abstract class TypeNode extends Node {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public int visitorTest(Visitor v) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 
 }

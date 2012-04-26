@@ -70,7 +70,7 @@ nonterminal StatementListNode ExpressionStatements;
 nonterminal ExpressionNode ForExpr;
 nonterminal StatementListNode ForInit;
 nonterminal StatementListNode ForIncr;
-nonterminal MapType;
+nonterminal DerivedTypeNode DictType;
 
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
@@ -861,31 +861,36 @@ Type::=
       CUP$Parser$actions.LOGGER.info("DerivedType LESS Type GRTR -> Type");
     :}
   |
-    MapType
+    DictType:m
     {:
-      CUP$Parser$actions.LOGGER.info("MapType -> Type");
+      RESULT = m;
+      CUP$Parser$actions.LOGGER.info("DictType -> Type");
     :}
   ;
   
-MapType::=
-    MAP LESS INT COMMA Type:t GRTR
+DictType::=
+    DICT LESS INT COMMA Type:t GRTR
     {:
-      CUP$Parser$actions.LOGGER.info("MAP LESS INT COMMA Type GRTR -> MapType");
+      RESULT = new DictTypeNode(Types.Primitive.INT, t);
+      CUP$Parser$actions.LOGGER.info("DICT LESS INT COMMA Type GRTR -> MapType");
     :}
   |
-    MAP LESS TEXT COMMA Type:t GRTR
+    DICT LESS TEXT COMMA Type:t GRTR
     {:
-      CUP$Parser$actions.LOGGER.info("MAP LESS TEXT COMMA Type GRTR -> MapType");
+      RESULT = new DictTypeNode(Types.Primitive.TEXT, t);
+      CUP$Parser$actions.LOGGER.info("DICT LESS TEXT COMMA Type GRTR -> MapType");
     :}
   |
-    MAP LESS BOOL COMMA Type:t GRTR
+    DICT LESS BOOL COMMA Type:t GRTR
     {:
-      CUP$Parser$actions.LOGGER.info("MAP LESS BOOL COMMA Type GRTR -> MapType");
+      RESULT = new DictTypeNode(Types.Primitive.BOOL, t);
+      CUP$Parser$actions.LOGGER.info("DICT LESS BOOL COMMA Type GRTR -> MapType");
     :}
   |
-    MAP LESS REAL COMMA Type:t GRTR
+    DICT LESS REAL COMMA Type:t GRTR
     {:
-      CUP$Parser$actions.LOGGER.info("MAP LESS REAL COMMA Type GRTR -> MapType");
+      RESULT = new DictTypeNode(Types.Primitive.REAL, t);
+      CUP$Parser$actions.LOGGER.info("DICT LESS REAL COMMA Type GRTR -> MapType");
     :}
   ;
   
@@ -901,12 +906,6 @@ DerivedType::=
     {:
       RESULT = Types.Derived.ITER;
       CUP$Parser$actions.LOGGER.info("ITER -> DerivedType");
-    :}
-  |
-    DICT
-    {:
-      RESULT = Types.Derived.DICT;
-      CUP$Parser$actions.LOGGER.info("DICT -> DerivedType");
     :}
   |
     MULTISET
