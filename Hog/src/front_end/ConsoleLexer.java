@@ -60,18 +60,7 @@ public class ConsoleLexer {
 	    
 	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
 	    
-	    Iterator<Node> postOrder = ast.postOrderTraversal();
-	    
-	    while (postOrder.hasNext()) {
-	    	System.out.println(postOrder.next());
-	    }
-	    
-	    String latexString = ast.toLatex();
-	    
-	    FileWriter fstream = new FileWriter("AST_output.tex");
-	    BufferedWriter bout = new BufferedWriter(fstream);
-	    bout.write(latexString);
-	    bout.close();
+	    root.print();
 	    
 	    
 	}

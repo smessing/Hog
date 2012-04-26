@@ -55,7 +55,7 @@ public class MockNode extends Node {
 
 	@Override
 	public void accept(Visitor v) {
-		v.visit(this);
+		// do nothing
 	}
 
 	@Override
