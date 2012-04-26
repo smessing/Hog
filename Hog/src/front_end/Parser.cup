@@ -862,16 +862,31 @@ Type::=
     :}
   |
     MapType
+    {:
+      CUP$Parser$actions.LOGGER.info("MapType -> Type");
+    :}
   ;
   
 MapType::=
     MAP LESS INT COMMA Type:t GRTR
+    {:
+      CUP$Parser$actions.LOGGER.info("MAP LESS INT COMMA Type GRTR -> MapType");
+    :}
   |
     MAP LESS TEXT COMMA Type:t GRTR
+    {:
+      CUP$Parser$actions.LOGGER.info("MAP LESS TEXT COMMA Type GRTR -> MapType");
+    :}
   |
     MAP LESS BOOL COMMA Type:t GRTR
+    {:
+      CUP$Parser$actions.LOGGER.info("MAP LESS BOOL COMMA Type GRTR -> MapType");
+    :}
   |
     MAP LESS REAL COMMA Type:t GRTR
+    {:
+      CUP$Parser$actions.LOGGER.info("MAP LESS REAL COMMA Type GRTR -> MapType");
+    :}
   ;
   
 
