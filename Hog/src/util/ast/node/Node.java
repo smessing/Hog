@@ -186,7 +186,7 @@ public abstract class Node implements Comparable<Node> {
     }
 
 	/**
-	 * 
+	 * A pretty printer for the subtree that this is a root of.
 	 * Code taken from:
 	 * http://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
 	 * 

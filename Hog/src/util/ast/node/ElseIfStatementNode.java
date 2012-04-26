@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import back_end.Visitor;
+
 public class ElseIfStatementNode extends SelectionStatementNode {
 
 	protected StatementNode ifCondTrue;
@@ -16,6 +18,11 @@ public class ElseIfStatementNode extends SelectionStatementNode {
 	@Override
 	public String getName() {
 		return "ElseIfStatementNode";
+	}
+	
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 
 }
