@@ -25,6 +25,8 @@ import front_end.*;
 
 import java.util.Iterator;
 import java.util.logging.*;
+import back_end.JavaGenerator;
+
 /**
  * A console front-end to the Lexer class for dynamically testing the Lexer.
  * 
@@ -60,6 +62,9 @@ public class ConsoleLexer {
 	      }
 	    
 	    AbstractSyntaxTree ast = new UntypedAbstractSyntaxTree(root);
+	    JavaGenerator j = new JavaGenerator(ast);
+	    
+	    //j.run();
 	    
 	    Iterator<Node> postOrder = ast.postOrderTraversal();
 	    

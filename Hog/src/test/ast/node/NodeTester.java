@@ -8,12 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import util.ast.node.ExpressionNode;
-import util.ast.node.IdNode;
-import util.ast.node.MockExpressionNode;
-import util.ast.node.BiOpNode;
-import util.ast.node.MockNode;
-import util.ast.node.UnOpNode;
+import util.ast.node.*;
 import util.type.Types;
 
 /**
@@ -32,6 +27,40 @@ public class NodeTester {
 	private ExpressionNode E;
 	private ExpressionNode F;
 	private ExpressionNode G;
+	
+	private ArgumentsNode __argumentsNode;
+	private BiOpNode __biOpNode;
+	private CatchesNode __catchesNode;
+	private ConstantNode __constantNode;
+	private DerivedTypeNode __derivedTypeNode;
+	private ElseIfStatementNode __elseIfStatementNode;
+	private ExceptionTypeNode __exceptionTypeNode;
+	private ExpressionNode __expressionNode;
+	private FunctionNode __functionNode;
+	private GuardingStatementNode __guardingStatementNode;
+	private IdNode __idNode;
+	private IfElseStatementNode __ifElseStatementNode;
+	//private IterationStatementNode __iterationStatementNode;
+	private JumpStatementNode __jumpStatementNode;
+	private MockExpressionNode __mockExpressionNode;
+	private MockNode __mockNode;
+	private ParametersNode __parametersNode;
+	private PostfixExpressionNode __postfixExpressionNode;
+	private PrimaryExpressionNode __primaryExpressionNode;
+	private PrimitiveTypeNode __primitiveTypeNode;
+	private ProgramNode __programNode;
+	private RelationalExpressionNode __relationalExpressionNode;
+	private SectionNode __sectionNode;
+	private SectionTypeNode __sectionTypeNode;
+	private SelectionStatementNode __selectionStatementNode;
+	private StatementListNode __statementListNode;
+	private StatementNode __statementNode;
+	//private SwitchStatementNode __switchStatementNode;
+	//private TypeNode __typeNode;
+	private UnOpNode __unOpNode;
+
+	
+	
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -50,8 +79,48 @@ public class NodeTester {
 		E = new UnOpNode(UnOpNode.OpType.CAST, new MockExpressionNode());
 		B = new BiOpNode(BiOpNode.OpType.TIMES, D, E);
 		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
+				
 	}
 
+	public void setUpNodes(){
+		/*
+		 __argumentsNode = new ArgumentsNode();
+		__biOpNode = new BiOpNode();
+		__catchesNode = new CatchesNode();
+		__constantNode = new ConstantNode();
+		__derivedTypeNode = new DerivedTypeNode();
+		__elseIfStatementNode = new ElseIfStatementNode();
+		__exceptionTypeNode = new ExceptionTypeNode();
+		__expressionNode = new ExpressionNode();
+		__functionNode = new FunctionNode;
+		__guardingStatementNode = new GuardingStatementNode();
+		__idNode = new IdNode();
+		__ifElseStatementNode = new IfElseStatementNode();
+		//private IterationStatementNode __iterationStatementNode;
+		__jumpStatementNode = new JumpStatementNode();
+		__mockExpressionNode = new MockExpressionNode();
+		*/
+		
+		/*
+		__mockNod e= new;
+		__parametersNode = new;
+		__postfixExpressionNode = new;
+		__primaryExpressionNode = new;
+		__primitiveTypeNode = new;
+		__programNode = new;
+		__relationalExpressionNode = new;
+		__sectionNode = new;
+		__sectionTypeNode = new;
+		__selectionStatementNode = new;
+		__statementListNode = new;
+		__statementNode = new;
+		//private SwitchStatementNode __switchStatementNode;
+		//private TypeNode __typeNode;
+		__unOpNode = new;
+		*/
+		
+	}
+	
 	@After
 	public void tearDown() {
 	}
