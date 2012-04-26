@@ -70,7 +70,7 @@ nonterminal StatementListNode ExpressionStatements;
 nonterminal ExpressionNode ForExpr;
 nonterminal StatementListNode ForInit;
 nonterminal StatementListNode ForIncr;
-
+nonterminal MapType;
 
 nonterminal ProgramNode Program;
 nonterminal SectionNode Functions;
@@ -861,8 +861,19 @@ Type::=
       CUP$Parser$actions.LOGGER.info("DerivedType LESS Type GRTR -> Type");
     :}
   |
-    MAP LESS Type:one COMMA Type:two GRTR
+    MapType
   ;
+  
+MapType::=
+    MAP LESS INT COMMA Type:t GRTR
+  |
+    MAP LESS TEXT COMMA Type:t GRTR
+  |
+    MAP LESS BOOL COMMA Type:t GRTR
+  |
+    MAP LESS REAL COMMA Type:t GRTR
+  ;
+  
 
 DerivedType::=
     LIST
