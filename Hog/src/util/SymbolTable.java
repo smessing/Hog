@@ -1,18 +1,21 @@
 package util;
 
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import util.ast.node.TypeNode;
+import front_end.sym;
+
+import util.ast.node.*;
 
 
 public class SymbolTable implements Cloneable{
 
 	   //protected Map<Name, Identifier> variables;
-	   static SymbolTable root = new SymbolTable(null);
+	   static SymbolTable root = null;
 	   static SymbolTable top = root;
-	   protected Map<String,TypeNode> table;
+	   protected Map<String,Symbol> table;
 	   protected SymbolTable outer;
 
 	   /*
@@ -21,12 +24,108 @@ public class SymbolTable implements Cloneable{
 	    * type parameters. That is, a programmer can assert that a given
 	    * assignment of some subset of the type parameters uniquely determines
 	    * the remaining type parameters. 
-	    * 
 	    */
 
     public SymbolTable(SymbolTable prev){
-    	this.table = new HashMap<String, TypeNode>();
-    	this.outer = prev;
+    	if(root == null){
+    		this.table = new HashMap<String, Symbol>();
+    		this.fillReservedTable();
+    		this.outer = null;
+    		root = this;
+    	}
+   
+    	else{
+    		this.table = new HashMap<String, Symbol>();
+        	this.outer = prev;
+    	}
+    }
+    
+    public void reserveWord(String word){ 
+    	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(Types.Flags.RESERVED_WORD);
+		this.table.put(word, new ReservedWordSymbol(typeNode));  
+	}
+    
+    public void reserveFunction(String word){ 
+    	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(Types.Flags.RESERVED_WORD);
+		this.table.put(word, new FunctionSymbol(typeNode));  
+	}
+	
+    
+    public void fillReservedTable(){
+    	reserveWord("and");
+    	reserveWord("or");
+    	reserveWord("if");
+    	reserveWord("else");
+    	reserveWord("elseif");
+    	reserveWord("Map");
+    	reserveWord("Reduce");
+		reserveWord("Main");
+		reserveWord("Functions");
+		//reserveWord(new Word("emit", sym.EMIT));
+		reserveWord("for");
+		reserveWord("not");
+		reserveWord("in");
+		reserveWord("return");
+		reserveWord("break");
+		reserveWord("case");
+		reserveWord("switch");
+		reserveWord("void");
+		reserveWord("while");
+		reserveWord("for");
+		reserveWord("foreach");
+		reserveWord("list");
+		reserveWord("continue");
+		reserveWord("int");
+		reserveWord("real");
+		reserveWord("bool");
+		reserveWord("text");
+		reserveWord("default");
+		reserveWord("set");
+		reserveWord("dict");
+		reserveWord("iter");
+		reserveWord("==");
+		reserveWord("!=");
+		reserveWord(">=");
+		reserveWord("<=");
+		reserveFunction("list.add");
+		reserveFunction("list.clear");
+		reserveFunction("list.get");
+		reserveFunction("list.iterator");
+		reserveFunction("list.size");
+		reserveFunction("list.sort");
+		reserveFunction("iter.next");
+		reserveFunction("iter.hasNext");
+		reserveFunction("iter.peek");
+		reserveFunction("set.add");
+		reserveFunction("set.clear");
+		reserveFunction("set.contains");
+		reserveFunction("set.containsAll");
+		reserveFunction("set.isEmpty");
+		reserveFunction("set.iterator");
+		reserveFunction("set.remove");
+		reserveFunction("set.removeAll");
+		reserveFunction("set.size");
+		reserveFunction("multiSet.add");
+		reserveFunction("multiSet.clear");
+		reserveFunction("multiSet.contains");
+		reserveFunction("multiSet.count");
+		reserveFunction("multiSet.entrySet");
+		reserveFunction("multiSet.isEmpty");
+		reserveFunction("multiSet.iterator");
+		reserveFunction("multiSet.removeAll");
+		reserveFunction("multiSet.removeOne");
+		reserveFunction("multiSet.size");
+		reserveFunction("text.length");
+		reserveFunction("text.replace");
+		reserveFunction("text.tokenize");
+		reserveFunction("dict.clear");
+		reserveFunction("dict.containsKey");
+		reserveFunction("dict.get");
+		reserveFunction("dict.keySet");
+		reserveFunction("dict.put");
+		reserveFunction("dict.size");
+		reserveFunction("dict.reverseDict");
+
     }
     
     //move to symbol table in outer scope
@@ -42,12 +141,13 @@ public class SymbolTable implements Cloneable{
      * makes sure this table doesn't already have the symbol
      * 
      */
-    public static boolean addVariable(String name, TypeNode type){
-    	if(!ReservedSymTable.getReservedWordSymTable().containsKey(name)){
+    public static boolean put(String name, Symbol type){
+    	if(!root.table.containsKey(name)){
     		if(!top.table.containsKey(name)){
-        		top.table.put(name, type);
-        		return true;
-    		}
+            	top.table.put(name, type);
+            	return true;
+        	}
+    		
     	}
     	return false;
     }
@@ -86,9 +186,9 @@ public class SymbolTable implements Cloneable{
     }
     
     //look for a specific variable in this scope
-    public TypeNode get(String name){
+    public Symbol get(String name){
        	for(SymbolTable st = top; st != null; st = st.outer){
-       		TypeNode found = st.table.get(name);
+       		Symbol found = st.table.get(name);
        		if(found != null) return found;
        	}
        	return null;
