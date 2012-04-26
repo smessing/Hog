@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import back_end.Visitor;
 
 /**
+ * A CatchesNode represents a catch statement with
+ * and exception and exception type.
  * 
  * @author sam
  *

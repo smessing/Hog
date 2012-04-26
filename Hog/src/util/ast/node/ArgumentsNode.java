@@ -3,16 +3,19 @@ package util.ast.node;
 import back_end.Visitor;
 
 /**
- * Represents the ArgumentExpressionList production
+ * Represents the ArgumentExpressionList production.
+ * An ArgumentsNode contains a list of IdNodes which
+ * specify the arguments for the function, method, or
+ * constructor.
  * 
  * @author ben
  *
  */
 public class ArgumentsNode extends ExpressionNode {
 	
-	public ArgumentsNode(ExpressionNode args, ExpressionNode exp) {
+	public ArgumentsNode(ExpressionNode arg, ExpressionNode exp) {
 		super();
-		this.addChild(args);
+		this.addChild(arg);
 		this.addChild(exp);
 		ArgumentsNode.LOGGER.fine("Constructing ArgumentsNode");
 	}

@@ -2,6 +2,10 @@ package test.ast.node;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.ArrayList;
+
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -9,6 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.ast.node.*;
+import util.ast.node.PostfixExpressionNode.PostfixType;
+import util.ast.node.SectionNode.SectionName;
+
 import util.type.Types;
 
 /**
@@ -79,48 +86,55 @@ public class NodeTester {
 		E = new UnOpNode(UnOpNode.OpType.CAST, new MockExpressionNode());
 		B = new BiOpNode(BiOpNode.OpType.TIMES, D, E);
 		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
-				
-	}
-
-	public void setUpNodes(){
-		/*
-		 __argumentsNode = new ArgumentsNode();
-		__biOpNode = new BiOpNode();
-		__catchesNode = new CatchesNode();
-		__constantNode = new ConstantNode();
-		__derivedTypeNode = new DerivedTypeNode();
-		__elseIfStatementNode = new ElseIfStatementNode();
-		__exceptionTypeNode = new ExceptionTypeNode();
-		__expressionNode = new ExpressionNode();
-		__functionNode = new FunctionNode;
-		__guardingStatementNode = new GuardingStatementNode();
-		__idNode = new IdNode();
-		__ifElseStatementNode = new IfElseStatementNode();
-		//private IterationStatementNode __iterationStatementNode;
-		__jumpStatementNode = new JumpStatementNode();
-		__mockExpressionNode = new MockExpressionNode();
-		*/
 		
+		/* FUNCTION_CALL<unknown>
+		 * |-- IdNode<unknown,emit> 
+		 * L__ ArgumentsNode
+		 * 		|-- IdNode<unknown,count>
+		 * 		L__ IdNode<unknown,word>
+		 * 
+		 */	
+		
+		//IdNode arg1 = new IdNode("emit");
+		//IdNode arg2 = new IdNode("values");
+		//IdNode arg3 = new IdNode("next");
+		//IdNode arg4 = new IdNode("UNKNOWN");
 		/*
-		__mockNod e= new;
-		__parametersNode = new;
-		__postfixExpressionNode = new;
-		__primaryExpressionNode = new;
-		__primitiveTypeNode = new;
-		__programNode = new;
-		__relationalExpressionNode = new;
-		__sectionNode = new;
-		__sectionTypeNode = new;
-		__selectionStatementNode = new;
-		__statementListNode = new;
-		__statementNode = new;
+		__argumentsNode = new ArgumentsNode(arg2, arg3);	
+		__postfixExpressionNode = new PostfixExpressionNode(PostfixType.METHOD_WITH_PARAMS, arg4, arg1);
+		__statementListNode = new StatementListNode();
+		__sectionNode = new SectionNode(__statementListNode, SectionNode.SectionName.MAIN);
+		__biOpNode = new BiOpNode(null, A, A);
+		__catchesNode = new CatchesNode(__idNode, __statementListNode);
+		__constantNode = new ConstantNode(null, null);
+		//__derivedTypeNode = new DerivedTypeNode(Type.Derived, new Types());
+		__elseIfStatementNode = new ElseIfStatementNode(A, __statementListNode, __elseIfStatementNode);
+		__exceptionTypeNode = new ExceptionTypeNode(null);
+		//__expressionNode = new ExpressionNode(new MockExpressionNode());
+		//__functionNode = new FunctionNode(null, null, __parametersNode, __statementListNode);
+		__guardingStatementNode = new GuardingStatementNode(__statementListNode, __catchesNode);
+		__idNode = new IdNode(null);
+		__ifElseStatementNode = new IfElseStatementNode(A, __statementListNode, __elseIfStatementNode, null);
+		//private IterationStatementNode __iterationStatementNode;
+		__jumpStatementNode = new JumpStatementNode(null);
+		__mockExpressionNode = new MockExpressionNode();	
+		__mockNode= new MockNode();
+		//__parametersNode = new ParametersNode(null, null);
+		__primaryExpressionNode = new PrimaryExpressionNode();
+		__primitiveTypeNode = new PrimitiveTypeNode(null);
+		__programNode = new ProgramNode(__sectionNode, __sectionNode, __sectionNode, __sectionNode);
+		__relationalExpressionNode = new RelationalExpressionNode(null, A, A);
+		//__sectionTypeNode = new SectionTypeNode();
 		//private SwitchStatementNode __switchStatementNode;
 		//private TypeNode __typeNode;
-		__unOpNode = new;
-		*/
-		
+		//__selectionStatementNode = new SelectionStatementNode(A);
+		//
+		//__statementNode = new StatementNode();
+		//__unOpNode = new UnOpNode();
+		 * 
+		 */
 	}
-	
+
 	@After
 	public void tearDown() {
 	}

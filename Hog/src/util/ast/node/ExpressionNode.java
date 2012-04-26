@@ -21,6 +21,10 @@ public abstract class ExpressionNode extends StatementNode {
 		this(new ArrayList<Node>());
 	}
 
+	/**
+	 * List<Node> children
+	 * @param children
+	 */
 	public ExpressionNode(List<Node> children) {
 		this(null, children);
 	}

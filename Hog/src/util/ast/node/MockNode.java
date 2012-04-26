@@ -21,6 +21,10 @@ public class MockNode extends Node {
 		this(new ArrayList<Node>());
 	}
 
+	/**
+	 * 
+	 * @param children the children of this node
+	 */
 	public MockNode(List<Node> children) {
 		super(children);
 		this.id = mockNodeCount;

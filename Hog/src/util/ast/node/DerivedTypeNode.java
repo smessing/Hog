@@ -4,6 +4,9 @@ import back_end.Visitor;
 import util.type.Types;
 
 /**
+ * A DerivedTypeNode represents a derived type 
+ * which contains a local type, and an inner type.
+ * 
  * @author ben
  *
  */
