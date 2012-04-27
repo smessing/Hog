@@ -3,7 +3,9 @@
  * 
  * derived from the WordCount program at http://wiki.apache.org/hadoop/WordCount
  * 
- * @author paul */
+ * @author paul 
+ * 
+ * */
 
 package org.myorg;
 
@@ -20,8 +22,29 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public static class Function {
-
+     public static int fib(int n){
+    	 if (n == 0){
+    		 return 0;
+    	 }
+    	 else if (n == 1){
+    		 return 1;
+    	 }
+    	 
+    	 else {
+    		 return fib(n-1) + fib(n-2);
+    	 }
+     }
+     
+     public static int factorial(int n){
+    	 if (n==0 || n == 1){
+    		 return 1;
+    	 }
+    	 else {
+    		 return n * factorial(n-1);
+    	 }
+     }
 }
+    
 
 public class WordCount {
 	public static class Map extends
