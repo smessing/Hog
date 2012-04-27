@@ -19,6 +19,8 @@ public class SymbolTable implements Cloneable{
 	   static SymbolTable top = root;
 	   protected Map<String,Symbol> table;
 	   protected SymbolTable outer;
+	   
+	   static Map<Node, SymbolTable> nodeToSymbolTableMap;
 
 	   /*
 	    * Note From Wikipedia: Not only do type classes permit multiple type
