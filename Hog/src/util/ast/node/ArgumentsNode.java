@@ -13,6 +13,11 @@ import back_end.Visitor;
  */
 public class ArgumentsNode extends ExpressionNode {
 	
+	/**
+	 * 
+	 * @param arg
+	 * @param exp
+	 */
 	public ArgumentsNode(ExpressionNode arg, ExpressionNode exp) {
 		super();
 		this.addChild(arg);
