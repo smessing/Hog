@@ -293,7 +293,6 @@ Block::=
     {:
       RESULT = sl;
       CUP$Parser$actions.LOGGER.info("L_BRACE StatementList R_BRACE -> Block");
-      //SYMTAB: MOVE TO OUTER SCOPE??
     :}
   | 
     L_BRACE R_BRACE
