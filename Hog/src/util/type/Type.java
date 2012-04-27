@@ -1,6 +1,5 @@
 package util.type;
 
-import util.MethodInstance;
 import util.SymbolTable;
 
 public interface Type {
@@ -38,7 +37,7 @@ public interface Type {
     /**
      * Returns true iff <code>t</code> has the method <code>mi</code>.
      */
-    boolean hasMethod(Type t, MethodInstance mi, SymbolTable context);
+   // boolean hasMethod(Type t, MethodInstance mi, SymbolTable context);
 
     /**
      * Returns true iff <code>t</code> has a method with name <code>name</code>
@@ -50,7 +49,7 @@ public interface Type {
      * Returns true iff <code>m1</code> is the same method as <code>m2</code>.
      * @param context TODO
      */
-    boolean isSameMethod(MethodInstance m1, MethodInstance m2, SymbolTable context);
+    //boolean isSameMethod(MethodInstance m1, MethodInstance m2, SymbolTable context);
     
     
     /**
