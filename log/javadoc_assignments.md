@@ -43,6 +43,11 @@ For each person, this document lists the classes that they are in charge of writ
 1. ReservedSymTable
 1. SymbolTable
 1. VariableSymbol
+1. TreeTraversalBuilder
+1. IdentifierAttributes
+1. BooleanValue
+1. LongValue
+1. Types
 
 ##Paul
 1. ErrorCheckingVisitor
@@ -51,7 +56,11 @@ For each person, this document lists the classes that they are in charge of writ
 1. MethodInstance
 1. ReservedWordSymbol
 1. Type
-1.
+1. Word
+1. DerivedTypeIdentifierAttributes
+1. PrimitiveTypeIdentifierAttributes
+1. ConstantValue
+1. Matcher
 
 ## Kurry
 1. TypeCheckingVisitor
@@ -60,3 +69,8 @@ For each person, this document lists the classes that they are in charge of writ
 1. NumberInstance
 1. Symbol
 1. TypeCheck
+1. AbstractSyntaxTree
+1. Identifier
+1. BriefLogFormatter
+1. DoubleValue
+1. StringValue
