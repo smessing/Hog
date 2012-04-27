@@ -263,5 +263,9 @@ public abstract class Node implements Comparable<Node> {
 			}
 		}
 	}
+	
+	public void setNewScope() {
+		this.newScope = true;
+	}
 
 }

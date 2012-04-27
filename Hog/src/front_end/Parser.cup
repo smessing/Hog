@@ -120,6 +120,7 @@ Program::=
     Functions:f Map:m Reduce:r Main:n
     {:
       RESULT = new ProgramNode(f, m, r, n);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("Functions Map Reduce Main -> Program");
     :}
   ;
@@ -128,6 +129,7 @@ Functions::=
     FUNCTIONS L_BRACE FunctionList:fl R_BRACE
     {:
       RESULT = new SectionNode(fl, SectionNode.SectionName.FUNCTIONS);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("FUNCTIONS L_BRACE FunctionList R_BRACE -> Functions");
     :}
   |
@@ -155,6 +157,7 @@ Function::=
     Type:t ID:i L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new FunctionNode(t, i, pl, sl); 
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE -> Function");
     :}
   ;
@@ -179,6 +182,7 @@ Map::=
     MAP SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new SectionNode(st, sl, SectionNode.SectionName.MAP);
+      RESULT.setNewScope();      
       CUP$Parser$actions.LOGGER.info("MAP SectionType L_BRACE StatementList R_BRACE -> Map");
     :}
   ;
@@ -187,6 +191,7 @@ Reduce::=
     REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new SectionNode(st, sl, SectionNode.SectionName.REDUCE);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("REDUCE SectionType L_BRACE StatementList R_BRACE -> Reduce");
     :}
   ;
@@ -203,6 +208,7 @@ Main::=
     MAIN L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = new SectionNode(sl, SectionNode.SectionName.MAIN);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("MAIN L_BRACE StatementList R_BRACE -> Main");
     :}
   ;
@@ -292,6 +298,7 @@ Block::=
     L_BRACE StatementList:sl R_BRACE
     {:
       RESULT = sl;
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("L_BRACE StatementList R_BRACE -> Block");
     :}
   | 
@@ -692,15 +699,16 @@ Constant::=
   ;
 
 SelectionStatement::=
-    IF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif ElseStatement:el
+    IF Expression:e Block:b ElseIfStatement:elif ElseStatement:el
     {:
-      RESULT = new IfElseStatementNode(e, s, elif, el);
-      CUP$Parser$actions.LOGGER.info("IF Expression L_BRACE StatmentList R_BRACE " +
+      RESULT = new IfElseStatementNode(e, b, elif, el);
+      CUP$Parser$actions.LOGGER.info("IF Expression Block " +
                                       "ElseIfStatement ElseStatment -> SelectionStatement");
     :}
   |
     SWITCH Expression:e L_BRACE StatementList:s R_BRACE
     {:
+    // NOT THINKING ABOUT SCOPE. TOO TIRED.
       RESULT = new SwitchStatementNode(e, s);
       CUP$Parser$actions.LOGGER.info("SWITCH Expression L_BRACE " +
                                       "StatementList R_BRACE -> SelectionStatement");
@@ -708,9 +716,9 @@ SelectionStatement::=
   ;
 
 ElseIfStatement::=
-    ELSEIF Expression:e L_BRACE StatementList:s R_BRACE ElseIfStatement:elif
+    ELSEIF Expression:e Block:b ElseIfStatement:elif
     {:
-      RESULT = new ElseIfStatementNode(e, s, elif);
+      RESULT = new ElseIfStatementNode(e, b, elif);
       CUP$Parser$actions.LOGGER.info("ELSEIF L_PAREN Expression R_PAREN ElseIfStatement -> " +
                                       "ElseIfStatement");
     :}
@@ -722,10 +730,10 @@ ElseIfStatement::=
   ;
 
 ElseStatement::=
-    ELSE L_BRACE StatementList:s R_BRACE
+    ELSE Block:b
     {:
-      RESULT = new ElseStatementNode(s);
-      CUP$Parser$actions.LOGGER.info("ELSE L_BRACE StatementList R_BRACE -> ElseStatement");
+      RESULT = new ElseStatementNode(b);
+      CUP$Parser$actions.LOGGER.info("Block -> ElseStatement");
     :}
   |
     /* epsilon */
@@ -735,30 +743,30 @@ ElseStatement::=
   ;
 
 IterationStatement::=
-    WHILE L_PAREN Expression:e R_PAREN L_BRACE StatementList:s R_BRACE
+    WHILE L_PAREN Expression:e R_PAREN Block:b
     {:
-      RESULT = new IterationStatementNode(e,s);
+      RESULT = new IterationStatementNode(e,b);
       CUP$Parser$actions.LOGGER.info("WHILE L_PAREN Expression R_PAREN L_BRACE " +
                                       "StatementList R_BRACE -> IterationStatement");
     :}
   |
-    FOR L_PAREN ForInit:init ForExpr:test ForIncr:incr R_PAREN L_BRACE StatementList:block R_BRACE
+    FOR L_PAREN ForInit:init ForExpr:test ForIncr:incr R_PAREN Block:b
     {:
       RESULT = new IterationStatementNode(init, test, incr, block);
       CUP$Parser$actions.LOGGER.info("FOR ForInit ForExpr ForInc L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement");
     :}
   |
-    FOR L_PAREN ForInit ForExpr R_PAREN L_BRACE StatementList R_BRACE
+    FOR L_PAREN ForInit ForExpr R_PAREN Block:b
     {:
-      //RESULT = new IterationStatementNode(e1,e2,e3,s);
+      //RESULT = new IterationStatementNode(e1,e2,e3,b);
       CUP$Parser$actions.LOGGER.info("FOR L_BRACEN ForInit ForExpr R_PAREN L_BRACE " +
                                       "StatementList R_BRACE -> IterationStatement");
     :}
   |
-    FOREACH Expression:e1 IN Expression:e2 L_BRACE StatementList:s R_BRACE
+    FOREACH Expression:e1 IN Expression:e2 Block:b
     {:
-      RESULT = new IterationStatementNode(e1,e2,s);
+      RESULT = new IterationStatementNode(e1,e2,b);
       CUP$Parser$actions.LOGGER.info("FOREACH Expression IN Expression L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement"); 
     :}
