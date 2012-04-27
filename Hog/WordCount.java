@@ -21,7 +21,7 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-public static class Function {
+public static class Functions {
      public static int fib(int n){
     	 if (n == 0){
     		 return 0;
