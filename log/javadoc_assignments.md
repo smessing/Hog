@@ -2,11 +2,11 @@
 For each person, this document lists the classes that they are in charge of writing JavaDoc for. These assignments are arbitrary. It's good to write documentation for code someone else wrote. All `public` and `protected` methods require JavaDoc.
 
 ## Sam
-1. ArgumentsNode
-1. BiOpNode
-1. CatchesNode
-1. DerivedTypeNode
-1. DictTypeNode
+1. ArgumentsNode [`done`]
+1. BiOpNode [`done`]
+1. CatchesNode [`done`]
+1. DerivedTypeNode [`done`]
+1. DictTypeNode [`done`]
 1. ElseIfStatementNode
 1. ElseStatementNode
 1. ExceptionTypeNode
