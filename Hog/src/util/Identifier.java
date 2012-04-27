@@ -2,12 +2,6 @@ package util;
 
 import util.type.Types;
 
-/*
- * 
- * 
- * 
- */
-
 public class Identifier{
 	
 	Types.Primitive type;

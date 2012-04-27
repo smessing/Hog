@@ -1,4 +1,6 @@
-package util;
+package util.type;
+
+import util.SymbolTable;
 
 public interface Type {
 
