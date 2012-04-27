@@ -120,7 +120,7 @@ Program::=
     Functions:f Map:m Reduce:r Main:n
     {:
       RESULT = new ProgramNode(f, m, r, n);
-      //SYMTAB: CREATE NEW TABLE WITH FUNCTIONS AS ROOT SCOPE AND MAIN REDUCE MAIN AS CHILDREN
+      //SYMTAB: CREATE NEW TABLE WITH FUNCTIONS AS ROOT SCOPE AND MAIN MAP REDUCE AS CHILDREN
       CUP$Parser$actions.LOGGER.info("Functions Map Reduce Main -> Program");
     :}
   ;
