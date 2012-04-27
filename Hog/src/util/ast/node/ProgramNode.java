@@ -10,6 +10,10 @@ public class ProgramNode extends Node {
 	protected SectionNode map;
 	protected SectionNode reduce;
 	protected SectionNode main;
+	
+	public ProgramNode(SectionNode map, SectionNode reduce, SectionNode main) {
+		this(null, map, reduce, main);
+	}
 
 	public ProgramNode(SectionNode functions, SectionNode map,
 			SectionNode reduce, SectionNode main) {
@@ -22,6 +26,10 @@ public class ProgramNode extends Node {
 		children.add(map);
 		children.add(reduce);
 		children.add(main);
+	}
+	
+	public boolean hasFunctions() {
+		return (functions != null);
 	}
 
 	@Override
