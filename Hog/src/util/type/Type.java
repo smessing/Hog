@@ -1,5 +1,6 @@
 package util.type;
 
+import util.MethodInstance;
 import util.SymbolTable;
 
 public interface Type {
@@ -43,7 +44,7 @@ public interface Type {
      * Returns true iff <code>t</code> has a method with name <code>name</code>
      * either defined in <code>t</code> or inherited into it.
      */
-    boolean hasMethodNamed(Type t, Identifier name);
+    boolean hasMethodNamed(Type t, String name);
     
     /**
      * Returns true iff <code>m1</code> is the same method as <code>m2</code>.
@@ -251,7 +252,7 @@ public interface Type {
      * Return the primitive with the given name.
      */
     
-    Type primitiveForName(Identifier name);
+    Type primitiveForName(String name);
     
     /**
      * Yields a string representing this type.  The string
