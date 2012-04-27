@@ -30,16 +30,6 @@ public class SectionNode extends Node {
 		this.addChild(list);
 		this.sectionName = sectionName;
 	}
-	
-	/**
-	 * 
-	 * @param type
-	 * @param list
-	 * @param sectionName
-	 */
-	public SectionNode(){
-		
-	}
 
 	// use this constructor for @map and @reduce sections
 	public SectionNode(SectionTypeNode type, StatementListNode list, SectionName sectionName) {
