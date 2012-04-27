@@ -36,8 +36,9 @@ public class BiOpNode extends ExpressionNode {
 	 *            - the left operand.
 	 * @param right
 	 *            - the right operand.
+	 * @throws UnsupportedOperationException - if the left or right operand is null.
 	 */
-	public BiOpNode(OpType type, ExpressionNode left, ExpressionNode right) {
+	public BiOpNode(OpType type, ExpressionNode left, ExpressionNode right) throws UnsupportedOperationException {
 		// note implicitly sets children.parent = this
 		super();
 		if (left == null || right == null) {
@@ -52,10 +53,20 @@ public class BiOpNode extends ExpressionNode {
 
 	}
 
+	/**
+	 * Get the OpType of this Binary Operator Node.
+	 * 
+	 * @return - the OpType of this node.
+	 */
 	public OpType getOpType() {
 		return opType;
 	}
 
+	/**
+	 * Set the OpType of this Binary Operator Node.
+	 * 
+	 * @param type - the new type of this node.
+	 */
 	public void setOpType(OpType type) {
 		this.opType = type;
 	}
