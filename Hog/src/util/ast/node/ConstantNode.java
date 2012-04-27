@@ -16,6 +16,12 @@ public class ConstantNode extends ExpressionNode {
 
 	protected String value;
 	
+	/**
+	 * Construct a new ConstantNode
+	 * 
+	 * @param type - 
+	 * @param value
+	 */
 	public ConstantNode(Types.Primitive type, String value) {
 		super(new PrimitiveTypeNode(type), new ArrayList<Node>());
 		this.value = value;
