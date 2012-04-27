@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-
-import front_end.sym;
+import java.util.logging.Logger;
 
 import util.ast.node.*;
 import util.type.Types;
@@ -19,6 +18,10 @@ public class SymbolTable implements Cloneable{
 	   static SymbolTable top = root;
 	   protected Map<String,Symbol> table;
 	   protected SymbolTable outer;
+	   
+	   static Map<Node, SymbolTable> nodeToSymbolTableMap = new HashMap<Node, SymbolTable>();
+	   
+	   private final static Logger LOGGER = Logger.getLogger(SymbolTable.class.getName());
 
 	   /*
 	    * Note From Wikipedia: Not only do type classes permit multiple type
@@ -32,6 +35,7 @@ public class SymbolTable implements Cloneable{
     	if(root == null){
     		this.table = new HashMap<String, Symbol>();
     		this.outer = null;
+    		SymbolTable.top = this;
     		this.fillReservedTable();
     		root = this;
     	}
@@ -40,6 +44,87 @@ public class SymbolTable implements Cloneable{
     		this.table = new HashMap<String, Symbol>();
         	this.outer = prev;
     	}
+    }
+    
+    /**
+     * mapNode adds a representative node and its corresponding symbol table to the nodeToSymbolTableMap
+     * 
+     * @param node is the representative node
+     * @throws Exception - when node has already been mapped to a symbol table
+     */
+    public void mapNode(Node node) throws Exception {
+    	// map argument node to this symbol table
+    	if (SymbolTable.nodeToSymbolTableMap.put(node, top) != null) {
+    		// if its not null, this node has already been mapped, throw an exception
+    		throw new Exception("Representative Node has already been mapped to a symbol table.");
+    	}
+    }
+    
+
+    //move to symbol table in outer scope
+    public SymbolTable pop(){
+    	top = top.outer;
+    	return top;
+    }
+    
+    /**
+     * Adds a variable to the symbol table. 
+     * First checks to make sure it is not a reserved word by
+     * looking the name up in the reserved word symbol table and
+     * makes sure this table doesn't already have the symbol
+     * 
+     * @param name
+     * @param type
+     * @return true for successful puts
+     */
+    public boolean put(String name, Symbol symbol){
+    	// if not in reserve table
+    	if(!root.table.containsKey(name)){
+    		// if not in current table
+    		if(!top.table.containsKey(name)){
+            	top.table.put(name, symbol);
+            	return true;
+        	}
+    		
+    	}
+    	return false;
+    }
+    
+    public void push() {
+    	top = new SymbolTable(top); 
+      }
+    
+
+    /**
+     * Returns whether the particular symbol is defined in this scope. If it isn't
+     * in this direct local scope, we ask the parent scope, but don't traverse to enclosing 
+     * blocks.
+     * 
+     * @param name
+     * @return true if the identifier is defined in this scope
+     */
+    public boolean isDefinedInScope(String name){
+       	if(this.table.containsKey(name)){
+    		return true;
+       	} else if (this.outer == null ){
+       		return false;
+       	} else {
+       		return this.outer.isDefinedInScope(name);
+       	}
+    }
+    
+    /**
+     * look for a specific identifier in this scope
+     * 
+     * @param name
+     * @return the Symbol if found, null otherwise
+     */
+    public Symbol get(String name){
+       	for(SymbolTable st = this; st != null; st = st.outer){
+       		Symbol found = st.table.get(name);
+       		if(found != null) return found;
+       	}
+       	return null;
     }
     
     public void reserveWord(String word){ 
@@ -66,7 +151,6 @@ public class SymbolTable implements Cloneable{
     	reserveWord("Reduce");
 		reserveWord("Main");
 		reserveWord("Functions");
-		//reserveWord(new Word("emit", sym.EMIT));
 		reserveWord("for");
 		reserveWord("not");
 		reserveWord("in");
@@ -177,71 +261,6 @@ public class SymbolTable implements Cloneable{
 
     }
     
-    //move to symbol table in outer scope
-    public SymbolTable pop(){
-    	top = top.outer;
-    	return top;
-    }
-    
-    /*
-     * Adds a variable to the symbol table. 
-     * First checks to make sure it is not a reserved word by
-     * looking the name up in the reserved word symbol table and
-     * makes sure this table doesn't already have the symbol
-     * 
-     */
-    public static boolean put(String name, Symbol type){
-    	if(!root.table.containsKey(name)){
-    		if(!top.table.containsKey(name)){
-            	top.table.put(name, type);
-            	return true;
-        	}
-    		
-    	}
-    	return false;
-    }
-    
-    public static void push() {
-    	top = new SymbolTable(top); 
-      }
-    
-
-    /*
-     * Returns whether the particular symbol is defined in this scope. If it isn't
-     * in this direct local scope, we ask the parent scope, but don't traverse to enclosing 
-     * blocks.
-     * 
-     */
-    public static boolean isDefinedInScope(String name){
-       	if(top.table.containsKey(name)){
-    		return true;
-       	}
-       	
-       	//hold a pointer to this table before moving outward
-       	SymbolTable topTable = top;
-       	
-       	//search all tables in this scope for this variable
-       	SymbolTable temp = top.outer;
-       	while(temp != null){
-       		if(top.table.containsKey(name)){
-        		return true;
-           	}
-       		temp = top.pop();
-       	}
-       	
-       	//reset
-       	top = topTable;
-       	return false;
-    }
-    
-    //look for a specific variable in this scope
-    public Symbol get(String name){
-       	for(SymbolTable st = top; st != null; st = st.outer){
-       		Symbol found = st.table.get(name);
-       		if(found != null) return found;
-       	}
-       	return null;
-    }
     
  
     

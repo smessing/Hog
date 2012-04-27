@@ -2,6 +2,12 @@ package util.ast.node;
 
 import back_end.Visitor;
 
+/**
+ * A FunctionNode.
+ * 
+ * @author ben, sam
+ *
+ */
 public class FunctionNode extends ExpressionNode {
 
 	protected ParametersNode parameters;

@@ -1,4 +1,4 @@
-package test.ast.node;
+package test;
 
 import static org.junit.Assert.*;
 

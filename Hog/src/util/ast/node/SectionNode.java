@@ -25,20 +25,10 @@ public class SectionNode extends Node {
 	protected SectionTypeNode type;
 
 	// use this constructor for @functions and @Main sections
-	public SectionNode(SectionTypeNode list, SectionName sectionName) {
+	public SectionNode(StatementListNode list, SectionName sectionName) {
 		SectionNode.LOGGER.fine("adding list child to @Functions or @Main SectionNode");
 		this.addChild(list);
 		this.sectionName = sectionName;
-	}
-	
-	/**
-	 * 
-	 * @param type
-	 * @param list
-	 * @param sectionName
-	 */
-	public SectionNode(){
-		
 	}
 
 	// use this constructor for @map and @reduce sections

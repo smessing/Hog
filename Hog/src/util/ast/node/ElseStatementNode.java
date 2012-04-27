@@ -4,7 +4,7 @@ package util.ast.node;
  * An ElseStatementNode represents an else statement and
  * takes a StatementListNode in it's constructor. 
  * 
- * @author ktran
+ * @author sam
  *
  */
 public class ElseStatementNode extends StatementNode {
