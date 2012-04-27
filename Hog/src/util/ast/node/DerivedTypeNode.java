@@ -15,10 +15,15 @@ public class DerivedTypeNode extends TypeNode {
 	protected Types.Derived localType;
 	protected TypeNode innerTypeNode;
 	
-	public DerivedTypeNode() {
+	protected DerivedTypeNode() {
 		// empty method to satisfy java
 	}
 	
+	/**
+	 * 
+	 * @param localType
+	 * @param innerTypeNode
+	 */
 	public DerivedTypeNode(Types.Derived localType, TypeNode innerTypeNode) {
 		this.localType = localType;
 		this.innerTypeNode = innerTypeNode;
