@@ -3,6 +3,10 @@ package util.ast.node;
 import back_end.Visitor;
 
 /**
+ * A JumpStatementNode represents either a Continue, Break,
+ * or Return construct, and returns have expression statements.
+ * 
+ * 
  * @author ben
  * 
  */

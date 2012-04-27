@@ -2,18 +2,20 @@ package test.ast.node;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.ArrayList;
+
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import util.ast.node.ExpressionNode;
-import util.ast.node.IdNode;
-import util.ast.node.MockExpressionNode;
-import util.ast.node.BiOpNode;
-import util.ast.node.MockNode;
-import util.ast.node.UnOpNode;
+import util.ast.node.*;
+import util.ast.node.PostfixExpressionNode.PostfixType;
+import util.ast.node.SectionNode.SectionName;
+
 import util.type.Types;
 
 /**
@@ -32,6 +34,40 @@ public class NodeTester {
 	private ExpressionNode E;
 	private ExpressionNode F;
 	private ExpressionNode G;
+	
+	private ArgumentsNode __argumentsNode;
+	private BiOpNode __biOpNode;
+	private CatchesNode __catchesNode;
+	private ConstantNode __constantNode;
+	private DerivedTypeNode __derivedTypeNode;
+	private ElseIfStatementNode __elseIfStatementNode;
+	private ExceptionTypeNode __exceptionTypeNode;
+	private ExpressionNode __expressionNode;
+	private FunctionNode __functionNode;
+	private GuardingStatementNode __guardingStatementNode;
+	private IdNode __idNode;
+	private IfElseStatementNode __ifElseStatementNode;
+	//private IterationStatementNode __iterationStatementNode;
+	private JumpStatementNode __jumpStatementNode;
+	private MockExpressionNode __mockExpressionNode;
+	private MockNode __mockNode;
+	private ParametersNode __parametersNode;
+	private PostfixExpressionNode __postfixExpressionNode;
+	private PrimaryExpressionNode __primaryExpressionNode;
+	private PrimitiveTypeNode __primitiveTypeNode;
+	private ProgramNode __programNode;
+	private RelationalExpressionNode __relationalExpressionNode;
+	private SectionNode __sectionNode;
+	private SectionTypeNode __sectionTypeNode;
+	private SelectionStatementNode __selectionStatementNode;
+	private StatementListNode __statementListNode;
+	private StatementNode __statementNode;
+	//private SwitchStatementNode __switchStatementNode;
+	//private TypeNode __typeNode;
+	private UnOpNode __unOpNode;
+
+	
+	
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -50,6 +86,53 @@ public class NodeTester {
 		E = new UnOpNode(UnOpNode.OpType.CAST, new MockExpressionNode());
 		B = new BiOpNode(BiOpNode.OpType.TIMES, D, E);
 		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
+		
+		/* FUNCTION_CALL<unknown>
+		 * |-- IdNode<unknown,emit> 
+		 * L__ ArgumentsNode
+		 * 		|-- IdNode<unknown,count>
+		 * 		L__ IdNode<unknown,word>
+		 * 
+		 */	
+		
+		//IdNode arg1 = new IdNode("emit");
+		//IdNode arg2 = new IdNode("values");
+		//IdNode arg3 = new IdNode("next");
+		//IdNode arg4 = new IdNode("UNKNOWN");
+		/*
+		__argumentsNode = new ArgumentsNode(arg2, arg3);	
+		__postfixExpressionNode = new PostfixExpressionNode(PostfixType.METHOD_WITH_PARAMS, arg4, arg1);
+		__statementListNode = new StatementListNode();
+		__sectionNode = new SectionNode(__statementListNode, SectionNode.SectionName.MAIN);
+		__biOpNode = new BiOpNode(null, A, A);
+		__catchesNode = new CatchesNode(__idNode, __statementListNode);
+		__constantNode = new ConstantNode(null, null);
+		//__derivedTypeNode = new DerivedTypeNode(Type.Derived, new Types());
+		__elseIfStatementNode = new ElseIfStatementNode(A, __statementListNode, __elseIfStatementNode);
+		__exceptionTypeNode = new ExceptionTypeNode(null);
+		//__expressionNode = new ExpressionNode(new MockExpressionNode());
+		//__functionNode = new FunctionNode(null, null, __parametersNode, __statementListNode);
+		__guardingStatementNode = new GuardingStatementNode(__statementListNode, __catchesNode);
+		__idNode = new IdNode(null);
+		__ifElseStatementNode = new IfElseStatementNode(A, __statementListNode, __elseIfStatementNode, null);
+		//private IterationStatementNode __iterationStatementNode;
+		__jumpStatementNode = new JumpStatementNode(null);
+		__mockExpressionNode = new MockExpressionNode();	
+		__mockNode= new MockNode();
+		//__parametersNode = new ParametersNode(null, null);
+		__primaryExpressionNode = new PrimaryExpressionNode();
+		__primitiveTypeNode = new PrimitiveTypeNode(null);
+		__programNode = new ProgramNode(__sectionNode, __sectionNode, __sectionNode, __sectionNode);
+		__relationalExpressionNode = new RelationalExpressionNode(null, A, A);
+		//__sectionTypeNode = new SectionTypeNode();
+		//private SwitchStatementNode __switchStatementNode;
+		//private TypeNode __typeNode;
+		//__selectionStatementNode = new SelectionStatementNode(A);
+		//
+		//__statementNode = new StatementNode();
+		//__unOpNode = new UnOpNode();
+		 * 
+		 */
 	}
 
 	@After

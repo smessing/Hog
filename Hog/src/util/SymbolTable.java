@@ -2,12 +2,14 @@ package util;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
 import front_end.sym;
 
 import util.ast.node.*;
+import util.type.Types;
 
 
 public class SymbolTable implements Cloneable{
@@ -29,8 +31,8 @@ public class SymbolTable implements Cloneable{
     public SymbolTable(SymbolTable prev){
     	if(root == null){
     		this.table = new HashMap<String, Symbol>();
-    		this.fillReservedTable();
     		this.outer = null;
+    		this.fillReservedTable();
     		root = this;
     	}
    
@@ -41,13 +43,16 @@ public class SymbolTable implements Cloneable{
     }
     
     public void reserveWord(String word){ 
-    	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(Types.Flags.RESERVED_WORD);
+    	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(util.type.Types.Flags.RESERVED_WORD);
 		this.table.put(word, new ReservedWordSymbol(typeNode));  
 	}
     
-    public void reserveFunction(String word){ 
-    	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(Types.Flags.RESERVED_WORD);
-		this.table.put(word, new FunctionSymbol(typeNode));  
+    public void reserveFunction(String word, TypeNode returnType, List<TypeNode> argumentList){ 
+		this.table.put(word, new FunctionSymbol(returnType, argumentList));  
+	}
+    
+    public void reserveFunction(String word, TypeNode returnType){ 
+		this.table.put(word, new FunctionSymbol(returnType));  
 	}
 	
     
@@ -87,44 +92,88 @@ public class SymbolTable implements Cloneable{
 		reserveWord("!=");
 		reserveWord(">=");
 		reserveWord("<=");
-		reserveFunction("list.add");
-		reserveFunction("list.clear");
-		reserveFunction("list.get");
-		reserveFunction("list.iterator");
-		reserveFunction("list.size");
-		reserveFunction("list.sort");
-		reserveFunction("iter.next");
-		reserveFunction("iter.hasNext");
-		reserveFunction("iter.peek");
-		reserveFunction("set.add");
-		reserveFunction("set.clear");
-		reserveFunction("set.contains");
-		reserveFunction("set.containsAll");
-		reserveFunction("set.isEmpty");
-		reserveFunction("set.iterator");
-		reserveFunction("set.remove");
-		reserveFunction("set.removeAll");
-		reserveFunction("set.size");
-		reserveFunction("multiSet.add");
-		reserveFunction("multiSet.clear");
-		reserveFunction("multiSet.contains");
-		reserveFunction("multiSet.count");
-		reserveFunction("multiSet.entrySet");
-		reserveFunction("multiSet.isEmpty");
-		reserveFunction("multiSet.iterator");
-		reserveFunction("multiSet.removeAll");
-		reserveFunction("multiSet.removeOne");
-		reserveFunction("multiSet.size");
-		reserveFunction("text.length");
-		reserveFunction("text.replace");
-		reserveFunction("text.tokenize");
-		reserveFunction("dict.clear");
-		reserveFunction("dict.containsKey");
-		reserveFunction("dict.get");
-		reserveFunction("dict.keySet");
-		reserveFunction("dict.put");
-		reserveFunction("dict.size");
-		reserveFunction("dict.reverseDict");
+		
+		/* add built-in list methods */
+		ArrayList<TypeNode> listAddArguments = new ArrayList<TypeNode>();
+		listAddArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("list.add", new PrimitiveTypeNode(Types.Primitive.VOID), listAddArguments);
+		reserveFunction("list.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
+		ArrayList<TypeNode> listGetArguments = new ArrayList<TypeNode>();
+		listGetArguments.add(new ReservedWordTypeNode(Types.Flags.INT));
+		reserveFunction("list.get", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE), listGetArguments);
+		reserveFunction("list.iterator", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		reserveFunction("list.size", new PrimitiveTypeNode(Types.Primitive.INT));
+		reserveFunction("list.sort", new PrimitiveTypeNode(Types.Primitive.VOID));
+		
+		/* add built-in iter methods */
+		reserveFunction("iter.next", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		reserveFunction("iter.hasNext", new PrimitiveTypeNode(Types.Primitive.BOOL));
+		reserveFunction("iter.peek", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		
+		/* add built-in set methods */
+		ArrayList<TypeNode> setAddArguments = new ArrayList<TypeNode>();
+		setAddArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("set.add", new PrimitiveTypeNode(Types.Primitive.BOOL), setAddArguments);
+		reserveFunction("set.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
+		ArrayList<TypeNode> setContainsArguments = new ArrayList<TypeNode>();
+		setContainsArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("set.contains", new PrimitiveTypeNode(Types.Primitive.BOOL), setContainsArguments);
+		ArrayList<TypeNode> setContainsAllArguments = new ArrayList<TypeNode>();
+		setContainsAllArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("set.containsAll", new PrimitiveTypeNode(Types.Primitive.BOOL), setContainsAllArguments);
+		reserveFunction("set.isEmpty", new PrimitiveTypeNode(Types.Primitive.BOOL));
+		reserveFunction("set.iterator", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		ArrayList<TypeNode> setRemoveArguments = new ArrayList<TypeNode>();
+		setRemoveArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("set.remove", new PrimitiveTypeNode(Types.Primitive.BOOL), setRemoveArguments);
+		ArrayList<TypeNode> setRemoveAllArguments = new ArrayList<TypeNode>();
+		setRemoveAllArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("set.removeAll", new PrimitiveTypeNode(Types.Primitive.BOOL), setRemoveAllArguments);
+		reserveFunction("set.size", new PrimitiveTypeNode(Types.Primitive.INT));
+
+		/* add built-in multiset methods */
+		ArrayList<TypeNode> multiSetAddArguments = new ArrayList<TypeNode>();
+		multiSetAddArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("multiSet.add", new PrimitiveTypeNode(Types.Primitive.BOOL), multiSetAddArguments);
+		reserveFunction("multiSet.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
+		ArrayList<TypeNode> multiSetContainArguments = new ArrayList<TypeNode>();
+		multiSetContainArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("multiSet.contains", new PrimitiveTypeNode(Types.Primitive.BOOL), multiSetContainArguments);
+		ArrayList<TypeNode> multiSetCountArguments = new ArrayList<TypeNode>();
+		multiSetCountArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("multiSet.count", new PrimitiveTypeNode(Types.Primitive.INT), multiSetCountArguments);
+		reserveFunction("multiSet.entrySet", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		reserveFunction("multiSet.isEmpty", new PrimitiveTypeNode(Types.Primitive.BOOL));
+		reserveFunction("multiSet.iterator", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		ArrayList<TypeNode> multiSetRemoveAllArguments = new ArrayList<TypeNode>();
+		multiSetRemoveAllArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("multiSet.removeAll", new PrimitiveTypeNode(Types.Primitive.BOOL), multiSetRemoveAllArguments);
+		ArrayList<TypeNode> multiSetRemoveOneArguments = new ArrayList<TypeNode>();
+		multiSetRemoveOneArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("multiSet.removeOne", new PrimitiveTypeNode(Types.Primitive.BOOL), multiSetRemoveOneArguments);
+		reserveFunction("multiSet.size", new PrimitiveTypeNode(Types.Primitive.INT));
+		
+		/* add built-in text functions */
+		reserveFunction("text.length", new PrimitiveTypeNode(Types.Primitive.INT));
+		ArrayList<TypeNode> textReplaceArguments = new ArrayList<TypeNode>();
+		textReplaceArguments.add(new ReservedWordTypeNode(Types.Flags.TEXT));
+		reserveFunction("text.replace", new PrimitiveTypeNode(Types.Primitive.TEXT), textReplaceArguments);
+		reserveFunction("text.tokenize", null);
+		
+		/* add built-in dict types */
+		reserveFunction("dict.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
+		ArrayList<TypeNode> dictContainsKeyArguments = new ArrayList<TypeNode>();
+		dictContainsKeyArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("dict.containsKey", new PrimitiveTypeNode(Types.Primitive.BOOL), dictContainsKeyArguments);
+		ArrayList<TypeNode> dictGetArguments = new ArrayList<TypeNode>();
+		dictGetArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("dict.get", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE), dictGetArguments);
+		reserveFunction("dict.keySet", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		ArrayList<TypeNode> dictPutArguments = new ArrayList<TypeNode>();
+		dictPutArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("dict.put", new PrimitiveTypeNode(Types.Primitive.VOID), dictPutArguments);
+		reserveFunction("dict.size", new PrimitiveTypeNode(Types.Primitive.INT));
+		reserveFunction("dict.reverseDict", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
 
     }
     

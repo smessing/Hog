@@ -33,5 +33,8 @@ public class TypeCheck extends Types{
 			return Types.Primitive.REAL;
 		}
 	}
+	
+	
+	
 
 }

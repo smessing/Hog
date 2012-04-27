@@ -5,7 +5,7 @@ import back_end.Visitor;
 /**
  * Represents PostFixExpression productions for the following types of postfix
  * expressions: array indexing, method calls with no params, method calls with
- * params function calls
+ * params, function calls
  * 
  * Can check which it represents by calling getPostFixType
  * 
