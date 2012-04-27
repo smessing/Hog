@@ -8,11 +8,7 @@ import back_end.Visitor;
  * A CatchesNode represents a catch statement with an exception and exception
  * type. E.g.
  * 
- * try {
- *		...
- * } catch (NumberFormateException nfe) {
- * 		catchStatements;
- * }
+ * try { ... } catch (NumberFormateException nfe) { catchStatements; }
  * 
  * @author sam
  * 
@@ -38,10 +34,17 @@ public class CatchesNode extends StatementListNode {
 	}
 
 	/**
-	 * Create a new CatchesNode. 
+	 * Create a new CatchesNode.
+	 * 
 	 * @param header
+	 *            - the IdNode that represents the exception being caught. (e.g.
+	 *            catch (NumberFormatException nfe)).
 	 * @param block
+	 *            - the StatementListNode that represents the statements to
+	 *            execute upon catching the exception represented by IdNode.
 	 * @param next
+	 *            - A (possibly empty) CatchesNode that represents another
+	 *            exception to be caught.
 	 */
 	public CatchesNode(IdNode header, StatementListNode block, CatchesNode next) {
 		super(new ArrayList<Node>());
@@ -55,19 +58,46 @@ public class CatchesNode extends StatementListNode {
 			this.addChild(next);
 	}
 
+	/**
+	 * Get the IdNode that represents the exception being caught at this node.
+	 * 
+	 * @return - the IdNode.
+	 */
 	public IdNode getHeader() {
 		return header;
 	}
 
+	/**
+	 * Get the block of statements to execute upon catching the exception at
+	 * this.header.
+	 * 
+	 * @return - A StatementListNode representing the block of statements to
+	 *         execute.
+	 */
 	public StatementListNode getBlock() {
 		return block;
 	}
 
+	/**
+	 * Ask if there is another catch block after the one represented by this.
+	 * 
+	 * @return - true if there is another catch block, false otherwise.
+	 */
 	public boolean hasNext() {
 		return (next == null);
 	}
 
+	/**
+	 * Return the next catch block.
+	 * 
+	 * @return - the CatchesNode that represents the next catch block.
+	 * @throws UnsupportedOperationException - if this.next == null.
+	 */
 	public CatchesNode getNext() {
+		if (next == null) {
+			throw new UnsupportedOperationException("Trying to retrieve "
+					+ this + "'s next CatchesNode, but it doesn't have one!");
+		}
 		return next;
 	}
 
