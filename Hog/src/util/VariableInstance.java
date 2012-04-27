@@ -1,6 +1,6 @@
 package util;
 
-public interface VarInstance<T> {
+public interface VariableInstance<T> {
 
     /**
      * The name of the variable.

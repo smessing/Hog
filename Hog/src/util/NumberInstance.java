@@ -1,6 +1,6 @@
 package util;
 
-public class NumberInstance implements VarInstance<Object> {
+public class NumberInstance implements VariableInstance<Object> {
 
 	Identifier id;
 	Identifier name;

@@ -37,6 +37,26 @@ For each person, this document lists the classes that they are in charge of writ
 
 ## Jason
 1. CodeGeneratingVisitor
-1. Java
+1. Visitor
+1. DerivedIdentifier
+1. Method
+1. ReservedSymTable
+1. SymbolTable
+1. VariableSymbol
+
 ##Paul
+1. ErrorCheckingVisitor
+1. AbstractSyntaxTreeTester
+1. FunctionSymbol
+1. MethodInstance
+1. ReservedWordSymbol
+1. Type
+1.
+
 ## Kurry
+1. TypeCheckingVisitor
+1. NodeTester
+1. Identifer
+1. NumberInstance
+1. Symbol
+1. TypeCheck
