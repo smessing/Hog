@@ -37,6 +37,16 @@ import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 
 /**
+ * Visitor class for error checking.
+ * 
+ * This is the second walk performed after construction of the AST from source.
+ * 
+ * Performs the following validations:
+ * - no dead code (statements after a return statement in the same basic block)
+ * - no break/continue statements outside of iteration loops
+ * - non-void functions have adequate number of return statements
+ * - no case/default statements outside of immediate switch statement
+ * 
  * @author sam
  *
  */

@@ -33,6 +33,16 @@ import util.ast.node.SwitchStatementNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 
+/**
+ * Visitor class for generating Java source.
+ * 
+ * This is the third (and final) walk performed after construction of the AST from source.
+ * CodeGeneratingVisitor generates a massive String representing the translated Hog program.
+ * 
+ * 
+ * @author kurry
+ *
+ */
 public class CodeGeneratingVisitor extends Visitor{
 	
 	
