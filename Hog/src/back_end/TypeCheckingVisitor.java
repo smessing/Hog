@@ -1,7 +1,13 @@
 package back_end;
 
-/*
- * Visitor class for type checking
+/**
+ * Visitor class for type checking.
+ * 
+ * Performs the following validations:
+ * - Check all operands are of right type for given operator
+ * - Populate & propagate types through AST.
+ * - Check that variables are declared before they are used.
+ * 
  * @author paul
  * 
 */
