@@ -58,7 +58,11 @@ public class ConsoleLexer {
 	      catch (Exception ex) {
 	    	  ex.printStackTrace();
 	      }
+<<<<<<< HEAD
+
+=======
 	    
+>>>>>>> c24853cc0d41597be1ef9d0a133ad637f4919a9b
 	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
 	    
 	    root.print();

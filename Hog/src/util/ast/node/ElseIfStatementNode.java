@@ -1,6 +1,4 @@
 package util.ast.node;
-import back_end.Visitor;
-
 
 /**
  * An ElseIfStatementNode represents an else-if statement
@@ -10,6 +8,9 @@ import back_end.Visitor;
  * @author sam
  *
  */
+
+import back_end.Visitor;
+
 public class ElseIfStatementNode extends SelectionStatementNode {
 
 	protected StatementNode ifCondTrue;

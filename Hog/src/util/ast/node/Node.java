@@ -73,6 +73,14 @@ public abstract class Node implements Comparable<Node> {
 	public List<Node> getChildren() {
 		return children;
 	}
+	
+	/**
+	 * Returns true of the node has children
+	 * @return
+	 */
+	public boolean hasChildren() {
+		return !children.isEmpty();
+	}
 
 	/**
 	 * Add a child to this node. The new child will always been the rightmost
