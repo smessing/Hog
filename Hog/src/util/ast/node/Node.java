@@ -90,15 +90,14 @@ public abstract class Node implements Comparable<Node> {
 		if (children == null) {
 			children = new ArrayList<Node>();
 		}
-		if (!child.hasParent()) {
-			throw new UnsupportedOperationException("Cannot add child " + child
-					+ " to " + this + ", as it already has a parent ("
-					+ child.getParent() + ")!");
-		}
 		// don't add a null child
 		if (child == null) {
 			Node.LOGGER.fine(this.toString() + " was asked to add "
 					+ "a null child in addChild. Nothing happened.");
+		} else if (child.hasParent()) {
+			throw new UnsupportedOperationException("Cannot add child " + child
+					+ " to " + this + ", as it already has a parent ("
+					+ child.getParent() + ")!");
 		} else if (!children.contains(child)) {
 			children.add(child);
 			child.setParent(this);

@@ -7,7 +7,7 @@ import back_end.Visitor;
  * and contains the statement if the condition is true, and
  * the statement if the condition is true.
  * 
- * @author ktran
+ * @author sam
  *
  */
 public class ElseIfStatementNode extends SelectionStatementNode {
