@@ -7,7 +7,11 @@ import util.type.Types;
  * A DerivedTypeNode represents a derived type 
  * which contains a local type, and an inner type.
  * 
- * @author ben
+ * For example, if those node represents the type set<list<int>>, the local
+ * type is the "outermost" type (in this example, set) and the inner type
+ * is everything but the outermost type (in this example, list<int>).
+ * 
+ * @author ben, sam
  *
  */
 public class DerivedTypeNode extends TypeNode {
@@ -20,19 +24,30 @@ public class DerivedTypeNode extends TypeNode {
 	}
 	
 	/**
+	 * Construct a new DerivedTypeNode.
 	 * 
-	 * @param localType
-	 * @param innerTypeNode
+	 * @param localType - Types.Derived representing the local type. 
+	 * @param innerTypeNode - A TypeNode representing the inner type.
 	 */
 	public DerivedTypeNode(Types.Derived localType, TypeNode innerTypeNode) {
 		this.localType = localType;
 		this.innerTypeNode = innerTypeNode;
 	}
 	
+	/**
+	 * Get the local type of this node.
+	 * 
+	 * @return the local type.
+	 */
 	public Types.Derived getLocalType() {
 		return localType;
 	}
 	
+	/**
+	 * Get the inner type of this node.
+	 * 
+	 * @return the inner type.
+	 */
 	public TypeNode getInnerTypeNode() {
 		return innerTypeNode;
 	}
