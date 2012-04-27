@@ -22,7 +22,8 @@ public class ProgramNode extends Node {
 		this.map = map;
 		this.reduce = reduce;
 		this.main = main;
-		children.add(functions);
+		// protect against adding a null child
+		if (this.hasFunctions()) children.add(functions);
 		children.add(map);
 		children.add(reduce);
 		children.add(main);
