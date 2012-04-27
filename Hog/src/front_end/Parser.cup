@@ -297,9 +297,10 @@ GuardingStatement::=
 Block::=
     L_BRACE StatementList:sl R_BRACE
     {:
+      //SYMTAB: NEW SCOPE IS PUSHED
       RESULT = sl;
-      //SYMTAB: NEW SCOPE
       CUP$Parser$actions.LOGGER.info("L_BRACE StatementList R_BRACE -> Block");
+      //SYMTAB: MOVE TO OUTER SCOPE??
     :}
   | 
     L_BRACE R_BRACE
@@ -600,6 +601,7 @@ PostfixExpression::=
     PostfixExpression:p DOT ID:i
     {:
       // object method call no params
+      //SYMTAB: ADD i TO TABLE??
       IdNode idNode = new IdNode(i);
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_NO_PARAMS, p, idNode);
       CUP$Parser$actions.LOGGER.info("PostfixExpression DOT ID: " + i + " -> PostFixExpression");
@@ -608,6 +610,7 @@ PostfixExpression::=
     PostfixExpression:p DOT ID:i L_PAREN ArgumentExpressionList:a R_PAREN
     {:
       // object method call with params
+       //SYMTAB: ADD i TO TABLE??
       IdNode idNode = new IdNode(i);
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, p, idNode, a);
       CUP$Parser$actions.LOGGER.info("PostfixExpression DOT ID: " + i + "L_PAREN ArgumentList R_PAREN -> PostFixExpression");
@@ -658,6 +661,7 @@ PrimaryExpression::=
     ID:i
     {:
       RESULT = new IdNode(i);
+       //SYMTAB: ADD i TO TABLE??
       CUP$Parser$actions.LOGGER.info("ID: " + i + " -> PrimaryExpression");
     :}
   |
@@ -747,6 +751,7 @@ IterationStatement::=
     WHILE L_PAREN Expression:e R_PAREN L_BRACE StatementList:s R_BRACE
     {:
       RESULT = new IterationStatementNode(e,s);
+       //SYMTAB: NEW SCOPE
       CUP$Parser$actions.LOGGER.info("WHILE L_PAREN Expression R_PAREN L_BRACE " +
                                       "StatementList R_BRACE -> IterationStatement");
     :}
@@ -754,6 +759,7 @@ IterationStatement::=
     FOR L_PAREN ForInit:init ForExpr:test ForIncr:incr R_PAREN L_BRACE StatementList:block R_BRACE
     {:
       RESULT = new IterationStatementNode(init, test, incr, block);
+       //SYMTAB: NEW SCOPE
       CUP$Parser$actions.LOGGER.info("FOR ForInit ForExpr ForInc L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement");
     :}
@@ -761,6 +767,7 @@ IterationStatement::=
     FOR L_PAREN ForInit ForExpr R_PAREN L_BRACE StatementList R_BRACE
     {:
       //RESULT = new IterationStatementNode(e1,e2,e3,s);
+       //SYMTAB: NEW SCOPE
       CUP$Parser$actions.LOGGER.info("FOR L_BRACEN ForInit ForExpr R_PAREN L_BRACE " +
                                       "StatementList R_BRACE -> IterationStatement");
     :}
@@ -768,6 +775,7 @@ IterationStatement::=
     FOREACH Expression:e1 IN Expression:e2 L_BRACE StatementList:s R_BRACE
     {:
       RESULT = new IterationStatementNode(e1,e2,s);
+       //SYMTAB: NEW SCOPE
       CUP$Parser$actions.LOGGER.info("FOREACH Expression IN Expression L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement"); 
     :}
@@ -777,6 +785,7 @@ ForInit::=
     ExpressionStatements:es
     {:
       RESULT = es;
+       //SYMTAB: NEW SCOPE??
       CUP$Parser$actions.LOGGER.info("ExpressionStatements -> ForInit");
     :}
   |
@@ -791,6 +800,7 @@ ForExpr::=
     ExpressionStatement:es
     {:
       RESULT = es;
+       //SYMTAB: NEW SCOPE
       CUP$Parser$actions.LOGGER.info("ExpressionStatement -> ForExpr");
     :}
   ;
@@ -799,6 +809,7 @@ ForIncr::=
     ExpressionStatements:es
     {:
       RESULT = es;
+       //SYMTAB: NEW SCOPE
       CUP$Parser$actions.LOGGER.info("ExpressionStatements -> ForIncr");
     :}
   ;

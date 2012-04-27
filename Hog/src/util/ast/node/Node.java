@@ -9,7 +9,8 @@ import front_end.ConsoleLexer;
 import back_end.Visitor;
 
 /**
- * A node within an AST.
+ * A node within an AST. This is an abstract class that specifies behavior for
+ * all node classes in Hog.
  * 
  * @author sam
  * 
@@ -25,7 +26,7 @@ public abstract class Node implements Comparable<Node> {
 	protected List<Node> children;
 
 	/**
-	 * Construct a new node.
+	 * Construct a new node. Creates an empty child list.
 	 */
 	public Node() {
 		this(new ArrayList<Node>());
@@ -42,33 +43,21 @@ public abstract class Node implements Comparable<Node> {
 		this.children = children;
 	}
 
+	/**
+	 * Call the appropriate method in the Visitor v for visiting this node.
+	 * 
+	 * @param v - the Visitor to visit this node.
+	 */
 	public abstract void accept(Visitor v);
 
 	public abstract int visitorTest(Visitor v);
 
 	/**
-	 * Add a child to this node. The new child will always been the rightmost
-	 * child in this node's subtree.
+	 * Test if a child is on this node's children list.
 	 * 
-	 * @param child
-	 *            - the node to be added.
+	 * @param child - the potential child node.
+	 * @return true if child is in children, false otherwise.
 	 */
-	public void addChild(Node child) {
-		// Node.LOGGER.info("Before adding child to Node: " + this.toString());
-		if (children == null) {
-			children = new ArrayList<Node>();
-		}
-
-		// don't add a null child
-		if (child == null) {
-			Node.LOGGER.fine(this.toString() + " was asked to add "
-					+ "a null child in addChild. Nothing happened.");
-		} else if (!children.contains(child)) {		
-			children.add(child);
-			child.setParent(this);
-		}
-	}
-
 	public boolean hasChild(Node child) {
 		if (children == null) {
 			return false;
@@ -85,6 +74,46 @@ public abstract class Node implements Comparable<Node> {
 		return children;
 	}
 
+	/**
+	 * Add a child to this node. The new child will always been the rightmost
+	 * child in this node's subtree. NOTE: addChild implicitly sets child's
+	 * parent to be this, by calling setParent().
+	 * 
+	 * @param child
+	 *            The node to be added.
+	 * @throws UnsupportedOperationException
+	 *             If child already has a parent.
+	 * 
+	 */
+	public void addChild(Node child) throws UnsupportedOperationException {
+		// Node.LOGGER.info("Before adding child to Node: " + this.toString());
+		if (children == null) {
+			children = new ArrayList<Node>();
+		}
+		if (!child.hasParent()) {
+			throw new UnsupportedOperationException("Cannot add child " + child
+					+ " to " + this + ", as it already has a parent ("
+					+ child.getParent() + ")!");
+		}
+		// don't add a null child
+		if (child == null) {
+			Node.LOGGER.fine(this.toString() + " was asked to add "
+					+ "a null child in addChild. Nothing happened.");
+		} else if (!children.contains(child)) {
+			children.add(child);
+			child.setParent(this);
+		}
+	}
+
+	/**
+	 * Remove a child from this node's children list. Implicitly unset's child's
+	 * parent.
+	 * 
+	 * @param child
+	 *            - the node to be removed
+	 * @return true if child was on this.children and was removed, false
+	 *         otherwise.
+	 */
 	public boolean removeChild(Node child) {
 		if (children == null) {
 			return false;
@@ -93,6 +122,15 @@ public abstract class Node implements Comparable<Node> {
 		}
 		child.unsetParent();
 		return true;
+	}
+
+	/**
+	 * Check if this node has a parent.
+	 * 
+	 * @return true if this has a parent, false otherwise.
+	 */
+	public boolean hasParent() {
+		return (this.parent != null);
 	}
 
 	/**
@@ -147,6 +185,11 @@ public abstract class Node implements Comparable<Node> {
 		return this.getName();
 	}
 
+	/**
+	 * Return a pretty-printed version of the children list.
+	 * 
+	 * @return A string representing the children list.
+	 */
 	public String getChildrenString() {
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -180,29 +223,34 @@ public abstract class Node implements Comparable<Node> {
 	public int compareTo(Node that) {
 		return this.getName().compareTo(that.getName());
 	}
-	
-	public void print() {
-        print("", true);
-    }
 
 	/**
-	 * A pretty printer for the subtree that this is a root of.
-	 * Code taken from:
-	 * http://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
+	 * A pretty-printer for the subtree that this is a root of. Code taken from:
+	 * http
+	 * ://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
 	 * 
-	 * @param prefix
-	 * @param isTail
 	 */
-    private void print(String prefix, boolean isTail) {
-        System.out.println(prefix + (isTail ? "L__ " : "|-- ") + this.getName());
-        if (children != null) {
-            for (int i = 0; i < children.size() - 1; i++) {
-                children.get(i).print(prefix + (isTail ? "    " : "|   "), false);
-            }
-            if (children.size() >= 1) {
-                children.get(children.size() - 1).print(prefix + (isTail ?"    " : "|   "), true);
-            }
-        }
-    }
+	public void print() {
+		print("", true);
+	}
+
+	/**
+	 * A pretty printer for the subtree that this is a root of. Code taken from:
+	 * http
+	 */
+	private void print(String prefix, boolean isTail) {
+		System.out
+				.println(prefix + (isTail ? "L__ " : "|-- ") + this.getName());
+		if (children != null) {
+			for (int i = 0; i < children.size() - 1; i++) {
+				children.get(i).print(prefix + (isTail ? "    " : "|   "),
+						false);
+			}
+			if (children.size() >= 1) {
+				children.get(children.size() - 1).print(
+						prefix + (isTail ? "    " : "|   "), true);
+			}
+		}
+	}
 
 }
