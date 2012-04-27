@@ -27,18 +27,18 @@
   int count = 1;
   dict<int, real> face;
   real face = 1.0;
-  foreach word in line.tokenize(" ") {
+  foreach word in line.tokenize(' ') {
     emit(word, 1);
   }
   if (count == 2) {
-    print("count equals 2!");
+    print('count equals 2!');
   } elseif (count == 3) {
-    print("count equals 3!");
+    print('count equals 3!');
   } else {
     int face = 0;
     int x = face + 1;
     face++;
-    print("count equals something else");
+    print('count equals something else');
   }
   
   list<int> face;
