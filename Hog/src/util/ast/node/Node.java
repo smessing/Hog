@@ -24,6 +24,9 @@ public abstract class Node implements Comparable<Node> {
 	protected Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
 	protected List<Node> children;
+	
+	// for use in building symbol table tree
+	protected boolean newScope;
 
 	/**
 	 * Construct a new node. Creates an empty child list.
@@ -41,6 +44,7 @@ public abstract class Node implements Comparable<Node> {
 	public Node(List<Node> children) {
 		this.parent = null;
 		this.children = children;
+		this.newScope = false;
 	}
 
 	/**
