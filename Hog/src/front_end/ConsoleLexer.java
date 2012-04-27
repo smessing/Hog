@@ -24,7 +24,6 @@ import front_end.*;
 
 import java.util.Iterator;
 import java.util.logging.*;
-import back_end.JavaGenerator;
 
 /**
  * A console front-end to the Lexer class for dynamically testing the Lexer.
