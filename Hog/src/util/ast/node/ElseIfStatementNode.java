@@ -1,4 +1,5 @@
 package util.ast.node;
+
 /**
  * An ElseIfStatementNode represents an else-if statement
  * and contains the statement if the condition is true, and

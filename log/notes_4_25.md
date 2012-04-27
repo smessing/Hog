@@ -47,7 +47,7 @@
 
 ## Sam
 * Realphabetize `Parser.cup`
-* arbitrarily assign JavaDoc to write to people
+* arbitrarily assign JavaDoc to write to people [`done`]
 * line numbers in cup
 * Parser tests
 
