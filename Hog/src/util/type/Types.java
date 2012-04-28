@@ -1,5 +1,6 @@
 package util.type;
 
+import util.ast.node.ExceptionTypeNode;
 import util.ast.node.ExpressionNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.DerivedTypeNode;
@@ -38,21 +39,35 @@ public class Types {
 	public static boolean isSameType(TypeNode one, TypeNode two) {
 		if (one instanceof PrimitiveTypeNode
 				&& two instanceof PrimitiveTypeNode) {
-			return isSamePrimitiveType((PrimitiveTypeNode) one,
+			return isSameType((PrimitiveTypeNode) one,
 					(PrimitiveTypeNode) two);
 		} else if (one instanceof DerivedTypeNode
 				&& two instanceof DerivedTypeNode) {
-
+			return isSameType((DerivedTypeNode) one, (DerivedTypeNode) two);
 		} else if (one instanceof DictTypeNode && two instanceof DictTypeNode) {
-
+			
 		}
 
 		throw new UnsupportedOperationException("TODO");
 	}
 
-	public static boolean isSamePrimitiveType(PrimitiveTypeNode one,
-			PrimitiveTypeNode two) {
+	private static boolean isSameType(ExceptionTypeNode one, ExceptionTypeNode two) {
+		return false;
+	}
+	
+	private static boolean isSameType(DictTypeNode one, DictTypeNode two) {
+		return false;
+	}
+	
+	private static boolean isSameType(PrimitiveTypeNode one, PrimitiveTypeNode two) {
 		return one.getType() == two.getType();
+	}
+	
+	private static boolean isSameType(DerivedTypeNode one, DerivedTypeNode two) {
+		if (one.getLocalType() == two.getLocalType()) {
+			return isSameType(one.getInnerTypeNode(), two.getInnerTypeNode());
+		}
+		return false;
 	}
 
 	public static TypeNode getHigherType(TypeNode typeOne, TypeNode typeTwo) {
