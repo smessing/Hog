@@ -58,6 +58,11 @@ public class TypesTester {
 		
 		assertFalse(Types.isSameType(boolNode, intNode));
 		assertTrue(Types.isSameType(dict_Text_ListInt, dict_Text_ListInt));
+		TypeNode secondIntNode = new PrimitiveTypeNode(Types.Primitive.INT);
+		assertTrue(Types.isSameType(secondIntNode, intNode));
+		TypeNode secondListInt = new DerivedTypeNode(Types.Derived.LIST,secondIntNode);
+		assertTrue(Types.isSameType(secondListInt, listInt));
+		assertFalse(Types.isSameType(listListSetBool, listSetBool));
 		
 	}
 	
