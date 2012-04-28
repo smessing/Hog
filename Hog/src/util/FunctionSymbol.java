@@ -12,6 +12,7 @@ public class FunctionSymbol extends Symbol {
 	List<TypeNode> argumentList;
 	
 	/**
+	 * Constructor for a function with no parameters
 	 * 
 	 * @param returnType
 	 */
@@ -21,6 +22,7 @@ public class FunctionSymbol extends Symbol {
 	
 	/**
 	 * Constructor takes a parameters node and flattens it into a list of parameter types
+	 * 
 	 * @param returnType
 	 * @param parameterNode
 	 */
@@ -32,11 +34,24 @@ public class FunctionSymbol extends Symbol {
 	}
 	
 	/**
-	 * Returns a properly ordered list of TypeNodes for the parameters list in the functionsymbol
-	 * @param parametersNode
-	 * @return
+	 * Constructor that takes the flat argumentsList - used to populate reserved functions 
+	 * and used internally after flatterning ParametersNode
+	 * 
+	 * @param returnType
+	 * @param argumentList
 	 */
-	public ArrayList<TypeNode> getParametersTypeNodesList(ParametersNode parametersNode) {
+	public FunctionSymbol(TypeNode returnType, List<TypeNode> argumentList){
+		super(returnType);
+		this.argumentList = argumentList;
+	}
+	
+	/**
+	 * Returns a properly ordered list of TypeNodes for the parameters list in the functionsymbol
+	 * 
+	 * @param parametersNode
+	 * @return an ArrayList<TypeNode> that represents the types of the functions parameters in order
+	 */
+	private ArrayList<TypeNode> getParametersTypeNodesList(ParametersNode parametersNode) {
 		ArrayList<TypeNode> paramsTypeNodeList = new ArrayList<TypeNode>();
 		
 		ParametersNode currNode = parametersNode;
@@ -56,14 +71,5 @@ public class FunctionSymbol extends Symbol {
 		
 	}
 	
-	/**
-	 * Constructor that takes the flat argumentsList - used to populate reserved functions
-	 * @param returnType
-	 * @param argumentList
-	 */
-	public FunctionSymbol(TypeNode returnType, List<TypeNode> argumentList){
-		super(returnType);
-		this.argumentList = argumentList;
-	}
 	
 }
