@@ -38,29 +38,33 @@ public class Types {
 
 	public static boolean isSameType(TypeNode one, TypeNode two) {
 
-		if (one instanceof PrimitiveTypeNode && two instanceof PrimitiveTypeNode) {
+		if (one instanceof PrimitiveTypeNode
+				&& two instanceof PrimitiveTypeNode) {
 
 			return isSameType((PrimitiveTypeNode) one, (PrimitiveTypeNode) two);
+
+		} else if (one instanceof DictTypeNode
+				&& two instanceof DictTypeNode) {
+
+			return isSameType((DictTypeNode) one, (DictTypeNode) two);
 
 		} else if (one instanceof DerivedTypeNode && two instanceof DerivedTypeNode) {
 
 			return isSameType((DerivedTypeNode) one, (DerivedTypeNode) two);
 
-		} else if (one instanceof DictTypeNode && two instanceof DictTypeNode) {
+		} else if (one instanceof ExceptionTypeNode
+				&& two instanceof ExceptionTypeNode) {
 
-			return isSameType((DictTypeNode) one, (DictTypeNode) two);
-			
-		} else if (one instanceof ExceptionTypeNode && two instanceof ExceptionTypeNode) {
-			
 			return isSameType((ExceptionTypeNode) one, (ExceptionTypeNode) two);
-			
+
 		}
-		
+
 		return false;
 
 	}
 
-	private static boolean isSameType(ExceptionTypeNode one, ExceptionTypeNode two) {
+	private static boolean isSameType(ExceptionTypeNode one,
+			ExceptionTypeNode two) {
 		return one.getExceptionType() == two.getExceptionType();
 	}
 

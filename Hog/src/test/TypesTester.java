@@ -53,6 +53,14 @@ public class TypesTester {
 		
 	}
 	
+	@Test
+	public void testTypeEquvilance() {
+		
+		assertFalse(Types.isSameType(boolNode, intNode));
+		assertTrue(Types.isSameType(dict_Text_ListInt, dict_Text_ListInt));
+		
+	}
+	
 	
 	
 }
