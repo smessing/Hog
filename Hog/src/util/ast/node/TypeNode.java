@@ -15,6 +15,7 @@ public abstract class TypeNode extends Node {
 
 	public TypeNode() {
 		// TODO Auto-generated constructor stub
+	
 	}
 
 	public TypeNode(List<Node> children) {

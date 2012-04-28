@@ -4,16 +4,14 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 import java.util.ArrayList;
-
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import util.ast.node.*;
 import util.ast.node.PostfixExpressionNode.PostfixType;
+import util.ast.node.BiOpNode.OpType;
 import util.ast.node.SectionNode.SectionName;
 
 import util.type.Types;
@@ -47,7 +45,7 @@ public class NodeTester {
 	private GuardingStatementNode __guardingStatementNode;
 	private IdNode __idNode;
 	private IfElseStatementNode __ifElseStatementNode;
-	//private IterationStatementNode __iterationStatementNode;
+	private IterationStatementNode __iterationStatementNode;
 	private JumpStatementNode __jumpStatementNode;
 	private MockExpressionNode __mockExpressionNode;
 	private MockNode __mockNode;
@@ -62,12 +60,14 @@ public class NodeTester {
 	private SelectionStatementNode __selectionStatementNode;
 	private StatementListNode __statementListNode;
 	private StatementNode __statementNode;
-	//private SwitchStatementNode __switchStatementNode;
-	//private TypeNode __typeNode;
+	private SwitchStatementNode __switchStatementNode;
+	private TypeNode __typeNode;
 	private UnOpNode __unOpNode;
 
-	
-	
+	public static final BiOpNode.OpType OPTYPE_ASSIGN = BiOpNode.OpType.ASSIGN;
+	public static final String ERROR_MESSAGE_TO_STRING = "Nodes should return the proper name when toString() is called.";
+	public static final String ERROR_MESSAGE_GET_NAME = "Nodes should return the proper name when getName() is called.";
+
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -94,45 +94,42 @@ public class NodeTester {
 		 * 		L__ IdNode<unknown,word>
 		 * 
 		 */	
+		__argumentsNode = new ArgumentsNode(new IdNode("values"),new IdNode("next"));
+		__postfixExpressionNode = new PostfixExpressionNode(PostfixType.METHOD_WITH_PARAMS,  new IdNode("UNKNOWN"), new IdNode("emit"));
 		
-		//IdNode arg1 = new IdNode("emit");
-		//IdNode arg2 = new IdNode("values");
-		//IdNode arg3 = new IdNode("next");
-		//IdNode arg4 = new IdNode("UNKNOWN");
-		/*
-		__argumentsNode = new ArgumentsNode(arg2, arg3);	
-		__postfixExpressionNode = new PostfixExpressionNode(PostfixType.METHOD_WITH_PARAMS, arg4, arg1);
-		__statementListNode = new StatementListNode();
+		/* StatementListNode
+		 * BiOpNode<ASSIGN>
+		 * IdNode<Primitive Type: INT, count>
+		 * ConstantNode<Primitive Type: INT>
+		 * 
+		 */
+		__statementListNode = new StatementListNode(new BiOpNode(BiOpNode.OpType.ASSIGN,new IdNode("count"),new ConstantNode(Types.Primitive.INT,"constant")));
 		__sectionNode = new SectionNode(__statementListNode, SectionNode.SectionName.MAIN);
 		__biOpNode = new BiOpNode(null, A, A);
 		__catchesNode = new CatchesNode(__idNode, __statementListNode);
 		__constantNode = new ConstantNode(null, null);
-		//__derivedTypeNode = new DerivedTypeNode(Type.Derived, new Types());
+		__derivedTypeNode = new DerivedTypeNode(Types.Derived.DICT, null);
 		__elseIfStatementNode = new ElseIfStatementNode(A, __statementListNode, __elseIfStatementNode);
 		__exceptionTypeNode = new ExceptionTypeNode(null);
-		//__expressionNode = new ExpressionNode(new MockExpressionNode());
-		//__functionNode = new FunctionNode(null, null, __parametersNode, __statementListNode);
+		__functionNode = new FunctionNode(null, null, __parametersNode, __statementListNode);
 		__guardingStatementNode = new GuardingStatementNode(__statementListNode, __catchesNode);
 		__idNode = new IdNode(null);
 		__ifElseStatementNode = new IfElseStatementNode(A, __statementListNode, __elseIfStatementNode, null);
-		//private IterationStatementNode __iterationStatementNode;
+		__iterationStatementNode = new IterationStatementNode(A, A, __statementListNode) ;
 		__jumpStatementNode = new JumpStatementNode(null);
 		__mockExpressionNode = new MockExpressionNode();	
 		__mockNode= new MockNode();
-		//__parametersNode = new ParametersNode(null, null);
+		__parametersNode = new ParametersNode(null, null);
 		__primaryExpressionNode = new PrimaryExpressionNode();
 		__primitiveTypeNode = new PrimitiveTypeNode(null);
 		__programNode = new ProgramNode(__sectionNode, __sectionNode, __sectionNode, __sectionNode);
 		__relationalExpressionNode = new RelationalExpressionNode(null, A, A);
-		//__sectionTypeNode = new SectionTypeNode();
-		//private SwitchStatementNode __switchStatementNode;
-		//private TypeNode __typeNode;
-		//__selectionStatementNode = new SelectionStatementNode(A);
-		//
-		//__statementNode = new StatementNode();
-		//__unOpNode = new UnOpNode();
-		 * 
-		 */
+		__sectionTypeNode = new SectionTypeNode(__idNode, __idNode, __typeNode, __typeNode);
+		 __switchStatementNode = new SwitchStatementNode(A, __statementListNode);
+		__selectionStatementNode = new SelectionStatementNode(A);
+		__statementNode = new StatementNode();
+		__unOpNode = new UnOpNode(null, A);
+	
 	}
 
 	@After
@@ -140,13 +137,73 @@ public class NodeTester {
 	}
 
 	@Test
+	public void getNameTest1(){
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ArgumentsNode", __argumentsNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "BiOpNode", __biOpNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "CatchesNode", __catchesNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ConstantNode", __constantNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "DerivedTypeNode", __derivedTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ElseIfStatementNode", __elseIfStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ExceptionTypeNode", __exceptionTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ExpressionNode", __expressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "FunctionNode", __functionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "GuardingStatementNode", __guardingStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IdNode", __idNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IfElseStatementNode", __ifElseStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IterationStatementNode", __iterationStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "JumpStatementNode", __jumpStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "MockExpressionNode", __mockExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "MockNode", __mockNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ParametersNode", __parametersNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PostFixExpressionNode", __postfixExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PrimaryExpressionNode", __primaryExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PrimitiveTypeNode", __primitiveTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ProgramNode", __programNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "RelationalExpressionNode", __relationalExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "SectionNode", __sectionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementListNode", __statementListNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementNode", __statementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "SwitchStatementNode", __switchStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "UnOpNode", __unOpNode.getName());		
+	}
+	
+	@Test
+	public void getNameTest2(){
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ArgumentsNode", __argumentsNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "BiOpNode", __biOpNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "CatchesNode", __catchesNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ConstantNode", __constantNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "DerivedTypeNode", __derivedTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ElseIfStatementNode", __elseIfStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ExceptionTypeNode", __exceptionTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ExpressionNode", __expressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "FunctionNode", __functionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "GuardingStatementNode", __guardingStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IdNode", __idNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IfElseStatementNode", __ifElseStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IterationStatementNode", __iterationStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "JumpStatementNode", __jumpStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "MockExpressionNode", __mockExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "MockNode", __mockNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ParametersNode", __parametersNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PostFixExpressionNode", __postfixExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PrimaryExpressionNode", __primaryExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PrimitiveTypeNode", __primitiveTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ProgramNode", __programNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "RelationalExpressionNode", __relationalExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "SectionNode", __sectionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementListNode", __statementListNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementNode", __statementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "SwitchStatementNode", __switchStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "UnOpNode", __unOpNode.getName());		
+	}
+	
+	@Test
 	public void toStringTest1() {
 
 		String properName = "BiOpNode<TIMES>";
 
-		assertEquals(
-				"Nodes should return the proper name when toString() is called.",
-				properName, A.toString());
+		assertEquals("Nodes should return the proper name when toString() is called.", properName, A.toString());
 
 	}
 
