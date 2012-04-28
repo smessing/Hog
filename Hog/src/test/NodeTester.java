@@ -67,7 +67,8 @@ public class NodeTester {
 	public static final BiOpNode.OpType OPTYPE_ASSIGN = BiOpNode.OpType.ASSIGN;
 	public static final String ERROR_MESSAGE_TO_STRING = "Nodes should return the proper name when toString() is called.";
 	public static final String ERROR_MESSAGE_GET_NAME = "Nodes should return the proper name when getName() is called.";
-
+	public static final String ERROR_MESSAGE_REMOVE_CHILD = "removeChild should properly remove a child";
+	public static final String ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT = "removeChild should properly unset the parent of child";
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -138,7 +139,7 @@ public class NodeTester {
 
 	@Test
 	public void getNameTest1(){
-		/*
+		
 		assertEquals( ERROR_MESSAGE_GET_NAME, "ArgumentsNode", __argumentsNode.getName());
 		assertEquals( ERROR_MESSAGE_GET_NAME, "BiOpNode", __biOpNode.getName());
 		assertEquals( ERROR_MESSAGE_GET_NAME, "CatchesNode", __catchesNode.getName());
@@ -166,12 +167,12 @@ public class NodeTester {
 		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementNode", __statementNode.getName());
 		assertEquals( ERROR_MESSAGE_GET_NAME, "SwitchStatementNode", __switchStatementNode.getName());
 		assertEquals( ERROR_MESSAGE_GET_NAME, "UnOpNode", __unOpNode.getName());	
-		*/	
+		
 	}
 	
 	@Test
 	public void getNameTest2(){
-		/*
+		
 		assertEquals( ERROR_MESSAGE_GET_NAME, "ArgumentsNode", __argumentsNode.getName());
 		assertEquals( ERROR_MESSAGE_GET_NAME, "BiOpNode", __biOpNode.getName());
 		assertEquals( ERROR_MESSAGE_GET_NAME, "CatchesNode", __catchesNode.getName());
@@ -199,14 +200,45 @@ public class NodeTester {
 		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementNode", __statementNode.getName());
 		assertEquals( ERROR_MESSAGE_GET_NAME, "SwitchStatementNode", __switchStatementNode.getName());
 		assertEquals( ERROR_MESSAGE_GET_NAME, "UnOpNode", __unOpNode.getName());		
-		*/
+		
 	}
 	
 	@Test
 	public void toStringTest1() {
-
-		String properName = "BiOpNode<TIMES>";
+		String TO_BE_DETERMINED = "";
+		
+		String properName = "BiOpNode<TIMES>"; 
 		assertEquals("Nodes should return the proper name when toString() is called.", properName, A.toString());
+		/**
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __argumentsNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __biOpNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __catchesNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __constantNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __derivedTypeNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __elseIfStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __exceptionTypeNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __expressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __functionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __guardingStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __idNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __ifElseStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __iterationStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __jumpStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __mockExpressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __mockNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __parametersNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __postfixExpressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __primaryExpressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __primitiveTypeNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __programNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __relationalExpressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __sectionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __statementListNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __statementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __switchStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __unOpNode.toString());
+		
+		*/
 
 	}
 
@@ -215,10 +247,37 @@ public class NodeTester {
 
 		String properName = "BiOpNode<TIMES>";
 
-		assertEquals(
-				"Nodes should return the proper name when toString() is called.",
-				properName, A.toString());
-
+		assertEquals("Nodes should return the proper name when toString() is called.", properName, A.toString());
+		/*
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __argumentsNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __biOpNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __catchesNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __constantNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __derivedTypeNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __elseIfStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __exceptionTypeNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __expressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __functionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __guardingStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __idNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __ifElseStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __iterationStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __jumpStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __mockExpressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __mockNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __parametersNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __postfixExpressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __primaryExpressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __primitiveTypeNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __programNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __relationalExpressionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __sectionNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __statementListNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __statementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __switchStatementNode.toString());
+		assertEquals( ERROR_MESSAGE_TO_STRING, TO_BE_DETERMINED, __unOpNode.toString());
+		
+		*/
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
@@ -226,6 +285,36 @@ public class NodeTester {
 		// note that this.addChild(that) implicitly sets that's parent to be
 		// this. In this case, D already has it's parent set to B.
 		B.setParent(D);
+		__argumentsNode.setParent(D);
+		__biOpNode.setParent(D);
+		__catchesNode.setParent(D);
+		 __constantNode.setParent(D);
+		__derivedTypeNode.setParent(D);
+		__elseIfStatementNode.setParent(D);
+		__exceptionTypeNode.setParent(D);
+		__expressionNode.setParent(D);
+		__functionNode.setParent(D);
+		__guardingStatementNode.setParent(D);
+		__idNode.setParent(D);
+		__ifElseStatementNode.setParent(D);
+		__iterationStatementNode.setParent(D);
+		__jumpStatementNode.setParent(D);
+		__mockExpressionNode.setParent(D);
+		__mockNode.setParent(D);
+		__parametersNode.setParent(D);
+		__postfixExpressionNode.setParent(D);
+		__primaryExpressionNode.setParent(D);
+		__primitiveTypeNode.setParent(D);
+		__programNode.setParent(D);
+		__relationalExpressionNode.setParent(D);
+		__sectionNode.setParent(D);
+		__sectionTypeNode.setParent(D);
+		__selectionStatementNode.setParent(D);
+		__statementListNode.setParent(D);
+		__statementNode.setParent(D);
+		__switchStatementNode.setParent(D);
+		__typeNode.setParent(D);
+		__unOpNode.setParent(D);
 	}
 
 	@Test
@@ -251,12 +340,111 @@ public class NodeTester {
 	@Test
 	public void removeChildTest() {
 		A.removeChild(C);
-		assertEquals("removeChild should properly remove a child", 1, A
-				.getChildren().size());
-		assertEquals("removeChild should properly remove a child", false, A
-				.hasChild(C));
-		assertEquals("removeChild should properly unset childs parent", null, C
-				.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, A .getChildren().size());
+		
+		/*
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __argumentsNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __biOpNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __catchesNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __constantNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __derivedTypeNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __elseIfStatementNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __exceptionTypeNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __expressionNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __functionNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __guardingStatementNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __idNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __ifElseStatementNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __iterationStatementNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __jumpStatementNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __mockExpressionNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __mockNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __parametersNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __postfixExpressionNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __primaryExpressionNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __primitiveTypeNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __programNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __relationalExpressionNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __sectionNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __sectionTypeNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __selectionStatementNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __statementListNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __statementNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __switchStatementNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __typeNode.getChildren().size());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, 1, __unOpNode.getChildren().size());
+		*/
+		
+		
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD, false, A .hasChild(C));
+		/*
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __argumentsNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __biOpNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __catchesNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __constantNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __derivedTypeNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __elseIfStatementNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __exceptionTypeNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __expressionNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __functionNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __guardingStatementNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __idNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __ifElseStatementNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __iterationStatementNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __jumpStatementNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __mockExpressionNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __mockNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __parametersNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __postfixExpressionNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __primaryExpressionNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __primitiveTypeNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __programNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __relationalExpressionNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __sectionNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __sectionTypeNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __selectionStatementNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __statementListNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __statementNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __switchStatementNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __typeNode.hasChild(C));
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, false, __unOpNode.hasChild(C));
+		*/
+		
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, C.getParent());
+		/*
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __argumentsNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __biOpNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __catchesNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __constantNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __derivedTypeNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __elseIfStatementNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __exceptionTypeNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __expressionNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __functionNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __guardingStatementNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __idNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __ifElseStatementNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __iterationStatementNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __jumpStatementNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __mockExpressionNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __mockNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __parametersNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __postfixExpressionNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __primaryExpressionNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __primitiveTypeNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __programNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __relationalExpressionNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __sectionNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __sectionTypeNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __selectionStatementNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __statementListNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __statementNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __switchStatementNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __typeNode.getParent());
+		assertEquals(ERROR_MESSAGE_REMOVE_CHILD_UNSET_PARENT, null, __unOpNode.getParent());
+		*/
+		
+		
 	}
 
 	@Test
