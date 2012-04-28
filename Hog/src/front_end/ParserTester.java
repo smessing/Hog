@@ -27,8 +27,7 @@ public class ParserTester {
 		StringReader stringReader = new StringReader(text);
 		Lexer lexer = new Lexer(stringReader);
 		Parser parser = new Parser(lexer);
-		ProgramNode root = (ProgramNode) parser.debug_parse().value;
-		System.out.println(root);
+		ProgramNode root = (ProgramNode) parser.parse().value;
 	}
 
 }

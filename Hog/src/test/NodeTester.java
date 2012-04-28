@@ -105,7 +105,7 @@ public class NodeTester {
 		 */
 		__statementListNode = new StatementListNode(new BiOpNode(BiOpNode.OpType.ASSIGN,new IdNode("count"),new ConstantNode(Types.Primitive.INT,"constant")));
 		__sectionNode = new SectionNode(__statementListNode, SectionNode.SectionName.MAIN);
-		__biOpNode = new BiOpNode(null, A, A);
+		__biOpNode = new BiOpNode(null, A, B);
 		__catchesNode = new CatchesNode(__idNode, __statementListNode);
 		__constantNode = new ConstantNode(null, null);
 		__derivedTypeNode = new DerivedTypeNode(Types.Derived.DICT, null);

@@ -1999,6 +1999,7 @@ public class LexerTester {
 				"ArrayOutOfBoundsException", "IncorrectArgumentException",
 				"TypeMismatchException", "NullReferenceException",
 				"ArithmeticException"));
+		
 		for (String s : exceptionNameList) {
 			String text = catchStart + s + catchEnd;
 			StringReader stringReader = new StringReader(text);
