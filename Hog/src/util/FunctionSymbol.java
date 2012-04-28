@@ -30,7 +30,7 @@ public class FunctionSymbol extends Symbol {
 		super(returnType);
 		// deepest node of parametersNode is first argument in the list
 		
-		this.argumentList = getParametersTypeNodesList(parametersNode);
+		this.argumentList = parametersNodeToTypeNodesList(parametersNode);
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class FunctionSymbol extends Symbol {
 	 * @param parametersNode
 	 * @return an ArrayList<TypeNode> that represents the types of the functions parameters in order
 	 */
-	private ArrayList<TypeNode> getParametersTypeNodesList(ParametersNode parametersNode) {
+	private ArrayList<TypeNode> parametersNodeToTypeNodesList(ParametersNode parametersNode) {
 		ArrayList<TypeNode> paramsTypeNodeList = new ArrayList<TypeNode>();
 		
 		ParametersNode currNode = parametersNode;
@@ -69,6 +69,22 @@ public class FunctionSymbol extends Symbol {
 		
 		return paramsTypeNodeList;
 		
+	}
+	
+	/**
+	 * Returns a List of TypeNodes, which represent the types of the parameters to the functions
+	 * @return
+	 */
+	public List<TypeNode> getParametersTypeNodesList() {
+		return this.argumentList;
+	}
+	
+	/**
+	 * Returns the number of parameters a function takes
+	 * @return
+	 */
+	public int getNumParams() {
+		return this.argumentList.size();
 	}
 	
 	
