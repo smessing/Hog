@@ -12,7 +12,7 @@ import util.ast.node.TypeNode;
  * representations.
  * 
  * Types are represented by TypeNode classes {DerivedTypeNode, DictTypeNode,
- * ExceptionTypeNode PrimitiveTypeNode}, in conjunction with the static enums
+ * ExceptionTypeNode, PrimitiveTypeNode}, in conjunction with the static enums
  * Primitive, Derived and Exception defined by this class.
  * 
  * @author sam
@@ -60,9 +60,8 @@ public class Types {
 
 	}
 
-	private static boolean isSameType(ExceptionTypeNode one,
-			ExceptionTypeNode two) {
-		return false;
+	private static boolean isSameType(ExceptionTypeNode one, ExceptionTypeNode two) {
+		return one.getExceptionType() == two.getExceptionType();
 	}
 
 	private static boolean isSameType(DictTypeNode one, DictTypeNode two) {
