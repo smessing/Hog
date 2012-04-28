@@ -9,7 +9,9 @@ import back_end.Visitor;
  *
  */
 public class PrimaryExpressionNode extends ExpressionNode {
-
+	/** Method to Return the name getName()
+	 * @return Returns a string with the node's name
+	 */
 	@Override
 	public String getName() {
 		return "PrimaryExpressionNode<" + this.getTypeName() + ">";

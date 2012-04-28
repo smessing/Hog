@@ -3,8 +3,8 @@ package util.ast.node;
 import java.util.ArrayList;
 
 import back_end.Visitor;
-
 import util.type.Types;
+import util.type.Types.Primitive;
 
 /**
  * A node representing the ID terminal in a parse tree.
@@ -15,6 +15,8 @@ import util.type.Types;
 public class IdNode extends ExpressionNode {
 
 	private String identifier;
+	//private Types.Primitive primitiveType;
+	//private Types.Derived derivedType;
 
 	public IdNode(String id) {
 		this(null, id);

@@ -33,7 +33,9 @@ public class ParametersNode extends ExpressionNode {
 	public String getIdentifier() {
 		return identifier;
 	}
-
+	/** Method to Return the name getName()
+	 * @return Returns a string with the node's name
+	 */
 	@Override
 	public String getName() {
 		return "ParemetersNode<" + this.getTypeName() + " "

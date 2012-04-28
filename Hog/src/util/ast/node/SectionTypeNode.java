@@ -11,6 +11,14 @@ public class SectionTypeNode extends Node {
 	protected TypeNode returnValue;
 
 
+	/** Constructor SectionTypeNode(IdNode inputKeyIdNode, IdNode inputValueIdNode,
+	 * 									TypeNode returnKey, TypeNode returnValue)
+	 * 
+	 * @param inputKeyIdNode
+	 * @param inputValueIdNode
+	 * @param returnKey
+	 * @param returnValue
+	 */
 	public SectionTypeNode(IdNode inputKeyIdNode, IdNode inputValueIdNode, TypeNode returnKey,
 			               TypeNode returnValue) {
 		super();
@@ -20,7 +28,10 @@ public class SectionTypeNode extends Node {
 		this.returnValue = returnValue;
 	}
 	
-
+	/** Method getType()
+	 * 
+	 * @return
+	 */
 	public String getType() {
 		return this.inputKeyIdNode.toString() + ", " + this.inputValueIdNode.toString()
 				+ " -> " + this.returnKey.toString()
@@ -32,7 +43,9 @@ public class SectionTypeNode extends Node {
 		v.visit(this);
 
 	}
-
+	/** Method to Return the name getName()
+	 * @return Returns a string with the node's name
+	 */
 	@Override
 	public String getName() {
 		return "SectionTypeNode<" + this.getType() + ">";

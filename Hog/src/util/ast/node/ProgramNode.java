@@ -6,15 +6,31 @@ import back_end.Visitor;
 
 public class ProgramNode extends Node {
 
+	/** functions field of type SectionNode */
 	protected SectionNode functions;
+	/** map field of type SectionNode */
 	protected SectionNode map;
+	/** reduce field of type SectionNode  */
 	protected SectionNode reduce;
+	/** main field of type SectionNode*/
 	protected SectionNode main;
 	
+	/** Constructor of ProgramNode(SectionNode map, SectionNode return, SectionNode main)
+	 * 
+	 * @param map
+	 * @param reduce
+	 * @param main
+	 */
 	public ProgramNode(SectionNode map, SectionNode reduce, SectionNode main) {
 		this(null, map, reduce, main);
 	}
-
+	/** Constructor ProgramNode(SectionNode functions, SectionNode map, SectionNode reduce, SectionNode main)
+	 * 
+	 * @param functions
+	 * @param map
+	 * @param reduce
+	 * @param main
+	 */
 	public ProgramNode(SectionNode functions, SectionNode map,
 			SectionNode reduce, SectionNode main) {
 		super();
@@ -38,7 +54,9 @@ public class ProgramNode extends Node {
 		v.visit(this);
 
 	}
-
+	/** Method to Return the name getName()
+	 * @return Returns a string with the node's name
+	 */
 	@Override
 	public String getName() {
 		return "ProgramNode";

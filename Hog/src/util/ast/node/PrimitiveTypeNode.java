@@ -9,8 +9,12 @@ import util.type.Types;
  */
 public class PrimitiveTypeNode extends TypeNode {
 	
+	/** localType field which contains Types.Primitive */
 	protected Types.Primitive localType;
-	
+	/** Constructor of PrimitiveTypeNode(Types.Primitive type)
+	 * 
+	 * @param type
+	 */
 	public PrimitiveTypeNode(Types.Primitive type) {
 		localType = type;
 	}
@@ -29,7 +33,9 @@ public class PrimitiveTypeNode extends TypeNode {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	/** Method to Return the name getName()
+	 * @return Returns a string with the node's name
+	 */
 	@Override
 	public String getName() {
 		return "Primitive Type: " + localType.toString();

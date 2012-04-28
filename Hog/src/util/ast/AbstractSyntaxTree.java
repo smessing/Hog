@@ -12,26 +12,39 @@ import util.ast.node.Node;
  */
 public class AbstractSyntaxTree {
 
+	/** root field of type Node */
 	protected Node root;
-
+	/** Constructor AbstractSyntabTree(Node root)
+	 * 
+	 * @param root Node
+	 */
 	public AbstractSyntaxTree(Node root) {
 		this.root = root;
 	}
-	
+	/** Method preOrderTraversal()
+	 * Returns an Iterator<\Node> of AbstractSyntax Tree in PreOrder
+	 * @return Iterator<\Node>
+	 */
 	public Iterator<Node> preOrderTraversal() {
 
 		return TreeTraversalBuilder.buildTraversalIterator(root,
 				TreeTraversalBuilder.traversalOrder.PREORDER);
 
 	}
-
+	/** Method postOrderTraversal()
+	 * Returns an Iterator<\Node> of AbstractSyntax Tree in PostOrder
+	 * @return Iterator<\Node>
+	 */
 	public Iterator<Node> postOrderTraversal() {
 
 		return TreeTraversalBuilder.buildTraversalIterator(root,
 				TreeTraversalBuilder.traversalOrder.POSTORDER);
 
 	}
-	
+	/** Method toLatex()
+	 *  Returns a String representation of the program in Latex format
+	 *  @return string String 
+	 */
 	public String toLatex() {
 		
 		if (root.getChildren() == null || root.getChildren().size() == 0) {
@@ -61,7 +74,7 @@ public class AbstractSyntaxTree {
 		
 		return sb.toString().replaceAll("<", "\\$<\\$").replaceAll(">", "\\$>\\$").replaceAll("_", "-");
 	}
-	
+
 	private String toLatexAux(Node node) {
 		
 		// base case
