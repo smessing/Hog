@@ -37,32 +37,46 @@ public class Types {
 	}
 
 	public static boolean isSameType(TypeNode one, TypeNode two) {
-		if (one instanceof PrimitiveTypeNode
-				&& two instanceof PrimitiveTypeNode) {
-			return isSameType((PrimitiveTypeNode) one,
-					(PrimitiveTypeNode) two);
-		} else if (one instanceof DerivedTypeNode
-				&& two instanceof DerivedTypeNode) {
+
+		if (one instanceof PrimitiveTypeNode && two instanceof PrimitiveTypeNode) {
+
+			return isSameType((PrimitiveTypeNode) one, (PrimitiveTypeNode) two);
+
+		} else if (one instanceof DerivedTypeNode && two instanceof DerivedTypeNode) {
+
 			return isSameType((DerivedTypeNode) one, (DerivedTypeNode) two);
+
 		} else if (one instanceof DictTypeNode && two instanceof DictTypeNode) {
+
+			return isSameType((DictTypeNode) one, (DictTypeNode) two);
+			
+		} else if (one instanceof ExceptionTypeNode && two instanceof ExceptionTypeNode) {
+			
+			return isSameType((ExceptionTypeNode) one, (ExceptionTypeNode) two);
 			
 		}
+		
+		return false;
 
-		throw new UnsupportedOperationException("TODO");
 	}
 
-	private static boolean isSameType(ExceptionTypeNode one, ExceptionTypeNode two) {
+	private static boolean isSameType(ExceptionTypeNode one,
+			ExceptionTypeNode two) {
 		return false;
 	}
-	
+
 	private static boolean isSameType(DictTypeNode one, DictTypeNode two) {
+		if (one.getKeyType() == two.getKeyType()) {
+			return isSameType(one.getValueType(), two.getValueType());
+		}
 		return false;
 	}
-	
-	private static boolean isSameType(PrimitiveTypeNode one, PrimitiveTypeNode two) {
+
+	private static boolean isSameType(PrimitiveTypeNode one,
+			PrimitiveTypeNode two) {
 		return one.getType() == two.getType();
 	}
-	
+
 	private static boolean isSameType(DerivedTypeNode one, DerivedTypeNode two) {
 		if (one.getLocalType() == two.getLocalType()) {
 			return isSameType(one.getInnerTypeNode(), two.getInnerTypeNode());
