@@ -72,10 +72,15 @@ public class BiOpNode extends ExpressionNode {
 	}
 
 	@Override
-	public String getName() {
+	public String toString() {
 		return "BiOpNode<" + opType.toString() + ">";
 	}
-
+	
+	@Override 
+	public String getName(){
+		return "BiOpNode";
+	}
+	
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);

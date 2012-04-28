@@ -41,10 +41,15 @@ public class MockNode extends Node {
 	}
 
 	@Override
-	public String getName() {
+	public String toString() {
 		return "MockNode-" + Integer.toString(this.id);
 	}
 
+	@Override
+	public String getName(){
+		return "MockNode";
+	}
+	
 	protected int compareTo(MockNode that) {
 		return this.id - that.getId();
 	}

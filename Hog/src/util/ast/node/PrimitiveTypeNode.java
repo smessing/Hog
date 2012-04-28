@@ -33,12 +33,18 @@ public class PrimitiveTypeNode extends TypeNode {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	/** Method to Return the name getName()
+	/** Method toString() Returns the string representation of Node
 	 * @return Returns a string with the node's name
 	 */
 	@Override
-	public String getName() {
+	public String toString() {
 		return "Primitive Type: " + localType.toString();
 	}
+	
+	@Override
+	public String getName(){
+		return "PrimitiveTypeNode";
+	}
+	
 
 }

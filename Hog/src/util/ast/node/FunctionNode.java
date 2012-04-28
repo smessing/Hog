@@ -31,10 +31,14 @@ public class FunctionNode extends ExpressionNode {
 	}
 
 	@Override
-	public String getName() {
+	public String toString() {
 		return "FunctionNode-" + identifier;
 	}
-
+	
+	@Override
+	public String getName(){
+		return "FunctionNode";
+	}
 	@Override
 	public int visitorTest(Visitor v) {
 		// TODO Auto-generated method stub

@@ -33,10 +33,15 @@ public class JumpStatementNode extends StatementNode {
 	}
 
 	@Override
-	public String getName() {
+	public String toString() {
 		return "JumpStatement: " + jumpType.toString();
 	}
 
+	@Override
+	public String getName(){
+		return "JumpStatementNode";
+	}
+	
 	@Override
 	public int visitorTest(Visitor v) {
 		return 0;

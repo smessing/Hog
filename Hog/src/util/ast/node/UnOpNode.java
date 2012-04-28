@@ -57,8 +57,13 @@ public class UnOpNode extends ExpressionNode {
 	 * @return Returns a string with the node's name
 	 */
 	@Override
-	public String getName() {
+	public String toString() {
 		return opType.toString() + "<" + this.getTypeName() + ">";
+	}
+	
+	@Override
+	public String getName(){
+		return "UnOpNode";
 	}
 	
 	/** Method to Accept Visitor accept(Visitor v)

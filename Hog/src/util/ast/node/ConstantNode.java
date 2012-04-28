@@ -40,10 +40,14 @@ public class ConstantNode extends ExpressionNode {
 	}
 
 	@Override
-	public String getName() {
+	public String toString() {
 		return "ConstantNode<" + this.getTypeName() + ">";
 	}
 
+	@Override
+	public String getName(){
+		return "ConstantNode";
+	}
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);

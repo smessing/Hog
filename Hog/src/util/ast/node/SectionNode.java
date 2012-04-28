@@ -60,14 +60,19 @@ public class SectionNode extends Node {
 	public void accept(Visitor v) {
 		v.visit(this);
 	}
-	/** Method to Return the name getName()
+	/** Method to Return the string representation of node
 	 * @return Returns a string with the node's name
 	 */
 	@Override
-	public String getName() {
+	public String toString() {
 		return "SectionNode: " + sectionName;
 	}
 
+	@Override
+	public String getName(){
+		return "SectionNode";
+	}
+	
 	@Override
 	public int visitorTest(Visitor v) {
 		// TODO Auto-generated method stub

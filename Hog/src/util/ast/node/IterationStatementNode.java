@@ -79,10 +79,14 @@ public class IterationStatementNode extends StatementNode {
 	}
 
 	@Override
-	public String getName() {
+	public String toString() {
 	    return "IterationStatement: " + iterationType.toString() + " loop";
 	}
-
+	
+	@Override
+	public String getName(){
+		return "IterationStatementNode";
+	}
 	@Override
 	public int visitorTest(Visitor v) {
 		return 0;

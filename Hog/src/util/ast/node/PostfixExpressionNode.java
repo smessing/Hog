@@ -57,10 +57,15 @@ public class PostfixExpressionNode extends ExpressionNode {
 	 * @return Returns a string with the node's name
 	 */
 	@Override
-	public String getName() {
+	public String toString() {
 		return postfixType.toString() + "<" + this.getTypeName() + ">";
 	}
 
+	@Override
+	public String getName(){
+		return "PostfixExpressionNode";
+	}
+	
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);

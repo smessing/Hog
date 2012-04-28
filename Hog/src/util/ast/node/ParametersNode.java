@@ -37,11 +37,16 @@ public class ParametersNode extends ExpressionNode {
 	 * @return Returns a string with the node's name
 	 */
 	@Override
-	public String getName() {
+	public String toString() {
 		return "ParemetersNode<" + this.getTypeName() + " "
 				+ this.getIdentifier() + ">";
 	}
-
+	
+	@Override
+	public String getName(){
+		return "ParametersNode";
+	}
+	
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);

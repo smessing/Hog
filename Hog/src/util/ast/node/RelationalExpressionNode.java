@@ -39,15 +39,18 @@ public class RelationalExpressionNode extends BiOpNode {
 		if(!acceptedOpTypes.contains(type))
 			throw new IllegalArgumentException("RelationalExpressionNode initialized with unacceptable OpType: " + type.toString());
 	}
-	/** Method to Return the name getName()
+	/** Method toString() Returns the string representation of node
 	 * @return Returns a string with the node's name
 	 */
 	@Override
-	public String getName() {
+	public String toString() {
 		return "RelationalExpressionNode<" + this.getTypeName() + ","
 				+ this.opType.toString() + ">";
 	}
-	
+	@Override
+	public String getName(){
+		return "RelationalExpressionNode";
+	}
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);

@@ -47,7 +47,7 @@ public class ConsoleLexer {
 		ProgramNode root = null;
 		FileReader fileReader = new FileReader(new File(filename));
 	    try {
-	        // Parser p = new Parser(new Lexer(System.in));
+	         //Parser p = new Parser(new Lexer(System.in));
 	    	Parser p = new Parser(new Lexer(fileReader));
 	    	root = (ProgramNode) p.parse().value;
 	    	

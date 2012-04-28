@@ -38,7 +38,7 @@ public class IdNode extends ExpressionNode {
 	}
 
 	@Override
-	public String getName() {
+	public String toString() {
 		return "IdNode<" + this.getTypeName() + "," + this.getIdentifier()
 				+ ">";
 	}
@@ -47,7 +47,12 @@ public class IdNode extends ExpressionNode {
 	public void accept(Visitor v) {
 		v.visit(this);
 	}
-
+	
+	@Override
+	public String getName(){
+		return "IdNode";
+	}
+	
 	@Override
 	public int visitorTest(Visitor v) {
 		v.visit(this);

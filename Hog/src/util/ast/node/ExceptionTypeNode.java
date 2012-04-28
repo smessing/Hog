@@ -33,7 +33,12 @@ public class ExceptionTypeNode extends TypeNode {
 	}
 
 	@Override
-	public String getName() {
+	public String toString() {
 		return "Exception Type: " + localType.toString();
+	}
+	
+	@Override
+	public String getName(){
+		return "ExceptionTypeNode";
 	}
 }

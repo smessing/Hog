@@ -48,7 +48,7 @@ public class AbstractSyntaxTree {
 	public String toLatex() {
 		
 		if (root.getChildren() == null || root.getChildren().size() == 0) {
-			return "[.{" + root.getName() + "} ]";
+			return "[.{" + root.toString() + "} ]";
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -61,7 +61,7 @@ public class AbstractSyntaxTree {
 		sb.append("\\thispagestyle{empty}\n");
 		sb.append("\\hspace*{-0.1\\linewidth}\\resizebox{1.2\\linewidth}{!}{%\n");
 		
-		sb.append("\\Tree[.{" + root.getName() + "}");
+		sb.append("\\Tree[.{" + root.toString() + "}");
 		
 		for (Node child : root.getChildren()) {
 			sb.append(toLatexAux(child));
@@ -79,12 +79,12 @@ public class AbstractSyntaxTree {
 		
 		// base case
 		if (node.getChildren() == null || node.getChildren().size() == 0) {
-			return " [.{" + node.getName() + "} ]";
+			return " [.{" + node.toString() + "} ]";
 		}
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(" [.{" + node.getName() + "}");
+		sb.append(" [.{" + node.toString() + "}");
 		
 		for (Node child : node.getChildren()) {
 			sb.append(toLatexAux(child));

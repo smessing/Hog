@@ -64,9 +64,14 @@ public class DerivedTypeNode extends TypeNode {
 	}
 
 	@Override
-	public String getName() {
+	public String toString() {
 		// TODO Auto-generated method stub
 		return "Derived Type: " + localType.toString();
+	}
+	
+	@Override
+	public String getName(){
+		return "DerivedTypeNode";
 	}
 
 }

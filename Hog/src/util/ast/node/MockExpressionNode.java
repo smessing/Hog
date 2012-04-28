@@ -9,8 +9,13 @@ public class MockExpressionNode extends ExpressionNode {
 	 */
 
 	@Override
-	public String getName() {
+	public String toString() {
 		return "MockExpressionNode<" + this.getTypeName() + ">";
+	}
+	
+	@Override
+	public String getName(){
+		return "MockExpressionNode";
 	}
 
 	@Override

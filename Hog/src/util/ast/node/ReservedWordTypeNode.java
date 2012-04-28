@@ -43,15 +43,20 @@ public class ReservedWordTypeNode extends TypeNode {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	/** Method to Return the name getName()
+	
+	/** Method toString() Returns the string representation of node
 	 * @return Returns a string with the node's name
 	 */
 	@Override
-	public String getName() {
+	public String toString() {
 		// TODO Auto-generated method stub
 		return "Reserved Word Type: " + localType.toString();
 	}
 	
+	@Override
+	public String getName(){
+		return "ReservedWordTypeNode";
+	}
 	
 
 }

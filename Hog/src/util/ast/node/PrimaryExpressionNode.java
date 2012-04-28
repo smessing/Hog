@@ -13,8 +13,13 @@ public class PrimaryExpressionNode extends ExpressionNode {
 	 * @return Returns a string with the node's name
 	 */
 	@Override
-	public String getName() {
+	public String toString() {
 		return "PrimaryExpressionNode<" + this.getTypeName() + ">";
+	}
+	
+	@Override
+	public String getName(){
+		return "PrimaryExpressionNode";
 	}
 	
 	@Override

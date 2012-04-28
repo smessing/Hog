@@ -47,8 +47,13 @@ public class SectionTypeNode extends Node {
 	 * @return Returns a string with the node's name
 	 */
 	@Override
-	public String getName() {
+	public String toString() {
 		return "SectionTypeNode<" + this.getType() + ">";
+	}
+	
+	@Override
+	public String getName(){
+		return "SectionTypeNode";
 	}
 
 	@Override
