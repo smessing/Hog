@@ -76,4 +76,11 @@ public abstract class TypeNode extends Node {
 	 */
 	public abstract boolean isDict();
 
+	/**
+	 * Ask if this node is of exception type.
+	 * 
+	 * @return true if this node is an exception, false otherwise.
+	 */
+	public abstract boolean isException();
+	
 }

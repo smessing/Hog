@@ -97,5 +97,10 @@ public class DerivedTypeNode extends TypeNode {
 	public boolean isPrimitive() {
 		return false;
 	}
+	
+	@Override
+	public boolean isException() {
+		return false;
+	}
 
 }

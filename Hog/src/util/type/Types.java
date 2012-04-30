@@ -38,6 +38,14 @@ public class Types {
 	}
 
 	public static boolean isSameType(TypeNode one, TypeNode two) {
+		
+		if (one.isPrimitive() && two.isPrimitive()) {
+			return isSameType((PrimitiveTypeNode) one, (PrimitiveTypeNode) two);
+		} else if (one.isDict() && two.isDict()) {
+			return isSameType((DictTypeNode) one, (DictTypeNode) two);
+		} else if (one.isDerived() && two.isDerived()) {
+			return isSameType((DerivedTypeNode) one, (DerivedTypeNode) two);
+		}
 
 		if (one instanceof PrimitiveTypeNode
 				&& two instanceof PrimitiveTypeNode) {

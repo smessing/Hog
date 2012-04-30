@@ -42,4 +42,39 @@ public class ExceptionTypeNode extends TypeNode {
 	public String getName() {
 		return "Exception Type: " + exceptionType.toString();
 	}
+
+	@Override
+	public boolean isBoolean() {
+		return false;
+	}
+
+	@Override
+	public boolean isDerived() {
+		return false;
+	}
+
+	@Override
+	public boolean isDict() {
+		return false;
+	}
+
+	@Override
+	public boolean isException() {
+		return true;
+	}
+
+	@Override
+	public boolean isNumeric() {
+		return false;
+	}
+
+	@Override
+	public boolean isPrimitive() {
+		return false;
+	}
+
+	@Override
+	public boolean isText() {
+		return false;
+	}
 }

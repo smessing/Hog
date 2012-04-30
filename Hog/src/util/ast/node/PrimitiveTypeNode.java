@@ -77,4 +77,9 @@ public class PrimitiveTypeNode extends TypeNode {
 		return true;
 	}
 
+	@Override
+	public boolean isException() {
+		return false;
+	}
+
 }
