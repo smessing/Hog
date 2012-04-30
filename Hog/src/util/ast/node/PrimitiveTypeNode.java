@@ -62,4 +62,19 @@ public class PrimitiveTypeNode extends TypeNode {
 		return localType == Types.Primitive.TEXT;
 	}
 
+	@Override
+	public boolean isDerived() {
+		return false;
+	}
+
+	@Override
+	public boolean isDict() {
+		return false;
+	}
+
+	@Override
+	public boolean isPrimitive() {
+		return true;
+	}
+
 }

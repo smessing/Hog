@@ -5,6 +5,8 @@ package util.ast.node;
 
 import java.util.List;
 
+import util.type.Types;
+
 import back_end.Visitor;
 
 /**
@@ -28,7 +30,9 @@ public abstract class TypeNode extends Node {
 	 * @param that - the node to compare to
 	 * @return true if the two nodes are same type, false otherwise.
 	 */
-	public abstract boolean isSameType(TypeNode that);
+	public boolean isSameType(TypeNode that) {
+		return Types.isSameType(this, that);
+	}
 	
 	/**
 	 * Ask if this node is of type BOOL.
@@ -50,5 +54,26 @@ public abstract class TypeNode extends Node {
 	 * @return true if this node is of type TEXT, false otherwise.
 	 */
 	public abstract boolean isText();
+	
+	/**
+	 * Ask if this node is of primitive type.
+	 * 
+	 * @return true if this node is a primitive type, false otherwise.
+	 */
+	public abstract boolean isPrimitive();
+	
+	/**
+	 * Ask if this node is of derived type.
+	 * 
+	 * @return true if this node is a derived type, false otherwise.
+	 */
+	public abstract boolean isDerived();
+	
+	/**
+	 * Ask if this node is of dict type.
+	 * 
+	 * @return true if this node is a dict, false otherwise.
+	 */
+	public abstract boolean isDict();
 
 }

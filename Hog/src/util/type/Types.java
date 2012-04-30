@@ -2,7 +2,6 @@ package util.type;
 
 import util.ast.node.BiOpNode;
 import util.ast.node.ExceptionTypeNode;
-import util.ast.node.ExpressionNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.DerivedTypeNode;
 import util.ast.node.DictTypeNode;
@@ -97,20 +96,20 @@ public class Types {
 		case DBL_EQLS:
 			return isSameType(left, right);
 		case PLUS:
-			if (isText(left) && isText(right)) return true;
+			if (left.isText() && right.isText()) return true;
 		case MINUS:
 		case DIVIDE:
 		case TIMES:
 		case MOD:
-			return isNumeric(left) && isNumeric(right);
+			return left.isNumeric() && right.isNumeric();
 		case OR:
 		case AND:
-			return isBoolean(left) && isBoolean(right);
+			return left.isBoolean() && right.isBoolean();
 		case LESS:
 		case GRTR:
 		case LESS_EQL:
 		case GRTR_EQL:
-			return isPrimitive(left) && isPrimitive(right) && isSameType(left, right);
+			return left.isPrimitive() && right.isPrimitive() && isSameType(left, right);
 		}
 		
 		// should never get here:
@@ -141,25 +140,6 @@ public class Types {
 		// should never get here:
 		throw new UnsupportedOperationException("OpType " + op + "not implemented!");
 	}
-
-	public static boolean isPrimitive(TypeNode type) {
-		return type instanceof PrimitiveTypeNode;
-	}
-	
-	public static boolean isNumeric(TypeNode type) {
-		throw new UnsupportedOperationException("TODO");
-	}
-	
-	public static boolean isText(TypeNode type) {
-		throw new UnsupportedOperationException("TODO");
-	}
-	
-	public static boolean isBoolean(TypeNode type) {
-		if (type instanceof PrimitiveTypeNode) {
-			return ((PrimitiveTypeNode) type).getType() == Primitive.BOOL;
-		}
-		return false;
-	}
 	
 	public static boolean isCompatible(UnOpNode.OpType op, TypeNode operand) {
 		throw new UnsupportedOperationException("TODO");
@@ -173,26 +153,6 @@ public class Types {
 
 		throw new UnsupportedOperationException("TODO");
 
-	}
-
-	public static boolean isInt(Primitive type) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public static boolean isReal(Primitive type) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public static boolean isBool(Primitive type) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public static boolean isText(Primitive type) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

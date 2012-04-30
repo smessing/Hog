@@ -58,5 +58,10 @@ public class DictTypeNode extends DerivedTypeNode {
 	public void accept(Visitor v) {
 		v.visit(this);
 	}
+	
+	@Override
+	public boolean isDict() {
+		return true;
+	}
 
 }
