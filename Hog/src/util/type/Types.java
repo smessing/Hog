@@ -44,12 +44,12 @@ public class Types {
 
 			return isSameType((PrimitiveTypeNode) one, (PrimitiveTypeNode) two);
 
-		} else if (one instanceof DictTypeNode
-				&& two instanceof DictTypeNode) {
+		} else if (one instanceof DictTypeNode && two instanceof DictTypeNode) {
 
 			return isSameType((DictTypeNode) one, (DictTypeNode) two);
 
-		} else if (one instanceof DerivedTypeNode && two instanceof DerivedTypeNode) {
+		} else if (one instanceof DerivedTypeNode
+				&& two instanceof DerivedTypeNode) {
 
 			return isSameType((DerivedTypeNode) one, (DerivedTypeNode) two);
 
@@ -88,15 +88,17 @@ public class Types {
 		return false;
 	}
 
-	public static boolean isCompatible(BiOpNode.OpType op, TypeNode left, TypeNode right ) {
-		
-		switch(op) {
+	public static boolean isCompatible(BiOpNode.OpType op, TypeNode left,
+			TypeNode right) {
+
+		switch (op) {
 		case ASSIGN:
 		case NOT_EQLS:
 		case DBL_EQLS:
 			return isSameType(left, right);
 		case PLUS:
-			if (left.isText() && right.isText()) return true;
+			if (left.isText() && right.isText())
+				return true;
 		case MINUS:
 		case DIVIDE:
 		case TIMES:
@@ -109,23 +111,33 @@ public class Types {
 		case GRTR:
 		case LESS_EQL:
 		case GRTR_EQL:
-			return left.isPrimitive() && right.isPrimitive() && isSameType(left, right);
+			return left.isPrimitive() && right.isPrimitive()
+					&& isSameType(left, right);
 		}
-		
+
 		// should never get here:
-		throw new UnsupportedOperationException("OpType " + op + "not implemented!");
+		throw new UnsupportedOperationException("OpType " + op
+				+ "not implemented!");
 	}
-	
-	
-	public static TypeNode getResult(BiOpNode.OpType op, TypeNode left, TypeNode right) {
-		
-		switch(op) {
+
+	public static TypeNode getResult(BiOpNode.OpType op, TypeNode left,
+			TypeNode right) throws TypeMismatchException {
+
+		if (!isCompatible(op, left, right)) {
+			throw new TypeMismatchException("Tried to call " + op
+					+ " on operands " + left + " (left) and " + right
+					+ " (right)!");
+		}
+
+		switch (op) {
 		case ASSIGN:
+			return left;
 		case PLUS:
 		case MINUS:
 		case DIVIDE:
 		case TIMES:
 		case MOD:
+			return getHigherNumericType(left, right);
 		case OR:
 		case AND:
 		case NOT_EQLS:
@@ -136,19 +148,24 @@ public class Types {
 		case GRTR_EQL:
 			return new PrimitiveTypeNode(Types.Primitive.BOOL);
 		}
-		
+
 		// should never get here:
-		throw new UnsupportedOperationException("OpType " + op + "not implemented!");
+		throw new UnsupportedOperationException("OpType " + op
+				+ "not implemented!");
 	}
-	
+
 	public static boolean isCompatible(UnOpNode.OpType op, TypeNode operand) {
 		throw new UnsupportedOperationException("TODO");
 	}
-	
+
 	public static TypeNode getResult(UnOpNode.OpType op, TypeNode operand) {
 		throw new UnsupportedOperationException("TODO");
 	}
-	
+
+	private static TypeNode getHigherNumericType(TypeNode left, TypeNode right) {
+		throw new UnsupportedOperationException("TODO");
+	}
+
 	public static TypeNode getHigherType(TypeNode typeOne, TypeNode typeTwo) {
 
 		throw new UnsupportedOperationException("TODO");
