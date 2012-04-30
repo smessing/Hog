@@ -94,9 +94,9 @@ public class Types {
 		switch(op) {
 		case ASSIGN:
 			return isSameType(left, right);
-		case MINUS:
 		case PLUS:
 			if (isText(left) && isText(right)) return true;
+		case MINUS:
 		case DIVIDE:
 		case TIMES:
 		case MOD:
