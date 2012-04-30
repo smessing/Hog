@@ -69,4 +69,19 @@ public class DerivedTypeNode extends TypeNode {
 		return "Derived Type: " + localType.toString();
 	}
 
+	@Override
+	public boolean isBoolean() {
+		return false;
+	}
+
+	@Override
+	public boolean isNumeric() {
+		return false;
+	}
+
+	@Override
+	public boolean isText() {
+		return false;
+	}
+
 }
