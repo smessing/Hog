@@ -141,13 +141,30 @@ public class Types {
 			return new PrimitiveTypeNode(Types.Primitive.BOOL);
 		}
 
-		// should never get here:
+		// should never get here.
 		throw new UnsupportedOperationException("OpType " + op
 				+ "not implemented!");
 	}
 
 	public static boolean isCompatible(UnOpNode.OpType op, TypeNode operand) {
-		throw new UnsupportedOperationException("TODO");
+		
+		switch(op) {
+		case UMINUS:
+		case INCR:
+		case DECR:
+			return operand.isNumeric();
+		case CAST:
+			throw new UnsupportedOperationException("TODO");
+		case RETURN:
+			throw new UnsupportedOperationException("TODO");
+		case NOT:
+			return operand.isBoolean();
+		case NONE: 
+			return true;
+		}
+		
+		// should never get here.
+		throw new UnsupportedOperationException("OpType " + op + "not implemented!");
 	}
 
 	public static TypeNode getResult(UnOpNode.OpType op, TypeNode operand) {
