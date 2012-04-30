@@ -7,6 +7,7 @@ import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.DerivedTypeNode;
 import util.ast.node.DictTypeNode;
 import util.ast.node.TypeNode;
+import util.ast.node.UnOpNode;
 
 /**
  * A convenience class for defining and manipulating internal type
@@ -89,6 +90,18 @@ public class Types {
 	}
 
 	public static boolean isCompatible(BiOpNode.OpType op, TypeNode left, TypeNode right ) {
+		throw new UnsupportedOperationException("TODO");
+	}
+	
+	public static TypeNode getResult(BiOpNode.OpType op, TypeNode left, TypeNode right) {
+		throw new UnsupportedOperationException("TODO");
+	}
+	
+	public static boolean isCompatible(UnOpNode.OpType op, TypeNode operand) {
+		throw new UnsupportedOperationException("TODO");
+	}
+	
+	public static TypeNode getResult(UnOpNode.OpType op, TypeNode operand) {
 		throw new UnsupportedOperationException("TODO");
 	}
 	
