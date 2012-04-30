@@ -1,5 +1,6 @@
 package util.type;
 
+import util.ast.node.BiOpNode;
 import util.ast.node.ExceptionTypeNode;
 import util.ast.node.ExpressionNode;
 import util.ast.node.PrimitiveTypeNode;
@@ -87,6 +88,10 @@ public class Types {
 		return false;
 	}
 
+	public static boolean isCompatible(BiOpNode.OpType op, TypeNode left, TypeNode right ) {
+		throw new UnsupportedOperationException("TODO");
+	}
+	
 	public static TypeNode getHigherType(TypeNode typeOne, TypeNode typeTwo) {
 
 		throw new UnsupportedOperationException("TODO");
