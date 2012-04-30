@@ -38,34 +38,15 @@ public class Types {
 	}
 
 	public static boolean isSameType(TypeNode one, TypeNode two) {
-		
+
 		if (one.isPrimitive() && two.isPrimitive()) {
 			return isSameType((PrimitiveTypeNode) one, (PrimitiveTypeNode) two);
 		} else if (one.isDict() && two.isDict()) {
 			return isSameType((DictTypeNode) one, (DictTypeNode) two);
 		} else if (one.isDerived() && two.isDerived()) {
 			return isSameType((DerivedTypeNode) one, (DerivedTypeNode) two);
-		}
-
-		if (one instanceof PrimitiveTypeNode
-				&& two instanceof PrimitiveTypeNode) {
-
-			return isSameType((PrimitiveTypeNode) one, (PrimitiveTypeNode) two);
-
-		} else if (one instanceof DictTypeNode && two instanceof DictTypeNode) {
-
-			return isSameType((DictTypeNode) one, (DictTypeNode) two);
-
-		} else if (one instanceof DerivedTypeNode
-				&& two instanceof DerivedTypeNode) {
-
-			return isSameType((DerivedTypeNode) one, (DerivedTypeNode) two);
-
-		} else if (one instanceof ExceptionTypeNode
-				&& two instanceof ExceptionTypeNode) {
-
+		} else if (one.isException() && two.isException()) {
 			return isSameType((ExceptionTypeNode) one, (ExceptionTypeNode) two);
-
 		}
 
 		return false;
@@ -139,13 +120,16 @@ public class Types {
 
 		switch (op) {
 		case ASSIGN:
-			return left;
+			return new PrimitiveTypeNode(Types.Primitive.VOID);
 		case PLUS:
+			if (left.isText() && right.isText())
+				return new PrimitiveTypeNode(Types.Primitive.TEXT);
 		case MINUS:
 		case DIVIDE:
 		case TIMES:
 		case MOD:
-			return getHigherNumericType(left, right);
+			return getHigherNumericType((PrimitiveTypeNode) left,
+					(PrimitiveTypeNode) right);
 		case OR:
 		case AND:
 		case NOT_EQLS:
@@ -170,14 +154,13 @@ public class Types {
 		throw new UnsupportedOperationException("TODO");
 	}
 
-	private static TypeNode getHigherNumericType(TypeNode left, TypeNode right) {
-		throw new UnsupportedOperationException("TODO");
-	}
-
-	public static TypeNode getHigherType(TypeNode typeOne, TypeNode typeTwo) {
-
-		throw new UnsupportedOperationException("TODO");
-
+	private static TypeNode getHigherNumericType(PrimitiveTypeNode left,
+			PrimitiveTypeNode right) {
+		if (left.getType() == Primitive.REAL
+				|| right.getType() == Primitive.REAL) {
+			return new PrimitiveTypeNode(Primitive.REAL);
+		}
+		return new PrimitiveTypeNode(Primitive.INT);
 	}
 
 }
