@@ -90,7 +90,38 @@ public class Types {
 	}
 
 	public static boolean isCompatible(BiOpNode.OpType op, TypeNode left, TypeNode right ) {
+		
+		switch(op) {
+		case ASSIGN:
+			return isSameType(left, right);
+		case MINUS:
+		case PLUS:
+			if (isText(left) && isText(right)) return true;
+		case DIVIDE:
+		case TIMES:
+		case MOD:
+			return isNumeric(left) && isNumeric(right);
+		case OR:
+		case AND:
+			return isBoolean(left) && isBoolean(right);
+		}
+		
 		throw new UnsupportedOperationException("TODO");
+	}
+	
+	public static boolean isNumeric(TypeNode type) {
+		throw new UnsupportedOperationException("TODO");
+	}
+	
+	public static boolean isText(TypeNode type) {
+		throw new UnsupportedOperationException("TODO");
+	}
+	
+	public static boolean isBoolean(TypeNode type) {
+		if (type instanceof PrimitiveTypeNode) {
+			return ((PrimitiveTypeNode) type).getType() == Primitive.BOOL;
+		}
+		return false;
 	}
 	
 	public static TypeNode getResult(BiOpNode.OpType op, TypeNode left, TypeNode right) {
