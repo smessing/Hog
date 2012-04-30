@@ -93,6 +93,8 @@ public class Types {
 		
 		switch(op) {
 		case ASSIGN:
+		case NOT_EQLS:
+		case DBL_EQLS:
 			return isSameType(left, right);
 		case PLUS:
 			if (isText(left) && isText(right)) return true;
@@ -104,9 +106,44 @@ public class Types {
 		case OR:
 		case AND:
 			return isBoolean(left) && isBoolean(right);
+		case LESS:
+		case GRTR:
+		case LESS_EQL:
+		case GRTR_EQL:
+			return isPrimitive(left) && isPrimitive(right) && isSameType(left, right);
 		}
 		
-		throw new UnsupportedOperationException("TODO");
+		// should never get here:
+		throw new UnsupportedOperationException("OpType " + op + "not implemented!");
+	}
+	
+	
+	public static TypeNode getResult(BiOpNode.OpType op, TypeNode left, TypeNode right) {
+		
+		switch(op) {
+		case ASSIGN:
+		case PLUS:
+		case MINUS:
+		case DIVIDE:
+		case TIMES:
+		case MOD:
+		case OR:
+		case AND:
+		case NOT_EQLS:
+		case DBL_EQLS:
+		case LESS:
+		case GRTR:
+		case LESS_EQL:
+		case GRTR_EQL:
+			return new PrimitiveTypeNode(Types.Primitive.BOOL);
+		}
+		
+		// should never get here:
+		throw new UnsupportedOperationException("OpType " + op + "not implemented!");
+	}
+
+	public static boolean isPrimitive(TypeNode type) {
+		return type instanceof PrimitiveTypeNode;
 	}
 	
 	public static boolean isNumeric(TypeNode type) {
@@ -122,10 +159,6 @@ public class Types {
 			return ((PrimitiveTypeNode) type).getType() == Primitive.BOOL;
 		}
 		return false;
-	}
-	
-	public static TypeNode getResult(BiOpNode.OpType op, TypeNode left, TypeNode right) {
-		throw new UnsupportedOperationException("TODO");
 	}
 	
 	public static boolean isCompatible(UnOpNode.OpType op, TypeNode operand) {
