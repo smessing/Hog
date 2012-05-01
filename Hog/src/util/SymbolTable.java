@@ -282,6 +282,9 @@ public class SymbolTable {
 		tokenizeArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
 		reserveFunction("text.tokenize", new PrimitiveTypeNode(Types.Primitive.TEXT), tokenizeArguments);
 		
+		/**
+		 * DICT NOT IMPLEMENTED YET
+		 */
 		/* add built-in dict types */
 		// clear()
 /*		reserveFunction("dict.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
