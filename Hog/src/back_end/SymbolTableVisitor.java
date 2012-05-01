@@ -1,5 +1,6 @@
 package back_end;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
@@ -9,6 +10,7 @@ import util.SymbolTable;
 import util.VariableSymbol;
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
+import util.type.Types;
 
 
 /**
@@ -268,8 +270,18 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(SectionTypeNode node) {
-		// TODO Auto-generated method stub
-
+		
+		openScope(node);
+		
+		// add emit() with the parameters as specified by the SectionTypeNode
+		List<TypeNode> emitParams = new ArrayList<TypeNode>();
+		emitParams.add(node.getReturnKey());
+		emitParams.add(node.getReturnValue());
+		FunctionSymbol funSym = new FunctionSymbol(new PrimitiveTypeNode(Types.Primitive.VOID), emitParams);
+		
+		SymbolTable.put("emit", funSym);
+		
+		closeScope(node);
 	}
 
 	@Override
@@ -286,8 +298,15 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(StatementNode node) {
-		// TODO Auto-generated method stub
-
+		openScope(node);
+		
+		// visit all children
+		List<Node> children = node.getChildren();
+		for (Node n : children) {
+			n.accept(this);
+		}
+		
+		closeScope(node);
 	}
 
 	@Override
