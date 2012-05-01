@@ -354,13 +354,17 @@ CatchHeader::=
 DeclarationStatement::=
     Type:t ID:i
     {:
-      RESULT = new IdNode(t, i);
+      IdNode declaration = new IdNode(t, i);
+      declaration.setDeclaration();
+      RESULT = declaration;
       CUP$Parser$actions.LOGGER.info("Type ID -> DeclarationStatement");
     :}
   |
     Type:t ID:i ASSIGN Expression:e
     {:
-      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, new IdNode(t,i), e);
+      IdNode declaration = new IdNode(t, i);
+      declaration.setDeclaration();
+      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, declaration, e);
       CUP$Parser$actions.LOGGER.info("Type ID ASSIGN Expression -> DeclarationStatement");
     :}
   ;

@@ -20,6 +20,8 @@ public class BiOpNode extends ExpressionNode {
 		ASSIGN, MINUS, PLUS, DIVIDE, TIMES, MOD, LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, OR, AND
 	}
 
+	protected ExpressionNode left;
+	protected ExpressionNode right;
 	protected OpType opType;
 
 	/**
@@ -43,9 +45,27 @@ public class BiOpNode extends ExpressionNode {
 		}
 		BiOpNode.LOGGER.fine("Constructing BiOpNode");
 		this.opType = type;
+		this.left = left;
+		this.right = right;
 		this.addChild(left);
 		this.addChild(right);
 
+	}
+	
+	/** Method returns left child.
+	 * 
+	 * @return
+	 */
+	public ExpressionNode getLeftNode(){
+		return this.left;
+	}
+	
+	/** Method returns right child.
+	 * 
+	 * @return
+	 */
+	public ExpressionNode getRightNode(){
+		return this.right;
 	}
 
 	/**

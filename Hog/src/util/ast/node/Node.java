@@ -268,5 +268,13 @@ public abstract class Node implements Comparable<Node> {
 	public void setNewScope() {
 		this.newScope = true;
 	}
+	
+	/** Method to Print Java Source
+	 * 
+	 * @return
+	 */
+	public String toSource(){
+		return this.getName();
+	}
 
 }
