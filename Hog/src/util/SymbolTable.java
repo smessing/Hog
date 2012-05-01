@@ -2,9 +2,11 @@ package util;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import util.ast.node.*;
@@ -110,7 +112,18 @@ public class SymbolTable {
     	top = new SymbolTable(top); 
       }
     
-
+    public static void printNodeMapping() {
+    	Set<Node> nodeMapping = nodeToSymbolTableMap.keySet();
+    	for(Node n : nodeMapping){
+    		System.out.println("NODE: " + n.getName() + " MAPS TO SYMBOL TABLE: " );
+    		SymbolTable tempTable = nodeToSymbolTableMap.get(n);
+    		Set<String> reservedSet = tempTable.table.keySet();
+    		for(String s : reservedSet){
+    			System.out.println("KEY: "+ s + " VALUE: " + tempTable.get(s).type);
+    		}
+    	}
+    }
+    
     /**
      * Returns whether the particular symbol is defined in this scope. If it isn't
      * in this direct local scope, we ask the parent scope, but don't traverse to enclosing 
@@ -145,7 +158,7 @@ public class SymbolTable {
     
     public void reserveWord(String word){ 
     	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(util.type.Types.Flags.RESERVED_WORD);
-		this.table.put(word, new ReservedWordSymbol(typeNode));  
+		this.table.put(word, new VariableSymbol(typeNode));  
 	}
     
     public void reserveFunction(String word, TypeNode returnType, List<TypeNode> argumentList){ 
