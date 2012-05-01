@@ -752,7 +752,7 @@ IterationStatement::=
   |
     FOR L_PAREN ForInit:init ForExpr:test ForIncr:incr R_PAREN Block:b
     {:
-      RESULT = new IterationStatementNode(init, test, incr, block);
+      RESULT = new IterationStatementNode(init, test, incr, b);
       CUP$Parser$actions.LOGGER.info("FOR ForInit ForExpr ForInc L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement");
     :}

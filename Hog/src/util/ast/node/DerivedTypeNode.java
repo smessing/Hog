@@ -65,8 +65,42 @@ public class DerivedTypeNode extends TypeNode {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "Derived Type: " + localType.toString();
+	}
+
+	@Override
+	public boolean isBoolean() {
+		return false;
+	}
+
+	@Override
+	public boolean isNumeric() {
+		return false;
+	}
+
+	@Override
+	public boolean isText() {
+		return false;
+	}
+
+	@Override
+	public boolean isDerived() {
+		return true;
+	}
+
+	@Override
+	public boolean isDict() {
+		return false;
+	}
+
+	@Override
+	public boolean isPrimitive() {
+		return false;
+	}
+	
+	@Override
+	public boolean isException() {
+		return false;
 	}
 
 }

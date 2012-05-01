@@ -53,6 +53,9 @@ public class CodeGeneratingVisitor extends Visitor{
 	
 	@Override
 	public void visit(ConstantNode node){
+		
+		System.out.println(node.getType());
+		
 		//node specific code generation operations here
 	}
 	

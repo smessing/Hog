@@ -13,14 +13,24 @@ import back_end.Visitor;
  * 
  */
 public class PostfixExpressionNode extends ExpressionNode {
-
+	/** enum PostfixType 
+	 *  values ARRAY_INDEX,METHOD_NO_PARAMS, METHOD_WITH_PARAMS, FUNCTION_CALL
+	 *
+	 */
 	public static enum PostfixType {
 		ARRAY_INDEX, METHOD_NO_PARAMS, METHOD_WITH_PARAMS, FUNCTION_CALL
 	}
-
+	/** postfixType field which is of type PostfixType */
 	protected PostfixType postfixType;
 
 	// for array indexing, method calls with no params, function calls
+	/** Constructor PostfixExpressionNode(PostfixType postfixType, ExpressionNode postfixExpr,
+	 * ExpressionNode expr)
+	 * 
+	 * @param postfixType
+	 * @param postfixExpr
+	 * @param expr
+	 */
 	public PostfixExpressionNode(PostfixType postfixType,
 			ExpressionNode postfixExpr, ExpressionNode expr) {
 		super();
@@ -43,7 +53,9 @@ public class PostfixExpressionNode extends ExpressionNode {
 	public PostfixType getPostfixType() {
 		return postfixType;
 	}
-
+	/** Method to Return the name getName()
+	 * @return Returns a string with the node's name
+	 */
 	@Override
 	public String getName() {
 		return postfixType.toString() + "<" + this.getTypeName() + ">";

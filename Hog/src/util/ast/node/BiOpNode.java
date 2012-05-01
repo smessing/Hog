@@ -1,11 +1,6 @@
 package util.ast.node;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import back_end.Visitor;
-
-import util.type.Types;
 
 /**
  * A node representing the Binary Operator terminals in a parse tree.

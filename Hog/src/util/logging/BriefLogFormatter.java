@@ -16,11 +16,15 @@ import java.util.Date;
  */
  
 public class BriefLogFormatter extends Formatter {
-	
+	/** format field of type DateFormat */
 	private static final DateFormat format = new SimpleDateFormat("h:mm:ss");
+	/** lineSep field of type String which contains line.separartor of system */
 	private static final String lineSep = System.getProperty("line.separator");
-	/**
+	 
+	/** Method format(LogRecord record)
 	 * A Custom format implementation that is designed for brevity.
+	 * @param record LogRecord
+	 * @return message String
 	 */
 	public String format(LogRecord record) {
 		String loggerName = record.getLoggerName();

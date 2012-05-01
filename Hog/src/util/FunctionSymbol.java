@@ -21,8 +21,7 @@ public class FunctionSymbol extends Symbol {
 	}
 	
 	/**
-	 * Constructor takes a parameters node and flattens it into a list of parameter types
-	 * 
+	 * Constructor takes a parameters node and flattens it into a list of TypeNodes
 	 * @param returnType
 	 * @param parameterNode
 	 */

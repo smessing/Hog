@@ -25,6 +25,13 @@ public class RelationalExpressionNode extends BiOpNode {
 		acceptedOpTypes.add(OpType.GRTR_EQL);
 	}
 
+	/** Constructor of RelationalExpressionNode(OpType type, ExpressionNode left,
+	 * 													ExpressionNode right)
+	 *
+	 * @param type
+	 * @param left
+	 * @param right
+	 */
 	public RelationalExpressionNode(OpType type, ExpressionNode left, ExpressionNode right) {
 		super(type, left, right);
 		
@@ -32,7 +39,9 @@ public class RelationalExpressionNode extends BiOpNode {
 		if(!acceptedOpTypes.contains(type))
 			throw new IllegalArgumentException("RelationalExpressionNode initialized with unacceptable OpType: " + type.toString());
 	}
-
+	/** Method to Return the name getName()
+	 * @return Returns a string with the node's name
+	 */
 	@Override
 	public String getName() {
 		return "RelationalExpressionNode<" + this.getTypeName() + ","
