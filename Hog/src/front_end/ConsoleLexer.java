@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import util.SymbolTable;
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.BiOpNode;
 import util.ast.node.ExpressionNode;
@@ -65,6 +66,7 @@ public class ConsoleLexer {
 	    root.print();
 	    
 	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
-	    
+	    symTabVisitor.walk();
+	    SymbolTable.printSymbolTable();
 	}
 }

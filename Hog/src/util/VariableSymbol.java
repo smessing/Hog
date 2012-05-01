@@ -8,4 +8,10 @@ public class VariableSymbol extends Symbol{
 		super(t);
 	}
 
+	@Override
+	public String toString() {
+		String str = "variable, return: " + this.type.toString();
+		return str;
+	}
+
 }

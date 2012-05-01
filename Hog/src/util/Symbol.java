@@ -9,5 +9,7 @@ public abstract class Symbol{
 	public Symbol(TypeNode t){
 		this.type = t;
 	}
+	
+	public abstract String toString();
 
 }

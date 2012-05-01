@@ -112,18 +112,20 @@ public class SymbolTable {
     	top = new SymbolTable(top); 
       }
     
-    public static void printNodeMapping() {
-    	Set<Node> nodeMapping = nodeToSymbolTableMap.keySet();
-    	for(Node n : nodeMapping){
-    		System.out.println("NODE: " + n.getName() + " MAPS TO SYMBOL TABLE: " );
-    		SymbolTable tempTable = nodeToSymbolTableMap.get(n);
-    		Set<String> reservedSet = tempTable.table.keySet();
-    		for(String s : reservedSet){
-    			System.out.println("KEY: "+ s + " VALUE: " + tempTable.get(s).type);
-    		}
-    	}
-    }
     
+    
+     public static void printSymbolTable(){
+    	 Set<Node> nodeMapping = nodeToSymbolTableMap.keySet();
+    	 for (Node n: nodeMapping){
+    		 System.out.println("\n\nNode: \"" + n.getName() + "\" maps to symbol table: ");
+    		 SymbolTable tempTable = nodeToSymbolTableMap.get(n);
+    		 Set<String> symbolSet = tempTable.table.keySet();
+    		 for (String s : symbolSet){
+    			 System.out.println("key: " + s + "; value: " + tempTable.get(s).toString());
+    		 }
+    	   }
+    	 }
+
     /**
      * Returns whether the particular symbol is defined in this scope. If it isn't
      * in this direct local scope, we ask the parent scope, but don't traverse to enclosing 

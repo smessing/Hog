@@ -86,6 +86,21 @@ public class FunctionSymbol extends Symbol {
 	public int getNumParams() {
 		return this.argumentList.size();
 	}
+
+	@Override
+	public String toString() {
+		StringBuffer strBuff = new StringBuffer();
+		strBuff.append("function, returns: ");
+		strBuff.append(this.type.toString());
+		strBuff.append(". ParamList: (");
+		for (TypeNode a : this.argumentList) {
+			strBuff.append(a.toString());
+			strBuff.append(", ");
+		}
+		strBuff.append(')');
+		
+		return strBuff.toString();
+	}
 	
 	
 }
