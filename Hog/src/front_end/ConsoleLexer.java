@@ -25,6 +25,8 @@ import front_end.*;
 import java.util.Iterator;
 import java.util.logging.*;
 
+import back_end.SymbolTableVisitor;
+
 /**
  * A console front-end to the Lexer class for dynamically testing the Lexer.
  * 
@@ -62,6 +64,7 @@ public class ConsoleLexer {
 	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
 	    root.print();
 	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
 	    
 	}
 }

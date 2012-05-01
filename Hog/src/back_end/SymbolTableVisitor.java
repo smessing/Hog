@@ -51,6 +51,7 @@ public class SymbolTableVisitor implements Visitor {
 	}
 	
 	private void closeScope(Node node) {
+
 		
 		// pop if this was a new scope
 		if(node.isNewScope()) {
