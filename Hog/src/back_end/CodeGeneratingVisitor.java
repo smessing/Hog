@@ -419,7 +419,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		
 		code.append("import java.io.IOException;\n");
 		code.append("import java.util.*;\n");
-
 		code.append("import org.apache.hadoop.fs.Path;\n");
 		code.append("import org.apache.hadoop.conf.*;\n");
 		code.append("import org.apache.hadoop.io.*;\n");
