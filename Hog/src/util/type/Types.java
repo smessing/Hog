@@ -1,7 +1,9 @@
 package util.type;
 
+import util.ast.node.ArgumentsNode;
 import util.ast.node.BiOpNode;
 import util.ast.node.ExceptionTypeNode;
+import util.ast.node.FunctionNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.DerivedTypeNode;
 import util.ast.node.DictTypeNode;
@@ -331,6 +333,12 @@ public class Types {
 			return new PrimitiveTypeNode(Primitive.REAL);
 		}
 		return new PrimitiveTypeNode(Primitive.INT);
+	}
+	
+	public static boolean isCompatible(String functionName, ArgumentsNode arguments) {
+		
+		
+		throw new UnsupportedOperationException("TODO");
 	}
 
 }
