@@ -61,11 +61,20 @@ public class SymbolTableVisitor implements Visitor {
 		}
 	
 	}
+	
+	private void visitAllChildrenStandard(Node node) {
+		// visit all children
+		List<Node> children = node.getChildren();
+		for (Node n : children) {
+			n.accept(this);
+		}
+	}
 
 	@Override
 	public void visit(ArgumentsNode node) {
-		// TODO Auto-generated method stub
-
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
 	}
 
 	@Override
@@ -162,8 +171,19 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(IdNode node) {
-		// TODO Auto-generated method stub
-
+		openScope(node);
+		
+		// if it has a type, it is a declaration. Put it in the symbol table
+		if(node.getType() != null) {
+			SymbolTable.put(node.getIdentifier(), new VariableSymbol(node.getType()));
+		} 
+		// else, it does not have a type, so we ensure it is already declared
+//		else {
+//			SymbolTable.
+//		}
+		
+		
+		closeScope(node);
 	}
 
 	@Override
@@ -228,17 +248,9 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ProgramNode node) {
-		
 		openScope(node);
-		
-		// visit all children
-		List<Node> children = node.getChildren();
-		for (Node n : children) {
-			n.accept(this);
-		}
-		
+		visitAllChildrenStandard(node);
 		closeScope(node);
-
 	}
 
 	@Override
@@ -257,13 +269,7 @@ public class SymbolTableVisitor implements Visitor {
 	public void visit(SectionNode node) {
 		
 		openScope(node);
-		
-		// visit all children
-		List<Node> children = node.getChildren();
-		for (Node n : children) {
-			n.accept(this);
-		}
-		
+		visitAllChildrenStandard(node);
 		closeScope(node);
 		
 	}
@@ -299,13 +305,7 @@ public class SymbolTableVisitor implements Visitor {
 	@Override
 	public void visit(StatementNode node) {
 		openScope(node);
-		
-		// visit all children
-		List<Node> children = node.getChildren();
-		for (Node n : children) {
-			n.accept(this);
-		}
-		
+		visitAllChildrenStandard(node);
 		closeScope(node);
 	}
 
