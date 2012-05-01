@@ -12,6 +12,7 @@ public class FunctionSymbol extends Symbol {
 	List<TypeNode> argumentList;
 	
 	/**
+	 * Constructor for a function with no parameters
 	 * 
 	 * @param returnType
 	 */
@@ -28,15 +29,28 @@ public class FunctionSymbol extends Symbol {
 		super(returnType);
 		// deepest node of parametersNode is first argument in the list
 		
-		this.argumentList = getParametersTypeNodesList(parametersNode);
+		this.argumentList = parametersNodeToTypeNodesList(parametersNode);
+	}
+	
+	/**
+	 * Constructor that takes the flat argumentsList - used to populate reserved functions 
+	 * and used internally after flatterning ParametersNode
+	 * 
+	 * @param returnType
+	 * @param argumentList
+	 */
+	public FunctionSymbol(TypeNode returnType, List<TypeNode> argumentList){
+		super(returnType);
+		this.argumentList = argumentList;
 	}
 	
 	/**
 	 * Returns a properly ordered list of TypeNodes for the parameters list in the functionsymbol
+	 * 
 	 * @param parametersNode
-	 * @return
+	 * @return an ArrayList<TypeNode> that represents the types of the functions parameters in order
 	 */
-	public ArrayList<TypeNode> getParametersTypeNodesList(ParametersNode parametersNode) {
+	private ArrayList<TypeNode> parametersNodeToTypeNodesList(ParametersNode parametersNode) {
 		ArrayList<TypeNode> paramsTypeNodeList = new ArrayList<TypeNode>();
 		
 		ParametersNode currNode = parametersNode;
@@ -57,13 +71,20 @@ public class FunctionSymbol extends Symbol {
 	}
 	
 	/**
-	 * Constructor that takes the flat argumentsList - used to populate reserved functions
-	 * @param returnType
-	 * @param argumentList
+	 * Returns a List of TypeNodes, which represent the types of the parameters to the functions
+	 * @return
 	 */
-	public FunctionSymbol(TypeNode returnType, List<TypeNode> argumentList){
-		super(returnType);
-		this.argumentList = argumentList;
+	public List<TypeNode> getParametersTypeNodesList() {
+		return this.argumentList;
 	}
+	
+	/**
+	 * Returns the number of parameters a function takes
+	 * @return
+	 */
+	public int getNumParams() {
+		return this.argumentList.size();
+	}
+	
 	
 }

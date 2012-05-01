@@ -51,6 +51,48 @@ public class ReservedWordTypeNode extends TypeNode {
 		// TODO Auto-generated method stub
 		return "Reserved Word Type: " + localType.toString();
 	}
+
+	@Override
+	public boolean isBoolean() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isNumeric() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isText() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isPrimitive() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDerived() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDict() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isException() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 
