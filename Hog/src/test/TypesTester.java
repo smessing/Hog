@@ -12,7 +12,7 @@ import util.ast.node.DictTypeNode;
 import util.ast.node.ExceptionTypeNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.TypeNode;
-import util.type.TypeMismatchException;
+import util.type.TypeMismatchError;
 import util.type.Types;
 
 /**
@@ -73,15 +73,15 @@ public class TypesTester {
 	}
 
 	@Test
-	public void testGetHigherNumericType() throws TypeMismatchException {
+	public void testGetHigherNumericType() throws TypeMismatchError {
 		assertTrue(Types.isSameType(intNode, Types.getHigherNumericType(
 				intNode, intNode)));
 		assertTrue(Types.isSameType(realNode, Types.getHigherNumericType(
 				realNode, intNode)));
 	}
 
-	@Test(expected = TypeMismatchException.class)
-	public void testGetHigherNumericType2() throws TypeMismatchException {
+	@Test(expected = TypeMismatchError.class)
+	public void testGetHigherNumericType2() throws TypeMismatchError {
 		Types.getHigherNumericType(boolNode, setBool);
 	}
 

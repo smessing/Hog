@@ -65,6 +65,21 @@ public class ConstantNode extends ExpressionNode {
 		Types.Primitive primType = ((PrimitiveTypeNode) type).getType();
 		switch (primType) {
 		case INT:
+		case BOOL:
+		case REAL:
+			return getValue();
+		case TEXT:
+			return '"' + getValue() + '"';
+		}
+
+		throw new UnsupportedOperationException("Primitive type: " + primType
+				+ " not yet supported.");
+	}
+	
+	public String toDeclarationSource() {
+		Types.Primitive primType = ((PrimitiveTypeNode) type).getType();
+		switch (primType) {
+		case INT:
 			return "new Integer(" + getValue() + ")";
 		case BOOL:
 			return "new Boolean(" + getValue() + ")";

@@ -72,7 +72,8 @@ public class Hog {
 
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
 		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
-
+		codeGenerator.walk();
+		
 		FileWriter fstream = null;
 		try {
 			fstream = new FileWriter("Hog.java");

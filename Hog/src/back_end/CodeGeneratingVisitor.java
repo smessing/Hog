@@ -131,26 +131,34 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
 
 		StringBuilder line = new StringBuilder();
-
+		line.append(node.getLeftNode().toSource());
+		
 		switch (node.getOpType()) {
 		case ASSIGN:
-			line.append(node.getLeftNode().toSource());
 			line.append(" = ");
-			line.append(node.getRightNode().toSource());
 			break;
 		case DBL_EQLS:
-			line.append(node.getLeftNode().toSource());
 			line.append(" == ");
-			line.append(node.getRightNode().toSource());
+			break;
+		case PLUS:
+			line.append(" + ");
+			break;
+		case OR:
+			line.append(" || ");
+			break;
+		case TIMES:
+			line.append(" * " );
 			break;
 		}
-
+		
+		line.append(node.getRightNode().toSource());
+		
 		if (line.toString().length() == 0) {
 			throw new UnsupportedOperationException("BiOpType: "
 					+ node.getOpType() + " not supported yet.");
 		}
 
-		LOGGER.fine("Writing to java source: " + line.toString());
+		LOGGER.fine("Writing to java source: " + line.toString() + ";");
 		code.append(line.toString());
 
 	}
