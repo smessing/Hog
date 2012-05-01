@@ -12,9 +12,7 @@ import util.ast.node.*;
 public class SymbolTableVisitor implements Visitor {
 	
 	@Override
-	public void walk(AbstractSyntaxTree tree) {
-		
-		tree.preOrderTraversal();
+	public void walk() {
 		// TODO Auto-generated method stub
 		
 	}

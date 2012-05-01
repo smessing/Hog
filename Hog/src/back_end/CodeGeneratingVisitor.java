@@ -41,6 +41,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 /**
  * Visitor class for generating Java source.
@@ -55,9 +56,10 @@ import java.util.Iterator;
  */
 public class CodeGeneratingVisitor implements Visitor {
 
-	AbstractSyntaxTree tree;
-	ProgramNode program;
-	BufferedWriter out;
+	protected final static Logger LOGGER = Logger
+			.getLogger(TypeCheckingVisitor.class.getName());
+	protected AbstractSyntaxTree tree;
+	protected BufferedWriter out;
 
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 		this.tree = root;
@@ -414,12 +416,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void walk() {
 
-		walk(tree.getRoot());
+		// start recursive walk:
 
-		// base case
-		if (tree.getRoot() instanceof BiOpNode) {
-			tree.getRoot().accept(this);
-		}
+		walk(tree.getRoot());
 
 		try {
 			out.newLine();
@@ -431,17 +430,25 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	public void walk(Node node) {
 
-		// base cases:
+		// base cases (else, recurse):
 
 		if (node instanceof BiOpNode) {
 			node.accept(this);
+			appendNewline();
+		} else {
+			for (Node child : node.getChildren()) {
+				walk(child);
+			}
 		}
 
-		// append a newline:
+	}
+
+	private void appendNewline() {
+
 		try {
 			out.newLine();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 
 	}
