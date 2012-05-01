@@ -420,6 +420,7 @@ public class CodeGeneratingVisitor implements Visitor{
 
 	@Override
 	public void walk(AbstractSyntaxTree tree){
+		System.out.println("walk Method Called");
 		try{
 		FileWriter fstream = new FileWriter("out.txt");
 		out = new BufferedWriter(fstream);
@@ -428,6 +429,7 @@ public class CodeGeneratingVisitor implements Visitor{
 		}
 		// base case
 		if (tree.getRoot() instanceof BiOpNode) {
+			System.out.println("tree.getRoot() is instanceof BiOpNode");
 			this.visit(tree.getRoot());
 			
 
