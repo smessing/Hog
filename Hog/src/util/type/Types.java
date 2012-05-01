@@ -40,7 +40,7 @@ public class Types {
 	 * 
 	 */
 	public static enum Primitive {
-		BOOL, TEXT, VOID, INT, REAL, CHECK_INNER_TYPE
+		BOOL, TEXT, VOID, INT, REAL
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class Types {
 	 * 
 	 */
 	public static enum Flags {
-		RESERVED_WORD, CHECK_INNER_TYPE, BOOL, TEXT, VOID, INT, REAL,
+		RESERVED_WORD, CHECK_INNER_TYPE, CHECK_ENTIRE_TYPE
 	}
 
 	/**

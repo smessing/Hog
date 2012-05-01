@@ -26,6 +26,7 @@ import util.ast.node.BiOpNode;
 import util.ast.node.CatchesNode;
 import util.ast.node.ConstantNode;
 import util.ast.node.DerivedTypeNode;
+import util.ast.node.DictTypeNode;
 import util.ast.node.ElseIfStatementNode;
 import util.ast.node.ElseStatementNode;
 import util.ast.node.ExceptionTypeNode;
@@ -45,6 +46,7 @@ import util.ast.node.PrimaryExpressionNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.ProgramNode;
 import util.ast.node.RelationalExpressionNode;
+import util.ast.node.ReservedWordTypeNode;
 import util.ast.node.SectionNode;
 import util.ast.node.SectionTypeNode;
 import util.ast.node.SelectionStatementNode;
@@ -54,7 +56,7 @@ import util.ast.node.SwitchStatementNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 
-public class TypeCheckingVisitor extends Visitor {
+public class TypeCheckingVisitor implements Visitor {
 
 	protected final static Logger LOGGER = Logger
 			.getLogger(TypeCheckingVisitor.class.getName());
@@ -268,6 +270,18 @@ public class TypeCheckingVisitor extends Visitor {
 	public void visit(TypeNode node) {
 		// node specific type checking operations here
 		LOGGER.fine("Type-checking TypeNode");
+	}
+
+	@Override
+	public void visit(DictTypeNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(ReservedWordTypeNode node) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

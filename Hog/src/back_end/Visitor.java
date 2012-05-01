@@ -3,17 +3,23 @@ package back_end;
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
 
-/*
- * @author paul, jason
+/**
+ * Visitor interface
+ * All visitors implement this interface
+ * 
+ * @author jason
+ *
  */
 
-public abstract class Visitor {
+public interface Visitor {
 	
+	public abstract void walk(AbstractSyntaxTree tree);
 	public abstract void visit(ArgumentsNode node);
 	public abstract void visit(BiOpNode node);
 	public abstract void visit(CatchesNode node);
 	public abstract void visit(ConstantNode node);
 	public abstract void visit(DerivedTypeNode node);
+	public abstract void visit(DictTypeNode node);
 	public abstract void visit(ElseIfStatementNode node);
 	public abstract void visit(ElseStatementNode node);
 	public abstract void visit(ExceptionTypeNode node);
@@ -33,6 +39,7 @@ public abstract class Visitor {
 	public abstract void visit(PrimitiveTypeNode node);
 	public abstract void visit(ProgramNode node);
 	public abstract void visit(RelationalExpressionNode node);
+	public abstract void visit(ReservedWordTypeNode node);
 	public abstract void visit(SectionNode node);
 	public abstract void visit(SectionTypeNode node);
 	public abstract void visit(SelectionStatementNode node);
@@ -41,6 +48,5 @@ public abstract class Visitor {
 	public abstract void visit(SwitchStatementNode node);
 	public abstract void visit(TypeNode node);
 	public abstract void visit(UnOpNode node);
-	public abstract void walk(AbstractSyntaxTree tree);
 
 }

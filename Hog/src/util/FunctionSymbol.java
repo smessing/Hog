@@ -34,7 +34,7 @@ public class FunctionSymbol extends Symbol {
 	
 	/**
 	 * Constructor that takes the flat argumentsList - used to populate reserved functions 
-	 * and used internally after flatterning ParametersNode
+	 * and used internally after flattening ParametersNode
 	 * 
 	 * @param returnType
 	 * @param argumentList
