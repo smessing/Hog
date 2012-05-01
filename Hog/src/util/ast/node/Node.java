@@ -268,5 +268,13 @@ public abstract class Node implements Comparable<Node> {
 	public void setNewScope() {
 		this.newScope = true;
 	}
+	
+	/**
+	 * 
+	 * @return true if the node represents the start of a new scope
+	 */
+	public boolean isNewScope() {
+		return this.newScope;
+	}
 
 }

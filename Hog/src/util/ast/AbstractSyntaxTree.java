@@ -41,6 +41,15 @@ public class AbstractSyntaxTree {
 				TreeTraversalBuilder.traversalOrder.POSTORDER);
 
 	}
+	
+	/**
+	 * 
+	 * @return the root of the AST
+	 */
+	public Node getRoot() {
+		return this.root;
+	}
+	
 	/** Method toLatex()
 	 *  Returns a String representation of the program in Latex format
 	 *  @return string String 

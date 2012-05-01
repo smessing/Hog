@@ -54,8 +54,9 @@ public class FunctionSymbol extends Symbol {
 		ArrayList<TypeNode> paramsTypeNodeList = new ArrayList<TypeNode>();
 		
 		ParametersNode currNode = parametersNode;
-		// add child of node passed in
-		paramsTypeNodeList.add((TypeNode) currNode.getChildren().get(0));
+		
+		// add type of node passed in
+		paramsTypeNodeList.add(currNode.getType());
 		
 		// recurse through, adding each child to list
 		while(currNode.hasChildren()) {
