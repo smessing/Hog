@@ -165,7 +165,7 @@ public class SymbolTable {
      * get the first symbol table that this node maps to 
      * keep checking parents to see if they map to symbol table 
      */
-    public static SymbolTable getMappedSymbol(Node n){
+    public static SymbolTable getMappedSymbolTable(Node n){
     	if(nodeToSymbolTableMap.containsKey(n)){
     		return nodeToSymbolTableMap.get(n);
     	}
