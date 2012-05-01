@@ -15,10 +15,7 @@ import back_end.Visitor;
  * 
  */
 public class PostfixExpressionNode extends ExpressionNode {
-	/** enum PostfixType 
-	 *  values ARRAY_INDEX,METHOD_NO_PARAMS, METHOD_WITH_PARAMS, FUNCTION_CALL
-	 *
-	 */
+	
 	public static enum PostfixType {
 		ARRAY_INDEX, METHOD_NO_PARAMS, METHOD_WITH_PARAMS, FUNCTION_CALL
 	}
@@ -40,7 +37,7 @@ public class PostfixExpressionNode extends ExpressionNode {
 	
 	/**
 	 * Constructor for function calls
-	 * If there are no arguments passed in, this will not have the argsList child
+	 * If there are no arguments passed in, this will not have the argsList child, since it won't be added successfully
 	 * 
 	 * @param postfixType - must be PostfixType.FUNCTION_CALL
 	 * @param functionName
@@ -52,17 +49,22 @@ public class PostfixExpressionNode extends ExpressionNode {
 		this.addChild(functionName);
 		this.addChild(argsList);
 	}	
-	
-	
 
-	// for method calls with params
+
+	/**
+	 * Constructor for method calls with params
+	 * @param postFixType - must be PostfixType.METHOD_WITH_PARAMS
+	 * @param objectName
+	 * @param methodName
+	 * @param argsList
+	 */
 	public PostfixExpressionNode(PostfixType postFixType,
-			ExpressionNode postfixExpr, ExpressionNode id,
+			IdNode objectName, IdNode methodName,
 			ExpressionNode argsList) {
 		super();
 		this.postfixType = postFixType;
-		this.addChild(postfixExpr);
-		this.addChild(id);
+		this.addChild(objectName);
+		this.addChild(methodName);
 		this.addChild(argsList);
 	}
 

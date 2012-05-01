@@ -174,15 +174,27 @@ public class SymbolTable {
 		reserveWord("iter");
 		
 		/* add built-in list methods */
+		
+		// add()
 		ArrayList<TypeNode> listAddArguments = new ArrayList<TypeNode>();
 		listAddArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("list.add", new PrimitiveTypeNode(Types.Primitive.VOID), listAddArguments);
+		
+		// clear()
 		reserveFunction("list.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
+
+		// get()
 		ArrayList<TypeNode> listGetArguments = new ArrayList<TypeNode>();
-		listGetArguments.add(new ReservedWordTypeNode(Types.Flags.INT));
+		listGetArguments.add(new PrimitiveTypeNode(Types.Primitive.INT));
 		reserveFunction("list.get", new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE), listGetArguments);
+		
+		// iterator()
 		reserveFunction("list.iterator", new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		
+		// size()
 		reserveFunction("list.size", new PrimitiveTypeNode(Types.Primitive.INT));
+		
+		// sort()
 		reserveFunction("list.sort", new PrimitiveTypeNode(Types.Primitive.VOID));
 		
 		/* add built-in iter methods */

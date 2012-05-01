@@ -587,13 +587,13 @@ PostfixExpression::=
       RESULT = p;
       CUP$Parser$actions.LOGGER.info("PrimaryExpression -> PostFixExpression");
     :}
-  |
-    PostfixExpression:p L_BRKT Expression:e R_BRKT
-    {:
-      // array indexing
-      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.ARRAY_INDEX, p, e);
-      CUP$Parser$actions.LOGGER.info("PostfixExpression L_BRKT Expression R_BRKT -> PostFixExpression");
-    :}
+//  |
+//    PostfixExpression:p L_BRKT Expression:e R_BRKT
+//    {:
+//      // array indexing
+//      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.ARRAY_INDEX, p, e);
+//      CUP$Parser$actions.LOGGER.info("PostfixExpression L_BRKT Expression R_BRKT -> PostFixExpression");
+//    :}
   |
     ID:objectName DOT ID:methodName
     {:
@@ -604,19 +604,21 @@ PostfixExpression::=
       CUP$Parser$actions.LOGGER.info("ID: " + objectName + " DOT ID: " + methodName + " -> PostFixExpression");
     :}
   |
-    PostfixExpression:p DOT ID:i L_PAREN ArgumentExpressionList:a R_PAREN
+    ID:objectName DOT ID:methodName L_PAREN ArgumentExpressionList:a R_PAREN
     {:
       // object method call with params
-      IdNode idNode = new IdNode(i);
-      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, p, idNode, a);
-      CUP$Parser$actions.LOGGER.info("PostfixExpression DOT ID: " + i + "L_PAREN ArgumentList R_PAREN -> PostFixExpression");
+      IdNode object = new IdNode(objectName);
+      IdNode method = new IdNode(methodName);
+      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, object, method, a);
+      CUP$Parser$actions.LOGGER.info("ID " + objectName + " DOT ID: " + methodName + "L_PAREN ArgumentList R_PAREN -> PostFixExpression");
     :}
   |
   
     ID:i L_PAREN ArgumentExpressionList:a R_PAREN
     {:
       //function call
-      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.FUNCTION_CALL, i, a);
+      IdNode functionName = new IdNode(i);
+      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.FUNCTION_CALL, functionName, a);
       CUP$Parser$actions.LOGGER.info("PostfixExpression L_PAREN ArgumentExpressionList R_PAREN -> PostFixExpression");
     :}
   |
