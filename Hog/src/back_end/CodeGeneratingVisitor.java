@@ -243,5 +243,11 @@ public class CodeGeneratingVisitor implements Visitor{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void walk(ProgramNode node) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

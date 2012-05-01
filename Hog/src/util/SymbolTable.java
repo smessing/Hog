@@ -10,6 +10,11 @@ import java.util.logging.Logger;
 import util.ast.node.*;
 import util.type.Types;
 
+/**
+ * 
+ * @author ben, jason
+ *
+ */
 
 public class SymbolTable {
 

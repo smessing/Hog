@@ -354,4 +354,10 @@ public class ErrorCheckingVisitor implements Visitor {
 		
 	}
 
+	@Override
+	public void walk(ProgramNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
