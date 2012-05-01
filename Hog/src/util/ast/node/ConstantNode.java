@@ -43,9 +43,8 @@ public class ConstantNode extends ExpressionNode {
 	public String getName() {
 		return "ConstantNode<" + this.getTypeName() + ">";
 	}
-	
-	
-	public String getTypeShortName(){
+
+	public String getTypeShortName() {
 		return "Something";
 	}
 
@@ -59,5 +58,19 @@ public class ConstantNode extends ExpressionNode {
 		v.visit(this);
 		System.out.println("in constant node");
 		return 3;
+	}
+
+	@Override
+	public String toSource() {
+		Types.Primitive primType = ((PrimitiveTypeNode) type).getType();
+		switch (primType) {
+		case INT:
+			return "new Integer(" + getValue() + ")";
+		case BOOL:
+			return "new Boolean(" + getValue() + ")";
+		}
+
+		throw new UnsupportedOperationException("Primitive type: " + primType
+				+ " not yet supported.");
 	}
 }

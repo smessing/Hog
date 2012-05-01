@@ -21,12 +21,22 @@ public class TestCodeGeneratingVisitor {
 		ConstantNode constantNode = new ConstantNode(Types.Primitive.INT, "2");
 		BiOpNode biOpNode = new BiOpNode(BiOpNode.OpType.ASSIGN, idNode,
 				constantNode);
-		AbstractSyntaxTree ast = new AbstractSyntaxTree(biOpNode);
+		TypeNode secondTypeNode = new PrimitiveTypeNode(Types.Primitive.BOOL);
+		IdNode secondIdNode = new IdNode(secondTypeNode, "y");
+		secondIdNode.setDeclaration();
+		ConstantNode secondConstantNode = new ConstantNode(
+				Types.Primitive.BOOL, "true");
+		BiOpNode secondBiOpNode = new BiOpNode(BiOpNode.OpType.ASSIGN,
+				secondIdNode, secondConstantNode);
+		StatementListNode statementListNode = new StatementListNode(
+				new StatementListNode(secondBiOpNode), biOpNode);
+		AbstractSyntaxTree ast = new AbstractSyntaxTree(statementListNode);
 		CodeGeneratingVisitor v = new CodeGeneratingVisitor(ast);
 		v.walk();
 
-		FileWriter fstream = null;
 		
+		FileWriter fstream = null;
+
 		try {
 			fstream = new FileWriter("Hog.java");
 			BufferedWriter out = new BufferedWriter(fstream);
@@ -36,7 +46,7 @@ public class TestCodeGeneratingVisitor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }
