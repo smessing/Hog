@@ -48,14 +48,14 @@ public class Hog {
 		
 		usage(args);
 		FileReader sourceReader = null;
-		try {
-			sourceReader = new FileReader(new File(source));
+		/*try {
+			//sourceReader = new FileReader(new File(source));
 		} catch (FileNotFoundException fnfe) {
 			
 			LOGGER.severe("Hog program " + source + "not found!");
 			System.exit(1);
 			
-		}
+		}/**/
 		Parser parser = new Parser(new Lexer(source));
 
 	}

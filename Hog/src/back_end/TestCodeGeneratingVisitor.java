@@ -10,12 +10,10 @@ public class TestCodeGeneratingVisitor {
 	 */
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		TypeNode typeNode = new PrimitiveTypeNode(Types.Primitive.INT);
 		IdNode idNode  = new IdNode(typeNode,"x");
-
+		idNode.setDeclaration();
 		ConstantNode constantNode = new ConstantNode(Types.Primitive.INT, "2");
-		
 		BiOpNode biOpNode = new BiOpNode(BiOpNode.OpType.ASSIGN, idNode, constantNode);
 		AbstractSyntaxTree ast = new AbstractSyntaxTree(biOpNode);
 		CodeGeneratingVisitor v = new CodeGeneratingVisitor(ast);
