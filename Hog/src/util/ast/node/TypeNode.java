@@ -83,4 +83,12 @@ public abstract class TypeNode extends Node {
 	 */
 	public abstract boolean isException();
 	
+	@Override
+	public boolean equals(Object that) {
+		if (that instanceof TypeNode) {
+			return Types.isSameType(this, (TypeNode) that);
+		}
+		return false;
+	}
+	
 }

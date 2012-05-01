@@ -1,7 +1,9 @@
-package util.type;
+package scratch;
+
+import util.type.Types;
 
 
-public class TypeCheck extends Types{
+public class TypeCheck extends Types {
 	/** Method isNumeric(Types.Primitive t)
 	 * Returns a boolean which has value true if t is numeric.
 	 * @param t

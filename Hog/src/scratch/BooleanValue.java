@@ -1,4 +1,5 @@
-package util.type;
+package scratch;
+/*package util.type;
 
 public class BooleanValue extends ConstantValue{
 	private final boolean val;
@@ -14,4 +15,4 @@ public class BooleanValue extends ConstantValue{
 	@Override
 	public Boolean toJavaObject() { return Boolean.valueOf(val); }
 
-}
+}*/

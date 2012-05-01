@@ -1,4 +1,5 @@
-package util.type;
+package scratch;
+/*package util.type;
 
 public class LongValue extends ConstantValue{
 	private final Long val;
@@ -16,3 +17,4 @@ public class LongValue extends ConstantValue{
         return val;
     }
 }
+*/

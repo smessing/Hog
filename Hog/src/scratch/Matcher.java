@@ -1,4 +1,5 @@
-package util.type;
+package scratch;
+/*package util.type;
 
 import util.type.Types.Primitive;
 
@@ -13,5 +14,6 @@ public interface Matcher<T> {
     String signature();
 
     /** Key used for cache lookups, or null if cannot be cached. */
-    Object key();
+    /*Object key();
 }
+*/

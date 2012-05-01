@@ -1,4 +1,5 @@
-package util.type;
+package scratch;
+/*package util.type;
 
 import util.type.Types.Primitive;
 
@@ -62,4 +63,4 @@ public abstract class ConstantValue {
     }
  
 	
-}
+}*/
