@@ -58,7 +58,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	protected final static Logger LOGGER = Logger
 			.getLogger(CodeGeneratingVisitor.class.getName());
-	
+
 	protected AbstractSyntaxTree tree;
 	protected StringBuilder code;
 
@@ -74,20 +74,20 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	@Override
-	public void walk()  {
-	
+	public void walk() {
+
 		writeHeader();
-		
+
 		// start recursive walk:
-	
+
 		walk(tree.getRoot());
-	
+
 	}
 
 	public void walk(Node node) {
-	
+
 		// base cases (else, recurse):
-	
+
 		if (node instanceof BiOpNode) {
 			node.accept(this);
 			appendEndline();
@@ -96,48 +96,63 @@ public class CodeGeneratingVisitor implements Visitor {
 				walk(child);
 			}
 		}
-	
+
 	}
 
 	private void writeHeader() {
-		
+
 		LOGGER.fine("Writing header to code");
-		
+
 		code.append("import java.io.IOException;\n");
 		code.append("import java.util.*;\n");
 		code.append("import org.apache.hadoop.fs.Path;\n");
 		code.append("import org.apache.hadoop.conf.*;\n");
 		code.append("import org.apache.hadoop.io.*;\n");
 		code.append("import org.apache.hadoop.mapreduce.*;\n");
-		code.append("import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\n");
-		code.append("import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;\n");
-		code.append("import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\n");
-		code.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;\n");
-		
+		code
+				.append("import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\n");
+		code
+				.append("import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;\n");
+		code
+				.append("import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\n");
+		code
+				.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;\n");
+
 	}
 
 	private void appendEndline() {
-		
+
 		code.append(";\n");
-	
+
 	}
 
 	@Override
 	public void visit(BiOpNode node) {
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
-		
+
 		StringBuilder line = new StringBuilder();
+
 		switch (node.getOpType()) {
 		case ASSIGN:
 			line.append(node.getLeftNode().toSource());
 			line.append(" = ");
 			line.append(node.getRightNode().toSource());
+			break;
+		case DBL_EQLS:
+			line.append(node.getLeftNode().toSource());
+			line.append(" == ");
+			line.append(node.getRightNode().toSource());
+			break;
+		}
 
+		if (line.toString().length() == 0) {
+			throw new UnsupportedOperationException("BiOpType: "
+					+ node.getOpType() + " not supported yet.");
 		}
 
 		LOGGER.fine("Writing to java source: " + line.toString());
 		code.append(line.toString());
-		
+
 	}
 
 	@Override
@@ -308,7 +323,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(FunctionNode node) {
 		// TODO Auto-generated method stub
 		try {
-			//out.write(node.getName());
+			// out.write(node.getName());
 		} catch (Exception e) {
 
 		}

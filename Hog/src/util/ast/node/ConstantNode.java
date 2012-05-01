@@ -68,6 +68,8 @@ public class ConstantNode extends ExpressionNode {
 			return "new Integer(" + getValue() + ")";
 		case BOOL:
 			return "new Boolean(" + getValue() + ")";
+		case TEXT:
+			return "new String(\"" + getValue() + '"';
 		}
 
 		throw new UnsupportedOperationException("Primitive type: " + primType
