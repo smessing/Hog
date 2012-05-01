@@ -45,413 +45,405 @@ import java.util.Iterator;
 /**
  * Visitor class for generating Java source.
  * 
- * This is the third (and final) walk performed after construction of the AST from source.
- * CodeGeneratingVisitor generates a massive String representing the translated Hog program.
+ * This is the third (and final) walk performed after construction of the AST
+ * from source. CodeGeneratingVisitor generates a massive String representing
+ * the translated Hog program.
  * 
  * 
  * @author kurry
- *
+ * 
  */
-public class CodeGeneratingVisitor implements Visitor{
-	
+public class CodeGeneratingVisitor implements Visitor {
+
 	AbstractSyntaxTree tree;
 	ProgramNode program;
 	BufferedWriter out;
-	
-	public CodeGeneratingVisitor(AbstractSyntaxTree root){
+
+	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 		this.tree = root;
 	}
-	
-	public CodeGeneratingVisitor(ProgramNode program){
-		this.program = program;
-	}
 
-	public void run() throws Exception{
+	public void run() throws Exception {
 		Iterator<Node> t = this.tree.postOrderTraversal();
 		FileWriter fstream = new FileWriter("out.txt");
 		out = new BufferedWriter(fstream);
-		
-		while(t.hasNext()){
-			//Node n = t.next();
-			//out.write(n.getName());
+
+		while (t.hasNext()) {
+			// Node n = t.next();
+			// out.write(n.getName());
 			t.next().accept(this);
 			out.newLine();
 		}
-		
+
 		out.close();
 	}
-	
+
 	@Override
-	public void visit(BiOpNode node){
-		//node specific code generation operations here
+	public void visit(BiOpNode node) {
+		// node specific code generation operations here
 		System.out.println("BiOpNode Visited");
 		StringBuilder line = new StringBuilder();
-		switch(node.getOpType()){
-		case ASSIGN: line.append(node.getLeftNode().toSource());
-					 line.append(" = ");
-					 line.append(node.getRightNode().toSource());
-		
-		
-		
-		
-		
+		switch (node.getOpType()) {
+		case ASSIGN:
+			line.append(node.getLeftNode().toSource());
+			line.append(" = ");
+			line.append(node.getRightNode().toSource());
+
 		}
-		
-		try{
+
+		try {
 			System.out.println(line.toString());
 			out.write(line.toString());
 			out.newLine();
-			}catch(Exception e){
-			
+		} catch (Exception e) {
+
 		}
 	}
-	
+
 	@Override
-	public void visit(ConstantNode node){
-		//node specific code generation operations here
-		try{
-			//out.write(node.getName() + " "+node.getValue() + ";");
-				}catch(Exception e){
-				
-			}
+	public void visit(ConstantNode node) {
+		// node specific code generation operations here
+		try {
+			// out.write(node.getName() + " "+node.getValue() + ";");
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	@Override
-	public void visit(ExpressionNode node){
-		//node specific code generation operations here
-		try{
-			//out.write("Expression Node: "+node.getName());
-				}catch(Exception e){
-				
-			}
+	public void visit(ExpressionNode node) {
+		// node specific code generation operations here
+		try {
+			// out.write("Expression Node: "+node.getName());
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	@Override
-	public void visit(IdNode node){
-		//node specific code generation operations here
-		try{
-			//out.write(node.getIdentifier());
-			//out.write("Visit ID NODE: "+node.getTypeName());
-				}catch(Exception e){
-				
-			}
+	public void visit(IdNode node) {
+		// node specific code generation operations here
+		try {
+			// out.write(node.getIdentifier());
+			// out.write("Visit ID NODE: "+node.getTypeName());
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	@Override
-	public void visit(MockNode node){
-		//node specific code generation operations here
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+	public void visit(MockNode node) {
+		// node specific code generation operations here
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	@Override
-	public void visit(MockExpressionNode node){
-		//node specific code generation operations here
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+	public void visit(MockExpressionNode node) {
+		// node specific code generation operations here
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	@Override
-	public void visit(Node node){
-		//node specific code generation operations here
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+	public void visit(Node node) {
+		// node specific code generation operations here
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	@Override
-	public void visit(ParametersNode node){
-		//node specific code generation operations here
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+	public void visit(ParametersNode node) {
+		// node specific code generation operations here
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	@Override
-	public void visit(PrimaryExpressionNode node){
-		//node specific code generation operations here
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+	public void visit(PrimaryExpressionNode node) {
+		// node specific code generation operations here
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	@Override
-	public void visit(RelationalExpressionNode node){
-		//node specific code generation operations here
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+	public void visit(RelationalExpressionNode node) {
+		// node specific code generation operations here
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	@Override
-	public void visit(UnOpNode node){
-		//node specific code generation operations here
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+	public void visit(UnOpNode node) {
+		// node specific code generation operations here
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(ArgumentsNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
-		
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
+
 	}
 
 	@Override
 	public void visit(CatchesNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
-		
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
+
 	}
 
 	@Override
 	public void visit(DerivedTypeNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
-		
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
+
 	}
 
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(ElseStatementNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(ExceptionTypeNode node) {
 		// TODO Auto-generated method stub
-		try{
-		//	out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(FunctionNode node) {
 		// TODO Auto-generated method stub
-		try{
+		try {
 			out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(GuardingStatementNode node) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void visit(IfElseStatementNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(IterationStatementNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(JumpStatementNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(PostfixExpressionNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(PrimitiveTypeNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(ProgramNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(SectionNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(SectionTypeNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(SelectionStatementNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(StatementListNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(StatementNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(SwitchStatementNode node) {
 		// TODO Auto-generated method stub
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void visit(TypeNode node) {
 		// TODO Auto-generated method stub
-		
-		
-		try{
-			//out.write(node.getName());
-				}catch(Exception e){
-				
-			}
+
+		try {
+			// out.write(node.getName());
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
-	public void walk(AbstractSyntaxTree tree){
-		System.out.println("walk Method Called");
-		try{
-		FileWriter fstream = new FileWriter("out.txt");
-		out = new BufferedWriter(fstream);
-		}catch(Exception e) {
-			
+	public void walk(AbstractSyntaxTree tree) {
+		try {
+			FileWriter fstream = new FileWriter("out.txt");
+			out = new BufferedWriter(fstream);
+		} catch (Exception e) {
+
 		}
 		// base case
 		if (tree.getRoot() instanceof BiOpNode) {
-			System.out.println("tree.getRoot() is instanceof BiOpNode");
-			this.visit(tree.getRoot());
-			
+			tree.getRoot().accept(this);
 
 		}
-		try{
+
+		try {
 			out.newLine();
 			out.close();
-		}catch(Exception e){
-			
+
+		} catch (Exception e) {
+
 		}
 	}
 
 	@Override
 	public void visit(DictTypeNode node) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void visit(ReservedWordTypeNode node) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }
