@@ -1,7 +1,15 @@
 package back_end;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
+
+import util.FunctionSymbol;
+import util.SymbolTable;
+import util.VariableSymbol;
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
+
 
 /**
  * 
@@ -11,10 +19,45 @@ import util.ast.node.*;
 
 public class SymbolTableVisitor implements Visitor {
 	
-	@Override
+	protected AbstractSyntaxTree tree;
+	
+	public SymbolTableVisitor(AbstractSyntaxTree tree) {
+		this.tree = tree;
+	}
+	
+	protected final static Logger LOGGER = Logger
+			.getLogger(SymbolTableVisitor.class.getName());
+	
 	public void walk() {
-		// TODO Auto-generated method stub
 		
+		ProgramNode treeRoot = (ProgramNode) this.tree.getRoot();
+		treeRoot.accept(this);
+	}
+	
+	private void openScope(Node node) {
+		
+		// push new scope
+		if(node.isNewScope()) {
+			SymbolTable.push();
+			
+			// map this as representative node
+			try {
+				SymbolTable.mapNode(node);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
+	private void closeScope(Node node) {
+
+		
+		// pop if this was a new scope
+		if(node.isNewScope()) {
+			SymbolTable.pop();
+		}
+	
 	}
 
 	@Override
@@ -79,7 +122,33 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(FunctionNode node) {
-		// TODO Auto-generated method stub
+		
+		// add function to symbol table - these need to be visible to entire program
+		FunctionSymbol funSym = new FunctionSymbol(node.getType(), node.getParametersNode());
+		SymbolTable.put(node.getIdentifier(), funSym);
+		
+		// open new scope - these are specific to within the function
+		openScope(node);
+		
+		// add variables and types in the params list to the symbol table
+		ParametersNode currParamNode = node.getParametersNode();
+		if( currParamNode != null) {
+			TypeNode paramType = currParamNode.getType();
+			String paramName = currParamNode.getIdentifier();
+			SymbolTable.put(paramName, new VariableSymbol(paramType));
+			
+			// recurse through children, adding variables to the symbol table
+			while(currParamNode.hasChildren()) {
+				currParamNode = (ParametersNode) currParamNode.getChildren().get(0);
+				paramType = currParamNode.getType();
+				paramName = currParamNode.getIdentifier();
+				SymbolTable.put(paramName, new VariableSymbol(paramType));
+			}
+					
+		}
+		
+		// close scope
+		closeScope(node);
 
 	}
 
@@ -157,7 +226,16 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ProgramNode node) {
-		// TODO Auto-generated method stub
+		
+		openScope(node);
+		
+		// visit all children
+		List<Node> children = node.getChildren();
+		for (Node n : children) {
+			n.accept(this);
+		}
+		
+		closeScope(node);
 
 	}
 
@@ -175,8 +253,17 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(SectionNode node) {
-		// TODO Auto-generated method stub
-
+		
+		openScope(node);
+		
+		// visit all children
+		List<Node> children = node.getChildren();
+		for (Node n : children) {
+			n.accept(this);
+		}
+		
+		closeScope(node);
+		
 	}
 
 	@Override
@@ -220,7 +307,7 @@ public class SymbolTableVisitor implements Visitor {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	
 
 }

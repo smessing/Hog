@@ -21,8 +21,8 @@ public class SymbolTable {
 	   //protected Map<Name, Identifier> variables;
 	   static SymbolTable root = null;
 	   static SymbolTable top = root;
-	   protected Map<String,Symbol> table;
-	   protected SymbolTable outer;
+	   public Map<String,Symbol> table;
+	   public SymbolTable outer;
 	   
 	   static Map<Node, SymbolTable> nodeToSymbolTableMap = new HashMap<Node, SymbolTable>();
 	   
@@ -57,19 +57,34 @@ public class SymbolTable {
      * @param node is the representative node
      * @throws Exception - when node has already been mapped to a symbol table
      */
-    public void mapNode(Node node) throws Exception {
+    public static void mapNode(Node node) throws Exception {
     	// map argument node to this symbol table
     	if (SymbolTable.nodeToSymbolTableMap.put(node, top) != null) {
     		// if its not null, this node has already been mapped, throw an exception
+    		LOGGER.severe("mapping representative node: " + node.getName() + " that has already been mapped to a symbol table.");
     		throw new Exception("Representative Node has already been mapped to a symbol table.");
     	}
     }
     
+    /**
+     * 
+     * @return the root of the symbol table
+     */
+    public static SymbolTable getRootSymbolTable() {
+    	return root;
+    }
+    
+    /**
+     * 
+     * @return the SymbolTable at the top
+     */
+    public static SymbolTable getTop() {
+    	return top;
+    }
 
     //move to symbol table in outer scope
-    public SymbolTable pop(){
+    public static void pop(){
     	top = top.outer;
-    	return top;
     }
     
     /**
@@ -82,20 +97,16 @@ public class SymbolTable {
      * @param type
      * @return true for successful puts
      */
-    public boolean put(String name, Symbol symbol){
+    public static boolean put(String name, Symbol symbol){
     	// if not in reserve table
-    	if(!root.table.containsKey(name)){
-    		// if not in current table
-    		if(!top.table.containsKey(name)){
+    	if(!top.isDefinedInScope(name)){
             	top.table.put(name, symbol);
             	return true;
-        	}
-    		
     	}
     	return false;
     }
     
-    public void push() {
+    public static void push() {
     	top = new SymbolTable(top); 
       }
     

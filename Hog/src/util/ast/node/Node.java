@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import front_end.ConsoleLexer;
 
 import back_end.Visitor;
 
@@ -269,7 +268,15 @@ public abstract class Node implements Comparable<Node> {
 		this.newScope = true;
 	}
 	
-	/** Method to Print Java Source
+	/**
+	 * 
+	 * @return true if the node represents the start of a new scope
+	 */
+	public boolean isNewScope() {
+		return this.newScope;
+	}
+
+		/** Method to Print Java Source
 	 * 
 	 * @return
 	 */
