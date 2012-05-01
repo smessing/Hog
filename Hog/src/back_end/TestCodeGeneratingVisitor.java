@@ -17,7 +17,7 @@ public class TestCodeGeneratingVisitor {
 		BiOpNode biOpNode = new BiOpNode(BiOpNode.OpType.ASSIGN, idNode, constantNode);
 		AbstractSyntaxTree ast = new AbstractSyntaxTree(biOpNode);
 		CodeGeneratingVisitor v = new CodeGeneratingVisitor(ast);
-        v.walk(ast);
+        v.walk();
 		
 	}
 

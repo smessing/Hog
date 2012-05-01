@@ -412,26 +412,38 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	@Override
-	public void walk(AbstractSyntaxTree tree) {
-		try {
-			FileWriter fstream = new FileWriter("out.txt");
-			out = new BufferedWriter(fstream);
-		} catch (Exception e) {
+	public void walk() {
 
-		}
+		walk(tree.getRoot());
+
 		// base case
 		if (tree.getRoot() instanceof BiOpNode) {
 			tree.getRoot().accept(this);
-
 		}
 
 		try {
 			out.newLine();
 			out.close();
-
 		} catch (Exception e) {
 
 		}
+	}
+
+	public void walk(Node node) {
+
+		// base cases:
+
+		if (node instanceof BiOpNode) {
+			node.accept(this);
+		}
+
+		// append a newline:
+		try {
+			out.newLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
