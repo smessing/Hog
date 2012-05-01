@@ -595,12 +595,13 @@ PostfixExpression::=
       CUP$Parser$actions.LOGGER.info("PostfixExpression L_BRKT Expression R_BRKT -> PostFixExpression");
     :}
   |
-    PostfixExpression:p DOT ID:i
+    ID:objectName DOT ID:methodName
     {:
       // object method call no params
-      IdNode idNode = new IdNode(i);
-      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_NO_PARAMS, p, idNode);
-      CUP$Parser$actions.LOGGER.info("PostfixExpression DOT ID: " + i + " -> PostFixExpression");
+      IdNode obj = new IdNode(objectName);
+      IdNode method = new IdNode(methodName);
+      RESULT = new PostfixExpressionNode(obj, method);
+      CUP$Parser$actions.LOGGER.info("ID: " + objectName + " DOT ID: " + methodName + " -> PostFixExpression");
     :}
   |
     PostfixExpression:p DOT ID:i L_PAREN ArgumentExpressionList:a R_PAREN
@@ -612,10 +613,10 @@ PostfixExpression::=
     :}
   |
   
-    PostfixExpression:p L_PAREN ArgumentExpressionList:a R_PAREN
+    ID:i L_PAREN ArgumentExpressionList:a R_PAREN
     {:
       //function call
-      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.FUNCTION_CALL, p, a);
+      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.FUNCTION_CALL, i, a);
       CUP$Parser$actions.LOGGER.info("PostfixExpression L_PAREN ArgumentExpressionList R_PAREN -> PostFixExpression");
     :}
   |

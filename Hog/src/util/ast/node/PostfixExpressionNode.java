@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import java.util.ArrayList;
+
 import back_end.Visitor;
 
 /**
@@ -23,21 +25,35 @@ public class PostfixExpressionNode extends ExpressionNode {
 	/** postfixType field which is of type PostfixType */
 	protected PostfixType postfixType;
 
-	// for array indexing, method calls with no params, function calls
-	/** Constructor PostfixExpressionNode(PostfixType postfixType, ExpressionNode postfixExpr,
-	 * ExpressionNode expr)
+	/**
+	 * Constructor for method calls with no parameters
 	 * 
-	 * @param postfixType
-	 * @param postfixExpr
-	 * @param expr
+	 * @param objectOfMethod
+	 * @param methodName
 	 */
-	public PostfixExpressionNode(PostfixType postfixType,
-			ExpressionNode postfixExpr, ExpressionNode expr) {
+	public PostfixExpressionNode(IdNode objectOfMethod, IdNode methodName) {
+		super();
+		postfixType = PostfixType.METHOD_NO_PARAMS;
+		this.addChild(objectOfMethod);
+		this.addChild(methodName);
+	}
+	
+	/**
+	 * Constructor for function calls
+	 * If there are no arguments passed in, this will not have the argsList child
+	 * 
+	 * @param postfixType - must be PostfixType.FUNCTION_CALL
+	 * @param functionName
+	 * @param argsList
+	 */
+	public PostfixExpressionNode(PostfixType postfixType, IdNode functionName, ExpressionNode argsList) {
 		super();
 		this.postfixType = postfixType;
-		this.addChild(postfixExpr);
-		this.addChild(expr);
-	}
+		this.addChild(functionName);
+		this.addChild(argsList);
+	}	
+	
+	
 
 	// for method calls with params
 	public PostfixExpressionNode(PostfixType postFixType,

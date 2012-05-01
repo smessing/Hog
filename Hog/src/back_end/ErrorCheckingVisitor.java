@@ -8,6 +8,7 @@ import util.ast.node.BiOpNode;
 import util.ast.node.CatchesNode;
 import util.ast.node.ConstantNode;
 import util.ast.node.DerivedTypeNode;
+import util.ast.node.DictTypeNode;
 import util.ast.node.ElseIfStatementNode;
 import util.ast.node.ElseStatementNode;
 import util.ast.node.ExceptionTypeNode;
@@ -27,6 +28,7 @@ import util.ast.node.PrimaryExpressionNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.ProgramNode;
 import util.ast.node.RelationalExpressionNode;
+import util.ast.node.ReservedWordTypeNode;
 import util.ast.node.SectionNode;
 import util.ast.node.SectionTypeNode;
 import util.ast.node.SelectionStatementNode;
@@ -50,7 +52,7 @@ import util.ast.node.UnOpNode;
  * @author sam
  *
  */
-public class ErrorCheckingVisitor extends Visitor {
+public class ErrorCheckingVisitor implements Visitor {
 
 	/* (non-Javadoc)
 	 * @see back_end.Visitor#visit(util.ast.node.ArgumentsNode)
@@ -338,6 +340,18 @@ public class ErrorCheckingVisitor extends Visitor {
 	public void visit(UnOpNode node) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void visit(DictTypeNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(ReservedWordTypeNode node) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

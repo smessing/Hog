@@ -11,7 +11,7 @@ import util.ast.node.*;
 import util.type.Types;
 
 
-public class SymbolTable implements Cloneable{
+public class SymbolTable {
 
 	   //protected Map<Name, Identifier> variables;
 	   static SymbolTable root = null;
@@ -172,10 +172,6 @@ public class SymbolTable implements Cloneable{
 		reserveWord("set");
 		reserveWord("dict");
 		reserveWord("iter");
-		reserveWord("==");
-		reserveWord("!=");
-		reserveWord(">=");
-		reserveWord("<=");
 		
 		/* add built-in list methods */
 		ArrayList<TypeNode> listAddArguments = new ArrayList<TypeNode>();
@@ -184,38 +180,60 @@ public class SymbolTable implements Cloneable{
 		reserveFunction("list.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
 		ArrayList<TypeNode> listGetArguments = new ArrayList<TypeNode>();
 		listGetArguments.add(new ReservedWordTypeNode(Types.Flags.INT));
-		reserveFunction("list.get", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE), listGetArguments);
-		reserveFunction("list.iterator", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		reserveFunction("list.get", new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE), listGetArguments);
+		reserveFunction("list.iterator", new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("list.size", new PrimitiveTypeNode(Types.Primitive.INT));
 		reserveFunction("list.sort", new PrimitiveTypeNode(Types.Primitive.VOID));
 		
 		/* add built-in iter methods */
-		reserveFunction("iter.next", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		reserveFunction("iter.next", new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("iter.hasNext", new PrimitiveTypeNode(Types.Primitive.BOOL));
-		reserveFunction("iter.peek", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		reserveFunction("iter.peek", new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		
 		/* add built-in set methods */
+		// add
 		ArrayList<TypeNode> setAddArguments = new ArrayList<TypeNode>();
 		setAddArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("set.add", new PrimitiveTypeNode(Types.Primitive.BOOL), setAddArguments);
+		
+		// clear
 		reserveFunction("set.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
+		
+		// contains
 		ArrayList<TypeNode> setContainsArguments = new ArrayList<TypeNode>();
 		setContainsArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("set.contains", new PrimitiveTypeNode(Types.Primitive.BOOL), setContainsArguments);
+		
+		// containsAll
 		ArrayList<TypeNode> setContainsAllArguments = new ArrayList<TypeNode>();
-		setContainsAllArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		setContainsAllArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_ENTIRE_TYPE));
 		reserveFunction("set.containsAll", new PrimitiveTypeNode(Types.Primitive.BOOL), setContainsAllArguments);
+		
+		// isEmpty()
 		reserveFunction("set.isEmpty", new PrimitiveTypeNode(Types.Primitive.BOOL));
-		reserveFunction("set.iterator", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
+		
+		// iterator
+		// this returns an Iter derived type node, who's inner node is CHECK.INNER.TYPE
+		DerivedTypeNode iteratorReturnNode = new DerivedTypeNode(Types.Derived.ITER, new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
+		reserveFunction("set.iterator", iteratorReturnNode);
 		ArrayList<TypeNode> setRemoveArguments = new ArrayList<TypeNode>();
+		
+		// remove()
 		setRemoveArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("set.remove", new PrimitiveTypeNode(Types.Primitive.BOOL), setRemoveArguments);
+		
+		// removeAll()
 		ArrayList<TypeNode> setRemoveAllArguments = new ArrayList<TypeNode>();
 		setRemoveAllArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("set.removeAll", new PrimitiveTypeNode(Types.Primitive.BOOL), setRemoveAllArguments);
+		
+		// size()
 		reserveFunction("set.size", new PrimitiveTypeNode(Types.Primitive.INT));
 
-		/* add built-in multiset methods */
+		/**
+		 * MULTI-SET NOT IMPLEMENTED YET
+		 */
+/*		 add built-in multiset methods 
 		ArrayList<TypeNode> multiSetAddArguments = new ArrayList<TypeNode>();
 		multiSetAddArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("multiSet.add", new PrimitiveTypeNode(Types.Primitive.BOOL), multiSetAddArguments);
@@ -236,16 +254,24 @@ public class SymbolTable implements Cloneable{
 		multiSetRemoveOneArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("multiSet.removeOne", new PrimitiveTypeNode(Types.Primitive.BOOL), multiSetRemoveOneArguments);
 		reserveFunction("multiSet.size", new PrimitiveTypeNode(Types.Primitive.INT));
-		
+*/
 		/* add built-in text functions */
+		// length()
 		reserveFunction("text.length", new PrimitiveTypeNode(Types.Primitive.INT));
+		
+		// replace()
 		ArrayList<TypeNode> textReplaceArguments = new ArrayList<TypeNode>();
-		textReplaceArguments.add(new ReservedWordTypeNode(Types.Flags.TEXT));
+		textReplaceArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
 		reserveFunction("text.replace", new PrimitiveTypeNode(Types.Primitive.TEXT), textReplaceArguments);
-		reserveFunction("text.tokenize", null);
+		
+		// tokenize()
+		ArrayList<TypeNode> tokenizeArguments = new ArrayList<TypeNode>();
+		tokenizeArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
+		reserveFunction("text.tokenize", new PrimitiveTypeNode(Types.Primitive.TEXT), tokenizeArguments);
 		
 		/* add built-in dict types */
-		reserveFunction("dict.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
+		// clear()
+/*		reserveFunction("dict.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
 		ArrayList<TypeNode> dictContainsKeyArguments = new ArrayList<TypeNode>();
 		dictContainsKeyArguments.add(new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));
 		reserveFunction("dict.containsKey", new PrimitiveTypeNode(Types.Primitive.BOOL), dictContainsKeyArguments);
@@ -258,60 +284,7 @@ public class SymbolTable implements Cloneable{
 		reserveFunction("dict.put", new PrimitiveTypeNode(Types.Primitive.VOID), dictPutArguments);
 		reserveFunction("dict.size", new PrimitiveTypeNode(Types.Primitive.INT));
 		reserveFunction("dict.reverseDict", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
-
-    }
-    
-    
- 
-    
-    public static void main(String[] args){
-    	SymbolTable s = new SymbolTable(null);
-    	SymbolTable next = new SymbolTable(s);
-    	/*
-    	NumberInstance n1 = new NumberInstance("a", "REAL", "1.00000", false);
-    	NumberInstance n2 = new NumberInstance("b", "REAL", "2.00000", false);
-    	s.addVariableToThisScope(n1);
-    	s.addVariableToThisScope(n2);
-    	if(s.isLocal(n1.name)){
-    		System.out.println("Variable Is Local: "+n1.name());
-    	}
-    	
-    	if(s.isLocal(n2.name)){
-    		System.out.println("Variable Is Local: "+n2.name());
-    	}
-    	
-    	s = s.pushBlock();
-    	s.name = "first";
-    	if(!s.isLocal(n1.name)){
-    		System.out.println("Variable Is Not Local: "+n1.name());
-    	}
-    	
-    	
-    	s = s.pushBlock();
-    	s.name = "second";
-    	
-    	
-    	s = s.pushBlock();
-    	s.name = "third";
-    	
-    	
-    	System.out.println(s.name);
-    	
-    	
-    	
-    	SymbolTable me = s;
-    	while(me != null){
-    		System.out.println(me.name);
-    		me = me.pop();
-    	}
-    	
-
-    }
-    
-    */
-    	
-    	
-    	
+*/
     }
     
 }
