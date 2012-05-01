@@ -11,6 +11,6 @@ public class ReservedWordSymbol extends Symbol {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.type.toString();
 	}	
 }

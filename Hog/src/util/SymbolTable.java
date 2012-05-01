@@ -112,7 +112,8 @@ public class SymbolTable {
     	top = new SymbolTable(top); 
       }
     
-
+    
+    
      public static void printSymbolTable(){
     	 Set<Node> nodeMapping = nodeToSymbolTableMap.keySet();
     	 for (Node n: nodeMapping){
@@ -159,7 +160,7 @@ public class SymbolTable {
     
     public void reserveWord(String word){ 
     	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(util.type.Types.Flags.RESERVED_WORD);
-		this.table.put(word, new ReservedWordSymbol(typeNode));  
+		this.table.put(word, new VariableSymbol(typeNode));  
 	}
     
     public void reserveFunction(String word, TypeNode returnType, List<TypeNode> argumentList){ 
