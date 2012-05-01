@@ -21,8 +21,8 @@ public class SymbolTable {
 	   //protected Map<Name, Identifier> variables;
 	   static SymbolTable root = null;
 	   static SymbolTable top = root;
-	   protected Map<String,Symbol> table;
-	   protected SymbolTable outer;
+	   public Map<String,Symbol> table;
+	   public SymbolTable outer;
 	   
 	   static Map<Node, SymbolTable> nodeToSymbolTableMap = new HashMap<Node, SymbolTable>();
 	   
@@ -84,13 +84,9 @@ public class SymbolTable {
      */
     public boolean put(String name, Symbol symbol){
     	// if not in reserve table
-    	if(!root.table.containsKey(name)){
-    		// if not in current table
-    		if(!top.table.containsKey(name)){
+    	if(!this.isDefinedInScope(name)){
             	top.table.put(name, symbol);
             	return true;
-        	}
-    		
     	}
     	return false;
     }
