@@ -1,5 +1,6 @@
 package back_end;
 
+import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
 
 /**
@@ -9,6 +10,14 @@ import util.ast.node.*;
  */
 
 public class SymbolTableVisitor implements Visitor {
+	
+	@Override
+	public void walk(AbstractSyntaxTree tree) {
+		
+		tree.preOrderTraversal();
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void visit(ArgumentsNode node) {
@@ -214,10 +223,6 @@ public class SymbolTableVisitor implements Visitor {
 
 	}
 
-	@Override
-	public void walk(ProgramNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }

@@ -1,5 +1,6 @@
 package back_end;
 
+import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
 
 /**
@@ -12,6 +13,7 @@ import util.ast.node.*;
 
 public interface Visitor {
 	
+	public abstract void walk(AbstractSyntaxTree tree);
 	public abstract void visit(ArgumentsNode node);
 	public abstract void visit(BiOpNode node);
 	public abstract void visit(CatchesNode node);
@@ -46,6 +48,6 @@ public interface Visitor {
 	public abstract void visit(SwitchStatementNode node);
 	public abstract void visit(TypeNode node);
 	public abstract void visit(UnOpNode node);
-	public abstract void walk(ProgramNode node);
+	
 
 }
