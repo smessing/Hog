@@ -255,7 +255,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(FunctionNode node) {
 		// TODO Auto-generated method stub
 		try {
-			out.write(node.getName());
+			//out.write(node.getName());
 		} catch (Exception e) {
 
 		}
@@ -417,17 +417,17 @@ public class CodeGeneratingVisitor implements Visitor {
 		
 		LOGGER.fine("Writing header to code");
 		
-		code.append("import java.io.IOException;");
-		code.append("import java.util.*;");
+		code.append("import java.io.IOException;\n");
+		code.append("import java.util.*;\n");
 
-		code.append("import org.apache.hadoop.fs.Path;");
-		code.append("import org.apache.hadoop.conf.*;");
-		code.append("import org.apache.hadoop.io.*;");
-		code.append("import org.apache.hadoop.mapreduce.*;");
-		code.append("import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;");
-		code.append("import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;");
-		code.append("import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;");
-		code.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;");
+		code.append("import org.apache.hadoop.fs.Path;\n");
+		code.append("import org.apache.hadoop.conf.*;\n");
+		code.append("import org.apache.hadoop.io.*;\n");
+		code.append("import org.apache.hadoop.mapreduce.*;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;\n");
 		
 	}
 
@@ -447,12 +447,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void appendNewline() {
-
-		try {
-			out.newLine();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		
+		code.append('\n');
 
 	}
 

@@ -26,15 +26,17 @@ public class TestCodeGeneratingVisitor {
 		v.walk();
 
 		FileWriter fstream = null;
-
+		
 		try {
 			fstream = new FileWriter("Hog.java");
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(v.getCode());
+			out.close();
+			System.out.println(v.getCode());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 	}
 
 }
