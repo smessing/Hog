@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import util.ast.node.*;
 import util.type.Types;
+import util.type.VariableRedefinedException;
 
 /**
  * 
@@ -98,14 +99,15 @@ public class SymbolTable {
      * @param name
      * @param type
      * @return true for successful puts
+     * @throws VariableRedefinedException 
      */
-    public static boolean put(String name, Symbol symbol){
+    public static boolean put(String name, Symbol symbol) throws VariableRedefinedException{
     	// if not in reserve table
     	if(!top.isDefinedInScope(name)){
             	top.table.put(name, symbol);
             	return true;
     	}
-    	return false;
+    	throw new VariableRedefinedException("The varliable " + name + " has already been defined");
     }
     
     public static void push() {
@@ -154,7 +156,26 @@ public class SymbolTable {
        	for(SymbolTable st = this; st != null; st = st.outer){
        		Symbol found = st.table.get(name);
        		if(found != null) return found;
+       		//identifier in the id node
        	}
+       	return null;
+    }
+    
+    /* 
+     * get the first symbol table that this node maps to 
+     * keep checking parents to see if they map to symbol table 
+     */
+    public static SymbolTable getMappedSymbol(Node n){
+    	if(nodeToSymbolTableMap.containsKey(n)){
+    		return nodeToSymbolTableMap.get(n);
+    	}
+    	while(n.hasParent()){
+    		Node tempNode = n.getParent();
+    		if(nodeToSymbolTableMap.containsKey(tempNode)){
+        		return nodeToSymbolTableMap.get(tempNode);
+        	}	
+    	}
+       	
        	return null;
     }
     
