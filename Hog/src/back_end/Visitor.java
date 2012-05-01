@@ -13,7 +13,7 @@ import util.ast.node.*;
 
 public interface Visitor {
 	
-	public abstract void walk(AbstractSyntaxTree tree);
+	public abstract void walk();
 	public abstract void visit(ArgumentsNode node);
 	public abstract void visit(BiOpNode node);
 	public abstract void visit(CatchesNode node);

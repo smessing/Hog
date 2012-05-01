@@ -356,7 +356,7 @@ public class ErrorCheckingVisitor implements Visitor {
 	}
 
 	@Override
-	public void walk(AbstractSyntaxTree tree) {
+	public void walk() {
 		// TODO Auto-generated method stub
 		
 	}

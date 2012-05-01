@@ -54,7 +54,7 @@ public class AbstractSyntaxTree {
 				TreeTraversalBuilder.traversalOrder.POSTORDER);
 
 	}
-
+	
 	/**
 	 * Method toLatex() Returns a String representation of the program in Latex
 	 * format

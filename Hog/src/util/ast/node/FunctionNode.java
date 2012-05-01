@@ -16,9 +16,14 @@ public class FunctionNode extends ExpressionNode {
 	public FunctionNode(TypeNode type, String name,
 			ParametersNode parameters, StatementListNode instructions) {
 		super(type);
+		this.identifier = name;
 		this.parameters = parameters;
 		this.addChild(instructions);
 		FunctionNode.LOGGER.fine("Constructing FunctionNode");
+	}
+	
+	public ParametersNode getParametersNode() {
+		return parameters;
 	}
 
 	@Override
