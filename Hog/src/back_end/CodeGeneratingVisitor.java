@@ -51,39 +51,35 @@ import java.util.logging.Logger;
  * the translated Hog program.
  * 
  * 
- * @author kurry
+ * @author kurry, sam
  * 
  */
 public class CodeGeneratingVisitor implements Visitor {
 
 	protected final static Logger LOGGER = Logger
-			.getLogger(TypeCheckingVisitor.class.getName());
+			.getLogger(CodeGeneratingVisitor.class.getName());
+	
 	protected AbstractSyntaxTree tree;
 	protected BufferedWriter out;
 
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
+
 		this.tree = root;
-	}
+		FileWriter fstream = null;
 
-	public void run() throws Exception {
-		Iterator<Node> t = this.tree.postOrderTraversal();
-		FileWriter fstream = new FileWriter("out.txt");
-		out = new BufferedWriter(fstream);
-
-		while (t.hasNext()) {
-			// Node n = t.next();
-			// out.write(n.getName());
-			t.next().accept(this);
-			out.newLine();
+		try {
+			fstream = new FileWriter("Hog.java");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
-		out.close();
+		out = new BufferedWriter(fstream);
 	}
 
 	@Override
 	public void visit(BiOpNode node) {
 		// node specific code generation operations here
-		System.out.println("BiOpNode Visited");
+		LOGGER.finer("visit(BiOpNode node) called on " + node);
 		StringBuilder line = new StringBuilder();
 		switch (node.getOpType()) {
 		case ASSIGN:
@@ -94,7 +90,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		}
 
 		try {
-			System.out.println(line.toString());
+			LOGGER.fine("Writing to java source: " + line.toString());
 			out.write(line.toString());
 			out.newLine();
 		} catch (Exception e) {
@@ -416,16 +412,21 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void walk() {
 
+		writeHeader();
+		
 		// start recursive walk:
 
 		walk(tree.getRoot());
 
 		try {
-			out.newLine();
 			out.close();
 		} catch (Exception e) {
 
 		}
+	}
+	
+	private void writeHeader() {
+		
 	}
 
 	public void walk(Node node) {
