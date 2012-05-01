@@ -84,7 +84,7 @@ public class CodeGeneratingVisitor implements Visitor{
 	@Override
 	public void visit(BiOpNode node){
 		//node specific code generation operations here
-		
+		System.out.println("BiOpNode Visited");
 		StringBuilder line = new StringBuilder();
 		switch(node.getOpType()){
 		case ASSIGN: line.append(node.getLeftNode().toSource());
