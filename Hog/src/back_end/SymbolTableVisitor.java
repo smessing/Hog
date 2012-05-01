@@ -1,7 +1,10 @@
 package back_end;
 
+import java.util.logging.Logger;
+
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
+
 
 /**
  * 
@@ -11,11 +14,13 @@ import util.ast.node.*;
 
 public class SymbolTableVisitor implements Visitor {
 	
-	@Override
+	protected final static Logger LOGGER = Logger
+			.getLogger(SymbolTableVisitor.class.getName());
+	
 	public void walk(AbstractSyntaxTree tree) {
 		
+		
 		tree.preOrderTraversal();
-		// TODO Auto-generated method stub
 		
 	}
 
