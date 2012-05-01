@@ -60,26 +60,19 @@ public class CodeGeneratingVisitor implements Visitor {
 			.getLogger(CodeGeneratingVisitor.class.getName());
 	
 	protected AbstractSyntaxTree tree;
-	protected BufferedWriter out;
+	protected StringBuilder code;
 
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 
 		this.tree = root;
-		FileWriter fstream = null;
+		this.code = new StringBuilder();
 
-		try {
-			fstream = new FileWriter("Hog.java");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		out = new BufferedWriter(fstream);
 	}
 
 	@Override
 	public void visit(BiOpNode node) {
-		// node specific code generation operations here
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
+		
 		StringBuilder line = new StringBuilder();
 		switch (node.getOpType()) {
 		case ASSIGN:
@@ -89,13 +82,9 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		}
 
-		try {
-			LOGGER.fine("Writing to java source: " + line.toString());
-			out.write(line.toString());
-			out.newLine();
-		} catch (Exception e) {
-
-		}
+		LOGGER.fine("Writing to java source: " + line.toString());
+		code.append(line.toString());
+		
 	}
 
 	@Override
@@ -266,7 +255,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(FunctionNode node) {
 		// TODO Auto-generated method stub
 		try {
-			out.write(node.getName());
+			//out.write(node.getName());
 		} catch (Exception e) {
 
 		}
@@ -410,7 +399,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	@Override
-	public void walk() {
+	public void walk()  {
 
 		writeHeader();
 		
@@ -418,14 +407,26 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		walk(tree.getRoot());
 
-		try {
-			out.close();
-		} catch (Exception e) {
-
-		}
+	}
+	
+	public String getCode() {
+		return code.toString();
 	}
 	
 	private void writeHeader() {
+		
+		LOGGER.fine("Writing header to code");
+		
+		code.append("import java.io.IOException;\n");
+		code.append("import java.util.*;\n");
+		code.append("import org.apache.hadoop.fs.Path;\n");
+		code.append("import org.apache.hadoop.conf.*;\n");
+		code.append("import org.apache.hadoop.io.*;\n");
+		code.append("import org.apache.hadoop.mapreduce.*;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;\n");
 		
 	}
 
@@ -445,12 +446,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void appendNewline() {
-
-		try {
-			out.newLine();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		
+		code.append('\n');
 
 	}
 
