@@ -65,7 +65,8 @@ public class Types {
 	 * 
 	 * The valid expection types are:
 	 * <ul>
-	 * <li>ARITHMETIC : attempting to compute the impossible (most likely division by zero),</li>
+	 * <li>ARITHMETIC : attempting to compute the impossible (most likely
+	 * division by zero),</li>
 	 * <li>ARRAY_OUT_OF_BOUNDS : attempting to access an invalid index into a
 	 * collection,</li>
 	 * <li>FILE_LOAD : error while reading from a file,</li>
@@ -86,7 +87,7 @@ public class Types {
 	/**
 	 * 
 	 * @author sam
-	 *
+	 * 
 	 */
 	public static enum Flags {
 		RESERVED_WORD, CHECK_INNER_TYPE, BOOL, TEXT, VOID, INT, REAL,
@@ -286,7 +287,7 @@ public class Types {
 			throw new TypeMismatchException("Tried to call " + op + " on "
 					+ operand + "!");
 		}
-		
+
 		switch (op) {
 		case UMINUS:
 		case INCR:
@@ -299,22 +300,34 @@ public class Types {
 		case NONE:
 			return operand;
 		}
-		
+
 		// should never get here.
 		throw new UnsupportedOperationException("OpType " + op
 				+ "not implemented!");
 	}
 
 	/**
+	 * Find the higher of two numeric types.
 	 * 
-	 * @param left
-	 * @param right
-	 * @return
+	 * If one (or both) of the types are REAL, then REAL is returned,
+	 * otherwise, INT is returned (unless an exception is thrown).
+	 * 
+	 * @param left a numeric PrimitiveTypeNode
+	 * @param right a numeric PrimitiveTypeNode
+	 * @return a PrimitiveTypeNode representing the higher numeric type.
+	 * @throws TypeMismatchException if one of the passed in types is not numeric.
 	 */
-	private static TypeNode getHigherNumericType(PrimitiveTypeNode left,
-			PrimitiveTypeNode right) {
-		if (left.getType() == Primitive.REAL
-				|| right.getType() == Primitive.REAL) {
+	public static PrimitiveTypeNode getHigherNumericType(TypeNode left,
+			TypeNode right) throws TypeMismatchException {
+
+		if (!left.isNumeric() || !right.isNumeric()) {
+			throw new TypeMismatchException(
+					"Tried to get higher numeric type for "
+							+ (left.isNumeric() ? right : left));
+		}
+
+		if (((PrimitiveTypeNode) left).getType() == Primitive.REAL
+				|| ((PrimitiveTypeNode) right).getType() == Primitive.REAL) {
 			return new PrimitiveTypeNode(Primitive.REAL);
 		}
 		return new PrimitiveTypeNode(Primitive.INT);

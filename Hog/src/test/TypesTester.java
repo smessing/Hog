@@ -12,6 +12,7 @@ import util.ast.node.DictTypeNode;
 import util.ast.node.ExceptionTypeNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.TypeNode;
+import util.type.TypeMismatchException;
 import util.type.Types;
 
 
@@ -26,6 +27,7 @@ public class TypesTester {
 	
 	private TypeNode boolNode;
 	private TypeNode intNode;
+	private TypeNode realNode;
 	private TypeNode textNode;
 	private TypeNode listInt;
 	private TypeNode exceptionFileNotFound;
@@ -42,6 +44,7 @@ public class TypesTester {
 		
 		boolNode = new PrimitiveTypeNode(Types.Primitive.BOOL);
 		intNode = new PrimitiveTypeNode(Types.Primitive.INT);
+		realNode = new PrimitiveTypeNode(Types.Primitive.REAL);
 		textNode = new PrimitiveTypeNode(Types.Primitive.TEXT);
 		listInt = new DerivedTypeNode(Types.Derived.LIST, intNode);
 		exceptionFileNotFound = new ExceptionTypeNode(Types.Exception.FILE_NOT_FOUND);
@@ -64,6 +67,17 @@ public class TypesTester {
 		assertTrue(Types.isSameType(secondListInt, listInt));
 		assertFalse(Types.isSameType(listListSetBool, listSetBool));
 		
+	}
+	
+	@Test
+	public void testGetHigherNumericType() throws TypeMismatchException {
+		assertEquals(intNode, Types.getHigherNumericType(intNode, intNode));
+		assertEquals(realNode, Types.getHigherNumericType(realNode, intNode));
+	}
+	
+	@Test(expected = TypeMismatchException.class) 
+	public void testGetHigherNumericType2() throws TypeMismatchException {
+		Types.getHigherNumericType(boolNode, setBool);
 	}
 	
 	
