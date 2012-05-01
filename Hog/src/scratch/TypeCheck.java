@@ -1,4 +1,6 @@
-package util.type;
+package scratch;
+
+import util.type.Types;
 
 
 public class TypeCheck extends Types{

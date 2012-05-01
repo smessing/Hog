@@ -17,7 +17,7 @@ public class UnOpNode extends ExpressionNode {
 	 * @return UMINUS, NOT, RETURN, INCR, DECR, CAST, NONE 
 	 */
 	public static enum OpType {
-		UMINUS, NOT, RETURN, INCR, DECR, CAST, NONE
+		UMINUS, NOT, INCR, DECR, CAST, NONE
 	}
 	
 	protected OpType opType;

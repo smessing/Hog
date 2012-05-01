@@ -1,4 +1,4 @@
-package util.type;
+package scratch;
 
 import util.SymbolTable;
 

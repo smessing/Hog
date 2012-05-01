@@ -11,7 +11,7 @@ import util.ast.node.*;
 import util.type.Types;
 
 
-public class SymbolTable implements Cloneable{
+public class SymbolTable implements Cloneable {
 
 	   //protected Map<Name, Identifier> variables;
 	   static SymbolTable root = null;

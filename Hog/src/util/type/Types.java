@@ -83,6 +83,11 @@ public class Types {
 		FILE_NOT_FOUND, FILE_LOAD, ARRAY_OUT_OF_BOUNDS, INCORRECT_ARGUMENT, TYPE_MISMATCH, NULL_REFERENCE, ARITHMETIC
 	}
 
+	/**
+	 * 
+	 * @author sam
+	 *
+	 */
 	public static enum Flags {
 		RESERVED_WORD, CHECK_INNER_TYPE, BOOL, TEXT, VOID, INT, REAL,
 	}
@@ -109,11 +114,23 @@ public class Types {
 
 	}
 
+	/**
+	 * 
+	 * @param one
+	 * @param two
+	 * @return
+	 */
 	private static boolean isSameType(ExceptionTypeNode one,
 			ExceptionTypeNode two) {
 		return one.getExceptionType() == two.getExceptionType();
 	}
 
+	/**
+	 * 
+	 * @param one
+	 * @param two
+	 * @return
+	 */
 	private static boolean isSameType(DictTypeNode one, DictTypeNode two) {
 		if (one.getKeyType() == two.getKeyType()) {
 			return isSameType(one.getValueType(), two.getValueType());
@@ -121,11 +138,23 @@ public class Types {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param one
+	 * @param two
+	 * @return
+	 */
 	private static boolean isSameType(PrimitiveTypeNode one,
 			PrimitiveTypeNode two) {
 		return one.getType() == two.getType();
 	}
 
+	/**
+	 * 
+	 * @param one
+	 * @param two
+	 * @return
+	 */
 	private static boolean isSameType(DerivedTypeNode one, DerivedTypeNode two) {
 		if (one.getLocalType() == two.getLocalType()) {
 			return isSameType(one.getInnerTypeNode(), two.getInnerTypeNode());
@@ -133,6 +162,13 @@ public class Types {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param op
+	 * @param left
+	 * @param right
+	 * @return
+	 */
 	public static boolean isCompatible(BiOpNode.OpType op, TypeNode left,
 			TypeNode right) {
 
@@ -165,6 +201,14 @@ public class Types {
 				+ "not implemented!");
 	}
 
+	/**
+	 * 
+	 * @param op
+	 * @param left
+	 * @param right
+	 * @return
+	 * @throws TypeMismatchException
+	 */
 	public static TypeNode getResult(BiOpNode.OpType op, TypeNode left,
 			TypeNode right) throws TypeMismatchException {
 
@@ -202,6 +246,12 @@ public class Types {
 				+ "not implemented!");
 	}
 
+	/**
+	 * 
+	 * @param op
+	 * @param operand
+	 * @return
+	 */
 	public static boolean isCompatible(UnOpNode.OpType op, TypeNode operand) {
 
 		switch (op) {
@@ -210,8 +260,6 @@ public class Types {
 		case DECR:
 			return operand.isNumeric();
 		case CAST:
-			throw new UnsupportedOperationException("TODO");
-		case RETURN:
 			throw new UnsupportedOperationException("TODO");
 		case NOT:
 			return operand.isBoolean();
@@ -224,6 +272,13 @@ public class Types {
 				+ "not implemented!");
 	}
 
+	/**
+	 * 
+	 * @param op
+	 * @param operand
+	 * @return
+	 * @throws TypeMismatchException
+	 */
 	public static TypeNode getResult(UnOpNode.OpType op, TypeNode operand)
 			throws TypeMismatchException {
 
@@ -231,9 +286,31 @@ public class Types {
 			throw new TypeMismatchException("Tried to call " + op + " on "
 					+ operand + "!");
 		}
-		throw new UnsupportedOperationException("TODO");
+		
+		switch (op) {
+		case UMINUS:
+		case INCR:
+		case DECR:
+			return (PrimitiveTypeNode) operand;
+		case CAST:
+			throw new UnsupportedOperationException("TODO");
+		case NOT:
+			return (PrimitiveTypeNode) operand;
+		case NONE:
+			return operand;
+		}
+		
+		// should never get here.
+		throw new UnsupportedOperationException("OpType " + op
+				+ "not implemented!");
 	}
 
+	/**
+	 * 
+	 * @param left
+	 * @param right
+	 * @return
+	 */
 	private static TypeNode getHigherNumericType(PrimitiveTypeNode left,
 			PrimitiveTypeNode right) {
 		if (left.getType() == Primitive.REAL
