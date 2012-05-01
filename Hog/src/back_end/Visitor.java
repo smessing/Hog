@@ -40,5 +40,6 @@ public abstract class Visitor {
 	public abstract void visit(SwitchStatementNode node);
 	public abstract void visit(TypeNode node);
 	public abstract void visit(UnOpNode node);
+	public abstract void walk(ProgramNode node);
 
 }
