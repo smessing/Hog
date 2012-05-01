@@ -1,5 +1,6 @@
 package back_end;
 
+import util.ast.AbstractSyntaxTree;
 import util.ast.node.ArgumentsNode;
 import util.ast.node.BiOpNode;
 import util.ast.node.CatchesNode;
@@ -226,6 +227,12 @@ public class CodeGeneratingVisitor extends Visitor{
 
 	@Override
 	public void visit(TypeNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void walk(AbstractSyntaxTree tree) {
 		// TODO Auto-generated method stub
 		
 	}

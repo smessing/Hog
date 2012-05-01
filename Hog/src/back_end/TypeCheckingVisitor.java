@@ -20,6 +20,7 @@ package back_end;
  */
 import java.util.logging.Logger;
 
+import util.ast.AbstractSyntaxTree;
 import util.ast.node.ArgumentsNode;
 import util.ast.node.BiOpNode;
 import util.ast.node.CatchesNode;
@@ -267,6 +268,12 @@ public class TypeCheckingVisitor extends Visitor {
 	public void visit(TypeNode node) {
 		// node specific type checking operations here
 		LOGGER.fine("Type-checking TypeNode");
+	}
+
+	@Override
+	public void walk(AbstractSyntaxTree tree) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

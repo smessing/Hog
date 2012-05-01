@@ -3,6 +3,7 @@
  */
 package back_end;
 
+import util.ast.AbstractSyntaxTree;
 import util.ast.node.ArgumentsNode;
 import util.ast.node.BiOpNode;
 import util.ast.node.CatchesNode;
@@ -338,6 +339,12 @@ public class ErrorCheckingVisitor extends Visitor {
 	public void visit(UnOpNode node) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void walk(AbstractSyntaxTree tree) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
