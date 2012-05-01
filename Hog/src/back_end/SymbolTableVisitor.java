@@ -19,12 +19,18 @@ import util.ast.node.*;
 
 public class SymbolTableVisitor implements Visitor {
 	
+	protected AbstractSyntaxTree tree;
+	
+	public SymbolTableVisitor(AbstractSyntaxTree tree) {
+		this.tree = tree;
+	}
+	
 	protected final static Logger LOGGER = Logger
 			.getLogger(SymbolTableVisitor.class.getName());
 	
-	public void walk(AbstractSyntaxTree tree) {
+	public void walk() {
 		
-		ProgramNode treeRoot = (ProgramNode) tree.getRoot();
+		ProgramNode treeRoot = (ProgramNode) this.tree.getRoot();
 		treeRoot.accept(this);
 	}
 	
