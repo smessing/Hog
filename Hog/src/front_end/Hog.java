@@ -56,6 +56,16 @@ public class Hog {
 		if (!source.endsWith(".java") && (!source.endsWith(".hog"))) {
 			die();
 		}
+		
+		if (args.length == 6) {
+			
+			input = args[2].equals("--input") ? args[3] : args[5];
+			
+			output = args[2].equals("--output") ? args[3] : args[5];
+			
+		} else if (args.length == 4) {
+			
+		}
 
 	}
 
