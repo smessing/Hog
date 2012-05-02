@@ -180,7 +180,7 @@ public class CodeGeneratingVisitor implements Visitor {
 					+ node.getOpType() + " not supported yet.");
 		}
 
-		LOGGER.fine("Writing to java source: " + line.toString() + ";");
+		LOGGER.fine("Writing to java source: " + line.toString() + ";");/**/
 
 	}
 
@@ -307,13 +307,35 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(ElseIfStatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
+	public void visit(IfElseStatementNode node) {
+		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
+		
+		line.append("if ( ");
+		line.append(node.getCondition().toSource());
+		line.append(" ) {\n");
+		walk(node.getIfCondTrue());
+		if (node.getCheckNext() != null) {
+			walk(node.getCheckNext());
 		}
+		if (node.getIfCondFalse() != null) {
+			walk(node.getIfCondFalse());
+		}
+		line.append("\n}\n");
+	}
+
+	@Override
+	public void visit(ElseIfStatementNode node) {
+		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
+		
+		line.append("else if (");
+		line.append(node.getCondition().toSource());
+		line.append(" ) {\n");
+		walk(node.getIfCondTrue());
+		if (node.getIfCondFalse() != null) {
+			walk(node.getIfCondFalse());
+		}
+		line.append("\n}\n");
+		
 	}
 
 	@Override
@@ -350,25 +372,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(GuardingStatementNode node) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void visit(IfElseStatementNode node) {
-		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-		for (Node child : node.getChildren()) {
-			System.out.println(child);
-		}
-		line.append("if ( ");
-		line.append(node.getCondition().toSource());
-		line.append(") {\n");
-		walk(node.getIfCondTrue());
-		if (node.getCheckNext() != null) {
-			walk(node.getCheckNext());
-		}
-		if (node.getIfCondFalse() != null) {
-			walk(node.getIfCondFalse());
-		}
-		line.append("\n}\n");
 	}
 
 	@Override
