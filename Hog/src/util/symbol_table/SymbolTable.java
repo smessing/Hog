@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import util.Symbol;
-import util.SymbolTable;
 import util.ast.node.*;
 import util.type.Types;
 import util.type.VariableRedefinedException;
