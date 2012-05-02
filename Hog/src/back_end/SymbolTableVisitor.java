@@ -5,11 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import util.FunctionSymbol;
-import util.SymbolTable;
-import util.VariableSymbol;
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
+import util.symbol_table.FunctionSymbol;
+import util.symbol_table.SymbolTable;
+import util.symbol_table.VariableSymbol;
 import util.type.Types;
 import util.type.VariableRedefinedException;
 import util.type.VariableUndeclaredException;

@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import util.SymbolTable;
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.BiOpNode;
 import util.ast.node.ExpressionNode;
@@ -16,6 +15,7 @@ import util.ast.node.MockExpressionNode;
 import util.ast.node.MockNode;
 import util.ast.node.Node;
 import util.ast.node.ProgramNode;
+import util.symbol_table.SymbolTable;
 import util.type.Types;
 
 import java_cup.parser;

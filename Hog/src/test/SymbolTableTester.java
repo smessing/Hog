@@ -18,9 +18,9 @@ import back_end.SymbolTableVisitor;
 import front_end.Lexer;
 import front_end.Parser;
 
-import util.SymbolTable;
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.ProgramNode;
+import util.symbol_table.SymbolTable;
 
 public class SymbolTableTester {
 
