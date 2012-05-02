@@ -249,10 +249,28 @@ public class SymbolTable {
 		reserveWord("real");
 		reserveWord("bool");
 		reserveWord("text");
+		reserveWord("tokenize");
 		reserveWord("default");
 		reserveWord("set");
 		reserveWord("dict");
 		reserveWord("iter");
+		reserveWord("add");
+		reserveWord("clear");
+		reserveWord("get");
+		reserveWord("iterator");
+		reserveWord("size");
+		reserveWord("sort");
+		reserveWord("next");
+		reserveWord("hasNext");
+		reserveWord("peek");
+		reserveWord("contains");
+		reserveWord("containsAll");
+		reserveWord("iter");
+		reserveWord("isEmpty");
+		reserveWord("remove");
+		reserveWord("removeAll");
+		reserveWord("mapReduce");
+		reserveWord("print");
 		
 		/* add built-in list methods */
 		
