@@ -350,6 +350,7 @@ public class Types {
 		// derived: lower case version of outer
 		// exception : lower case version of node
 		
+		
 		String typeName = null;
 
 		if (node instanceof PrimitiveTypeNode) {
@@ -366,7 +367,7 @@ public class Types {
 
 		} else {
 			throw new UnsupportedOperationException(
-					"No support for TypeNode type: " + node.getClass());
+					"No support for TypeNode type: ");
 		}
 
 		return typeName;

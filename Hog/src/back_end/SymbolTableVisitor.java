@@ -12,6 +12,7 @@ import util.symbol_table.FunctionSymbol;
 import util.symbol_table.Symbol;
 import util.symbol_table.SymbolTable;
 import util.symbol_table.VariableSymbol;
+import util.type.FunctionNotDefined;
 import util.type.Types;
 import util.type.VariableRedefinedException;
 import util.type.VariableUndeclaredException;
@@ -255,6 +256,12 @@ public class SymbolTableVisitor implements Visitor {
 			}
 			
 			// it has been declared. Now we decorate it with its type
+			LOGGER.finer("We are about to decorate a variable");
+			if(node.getType() == null) {
+				LOGGER.finer("The node we are decorating has a null typeNode.");
+			}
+			LOGGER.finer("The node we are decorating does not have a null typeNode.");
+			LOGGER.finer("The type of NodeSymbol is " + nodeSymbol.getType());
 			node.setType(nodeSymbol.getType());
 		}
 		
@@ -324,39 +331,6 @@ public class SymbolTableVisitor implements Visitor {
 	public void visit(PostfixExpressionNode node) {
 		LOGGER.info("SymbolTableVistor visiting PostFixExpressionNode");
 		openScope(node);
-		
-		// if it is a method call, it must be a built in.
-		if (node.getPostfixType() == PostfixType.METHOD_NO_PARAMS || 
-				node.getPostfixType() == PostfixType.METHOD_WITH_PARAMS) {
-			
-			// second child is the name of the method
-			IdNode methodName = (IdNode) node.getChildren().get(1);
-			
-			// first child is the object we are calling the method on
-			IdNode objectOfMethod = (IdNode) node.getChildren().get(0);
-			TypeNode objectType = objectOfMethod.getType(); // get typenode
-			
-			// get the lowercase version of the type name of the object
-			String lowerCaseTypeName = Types.getLowerCaseTypeName(objectType);
-			
-			// lookupStr, eg. list.add
-			String lookupStr = lowerCaseTypeName + "." + methodName.getIdentifier();
-			
-			// if this is not a legal method call this kind of type
-			if( !SymbolTable.getRootSymbolTable().isDefinedInScope(lookupStr) ) {
-				throw new FunctionNodeDefined("The function " + lookupStr + " is not defined.");
-			}
-			
-
-			
-			
-			
-
-			
-			
-		}
-		
-		
 		visitAllChildrenStandard(node);
 		closeScope(node);
 	}
