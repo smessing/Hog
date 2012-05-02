@@ -21,7 +21,10 @@ public class FunctionNode extends ExpressionNode {
 		this.addChild(instructions);
 		FunctionNode.LOGGER.fine("Constructing FunctionNode");
 	}
-	
+	/** Method Returns The Parameters Node of Function Node
+	 * 
+	 * @return ParametersNode
+	 */
 	public ParametersNode getParametersNode() {
 		return parameters;
 	}

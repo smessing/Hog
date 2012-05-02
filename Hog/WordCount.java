@@ -23,7 +23,7 @@ import org.apache.hadoop.mapred.*;
 public class WordCount {
 	
 	public static class Functions {
-	     public static int fib(int n){
+	     public static Integer fib(Integer n){
 	    	 if (n == 0){
 	    		 return 0;
 	    	 }
@@ -36,7 +36,7 @@ public class WordCount {
 	    	 }
 	     }
 	     
-	     public static int factorial(int n){
+	     public static Integer factorial(Integer n){
 	    	 if (n==0 || n == 1){
 	    		 return 1;
 	    	 }
