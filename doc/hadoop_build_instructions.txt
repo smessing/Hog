@@ -1,4 +1,6 @@
 
+http://stackoverflow.com/questions/7134723/hadoop-on-osx-unable-to-load-realm-info-from-scdynamicstore
+
 1. To Compile (assuming hadoop-core-1.0.1.jar and WordCount.java is in current folder)
 
 javac -classpath hadoop-core-1.0.1.jar WordCount.java

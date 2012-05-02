@@ -41,6 +41,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -363,6 +364,26 @@ public class CodeGeneratingVisitor implements Visitor {
 		// TODO Auto-generated method stub
 		try {
 			// out.write(node.getName());
+			
+			line.append("public static"+" "+node.getType().toSource()+" "+node.getIdentifier());
+			
+			ParametersNode params = node.getParametersNode();
+			line.append("(");
+			line.append(params.getType().toSource());
+			line.append(" "+params.getIdentifier());
+			line.append(")");
+			line.append("\n");
+			/*
+			if(params.hasChildren()){
+				while(params.getChildren().iterator().hasNext()){
+					Node child = params.getChildren().iterator().next();
+					line.append(" "+child.getName()+" "+params.getIdentifier());
+				}
+			}
+			*/
+			
+		
+		
 		} catch (Exception e) {
 
 		}
