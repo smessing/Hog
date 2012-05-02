@@ -2,10 +2,8 @@
 *.aux
 *.log
 *.synctex.gz
-<<<<<<< HEAD
-=======
+final_report.pdf
 AST_output.pdf
->>>>>>> 4fbd9d9526cd525777370200d88f36e57acad69f
 AST_output.tex
 
 # Bibtex:
