@@ -27,6 +27,7 @@ public class JumpStatementNode extends StatementNode {
 							+ "jump type, and expression node " + e
 							+ ". But there shouldn't be an expression node.");
 		}
+		this.expression = e;
 		this.addChild(e);
 	}
 

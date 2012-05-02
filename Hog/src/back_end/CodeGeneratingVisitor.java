@@ -145,16 +145,16 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append("\n");
 		code.append(line.toString());
 		LOGGER.fine("[writeFunction] Writing to java source: "
-				+ line.toString() + ";");/**/
+				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
 	}
 
 	private void writeFunctions() {
-		line.append("}\n");
+		line.append("\n}\n");
 		code.append(line.toString());
 		LOGGER.fine("[writeFunctions] Writing to java source: "
-				+ line.toString() + ";");/**/
+				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
 	}
@@ -163,7 +163,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append(";\n");
 		code.append(line.toString());
 		LOGGER.fine("[writeStatement] Writing to java source: "
-				+ line.toString() + ";");/**/
+				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
 	}
@@ -423,21 +423,15 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case MAP:
 			line
-					.append("public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {");
-
-			line.append("}\n");
+					.append("public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {\n");
 			break;
 		case REDUCE:
 			line
-					.append("public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {");
-
-			line.append("}\n");
+					.append("public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {\n");
 			break;
 		case MAIN:
 			line
-					.append("public static void main(String[] args) throws Exception {");
-
-			line.append("}\n");
+					.append("public static void main(String[] args) throws Exception {\n");
 			break;
 		}
 
