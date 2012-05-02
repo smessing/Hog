@@ -467,7 +467,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		walk(node.getBlock());
 
-		writeFunctions();
+		//writeFunctions();
 
 	}
 

@@ -9,6 +9,7 @@ import util.ast.node.DerivedTypeNode;
 import util.ast.node.DictTypeNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
+import util.error.TypeMismatchError;
 
 /**
  * A convenience class for defining and manipulating internal type

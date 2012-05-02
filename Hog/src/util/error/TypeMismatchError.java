@@ -1,4 +1,4 @@
-package util.type;
+package util.error;
 
 @SuppressWarnings("serial")
 public class TypeMismatchError extends Exception {
