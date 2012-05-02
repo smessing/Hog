@@ -98,7 +98,10 @@ public class CodeGeneratingVisitor implements Visitor {
 		
 		if (node instanceof IfElseStatementNode) {
 			baseCase = true;
-		} else if (node.getChildren().isEmpty()) {
+		} else if (node instanceof FunctionNode) {
+			baseCase = true;
+		}
+		else if (node.getChildren().isEmpty()) {
 			baseCase = true;
 		}
 
@@ -372,6 +375,12 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append(params.getType().toSource());
 			line.append(" "+params.getIdentifier());
 			line.append(")");
+			
+			line.append("{");
+			// body of function
+			//walk(node);
+			line.append("\n");
+			line.append("}");
 			line.append("\n");
 			/*
 			if(params.hasChildren()){
