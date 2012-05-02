@@ -325,9 +325,9 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(ElseIfStatementNode node) {
-		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
+		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
 		
-		line.append("else if (");
+		line.append("\n} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
 		walk(node.getIfCondTrue());
@@ -340,12 +340,12 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(ElseStatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
+		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
+		
+		line.append("else {\n");
+		walk(node.getBlock());
+		line.append("\n}\n");
+		
 	}
 
 	@Override

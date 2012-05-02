@@ -9,8 +9,15 @@ package util.ast.node;
  */
 public class ElseStatementNode extends StatementNode {
 
-	public ElseStatementNode(StatementListNode child) {
-		this.addChild(child);
+	protected StatementListNode block;
+	
+	public ElseStatementNode(StatementListNode block) {
+		this.addChild(block);
+		this.block = block;
+	}
+	
+	public StatementListNode getBlock() {
+		return block;
 	}
 
 	@Override
