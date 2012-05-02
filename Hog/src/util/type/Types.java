@@ -336,6 +336,14 @@ public class Types {
 		return new PrimitiveTypeNode(Primitive.INT);
 	}
 
+	/**
+	 * Get a lower-case string representation of this node's type.
+	 * 
+	 * Note: for derived type, returns lower-case representation of the <i>local</i> type.
+	 * 
+	 * @param node a TypeNode to get the string representation for.
+	 * @return a lower-case string of the TypeNode's type.
+	 */
 	public static String getLowercaseTypeName(TypeNode node) {
 
 		// prim: lower case version
