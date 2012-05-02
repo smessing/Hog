@@ -166,12 +166,18 @@ public class SymbolTable {
      * keep checking parents to see if they map to symbol table 
      */
     public static SymbolTable getMappedSymbolTable(Node n){
+    	LOGGER.info("getMappedSymbolTable() on node: " + n.toString());
     	if(nodeToSymbolTableMap.containsKey(n)){
     		return nodeToSymbolTableMap.get(n);
     	}
-    	while(n.hasParent()){
-    		Node tempNode = n.getParent();
+    	
+    	LOGGER.info("after nodeToSymbolTableMap.containsKey and get()");
+    	Node tempNode = n;
+    	while(tempNode.hasParent()){
+    		tempNode = tempNode.getParent();
+    		LOGGER.info("inside while loop for n.hasParent()");
     		if(nodeToSymbolTableMap.containsKey(tempNode)){
+    			LOGGER.info("we found the symbol table it maps to!");
         		return nodeToSymbolTableMap.get(tempNode);
         	}	
     	}

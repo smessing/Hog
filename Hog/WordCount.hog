@@ -25,8 +25,8 @@
   #{ this is a 
        block comment }#
   int count = 1;
-  dict<int, real> face;
-  real face = 1.0;
+  #dict<int, real> face;
+  #real face = 1.0;
   foreach word in line.tokenize(' ') {
     emit(word, 1);
   }
@@ -41,14 +41,14 @@
     print('count equals something else');
   }
   
-  list<int> face;
-  try {
-    face.get(0);
-  } catch (FileNotFoundException exception) {
-    print(exception);
-  } catch (ArrayOutOfBoundsException exception) {
-    print (exception);
-  }
+  #list<int> face;
+  #try {
+   # face.get(0);
+  #} catch (FileNotFoundException exception) {
+   # print(exception);
+  #} catch (ArrayOutOfBoundsException exception) {
+  #  print (exception);
+  #}
   for (int i = 0; i < 4; i++;) {
     print(i);
   }
