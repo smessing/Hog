@@ -776,9 +776,10 @@ IterationStatement::=
                                       "StatementList R_BRACE -> IterationStatement");
     :}
   |
-    FOREACH Expression:e1 IN Expression:e2 Block:b
+    FOREACH Type:t ID:i IN Expression:e2 Block:b
     {:
-      RESULT = new IterationStatementNode(e1,e2,b);
+      IdNode idNode = new IdNode(t, i);
+      RESULT = new IterationStatementNode(idNode,e2,b);
       CUP$Parser$actions.LOGGER.info("FOREACH Expression IN Expression L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement"); 
     :}
