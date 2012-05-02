@@ -2,6 +2,8 @@ package back_end;
 
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
+import util.type.VariableRedefinedException;
+import util.type.VariableUndeclaredException;
 
 /**
  * Visitor interface
