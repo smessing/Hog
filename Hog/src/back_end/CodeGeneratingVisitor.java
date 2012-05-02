@@ -374,15 +374,8 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append(")");
 			line.append(" {\n");
 			walk(node.getInstructions());
-			line.append("}\n");
 			
-			
-			/*
-			 * if(params.hasChildren()){
-			 * while(params.getChildren().iterator().hasNext()){ Node child =
-			 * params.getChildren().iterator().next();
-			 * line.append(" "+child.getName()+" "+params.getIdentifier()); } }
-			 */
+			writeFunctions();
 
 
 	}
@@ -405,11 +398,20 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(JumpStatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
+		switch(node.getJumpType()) {
+		case RETURN:
+			line.append("return ");
+			break;
+		case BREAK:
+			line.append("break;");
+			break;
+		case CONTINUE:
+			line.append("continue;");
+			break;
+		}
+		
+		if (node.getExpressionNode() != null) {
+			walk(node.getExpressionNode());
 		}
 	}
 
