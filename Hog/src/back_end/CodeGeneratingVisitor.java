@@ -61,6 +61,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	protected AbstractSyntaxTree tree;
 	protected StringBuilder code;
+	protected StringBuilder line;
 
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 
@@ -119,6 +120,13 @@ public class CodeGeneratingVisitor implements Visitor {
 				.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;\n");
 
 	}
+	
+	private void writeStatement() {
+		code.append(line.toString());
+		// reset line
+		line = new StringBuilder();
+		code.append(";\n");
+	}
 
 	private void appendEndline() {
 
@@ -129,9 +137,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(BiOpNode node) {
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
-
-		StringBuilder line = new StringBuilder();
-		line.append(node.getLeftNode().toSource());
+		
+		walk(node.getLeftNode());
 		
 		switch (node.getOpType()) {
 		case ASSIGN:
@@ -151,7 +158,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		}
 		
-		line.append(node.getRightNode().toSource());
+		walk(node.getRightNode());
 		
 		if (line.toString().length() == 0) {
 			throw new UnsupportedOperationException("BiOpType: "
@@ -159,7 +166,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		}
 
 		LOGGER.fine("Writing to java source: " + line.toString() + ";");
-		code.append(line.toString());
 
 	}
 
@@ -445,12 +451,13 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(StatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
+		
+		for (Node child : node.getChildren()) {
+			child.accept(this);
 		}
+		
+		writeStatement();
+
 	}
 
 	@Override

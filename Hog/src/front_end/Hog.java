@@ -70,6 +70,8 @@ public class Hog {
 			ex.printStackTrace();
 		}
 
+		root.print();
+		
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
 		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
 		codeGenerator.walk();
