@@ -336,24 +336,32 @@ public class Types {
 		return new PrimitiveTypeNode(Primitive.INT);
 	}
 
-	public static String getType(TypeNode node) {
+	public static String getLowercaseTypeName(TypeNode node) {
 
 		// prim: lower case version
 		// derived: lower case version of outer
 		// exception : lower case version of node
+		
+		String typeName = null;
 
 		if (node instanceof PrimitiveTypeNode) {
+			
+			typeName = ((PrimitiveTypeNode) node).getType().toString().toLowerCase();
 
 		} else if (node instanceof DerivedTypeNode) {
+			
+			typeName = ((DerivedTypeNode) node).getLocalType().toString().toLowerCase();
 
 		} else if (node instanceof ExceptionTypeNode) {
+			
+			typeName = ((ExceptionTypeNode) node).getExceptionType().toString().toLowerCase();
 
 		} else {
 			throw new UnsupportedOperationException(
 					"No support for TypeNode type: " + node.getClass());
 		}
 
-		throw new UnsupportedOperationException("TODO");
+		return typeName;
 
 	}
 
