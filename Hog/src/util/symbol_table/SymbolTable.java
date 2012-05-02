@@ -177,7 +177,7 @@ public class SymbolTable {
     		tempNode = tempNode.getParent();
     		LOGGER.info("inside while loop for n.hasParent()");
     		if(nodeToSymbolTableMap.containsKey(tempNode)){
-    			LOGGER.info("we found the symbol table it maps to!");
+    			LOGGER.info("It maps to " + tempNode.getName());
         		return nodeToSymbolTableMap.get(tempNode);
         	}	
     	}
