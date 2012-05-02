@@ -378,6 +378,10 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(PostfixExpressionNode node) {
 		LOGGER.finer("visit(PostfixExpressionNode node) called on " + node);
+		
+		switch(node.getPostfixType()) {
+		
+		}
 
 	}
 
