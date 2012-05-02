@@ -6,24 +6,39 @@ import back_end.Visitor;
  * A FunctionNode.
  * 
  * @author ben, sam
- *
+ * 
  */
 public class FunctionNode extends ExpressionNode {
 
 	protected ParametersNode parameters;
+	protected StatementListNode instructions;
 	protected String identifier;
 
-	public FunctionNode(TypeNode type, String name,
-			ParametersNode parameters, StatementListNode instructions) {
+	public FunctionNode(TypeNode type, String name, ParametersNode parameters,
+			StatementListNode instructions) {
 		super(type);
 		this.identifier = name;
 		this.parameters = parameters;
+		if (instructions == null) {
+			throw new UnsupportedOperationException(
+					"Tried to create a FunctionNode without a body. Something is wrong!");
+		}
+		this.instructions = instructions;
 		this.addChild(instructions);
 		FunctionNode.LOGGER.fine("Constructing FunctionNode");
 	}
-	
+
+	/**
+	 * Method Returns The Parameters Node of Function Node
+	 * 
+	 * @return ParametersNode
+	 */
 	public ParametersNode getParametersNode() {
 		return parameters;
+	}
+
+	public StatementListNode getInstructions() {
+		return instructions;
 	}
 
 	@Override
@@ -37,7 +52,7 @@ public class FunctionNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "FunctionNode-" + identifier;
+		return id + "-FunctionNode-" + identifier;
 	}
 
 	@Override

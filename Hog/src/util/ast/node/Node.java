@@ -19,10 +19,14 @@ public abstract class Node implements Comparable<Node> {
 	// logger used for all nodes
 	protected final static Logger LOGGER = Logger.getLogger(Node.class
 			.getName());
+	
+	protected static int nodeCount = 0;
+	
 
 	protected Node parent;
 	// Note: children are ordered left-to-right (first child is leftmost child).
 	protected List<Node> children;
+	protected int id;
 	
 	// for use in building symbol table tree
 	protected boolean newScope;
@@ -32,6 +36,8 @@ public abstract class Node implements Comparable<Node> {
 	 */
 	public Node() {
 		this(new ArrayList<Node>());
+		this.id = nodeCount;
+		nodeCount++;
 	}
 
 	/**
@@ -44,6 +50,8 @@ public abstract class Node implements Comparable<Node> {
 		this.parent = null;
 		this.children = children;
 		this.newScope = false;
+		this.id = nodeCount;
+		nodeCount++;
 	}
 
 	/**
@@ -192,7 +200,7 @@ public abstract class Node implements Comparable<Node> {
 	 */
 	@Override
 	public String toString() {
-		return this.getName();
+		return id + "-" + this.getName();
 	}
 
 	/**

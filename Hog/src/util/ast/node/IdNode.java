@@ -16,9 +16,9 @@ public class IdNode extends ExpressionNode {
 
 	private String identifier;
 	private boolean isDeclaration = false;
-	
-	//private Types.Primitive primitiveType;
-	//private Types.Derived derivedType;
+
+	// private Types.Primitive primitiveType;
+	// private Types.Derived derivedType;
 
 	public IdNode(String id) {
 		this(null, id);
@@ -38,11 +38,12 @@ public class IdNode extends ExpressionNode {
 	public String getIdentifier() {
 		return identifier;
 	}
-	
-	/** Method to Set isDeclaration to True
+
+	/**
+	 * Method to Set isDeclaration to True
 	 * 
 	 */
-	public void setDeclaration(){
+	public void setDeclaration() {
 		this.isDeclaration = true;
 	}
 
@@ -63,9 +64,10 @@ public class IdNode extends ExpressionNode {
 		System.out.println("here in id node");
 		return 6;
 	}
-	
+
 	@Override
 	public String toSource() {
-		return (isDeclaration) ? this.getTypeName() + " " + this.getIdentifier() : this.getIdentifier(); 
+		return (isDeclaration) ? this.getType().toSource() + " "
+				+ this.getIdentifier() : this.getIdentifier();
 	}
 }

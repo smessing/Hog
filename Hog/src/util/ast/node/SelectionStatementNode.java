@@ -39,7 +39,7 @@ public class SelectionStatementNode extends StatementNode {
 	 */
 	@Override
 	public String getName() {
-		return "SelectionStatementNode";
+		return id + "-SelectionStatementNode";
 	}
 	
 }

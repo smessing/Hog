@@ -210,13 +210,13 @@ public class Types {
 	 * @param left
 	 * @param right
 	 * @return
-	 * @throws TypeMismatchException
+	 * @throws TypeMismatchError
 	 */
 	public static TypeNode getResult(BiOpNode.OpType op, TypeNode left,
-			TypeNode right) throws TypeMismatchException {
+			TypeNode right) throws TypeMismatchError {
 
 		if (!isCompatible(op, left, right)) {
-			throw new TypeMismatchException("Tried to call " + op
+			throw new TypeMismatchError("Tried to call " + op
 					+ " on operands " + left + " (left) and " + right
 					+ " (right)!");
 		}
@@ -280,13 +280,13 @@ public class Types {
 	 * @param op
 	 * @param operand
 	 * @return
-	 * @throws TypeMismatchException
+	 * @throws TypeMismatchError
 	 */
 	public static TypeNode getResult(UnOpNode.OpType op, TypeNode operand)
-			throws TypeMismatchException {
+			throws TypeMismatchError {
 
 		if (isCompatible(op, operand)) {
-			throw new TypeMismatchException("Tried to call " + op + " on "
+			throw new TypeMismatchError("Tried to call " + op + " on "
 					+ operand + "!");
 		}
 
@@ -317,13 +317,13 @@ public class Types {
 	 * @param left a numeric PrimitiveTypeNode
 	 * @param right a numeric PrimitiveTypeNode
 	 * @return a PrimitiveTypeNode representing the higher numeric type.
-	 * @throws TypeMismatchException if one of the passed in types is not numeric.
+	 * @throws TypeMismatchError if one of the passed in types is not numeric.
 	 */
 	public static PrimitiveTypeNode getHigherNumericType(TypeNode left,
-			TypeNode right) throws TypeMismatchException {
+			TypeNode right) throws TypeMismatchError {
 
 		if (!left.isNumeric() || !right.isNumeric()) {
-			throw new TypeMismatchException(
+			throw new TypeMismatchError(
 					"Tried to get higher numeric type for "
 							+ (left.isNumeric() ? right : left));
 		}

@@ -30,6 +30,8 @@ public class SectionNode extends Node {
 	 * Used to defined key-value pair types for input and ouput
 	 * */
 	protected SectionTypeNode type;
+	
+	protected StatementListNode block;
 
 	/** Constructor SectionNode(StatementListNode list, SectionName sectionName)
 	 * use this constructor for @functions and @Main sections
@@ -39,6 +41,7 @@ public class SectionNode extends Node {
 	public SectionNode(StatementListNode list, SectionName sectionName) {
 		SectionNode.LOGGER.fine("adding list child to @Functions or @Main SectionNode");
 		this.addChild(list);
+		this.block = list;
 		this.sectionName = sectionName;
 	}
 
@@ -53,6 +56,7 @@ public class SectionNode extends Node {
 		SectionNode.LOGGER.fine("adding list child to @Map or @Reduce SectionNode");
 		this.addChild(type);
 		this.addChild(list);
+		this.block = list;
 		this.sectionName = sectionName;
 	}
 
@@ -65,9 +69,17 @@ public class SectionNode extends Node {
 	 */
 	@Override
 	public String getName() {
-		return "SectionNode: " + sectionName;
+		return id + "-SectionNode: " + sectionName;
+	}
+	
+	public SectionName getSectionName() {
+		return sectionName;
 	}
 
+	public StatementListNode getBlock() {
+		return block;
+	}
+	
 	@Override
 	public int visitorTest(Visitor v) {
 		// TODO Auto-generated method stub

@@ -58,7 +58,7 @@ public class UnOpNode extends ExpressionNode {
 	 */
 	@Override
 	public String getName() {
-		return opType.toString() + "<" + this.getTypeName() + ">";
+		return id + "-" + opType.toString() + "<" + this.getTypeName() + ">";
 	}
 	
 	/** Method to Accept Visitor accept(Visitor v)
