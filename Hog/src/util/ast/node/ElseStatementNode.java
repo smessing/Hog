@@ -1,4 +1,7 @@
 package util.ast.node;
+
+import back_end.Visitor;
+
 /**
  * 
  * An ElseStatementNode represents an else statement and
@@ -23,5 +26,10 @@ public class ElseStatementNode extends StatementNode {
 	@Override
 	public String getName() {
 		return "ElseStatementNode";
+	}
+	
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 }
