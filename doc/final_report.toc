@@ -2,8 +2,14 @@
 \contentsline {chapter}{\numberline {2}Tutorial}{7}
 \contentsline {chapter}{\numberline {3}Language Reference Manual}{9}
 \contentsline {chapter}{\numberline {4}Project Plan}{11}
-\contentsline {chapter}{\numberline {5}Langauge Evolution}{13}
+\contentsline {chapter}{\numberline {5}Language Evolution}{13}
 \contentsline {chapter}{\numberline {6}Translator Architecture}{15}
 \contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{17}
 \contentsline {chapter}{\numberline {8}Test Plan}{19}
 \contentsline {chapter}{\numberline {9}Conclusions}{21}
+\contentsline {section}{\numberline {9.1}Lessons Learned}{21}
+\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{21}
+\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{21}
+\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{21}
+\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{21}
+\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{21}
