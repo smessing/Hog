@@ -106,6 +106,8 @@ public class CodeGeneratingVisitor implements Visitor {
 			baseCase = true;
 		} else if (node instanceof StatementNode) {
 			baseCase = true;
+		} else if (node instanceof StatementListNode) {
+			baseCase = true;
 		} else if (node.getChildren().isEmpty()) {
 			baseCase = true;
 		}
@@ -487,9 +489,10 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		for (Node child : node.getChildren()) {
 			child.accept(this);
+			writeStatement();
 		}
 
-		writeStatement();
+		//writeStatement();
 
 	}
 
