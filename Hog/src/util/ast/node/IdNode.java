@@ -49,7 +49,7 @@ public class IdNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "IdNode<" + this.getTypeName() + "," + this.getIdentifier()
+		return id + "-IdNode<" + this.getTypeName() + "," + this.getIdentifier()
 				+ ">";
 	}
 

@@ -43,7 +43,7 @@ public class PrimitiveTypeNode extends TypeNode {
 	 */
 	@Override
 	public String getName() {
-		return "Primitive Type: " + localType.toString();
+		return id + "-Primitive Type: " + localType.toString();
 	}
 
 	@Override

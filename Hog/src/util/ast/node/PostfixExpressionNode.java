@@ -80,7 +80,7 @@ public class PostfixExpressionNode extends ExpressionNode {
 		for (Node n : this.getChildren()) {
 			sb.append(n.getName() + "' ");
 		}
-		return postfixType.toString() + "<" + this.getTypeName() + ">" + sb.toString();
+		return id + "-" + postfixType.toString() + "<" + this.getTypeName() + ">" + sb.toString();
 	}
 
 	@Override
