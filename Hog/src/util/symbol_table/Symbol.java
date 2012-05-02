@@ -10,6 +10,10 @@ public abstract class Symbol{
 		this.type = t;
 	}
 	
+	public TypeNode getType() {
+		return this.type;
+	}
+	
 	public abstract String toString();
 
 }

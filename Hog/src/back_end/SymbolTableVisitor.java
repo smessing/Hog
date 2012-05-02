@@ -7,7 +7,9 @@ import java.util.logging.Logger;
 
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
+import util.ast.node.PostfixExpressionNode.PostfixType;
 import util.symbol_table.FunctionSymbol;
+import util.symbol_table.Symbol;
 import util.symbol_table.SymbolTable;
 import util.symbol_table.VariableSymbol;
 import util.type.Types;
@@ -223,6 +225,7 @@ public class SymbolTableVisitor implements Visitor {
 		openScope(node);
 		
 		LOGGER.info("SymbolTableVistor after openScope");
+		
 		// if it has a type, it is a declaration. Put it in the symbol table
 		if(node.getType() != null) {
 			try {
@@ -239,9 +242,9 @@ public class SymbolTableVisitor implements Visitor {
 		//else, it does not have a type, so we ensure it is already declared
 		else {
 			LOGGER.info("IdNode does not have a type. Before getMappedSymbolTable");
-			SymbolTable nodesTable = SymbolTable.getMappedSymbolTable(node);
+			Symbol nodeSymbol = SymbolTable.getSymbolForIdNode(node);
 			LOGGER.info("After getMappedSymbolTable");
-			if (nodesTable == null) {
+			if (nodeSymbol == null) {
 				try {
 					throw new VariableUndeclaredException(node.getIdentifier() + " was used before it was declared.");
 				} catch (VariableUndeclaredException e) {
@@ -251,6 +254,8 @@ public class SymbolTableVisitor implements Visitor {
 				}
 			}
 			
+			// it has been declared. Now we decorate it with its type
+			node.setType(nodeSymbol.getType());
 		}
 		
 		LOGGER.info("SymbolTableVistor after SymbolTable.put(...)");
@@ -319,6 +324,39 @@ public class SymbolTableVisitor implements Visitor {
 	public void visit(PostfixExpressionNode node) {
 		LOGGER.info("SymbolTableVistor visiting PostFixExpressionNode");
 		openScope(node);
+		
+		// if it is a method call, it must be a built in.
+		if (node.getPostfixType() == PostfixType.METHOD_NO_PARAMS || 
+				node.getPostfixType() == PostfixType.METHOD_WITH_PARAMS) {
+			
+			// second child is the name of the method
+			IdNode methodName = (IdNode) node.getChildren().get(1);
+			
+			// first child is the object we are calling the method on
+			IdNode objectOfMethod = (IdNode) node.getChildren().get(0);
+			TypeNode objectType = objectOfMethod.getType(); // get typenode
+			
+			// get the lowercase version of the type name of the object
+			String lowerCaseTypeName = Types.getLowerCaseTypeName(objectType);
+			
+			// lookupStr, eg. list.add
+			String lookupStr = lowerCaseTypeName + "." + methodName.getIdentifier();
+			
+			// if this is not a legal method call this kind of type
+			if( !SymbolTable.getRootSymbolTable().isDefinedInScope(lookupStr) ) {
+				throw new FunctionNodeDefined("The function " + lookupStr + " is not defined.");
+			}
+			
+
+			
+			
+			
+
+			
+			
+		}
+		
+		
 		visitAllChildrenStandard(node);
 		closeScope(node);
 	}
