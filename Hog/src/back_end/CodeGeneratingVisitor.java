@@ -237,14 +237,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
 
-		line.append("\n} else if ( ");
+		line.append("} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
 		walk(node.getIfCondTrue());
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
 		}
-		line.append("\n");
 
 	}
 
@@ -254,7 +253,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		line.append("} else {\n");
 		walk(node.getBlock());
-		line.append("\n}\n");
+		line.append("}\n");
 
 	}
 
@@ -318,7 +317,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
 		}
-		line.append("\n}\n");
+		line.append("}\n");
 	}
 
 	@Override
