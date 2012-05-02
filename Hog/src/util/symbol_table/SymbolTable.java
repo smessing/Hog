@@ -1,14 +1,17 @@
-package util;
+package util.symbol_table;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import util.ast.node.*;
 import util.type.Types;
+import util.type.VariableRedefinedException;
 
 /**
  * 
@@ -96,20 +99,34 @@ public class SymbolTable {
      * @param name
      * @param type
      * @return true for successful puts
+     * @throws VariableRedefinedException 
      */
-    public static boolean put(String name, Symbol symbol){
+    public static boolean put(String name, Symbol symbol) throws VariableRedefinedException{
     	// if not in reserve table
     	if(!top.isDefinedInScope(name)){
             	top.table.put(name, symbol);
             	return true;
     	}
-    	return false;
+    	throw new VariableRedefinedException("The varliable " + name + " has already been defined");
     }
     
     public static void push() {
     	top = new SymbolTable(top); 
       }
     
+    
+    
+     public static void printSymbolTable(){
+    	 Set<Node> nodeMapping = nodeToSymbolTableMap.keySet();
+    	 for (Node n: nodeMapping){
+    		 System.out.println("\n\nNode: \"" + n.getName() + "\" maps to symbol table: ");
+    		 SymbolTable tempTable = nodeToSymbolTableMap.get(n);
+    		 Set<String> symbolSet = tempTable.table.keySet();
+    		 for (String s : symbolSet){
+    			 System.out.println("key: " + s + "; value: " + tempTable.get(s).toString());
+    		 }
+    	   }
+    	 }
 
     /**
      * Returns whether the particular symbol is defined in this scope. If it isn't
@@ -139,13 +156,61 @@ public class SymbolTable {
        	for(SymbolTable st = this; st != null; st = st.outer){
        		Symbol found = st.table.get(name);
        		if(found != null) return found;
+       		//identifier in the id node
        	}
        	return null;
     }
     
+    /* 
+     * get the first symbol table that this node maps to 
+     * keep checking parents to see if they map to symbol table 
+     */
+    public static SymbolTable getMappedSymbolTable(Node n){
+    	LOGGER.info("getMappedSymbolTable() on node: " + n.toString());
+    	if(nodeToSymbolTableMap.containsKey(n)){
+    		return nodeToSymbolTableMap.get(n);
+    	}
+    	
+    	LOGGER.info("after nodeToSymbolTableMap.containsKey and get()");
+    	Node tempNode = n;
+    	while(tempNode.hasParent()){
+    		tempNode = tempNode.getParent();
+    		LOGGER.info("inside while loop for n.hasParent()");
+    		if(nodeToSymbolTableMap.containsKey(tempNode)){
+    			LOGGER.info("It maps to " + tempNode.getName());
+        		return nodeToSymbolTableMap.get(tempNode);
+        	}	
+    	}
+       	
+       	return null;
+    }
+    
+    public static Symbol getSymbolForIdNode(IdNode n){
+    	//get relevant symbol table for this node
+    	SymbolTable nodeTable = getMappedSymbolTable(n);
+    	// a table should always be found
+    	if(nodeTable == null){
+    		try {
+    			
+				throw new Exception("No Table Found for Node: " + n.getName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(1);
+			}
+    	}
+    	
+    	if(!nodeTable.isDefinedInScope(n.getIdentifier())){
+    		return null;
+    	}
+    	else{
+    		return nodeTable.get(n.getIdentifier());
+    	}
+    } 
+    
     public void reserveWord(String word){ 
     	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(util.type.Types.Flags.RESERVED_WORD);
-		this.table.put(word, new ReservedWordSymbol(typeNode));  
+		this.table.put(word, new VariableSymbol(typeNode));  
 	}
     
     public void reserveFunction(String word, TypeNode returnType, List<TypeNode> argumentList){ 
@@ -257,6 +322,9 @@ public class SymbolTable {
 		
 		// size()
 		reserveFunction("set.size", new PrimitiveTypeNode(Types.Primitive.INT));
+		
+		//add mapReduce function to reserved table
+		reserveFunction("mapReduce", new PrimitiveTypeNode(Types.Primitive.VOID));
 
 		/**
 		 * MULTI-SET NOT IMPLEMENTED YET

@@ -1,6 +1,6 @@
 package scratch;
 
-import util.SymbolTable;
+import util.symbol_table.SymbolTable;
 
 public interface Type {
 

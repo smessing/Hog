@@ -41,7 +41,7 @@ public class ConstantNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "ConstantNode<" + this.getTypeName() + ">";
+		return id + "-ConstantNode<" + this.getTypeName() + ">";
 	}
 
 	public String getTypeShortName() {

@@ -38,7 +38,7 @@ public class ParametersNode extends ExpressionNode {
 	 */
 	@Override
 	public String getName() {
-		return "ParemetersNode<" + this.getTypeName() + " "
+		return id + "-ParemetersNode<" + this.getTypeName() + " "
 				+ this.getIdentifier() + ">";
 	}
 

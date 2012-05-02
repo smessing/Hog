@@ -103,7 +103,7 @@ public class CatchesNode extends StatementListNode {
 
 	@Override
 	public String getName() {
-		return "CatchesNode";
+		return id + "-CatchesNode";
 	}
 
 	@Override

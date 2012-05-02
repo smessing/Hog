@@ -613,7 +613,12 @@ PostfixExpression::=
       // object method call with params
       IdNode object = new IdNode(objectName);
       IdNode method = new IdNode(methodName);
-      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, object, method, a);
+      // if argument list is empty, this is a method with no params
+      if( a == null ) {
+        RESULT = new PostfixExpressionNode(object, method);
+      } else {
+        RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, object, method, a);
+      }
       CUP$Parser$actions.LOGGER.info("ID " + objectName + " DOT ID: " + methodName + "L_PAREN ArgumentList R_PAREN -> PostFixExpression");
     :}
   |
@@ -771,9 +776,10 @@ IterationStatement::=
                                       "StatementList R_BRACE -> IterationStatement");
     :}
   |
-    FOREACH Expression:e1 IN Expression:e2 Block:b
+    FOREACH Type:t ID:i IN Expression:e2 Block:b
     {:
-      RESULT = new IterationStatementNode(e1,e2,b);
+      IdNode idNode = new IdNode(t, i);
+      RESULT = new IterationStatementNode(idNode,e2,b);
       CUP$Parser$actions.LOGGER.info("FOREACH Expression IN Expression L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement"); 
     :}

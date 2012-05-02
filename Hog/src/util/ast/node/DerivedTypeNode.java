@@ -65,7 +65,7 @@ public class DerivedTypeNode extends TypeNode {
 
 	@Override
 	public String getName() {
-		return "Derived Type: " + localType.toString();
+		return id + "-Derived Type: " + localType.toString();
 	}
 
 	@Override

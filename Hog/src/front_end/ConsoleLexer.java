@@ -15,6 +15,7 @@ import util.ast.node.MockExpressionNode;
 import util.ast.node.MockNode;
 import util.ast.node.Node;
 import util.ast.node.ProgramNode;
+import util.symbol_table.SymbolTable;
 import util.type.Types;
 
 import java_cup.parser;
@@ -65,6 +66,7 @@ public class ConsoleLexer {
 	    root.print();
 	    
 	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
-	    
+	    symTabVisitor.walk();
+	    SymbolTable.printSymbolTable();
 	}
 }

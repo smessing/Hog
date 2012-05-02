@@ -38,7 +38,7 @@ public class ArgumentsNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "ArgumentsNode";
+		return id + "-ArgumentsNode";
 	}
 
 	@Override

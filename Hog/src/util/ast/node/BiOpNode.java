@@ -88,7 +88,7 @@ public class BiOpNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "BiOpNode<" + opType.toString() + ">";
+		return id + "-BiOpNode<" + opType.toString() + ">";
 	}
 
 	@Override

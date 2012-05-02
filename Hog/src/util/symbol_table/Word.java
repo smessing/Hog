@@ -1,4 +1,4 @@
-package util;
+package util.symbol_table;
 
 import front_end.sym;
 

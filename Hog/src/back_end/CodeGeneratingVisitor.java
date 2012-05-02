@@ -90,24 +90,29 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void walk(Node node) {
 
 		node.accept(this);
-		
+
 		// base cases (sometimes recursion needs to go through visit methods
 		// as with If Else statements).
-		
+
 		boolean baseCase = false;
-		
+
 		if (node instanceof IfElseStatementNode) {
+			baseCase = true;
+		} else if (node instanceof SectionNode) {
 			baseCase = true;
 		} else if (node instanceof FunctionNode) {
 			baseCase = true;
-		}
-		else if (node.getChildren().isEmpty()) {
+		} else if (node instanceof JumpStatementNode) {
+			baseCase = true;
+		} else if (node instanceof StatementNode) {
+			baseCase = true;
+		} else if (node.getChildren().isEmpty()) {
 			baseCase = true;
 		}
 
 		// continue recursion if not base case:
-		
-		if(!baseCase) {
+
+		if (!baseCase) {
 			for (Node child : node.getChildren()) {
 				walk(child);
 			}
@@ -136,18 +141,37 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	}
 
-	private void writeFunctions() {
-		line.append("}\n");
+	private void writeFunction() {
+		line.append("\n");
 		code.append(line.toString());
+		LOGGER.fine("[writeFunction] Writing to java source:\n"
+				+ line.toString());/**/
+		// reset line
+		line = new StringBuilder();
+	}
+
+	private void writeFunctions() {
+		line.append("\n}\n");
+		code.append(line.toString());
+		LOGGER.fine("[writeFunctions] Writing to java source:\n"
+				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
 	}
 
 	private void writeStatement() {
+		line.append(";\n");
 		code.append(line.toString());
+		LOGGER.fine("[writeStatement] Writing to java source:\n"
+				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
-		code.append(";\n");
+	}
+
+	@Override
+	public void visit(ArgumentsNode node) {
+		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
+
 	}
 
 	@Override
@@ -184,7 +208,11 @@ public class CodeGeneratingVisitor implements Visitor {
 					+ node.getOpType() + " not supported yet.");
 		}
 
-		LOGGER.fine("Writing to java source: " + line.toString() + ";");/**/
+	}
+
+	@Override
+	public void visit(CatchesNode node) {
+		LOGGER.finer("visit(CatchesNode node) called on " + node);
 
 	}
 
@@ -196,8 +224,78 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	@Override
+	public void visit(DerivedTypeNode node) {
+		LOGGER.finer("visit(DerivedTypeNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(DictTypeNode node) {
+		LOGGER.finer("visit(DictTypeNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(ElseIfStatementNode node) {
+		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
+
+		line.append("\n} else if ( ");
+		line.append(node.getCondition().toSource());
+		line.append(" ) {\n");
+		walk(node.getIfCondTrue());
+		if (node.getIfCondFalse() != null) {
+			walk(node.getIfCondFalse());
+		}
+		line.append("\n");
+
+	}
+
+	@Override
+	public void visit(ElseStatementNode node) {
+		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
+
+		line.append("} else {\n");
+		walk(node.getBlock());
+		line.append("\n}\n");
+
+	}
+
+	@Override
+	public void visit(ExceptionTypeNode node) {
+		LOGGER.finer("visit(ExceptionTypeNode node) called on " + node);
+
+	}
+
+	@Override
 	public void visit(ExpressionNode node) {
 		LOGGER.finer("visit(ExpressionNode node) called on " + node);
+		// ExpressionNode is to general, so move to a more specific case:
+		node.accept(this);
+	}
+
+	@Override
+	public void visit(FunctionNode node) {
+		LOGGER.finer("visit(FunctionNodeNode node) called on " + node);
+
+		line.append("public static " + node.getType().toSource() + " "
+				+ node.getIdentifier());
+
+		ParametersNode params = node.getParametersNode();
+		line.append("(");
+		line.append(params.getType().toSource());
+		line.append(" " + params.getIdentifier());
+		line.append(")");
+		line.append(" {\n");
+		walk(node.getInstructions());
+
+		writeFunction();
+
+	}
+
+	@Override
+	public void visit(GuardingStatementNode node) {
+		LOGGER.finer("visit(GuardingStatementNode node) called on " + node);
+
 	}
 
 	@Override
@@ -208,112 +306,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(MockNode node) {
-		// node specific code generation operations here
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(MockExpressionNode node) {
-		// node specific code generation operations here
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(Node node) {
-		// node specific code generation operations here
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(ParametersNode node) {
-		// node specific code generation operations here
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(PrimaryExpressionNode node) {
-		// node specific code generation operations here
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(RelationalExpressionNode node) {
-		// node specific code generation operations here
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(UnOpNode node) {
-		// node specific code generation operations here
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(ArgumentsNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-
-	}
-
-	@Override
-	public void visit(CatchesNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-
-	}
-
-	@Override
-	public void visit(DerivedTypeNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-
-	}
-
-	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-		
+
 		line.append("if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -328,188 +323,148 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(ElseIfStatementNode node) {
-		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-		
-		line.append("else if (");
-		line.append(node.getCondition().toSource());
-		line.append(" ) {\n");
-		walk(node.getIfCondTrue());
-		if (node.getIfCondFalse() != null) {
-			walk(node.getIfCondFalse());
-		}
-		line.append("\n}\n");
-		
-	}
-
-	@Override
-	public void visit(ElseStatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(ExceptionTypeNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(FunctionNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-			
-			line.append("public static"+" "+node.getType().toSource()+" "+node.getIdentifier());
-			
-			ParametersNode params = node.getParametersNode();
-			line.append("(");
-			line.append(params.getType().toSource());
-			line.append(" "+params.getIdentifier());
-			line.append(")");
-			
-			line.append("{");
-			// body of function
-			//walk(node);
-			line.append("\n");
-			line.append("}");
-			line.append("\n");
-			/*
-			if(params.hasChildren()){
-				while(params.getChildren().iterator().hasNext()){
-					Node child = params.getChildren().iterator().next();
-					line.append(" "+child.getName()+" "+params.getIdentifier());
-				}
-			}
-			*/
-			
-		
-		
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(GuardingStatementNode node) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void visit(IterationStatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
+		LOGGER.finer("visit(IterationStatementNode node) called on " + node);
 
-		}
 	}
 
 	@Override
 	public void visit(JumpStatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
+		LOGGER.finer("visit(JumpStatementNode node) called on " + node);
 
+		switch (node.getJumpType()) {
+		case RETURN:
+			line.append("return ");
+			break;
+		case BREAK:
+			line.append("break");
+			break;
+		case CONTINUE:
+			line.append("continue");
+			break;
 		}
+
+		if (node.getExpressionNode() != null) {
+			walk(node.getExpressionNode());
+		}
+
+		writeStatement();
+	}
+
+	@Override
+	public void visit(MockNode node) {
+		LOGGER.finer("visit(MockNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(MockExpressionNode node) {
+		LOGGER.finer("visit(MockExpressionNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(Node node) {
+		LOGGER.finer("visit(Node node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(ParametersNode node) {
+		LOGGER.finer("visit(ParametersNode node) called on " + node);
+
 	}
 
 	@Override
 	public void visit(PostfixExpressionNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
+		LOGGER.finer("visit(PostfixExpressionNode node) called on " + node);
+		
+		switch(node.getPostfixType()) {
+		case ARRAY_INDEX:
+			throw new UnsupportedOperationException("Array Indexes have been removed from the grammar. Something's wrong.");
+		case METHOD_NO_PARAMS:
+		case METHOD_WITH_PARAMS:
+		case FUNCTION_CALL:
+		
 		}
+
+	}
+
+	@Override
+	public void visit(PrimaryExpressionNode node) {
+		LOGGER.finer("visit(PrimaryExpressionNode node) called on " + node);
+
 	}
 
 	@Override
 	public void visit(PrimitiveTypeNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
+		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
 
-		}
 	}
 
 	@Override
 	public void visit(ProgramNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
+		LOGGER.finer("visit(ProgramNode node) called on " + node);
 
-		}
+	}
+
+	@Override
+	public void visit(RelationalExpressionNode node) {
+		LOGGER.finer("visit(RelationalNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(ReservedWordTypeNode node) {
+		LOGGER.finer("visit(ReservedWordTypeNode node) called on " + node);
+
 	}
 
 	@Override
 	public void visit(SectionNode node) {
+		LOGGER.finer("visit(SectionNode node) called on " + node);
 
 		SectionNode.SectionName sectionKind = node.getSectionName();
 
 		switch (sectionKind) {
 		case FUNCTIONS:
 			line.append("public static class Functions {\n");
-
-			return;
+			break;
 		case MAP:
-			code
-					.append("public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {");
-
-			code.append("}\n");
-			return;
+			line
+					.append("public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {\n");
+			break;
 		case REDUCE:
-			code
-					.append("public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {");
-
-			code.append("}\n");
-			return;
+			line
+					.append("public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {\n");
+			break;
 		case MAIN:
-			code
-					.append("public static void main(String[] args) throws Exception {");
-
-			code.append("}\n");
-			return;
+			line
+					.append("public static void main(String[] args) throws Exception {\n");
+			break;
 		}
 
-		throw new UnsupportedOperationException("Section kind: " + sectionKind
-				+ " not supported yet.");
+		walk(node.getBlock());
+
+		writeFunctions();
+
 	}
 
 	@Override
 	public void visit(SectionTypeNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
+		LOGGER.finer("visit(SectionTypeNode node) called on " + node);
 
-		}
 	}
 
 	@Override
 	public void visit(SelectionStatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
+		LOGGER.finer("visit(SelectionStatementNode node) called on " + node);
 
-		}
 	}
 
 	@Override
 	public void visit(StatementListNode node) {
+		LOGGER.finer("visit(StatementListNode node) called on " + node);
 
 		for (Node child : node.getChildren()) {
 			child.accept(this);
@@ -521,48 +476,31 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(StatementNode node) {
-		
+
 		LOGGER.finer("visit(StatementNode node) called on " + node);
 
 		for (Node child : node.getChildren()) {
-			child.accept(this);
+			walk(child);
 		}
 
-		
 		writeFunctions();
 
 	}
 
 	@Override
 	public void visit(SwitchStatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
+		LOGGER.finer("visit(SwitchStatementNode node) called on " + node);
 	}
 
 	@Override
 	public void visit(TypeNode node) {
-		// TODO Auto-generated method stub
-
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
-		}
-	}
-
-	@Override
-	public void visit(DictTypeNode node) {
-		// TODO Auto-generated method stub
+		LOGGER.finer("visit(TypeNode node) called on " + node);
 
 	}
 
 	@Override
-	public void visit(ReservedWordTypeNode node) {
-		// TODO Auto-generated method stub
+	public void visit(UnOpNode node) {
+		LOGGER.finer("visit(UnOpNode node) called on " + node);
 
 	}
 

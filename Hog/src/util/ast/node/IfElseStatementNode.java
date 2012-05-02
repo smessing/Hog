@@ -5,8 +5,8 @@ import back_end.Visitor;
 public class IfElseStatementNode extends SelectionStatementNode {
 
 	protected StatementListNode ifCondTrue;
-	protected StatementNode checkNext;
-	protected StatementListNode ifCondFalse;
+	protected ElseIfStatementNode checkNext;
+	protected ElseStatementNode ifCondFalse;
 
 	public IfElseStatementNode(ExpressionNode condition,
 			StatementListNode ifCondTrue, ElseIfStatementNode checkNext,
@@ -24,11 +24,11 @@ public class IfElseStatementNode extends SelectionStatementNode {
 		return ifCondTrue;
 	}
 
-	public StatementListNode getIfCondFalse() {
+	public ElseStatementNode getIfCondFalse() {
 		return ifCondFalse;
 	}
 
-	public StatementNode getCheckNext() {
+	public ElseIfStatementNode getCheckNext() {
 		return checkNext;
 	}
 
@@ -39,7 +39,7 @@ public class IfElseStatementNode extends SelectionStatementNode {
 	
 	@Override
 	public String getName() {
-		return "IfElseStatementNode";
+		return id + "-IfElseStatementNode";
 	}
 
 }

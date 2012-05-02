@@ -43,12 +43,30 @@ public class SectionTypeNode extends Node {
 		v.visit(this);
 
 	}
+	
+	public TypeNode getReturnKey() {
+		return this.returnKey;
+	}
+	
+	public TypeNode getReturnValue() {
+		return this.returnValue;
+	}
+	
+	public IdNode getInputKeyIdNode() {
+		return this.inputKeyIdNode;
+	}
+	
+	public IdNode getInputValueIdNode() {
+		return this.inputValueIdNode;
+	}
+	
+	
 	/** Method to Return the name getName()
 	 * @return Returns a string with the node's name
 	 */
 	@Override
 	public String getName() {
-		return "SectionTypeNode<" + this.getType() + ">";
+		return id + "-SectionTypeNode<" + this.getType() + ">";
 	}
 
 	@Override

@@ -216,9 +216,8 @@ public class Types {
 			TypeNode right) throws TypeMismatchError {
 
 		if (!isCompatible(op, left, right)) {
-			throw new TypeMismatchError("Tried to call " + op
-					+ " on operands " + left + " (left) and " + right
-					+ " (right)!");
+			throw new TypeMismatchError("Tried to call " + op + " on operands "
+					+ left + " (left) and " + right + " (right)!");
 		}
 
 		switch (op) {
@@ -311,21 +310,23 @@ public class Types {
 	/**
 	 * Find the higher of two numeric types.
 	 * 
-	 * If one (or both) of the types are REAL, then REAL is returned,
-	 * otherwise, INT is returned (unless an exception is thrown).
+	 * If one (or both) of the types are REAL, then REAL is returned, otherwise,
+	 * INT is returned (unless an exception is thrown).
 	 * 
-	 * @param left a numeric PrimitiveTypeNode
-	 * @param right a numeric PrimitiveTypeNode
+	 * @param left
+	 *            a numeric PrimitiveTypeNode
+	 * @param right
+	 *            a numeric PrimitiveTypeNode
 	 * @return a PrimitiveTypeNode representing the higher numeric type.
-	 * @throws TypeMismatchError if one of the passed in types is not numeric.
+	 * @throws TypeMismatchError
+	 *             if one of the passed in types is not numeric.
 	 */
 	public static PrimitiveTypeNode getHigherNumericType(TypeNode left,
 			TypeNode right) throws TypeMismatchError {
 
 		if (!left.isNumeric() || !right.isNumeric()) {
-			throw new TypeMismatchError(
-					"Tried to get higher numeric type for "
-							+ (left.isNumeric() ? right : left));
+			throw new TypeMismatchError("Tried to get higher numeric type for "
+					+ (left.isNumeric() ? right : left));
 		}
 
 		if (((PrimitiveTypeNode) left).getType() == Primitive.REAL
@@ -334,12 +335,47 @@ public class Types {
 		}
 		return new PrimitiveTypeNode(Primitive.INT);
 	}
-	
-	public static boolean isCompatible(String functionName, ArgumentsNode arguments) {
+
+	/**
+	 * Get a lower-case string representation of this node's type.
+	 * 
+	 * Note: for derived type, returns lower-case representation of the <i>local</i> type.
+	 * 
+	 * @param node a TypeNode to get the string representation for.
+	 * @return a lower-case string of the TypeNode's type.
+	 */
+	public static String getLowercaseTypeName(TypeNode node) {
+
+		// prim: lower case version
+		// derived: lower case version of outer
+		// exception : lower case version of node
 		
-		
-		
-		
+		String typeName = null;
+
+		if (node instanceof PrimitiveTypeNode) {
+			
+			typeName = ((PrimitiveTypeNode) node).getType().toString().toLowerCase();
+
+		} else if (node instanceof DerivedTypeNode) {
+			
+			typeName = ((DerivedTypeNode) node).getLocalType().toString().toLowerCase();
+
+		} else if (node instanceof ExceptionTypeNode) {
+			
+			typeName = ((ExceptionTypeNode) node).getExceptionType().toString().toLowerCase();
+
+		} else {
+			throw new UnsupportedOperationException(
+					"No support for TypeNode type: " + node.getClass());
+		}
+
+		return typeName;
+
+	}
+
+	public static boolean isCompatible(String functionName,
+			ArgumentsNode arguments) {
+
 		throw new UnsupportedOperationException("TODO");
 	}
 

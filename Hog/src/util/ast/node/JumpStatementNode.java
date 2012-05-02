@@ -3,8 +3,8 @@ package util.ast.node;
 import back_end.Visitor;
 
 /**
- * A JumpStatementNode represents either a Continue, Break,
- * or Return construct, and returns have expression statements.
+ * A JumpStatementNode represents either a Continue, Break, or Return construct,
+ * and returns have expression statements.
  * 
  * 
  * @author ben
@@ -17,14 +17,30 @@ public class JumpStatementNode extends StatementNode {
 	}
 
 	protected JumpType jumpType;
+	protected StatementNode expression;
 
 	public JumpStatementNode(JumpType jumpType, StatementNode e) {
 		this(jumpType);
+		if (jumpType != JumpType.RETURN) {
+			throw new UnsupportedOperationException(
+					"Tried to create a JumpStatement node with " + jumpType
+							+ "jump type, and expression node " + e
+							+ ". But there shouldn't be an expression node.");
+		}
+		this.expression = e;
 		this.addChild(e);
 	}
 
 	public JumpStatementNode(JumpType jumpType) {
 		this.jumpType = jumpType;
+	}
+
+	public JumpType getJumpType() {
+		return jumpType;
+	}
+
+	public StatementNode getExpressionNode() {
+		return expression;
 	}
 
 	@Override
@@ -34,7 +50,7 @@ public class JumpStatementNode extends StatementNode {
 
 	@Override
 	public String getName() {
-		return "JumpStatement: " + jumpType.toString();
+		return id + "-JumpStatement: " + jumpType.toString();
 	}
 
 	@Override
