@@ -144,7 +144,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void writeFunction() {
 		line.append("\n");
 		code.append(line.toString());
-		LOGGER.fine("[writeFunction] Writing to java source: "
+		LOGGER.fine("[writeFunction] Writing to java source:\n"
 				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
@@ -153,7 +153,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void writeFunctions() {
 		line.append("\n}\n");
 		code.append(line.toString());
-		LOGGER.fine("[writeFunctions] Writing to java source: "
+		LOGGER.fine("[writeFunctions] Writing to java source:\n"
 				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
@@ -162,7 +162,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void writeStatement() {
 		line.append(";\n");
 		code.append(line.toString());
-		LOGGER.fine("[writeStatement] Writing to java source: "
+		LOGGER.fine("[writeStatement] Writing to java source:\n"
 				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
