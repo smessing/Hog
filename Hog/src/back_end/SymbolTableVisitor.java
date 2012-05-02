@@ -11,6 +11,7 @@ import util.VariableSymbol;
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
 import util.type.Types;
+import util.type.VariableRedefinedException;
 
 
 /**
@@ -136,7 +137,12 @@ public class SymbolTableVisitor implements Visitor {
 		
 		// add function to symbol table - these need to be visible to entire program
 		FunctionSymbol funSym = new FunctionSymbol(node.getType(), node.getParametersNode());
-		SymbolTable.put(node.getIdentifier(), funSym);
+		try {
+			SymbolTable.put(node.getIdentifier(), funSym);
+		} catch (VariableRedefinedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// open new scope - these are specific to within the function
 		openScope(node);
@@ -146,14 +152,24 @@ public class SymbolTableVisitor implements Visitor {
 		if( currParamNode != null) {
 			TypeNode paramType = currParamNode.getType();
 			String paramName = currParamNode.getIdentifier();
-			SymbolTable.put(paramName, new VariableSymbol(paramType));
+			try {
+				SymbolTable.put(paramName, new VariableSymbol(paramType));
+			} catch (VariableRedefinedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			// recurse through children, adding variables to the symbol table
 			while(currParamNode.hasChildren()) {
 				currParamNode = (ParametersNode) currParamNode.getChildren().get(0);
 				paramType = currParamNode.getType();
 				paramName = currParamNode.getIdentifier();
-				SymbolTable.put(paramName, new VariableSymbol(paramType));
+				try {
+					SymbolTable.put(paramName, new VariableSymbol(paramType));
+				} catch (VariableRedefinedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 					
 		}
@@ -175,14 +191,22 @@ public class SymbolTableVisitor implements Visitor {
 		
 		// if it has a type, it is a declaration. Put it in the symbol table
 		if(node.getType() != null) {
-			SymbolTable.put(node.getIdentifier(), new VariableSymbol(node.getType()));
+			try {
+				SymbolTable.put(node.getIdentifier(), new VariableSymbol(node.getType()));
+			} catch (VariableRedefinedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} 
-		// else, it does not have a type, so we ensure it is already declared
-//		else {
-//			SymbolTable.
-//		}
-		
-		
+		//else, it does not have a type, so we ensure it is already declared
+		else {
+			SymbolTable nodesTable = SymbolTable.getMappedSymbolTable(node);
+			if (nodesTable == null) {
+				throw new VariableUndeclaredException(node.getIdentifier() + " was used before it was declared.");
+			}
+			
+		}
+
 		closeScope(node);
 	}
 
@@ -285,7 +309,12 @@ public class SymbolTableVisitor implements Visitor {
 		emitParams.add(node.getReturnValue());
 		FunctionSymbol funSym = new FunctionSymbol(new PrimitiveTypeNode(Types.Primitive.VOID), emitParams);
 		
-		SymbolTable.put("emit", funSym);
+		try {
+			SymbolTable.put("emit", funSym);
+		} catch (VariableRedefinedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		closeScope(node);
 	}

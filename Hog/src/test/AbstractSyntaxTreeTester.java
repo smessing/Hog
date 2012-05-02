@@ -97,6 +97,7 @@ public class AbstractSyntaxTreeTester {
 		correctPreOrderTraversal.add(H);
 		correctPreOrderTraversal.add(G);
 
+		Iterator<Node> preOrderTraversal = tree.preOrderTraversal();
  
 		int index = 0;
 		while (preOrderTraversal.hasNext()) {
