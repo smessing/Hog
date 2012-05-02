@@ -76,7 +76,7 @@ public class PostfixExpressionNode extends ExpressionNode {
 	 */
 	@Override
 	public String getName() {
-		return postfixType.toString() + "<" + this.getTypeName() + ">";
+		return id + "-" + postfixType.toString() + "<" + this.getTypeName() + ">";
 	}
 
 	@Override

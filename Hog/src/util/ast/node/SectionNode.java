@@ -69,7 +69,7 @@ public class SectionNode extends Node {
 	 */
 	@Override
 	public String getName() {
-		return "SectionNode: " + sectionName;
+		return id + "-SectionNode: " + sectionName;
 	}
 	
 	public SectionName getSectionName() {

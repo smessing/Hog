@@ -52,7 +52,7 @@ public class FunctionNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "FunctionNode-" + identifier;
+		return id + "-FunctionNode-" + identifier;
 	}
 
 	@Override

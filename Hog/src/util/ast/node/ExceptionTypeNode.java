@@ -40,7 +40,7 @@ public class ExceptionTypeNode extends TypeNode {
 
 	@Override
 	public String getName() {
-		return "Exception Type: " + exceptionType.toString();
+		return id + "-Exception Type: " + exceptionType.toString();
 	}
 
 	@Override

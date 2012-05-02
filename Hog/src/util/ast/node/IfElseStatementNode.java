@@ -39,7 +39,7 @@ public class IfElseStatementNode extends SelectionStatementNode {
 	
 	@Override
 	public String getName() {
-		return "IfElseStatementNode";
+		return id + "-IfElseStatementNode";
 	}
 
 }

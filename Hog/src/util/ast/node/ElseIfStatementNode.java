@@ -36,7 +36,7 @@ public class ElseIfStatementNode extends SelectionStatementNode {
 
 	@Override
 	public String getName() {
-		return "ElseIfStatementNode";
+		return id + "-ElseIfStatementNode";
 	}
 	
 	@Override

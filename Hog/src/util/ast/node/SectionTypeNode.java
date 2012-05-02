@@ -48,7 +48,7 @@ public class SectionTypeNode extends Node {
 	 */
 	@Override
 	public String getName() {
-		return "SectionTypeNode<" + this.getType() + ">";
+		return id + "-SectionTypeNode<" + this.getType() + ">";
 	}
 
 	@Override

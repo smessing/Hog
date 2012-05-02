@@ -64,7 +64,7 @@ public class GuardingStatementNode extends StatementNode {
 	
 	@Override
 	public String getName() {
-		return "GuardingStatemenetNode";
+		return id + "-GuardingStatemenetNode";
 	}
 	
 	@Override

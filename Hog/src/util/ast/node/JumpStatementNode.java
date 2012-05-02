@@ -49,7 +49,7 @@ public class JumpStatementNode extends StatementNode {
 
 	@Override
 	public String getName() {
-		return "JumpStatement: " + jumpType.toString();
+		return id + "-JumpStatement: " + jumpType.toString();
 	}
 
 	@Override
