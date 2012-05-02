@@ -90,21 +90,23 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void walk(Node node) {
 
 		node.accept(this);
-		
+
 		// base cases (sometimes recursion needs to go through visit methods
 		// as with If Else statements).
-		
+
 		boolean baseCase = false;
-		
+
 		if (node instanceof IfElseStatementNode) {
+			baseCase = true;
+		} else if (node instanceof FunctionNode) {
 			baseCase = true;
 		} else if (node.getChildren().isEmpty()) {
 			baseCase = true;
 		}
 
 		// continue recursion if not base case:
-		
-		if(!baseCase) {
+
+		if (!baseCase) {
 			for (Node child : node.getChildren()) {
 				walk(child);
 			}
@@ -310,7 +312,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-		
+
 		line.append("if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -327,7 +329,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
-		
+
 		line.append("\n} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -336,17 +338,17 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getIfCondFalse());
 		}
 		line.append("\n}\n");
-		
+
 	}
 
 	@Override
 	public void visit(ElseStatementNode node) {
 		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
-		
+
 		line.append("else {\n");
 		walk(node.getBlock());
 		line.append("\n}\n");
-		
+
 	}
 
 	@Override
@@ -361,32 +363,28 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(FunctionNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-			
-			line.append("public static"+" "+node.getType().toSource()+" "+node.getIdentifier());
-			
+
+			line.append("public static " + node.getType().toSource() + " "
+					+ node.getIdentifier());
+
 			ParametersNode params = node.getParametersNode();
 			line.append("(");
 			line.append(params.getType().toSource());
-			line.append(" "+params.getIdentifier());
+			line.append(" " + params.getIdentifier());
 			line.append(")");
-			line.append("\n");
-			/*
-			if(params.hasChildren()){
-				while(params.getChildren().iterator().hasNext()){
-					Node child = params.getChildren().iterator().next();
-					line.append(" "+child.getName()+" "+params.getIdentifier());
-				}
-			}
-			*/
+			line.append(" {\n");
+			walk(node.getInstructions());
+			line.append("}\n");
 			
-		
-		
-		} catch (Exception e) {
+			
+			/*
+			 * if(params.hasChildren()){
+			 * while(params.getChildren().iterator().hasNext()){ Node child =
+			 * params.getChildren().iterator().next();
+			 * line.append(" "+child.getName()+" "+params.getIdentifier()); } }
+			 */
 
-		}
+
 	}
 
 	@Override
@@ -512,14 +510,13 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(StatementNode node) {
-		
+
 		LOGGER.finer("visit(StatementNode node) called on " + node);
 
 		for (Node child : node.getChildren()) {
 			child.accept(this);
 		}
 
-		
 		writeFunctions();
 
 	}
