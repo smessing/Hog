@@ -1,4 +1,4 @@
-package util;
+package util.symbol_table;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
