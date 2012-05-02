@@ -67,6 +67,10 @@ public class SectionNode extends Node {
 	public String getName() {
 		return "SectionNode: " + sectionName;
 	}
+	
+	public SectionName getSectionName() {
+		return sectionName;
+	}
 
 	@Override
 	public int visitorTest(Visitor v) {

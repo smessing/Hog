@@ -67,6 +67,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		this.tree = root;
 		this.code = new StringBuilder();
+		this.line = new StringBuilder();
 
 	}
 
@@ -87,12 +88,22 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	public void walk(Node node) {
 
-		// base cases (else, recurse):
+		node.accept(this);
+		
+		// base cases (sometimes recursion needs to go through visit methods
+		// as with If Else statements).
+		
+		boolean baseCase = false;
+		
+		if (node instanceof IfElseStatementNode) {
+			baseCase = true;
+		} else if (node.getChildren().isEmpty()) {
+			baseCase = true;
+		}
 
-		if (node instanceof BiOpNode) {
-			node.accept(this);
-			appendEndline();
-		} else {
+		// continue recursion if not base case:
+		
+		if(!baseCase) {
 			for (Node child : node.getChildren()) {
 				walk(child);
 			}
@@ -120,7 +131,14 @@ public class CodeGeneratingVisitor implements Visitor {
 				.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;\n");
 
 	}
-	
+
+	private void writeFunctions() {
+		line.append("}\n");
+		code.append(line.toString());
+		// reset line
+		line = new StringBuilder();
+	}
+
 	private void writeStatement() {
 		code.append(line.toString());
 		// reset line
@@ -128,18 +146,12 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append(";\n");
 	}
 
-	private void appendEndline() {
-
-		code.append(";\n");
-
-	}
-
 	@Override
 	public void visit(BiOpNode node) {
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
-		
+
 		walk(node.getLeftNode());
-		
+
 		switch (node.getOpType()) {
 		case ASSIGN:
 			line.append(" = ");
@@ -154,12 +166,15 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append(" || ");
 			break;
 		case TIMES:
-			line.append(" * " );
+			line.append(" * ");
+			break;
+		case MINUS:
+			line.append(" - ");
 			break;
 		}
-		
+
 		walk(node.getRightNode());
-		
+
 		if (line.toString().length() == 0) {
 			throw new UnsupportedOperationException("BiOpType: "
 					+ node.getOpType() + " not supported yet.");
@@ -171,33 +186,21 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(ConstantNode node) {
-		// node specific code generation operations here
-		try {
-			// out.write(node.getName() + " "+node.getValue() + ";");
-		} catch (Exception e) {
+		LOGGER.finer("visit(ConstantNode node) called on " + node);
+		line.append(node.toSource());
 
-		}
 	}
 
 	@Override
 	public void visit(ExpressionNode node) {
-		// node specific code generation operations here
-		try {
-			// out.write("Expression Node: "+node.getName());
-		} catch (Exception e) {
-
-		}
+		LOGGER.finer("visit(ExpressionNode node) called on " + node);
 	}
 
 	@Override
 	public void visit(IdNode node) {
-		// node specific code generation operations here
-		try {
-			// out.write(node.getIdentifier());
-			// out.write("Visit ID NODE: "+node.getTypeName());
-		} catch (Exception e) {
+		LOGGER.finer("visit(IdNode node) called on " + node);
+		line.append(node.toSource());
 
-		}
 	}
 
 	@Override
@@ -351,12 +354,21 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(IfElseStatementNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
-
+		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
+		for (Node child : node.getChildren()) {
+			System.out.println(child);
 		}
+		line.append("if ( ");
+		line.append(node.getCondition().toSource());
+		line.append(") {\n");
+		walk(node.getIfCondTrue());
+		if (node.getCheckNext() != null) {
+			walk(node.getCheckNext());
+		}
+		if (node.getIfCondFalse() != null) {
+			walk(node.getIfCondFalse());
+		}
+		line.append("\n}\n");
 	}
 
 	@Override
@@ -411,12 +423,36 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(SectionNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
 
+		SectionNode.SectionName sectionKind = node.getSectionName();
+
+		switch (sectionKind) {
+		case FUNCTIONS:
+			line.append("public static class Functions {\n");
+
+			return;
+		case MAP:
+			code
+					.append("public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {");
+
+			code.append("}\n");
+			return;
+		case REDUCE:
+			code
+					.append("public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {");
+
+			code.append("}\n");
+			return;
+		case MAIN:
+			code
+					.append("public static void main(String[] args) throws Exception {");
+
+			code.append("}\n");
+			return;
 		}
+
+		throw new UnsupportedOperationException("Section kind: " + sectionKind
+				+ " not supported yet.");
 	}
 
 	@Override
@@ -441,22 +477,26 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(StatementListNode node) {
-		// TODO Auto-generated method stub
-		try {
-			// out.write(node.getName());
-		} catch (Exception e) {
 
+		for (Node child : node.getChildren()) {
+			child.accept(this);
 		}
+
+		writeStatement();
+
 	}
 
 	@Override
 	public void visit(StatementNode node) {
 		
+		LOGGER.finer("visit(StatementNode node) called on " + node);
+
 		for (Node child : node.getChildren()) {
 			child.accept(this);
 		}
+
 		
-		writeStatement();
+		writeFunctions();
 
 	}
 

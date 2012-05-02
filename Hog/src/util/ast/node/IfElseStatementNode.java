@@ -4,24 +4,27 @@ import back_end.Visitor;
 
 public class IfElseStatementNode extends SelectionStatementNode {
 
-	protected StatementNode ifCondTrue;
+	protected StatementListNode ifCondTrue;
 	protected StatementNode checkNext;
-	protected StatementNode ifCondFalse;
+	protected StatementListNode ifCondFalse;
 
 	public IfElseStatementNode(ExpressionNode condition,
 			StatementListNode ifCondTrue, ElseIfStatementNode checkNext,
 			ElseStatementNode ifCondFalse) {
 		super(condition);
 		this.addChild(ifCondTrue);
+		this.ifCondTrue = ifCondTrue;
 		this.addChild(checkNext);
+		this.checkNext = checkNext;
 		this.addChild(ifCondFalse);
+		this.ifCondFalse = ifCondFalse;
 	}
 
-	public StatementNode getIfCondTrue() {
+	public StatementListNode getIfCondTrue() {
 		return ifCondTrue;
 	}
 
-	public StatementNode getIfCondFalse() {
+	public StatementListNode getIfCondFalse() {
 		return ifCondFalse;
 	}
 
