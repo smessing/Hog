@@ -299,6 +299,9 @@ public class SymbolTable {
 		
 		// size()
 		reserveFunction("set.size", new PrimitiveTypeNode(Types.Primitive.INT));
+		
+		//add mapReduce function to reserved table
+		reserveFunction("mapReduce", new PrimitiveTypeNode(Types.Primitive.VOID));
 
 		/**
 		 * MULTI-SET NOT IMPLEMENTED YET
