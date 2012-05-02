@@ -98,6 +98,8 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		if (node instanceof IfElseStatementNode) {
 			baseCase = true;
+		} else if (node instanceof SectionNode) {
+			baseCase = true;
 		} else if (node instanceof FunctionNode) {
 			baseCase = true;
 		} else if (node instanceof JumpStatementNode) {
@@ -140,15 +142,17 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void writeFunctions() {
 		line.append("}\n");
 		code.append(line.toString());
+		LOGGER.fine("[writeFunctions] Writing to java source: " + line.toString() + ";");/**/
 		// reset line
 		line = new StringBuilder();
 	}
 
 	private void writeStatement() {
+		line.append(";\n");
 		code.append(line.toString());
+		LOGGER.fine("[writeStatement] Writing to java source: " + line.toString() + ";");/**/
 		// reset line
 		line = new StringBuilder();
-		code.append(";\n");
 	}
 
 	@Override
@@ -157,9 +161,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
-	
+
 	}
 
 	@Override
@@ -196,8 +200,6 @@ public class CodeGeneratingVisitor implements Visitor {
 					+ node.getOpType() + " not supported yet.");
 		}
 
-		LOGGER.fine("Writing to java source: " + line.toString() + ";");/**/
-
 	}
 
 	@Override
@@ -206,9 +208,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
-	
+
 	}
 
 	@Override
@@ -224,21 +226,21 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
-	
+
 	}
 
 	@Override
 	public void visit(DictTypeNode node) {
 		// TODO Auto-generated method stub
-	
+
 	}
 
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
-	
+
 		line.append("\n} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -247,17 +249,17 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getIfCondFalse());
 		}
 		line.append("\n}\n");
-	
+
 	}
 
 	@Override
 	public void visit(ElseStatementNode node) {
 		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
-	
+
 		line.append("else {\n");
 		walk(node.getBlock());
 		line.append("\n}\n");
-	
+
 	}
 
 	@Override
@@ -266,7 +268,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
 	}
 
@@ -277,27 +279,26 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(FunctionNode node) {
-	
-			line.append("public static " + node.getType().toSource() + " "
-					+ node.getIdentifier());
-	
-			ParametersNode params = node.getParametersNode();
-			line.append("(");
-			line.append(params.getType().toSource());
-			line.append(" " + params.getIdentifier());
-			line.append(")");
-			line.append(" {\n");
-			walk(node.getInstructions());
-			
-			writeFunctions();
-	
-	
+
+		line.append("public static " + node.getType().toSource() + " "
+				+ node.getIdentifier());
+
+		ParametersNode params = node.getParametersNode();
+		line.append("(");
+		line.append(params.getType().toSource());
+		line.append(" " + params.getIdentifier());
+		line.append(")");
+		line.append(" {\n");
+		walk(node.getInstructions());
+
+		writeFunctions();
+
 	}
 
 	@Override
 	public void visit(GuardingStatementNode node) {
 		// TODO Auto-generated method stub
-	
+
 	}
 
 	@Override
@@ -310,7 +311,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-	
+
 		line.append("if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -330,31 +331,23 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
 	}
 
 	@Override
 	public void visit(JumpStatementNode node) {
-		/*switch(node.getJumpType()) {
-		case RETURN:
-			line.append("return ");
-			break;
-		case BREAK:
-			line.append("break");
-			break;
-		case CONTINUE:
-			line.append("continue");
-			break;
-		}
-		
-		if (node.getExpressionNode() != null) {
-			walk(node.getExpressionNode());
-		}
-		
-		line.append(";\n");
-		code.append(line.toString());
-		line = new StringBuilder();/**/
+		/*
+		 * switch(node.getJumpType()) { case RETURN: line.append("return ");
+		 * break; case BREAK: line.append("break"); break; case CONTINUE:
+		 * line.append("continue"); break; }
+		 * 
+		 * if (node.getExpressionNode() != null) {
+		 * walk(node.getExpressionNode()); }
+		 * 
+		 * line.append(";\n"); code.append(line.toString()); line = new
+		 * StringBuilder();/*
+		 */
 	}
 
 	@Override
@@ -403,7 +396,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
 	}
 
@@ -423,7 +416,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
 	}
 
@@ -433,7 +426,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
 	}
 
@@ -450,41 +443,42 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ReservedWordTypeNode node) {
 		// TODO Auto-generated method stub
-	
+
 	}
 
 	@Override
 	public void visit(SectionNode node) {
-	
+
 		SectionNode.SectionName sectionKind = node.getSectionName();
-	
+
 		switch (sectionKind) {
 		case FUNCTIONS:
 			line.append("public static class Functions {\n");
-	
-			return;
+			break;
 		case MAP:
-			code
+			line
 					.append("public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {");
-	
-			code.append("}\n");
-			return;
+
+			line.append("}\n");
+			break;
 		case REDUCE:
-			code
+			line
 					.append("public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {");
-	
-			code.append("}\n");
-			return;
+
+			line.append("}\n");
+			break;
 		case MAIN:
-			code
+			line
 					.append("public static void main(String[] args) throws Exception {");
-	
-			code.append("}\n");
-			return;
+
+			line.append("}\n");
+			break;
 		}
-	
-		throw new UnsupportedOperationException("Section kind: " + sectionKind
-				+ " not supported yet.");
+
+		walk(node.getBlock());
+		
+		writeFunctions();
+		
 	}
 
 	@Override
@@ -493,7 +487,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
 	}
 
@@ -503,32 +497,32 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
 	}
 
 	@Override
 	public void visit(StatementListNode node) {
-	
+
 		for (Node child : node.getChildren()) {
 			child.accept(this);
 		}
-	
+
 		writeStatement();
-	
+
 	}
 
 	@Override
 	public void visit(StatementNode node) {
-	
+
 		LOGGER.finer("visit(StatementNode node) called on " + node);
-	
+
 		for (Node child : node.getChildren()) {
 			child.accept(this);
 		}
-	
+
 		writeFunctions();
-	
+
 	}
 
 	@Override
@@ -537,18 +531,18 @@ public class CodeGeneratingVisitor implements Visitor {
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
 	}
 
 	@Override
 	public void visit(TypeNode node) {
 		// TODO Auto-generated method stub
-	
+
 		try {
 			// out.write(node.getName());
 		} catch (Exception e) {
-	
+
 		}
 	}
 
