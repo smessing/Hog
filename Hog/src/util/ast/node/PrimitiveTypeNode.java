@@ -82,4 +82,24 @@ public class PrimitiveTypeNode extends TypeNode {
 		return false;
 	}
 
+	@Override
+	public String toSource() {
+
+		switch (localType) {
+		case INT:
+			return "Integer";
+		case REAL:
+			return "Double";
+		case BOOL:
+			return "Boolean";
+		case VOID:
+			return "void";
+		case TEXT:
+			return "String";
+		}
+
+		throw new UnsupportedOperationException("localType " + localType
+				+ "not yet supported.");
+	}
+
 }

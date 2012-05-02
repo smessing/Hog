@@ -88,7 +88,7 @@ public class BiOpNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return "BiOpNode<" + opType.toString() + ">";
+		return id + "-BiOpNode<" + opType.toString() + ">";
 	}
 
 	@Override
@@ -101,5 +101,40 @@ public class BiOpNode extends ExpressionNode {
 		// TODO Auto-generated method stub
 		return 42;
 	}
+	
+	@Override
+	public String toSource() {
+		StringBuilder code = new StringBuilder();
+		code.append(left.toSource());
+		
+		switch(opType) {
+		case ASSIGN:
+			code.append(" = ");
+			break;
+		case DBL_EQLS:
+			code.append(" == ");
+			break;
+		case PLUS:
+			code.append(" + ");
+			break;
+		case OR:
+			code.append(" || ");
+			break;
+		case TIMES:
+			code.append(" * ");
+			break;
+		case MINUS:
+			code.append(" - ");
+			break;
+		}
+		
+		code.append(right.toSource());
+		
+		return code.toString();
+		
+		
+	}
 
+	
+	
 }

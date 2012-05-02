@@ -51,7 +51,7 @@ public class DictTypeNode extends DerivedTypeNode {
 
 	@Override
 	public String getName() {
-		return "DictTypeNode";
+		return id + "-DictTypeNode";
 	}
 
 	@Override

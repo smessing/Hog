@@ -13,20 +13,30 @@ import back_end.Visitor;
 
 public class ElseIfStatementNode extends SelectionStatementNode {
 
-	protected StatementNode ifCondTrue;
-	protected StatementNode ifCondFalse;
+	protected StatementListNode ifCondFalse;
+	protected StatementListNode ifCondTrue;
 
 	public ElseIfStatementNode(ExpressionNode condition,
-			StatementListNode checkNext, ElseIfStatementNode ifCondFalse) {
+			StatementListNode ifCondTrue, ElseIfStatementNode ifCondFalse) {
 		super(condition);
 		this.addChild(ifCondTrue);
-		this.addChild(checkNext);
+		this.ifCondTrue = ifCondTrue;
 		this.addChild(ifCondFalse);
+		this.ifCondFalse = ifCondFalse;
+
+	}
+	
+	public StatementListNode getIfCondTrue() {
+		return ifCondTrue;
+	}
+
+	public StatementListNode getIfCondFalse() {
+		return ifCondFalse;
 	}
 
 	@Override
 	public String getName() {
-		return "ElseIfStatementNode";
+		return id + "-ElseIfStatementNode";
 	}
 	
 	@Override

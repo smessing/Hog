@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import util.Symbol;
+import util.SymbolTable;
 import util.ast.node.*;
 import util.type.Types;
 import util.type.VariableRedefinedException;
@@ -177,13 +179,36 @@ public class SymbolTable {
     		tempNode = tempNode.getParent();
     		LOGGER.info("inside while loop for n.hasParent()");
     		if(nodeToSymbolTableMap.containsKey(tempNode)){
-    			LOGGER.info("we found the symbol table it maps to!");
+    			LOGGER.info("It maps to " + tempNode.getName());
         		return nodeToSymbolTableMap.get(tempNode);
         	}	
     	}
        	
        	return null;
     }
+    
+    public static Symbol getSymbolForIdNode(IdNode n){
+    	//get relevant symbol table for this node
+    	SymbolTable nodeTable = getMappedSymbolTable(n);
+    	// a table should always be found
+    	if(nodeTable == null){
+    		try {
+    			
+				throw new Exception("No Table Found for Node: " + n.getName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(1);
+			}
+    	}
+    	
+    	if(!nodeTable.isDefinedInScope(n.getIdentifier())){
+    		return null;
+    	}
+    	else{
+    		return nodeTable.get(n.getIdentifier());
+    	}
+    } 
     
     public void reserveWord(String word){ 
     	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(util.type.Types.Flags.RESERVED_WORD);

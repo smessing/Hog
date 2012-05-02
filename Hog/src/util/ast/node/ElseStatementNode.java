@@ -1,4 +1,7 @@
 package util.ast.node;
+
+import back_end.Visitor;
+
 /**
  * 
  * An ElseStatementNode represents an else statement and
@@ -9,12 +12,24 @@ package util.ast.node;
  */
 public class ElseStatementNode extends StatementNode {
 
-	public ElseStatementNode(StatementListNode child) {
-		this.addChild(child);
+	protected StatementListNode block;
+	
+	public ElseStatementNode(StatementListNode block) {
+		this.addChild(block);
+		this.block = block;
+	}
+	
+	public StatementListNode getBlock() {
+		return block;
 	}
 
 	@Override
 	public String getName() {
-		return "ElseStatementNode";
+		return id + "-ElseStatementNode";
+	}
+	
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
 }
