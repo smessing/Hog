@@ -130,14 +130,10 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append("import org.apache.hadoop.conf.*;\n");
 		code.append("import org.apache.hadoop.io.*;\n");
 		code.append("import org.apache.hadoop.mapreduce.*;\n");
-		code
-				.append("import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\n");
-		code
-				.append("import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;\n");
-		code
-				.append("import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\n");
-		code
-				.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\n");
+		code.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;\n");
 
 	}
 
@@ -177,9 +173,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(BiOpNode node) {
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
-
+		
 		walk(node.getLeftNode());
-
+		
 		switch (node.getOpType()) {
 		case ASSIGN:
 			line.append(" = ");
@@ -286,8 +282,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append(" " + params.getIdentifier());
 		line.append(")");
 		line.append(" {\n");
+		
 		walk(node.getInstructions());
-
+		
 		writeFunction();
 
 	}
@@ -378,14 +375,39 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(PostfixExpressionNode node) {
 		LOGGER.finer("visit(PostfixExpressionNode node) called on " + node);
-		
-		switch(node.getPostfixType()) {
+
+		switch (node.getPostfixType()) {
 		case ARRAY_INDEX:
-			throw new UnsupportedOperationException("Array Indexes have been removed from the grammar. Something's wrong.");
+			throw new UnsupportedOperationException(
+					"Array Indexes have been removed from the grammar. Something's wrong.");
 		case METHOD_NO_PARAMS:
+			IdNode objectOfMethod = node.getObjectOfMethod();
+			IdNode methodNameNoParam = node.getMethodName();
+			line.append(objectOfMethod.getIdentifier() + "."
+					+ methodNameNoParam.getIdentifier() + "()");
+
+			break;
 		case METHOD_WITH_PARAMS:
+			IdNode objectName = node.getObjectName();
+			IdNode methodName = node.getMethodName();
+			if (node.hasArguments()) {
+				ExpressionNode argsList = node.getArgsList();
+				line.append(objectName.getIdentifier() + "."
+						+ methodName.getIdentifier() + "("
+						+ argsList.toSource() + ")");
+			}
+
+			break;
 		case FUNCTION_CALL:
-		
+			IdNode functionName = node.getFunctionName();
+			if (node.hasArguments()) {
+				ExpressionNode functionArgsList = node.getArgsList();
+				line.append(functionName.getIdentifier() + "("
+						+ functionArgsList.toSource() + ")");
+			} else
+				line.append(functionName.getIdentifier() + "()");
+			break;
+
 		}
 
 	}
@@ -431,16 +453,13 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append("public static class Functions {\n");
 			break;
 		case MAP:
-			line
-					.append("public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {\n");
+			line.append("public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {\n");
 			break;
 		case REDUCE:
-			line
-					.append("public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {\n");
+			line.append("public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {\n");
 			break;
 		case MAIN:
-			line
-					.append("public static void main(String[] args) throws Exception {\n");
+			line.append("public static void main(String[] args) throws Exception {\n");
 			break;
 		}
 
