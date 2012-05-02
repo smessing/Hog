@@ -249,6 +249,7 @@ public class SymbolTable {
 		reserveWord("real");
 		reserveWord("bool");
 		reserveWord("text");
+		reserveWord("tokenize");
 		reserveWord("default");
 		reserveWord("set");
 		reserveWord("dict");
@@ -269,6 +270,7 @@ public class SymbolTable {
 		reserveWord("remove");
 		reserveWord("removeAll");
 		reserveWord("mapReduce");
+		reserveWord("print");
 		
 		/* add built-in list methods */
 		
