@@ -1,0 +1,28 @@
+
+1. To Compile (assuming hadoop-core-1.0.1.jar and WordCount.java is in current folder)
+
+javac -classpath hadoop-core-1.0.1.jar WordCount.java
+
+2. To Create Jar
+
+jar -cf wordcount.jar *.class
+
+3. To Put Files in Input in Distributed File System (Assuming in Hadoop Folder)
+
+./bin/hadoop dfs -put local dfs
+Example:
+
+./bin/hadoop dfs -put input /user/ktran/input
+
+4. To Delete or List Files
+
+./bin/hadoop dfs -rmr /user/ktran/input
+./bin/hadoop dfs -ls /user/ktran/input
+
+5. To Run
+
+./bin/hadoop jar wordcount.jar WordCount input output
+
+6. To View Output
+
+./bin/hadoop dfs -cat /user/ktran/output/part-00000
