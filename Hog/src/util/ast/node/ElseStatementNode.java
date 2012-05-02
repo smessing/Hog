@@ -25,7 +25,7 @@ public class ElseStatementNode extends StatementNode {
 
 	@Override
 	public String getName() {
-		return id + "-ElseStatementNode";
+		return id + "-ElseStatementNode newscope: " + isNewScope();
 	}
 	
 	@Override

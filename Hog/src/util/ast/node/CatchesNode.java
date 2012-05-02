@@ -103,7 +103,7 @@ public class CatchesNode extends StatementListNode {
 
 	@Override
 	public String getName() {
-		return id + "-CatchesNode";
+		return id + "-CatchesNode newscope: " + isNewScope();
 	}
 
 	@Override

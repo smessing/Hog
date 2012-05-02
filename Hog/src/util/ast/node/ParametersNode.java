@@ -39,7 +39,7 @@ public class ParametersNode extends ExpressionNode {
 	@Override
 	public String getName() {
 		return id + "-ParemetersNode<" + this.getTypeName() + " "
-				+ this.getIdentifier() + ">";
+				+ this.getIdentifier() + "> newscope: " + isNewScope();
 	}
 
 	@Override
