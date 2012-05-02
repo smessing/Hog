@@ -87,7 +87,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	}
 
-	public void walk(Node node) {
+	private void walk(Node node) {
 
 		node.accept(this);
 
