@@ -49,6 +49,7 @@ public class SymbolTableVisitor implements Visitor {
 				SymbolTable.mapNode(node);
 			} catch (Exception e) {
 				e.printStackTrace();
+				System.exit(1);
 			}
 		}
 
@@ -169,6 +170,7 @@ public class SymbolTableVisitor implements Visitor {
 		} catch (VariableRedefinedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 		
 		// open new scope - these are specific to within the function
@@ -196,9 +198,10 @@ public class SymbolTableVisitor implements Visitor {
 				} catch (VariableRedefinedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+					System.exit(1);
 				}
 			}
+		}
 		
 		// close scope
 		closeScope(node);
@@ -229,6 +232,7 @@ public class SymbolTableVisitor implements Visitor {
 				// TODO Auto-generated catch block
 				LOGGER.info("put 1 failed");
 				e.printStackTrace();
+				System.exit(1);
 			}
 		} 
 		
@@ -243,6 +247,7 @@ public class SymbolTableVisitor implements Visitor {
 				} catch (VariableUndeclaredException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					System.exit(1);
 				}
 			}
 			
@@ -378,12 +383,26 @@ public class SymbolTableVisitor implements Visitor {
 		emitParams.add(node.getReturnValue());
 		FunctionSymbol funSym = new FunctionSymbol(new PrimitiveTypeNode(Types.Primitive.VOID), emitParams);
 		
+		// add input key and value
+		VariableSymbol inputKeySym = new VariableSymbol(node.getInputKeyIdNode().getType());
+		String inputKeyStr = node.getInputKeyIdNode().getIdentifier();
+		
+		VariableSymbol inputValueSym = new VariableSymbol(node.getInputValueIdNode().getType());
+		String inputValStr = node.getInputValueIdNode().getIdentifier();
+		
+		
 		try {
+			SymbolTable.put(inputKeyStr, inputKeySym);
+			SymbolTable.put(inputValStr, inputValueSym);
 			SymbolTable.put("emit", funSym);
 		} catch (VariableRedefinedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
+		
+
+		
 		
 		closeScope(node);
 	}
