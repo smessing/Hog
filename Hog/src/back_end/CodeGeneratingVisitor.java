@@ -48,7 +48,7 @@ import java.util.logging.Logger;
 /**
  * Visitor class for generating Java source.
  * 
- * This is the third (and final) walk performed after construction of the AST
+ * This is the fourth (and final) walk performed after construction of the AST
  * from source. CodeGeneratingVisitor generates a massive String representing
  * the translated Hog program.
  * 
@@ -64,14 +64,14 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected AbstractSyntaxTree tree;
 	protected StringBuilder code;
 	protected StringBuilder line;
-	protected int scopeCount;
+	protected StringBuilder indentation;
 
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 
 		this.tree = root;
 		this.code = new StringBuilder();
 		this.line = new StringBuilder();
-		this.scopeCount = 0;
+		this.indentation = new StringBuilder();
 
 	}
 
@@ -94,6 +94,10 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	private void walk(Node node) {
 
+		if (node.isNewScope()) {
+			this.indentation.append("  ");
+		}
+		
 		node.accept(this);
 
 		if (node.isEndOfLine()) {
@@ -128,6 +132,10 @@ public class CodeGeneratingVisitor implements Visitor {
 				walk(child);
 			}
 		}
+		
+		if (node.isNewScope()) {
+			indentation.delete(indentation.length()-2, indentation.length());
+		}
 
 	}
 
@@ -152,6 +160,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeBlockEnd() {
+		line.append(indentation.toString());
 		line.append("}\n");
 		code.append(line.toString());
 		LOGGER.fine("[writeFunctions] Writing to java source:\n"
@@ -266,9 +275,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
+		indentation.delete(indentation.length()-2, indentation.length());
+		line.append(indentation.toString());
 		line.append("} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
+		indentation.append("  ");
+		line.append(indentation.toString());
 		walk(node.getIfCondTrue());
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
@@ -279,8 +292,11 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseStatementNode node) {
 		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
-
+		indentation.delete(indentation.length()-2, indentation.length());
+		line.append(indentation.toString());
 		line.append("} else {\n");
+		indentation.append("  ");
+		line.append(indentation.toString());
 		walk(node.getBlock());
 		line.append("}\n");
 
@@ -302,6 +318,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(FunctionNode node) {
 		LOGGER.finer("visit(FunctionNodeNode node) called on " + node);
+		line.append(indentation.toString());
 		line.append("public static " + node.getType().toSource() + " "
 				+ node.getIdentifier());
 		ParametersNode params = node.getParametersNode();
@@ -330,6 +347,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
+		line.append(indentation.toString());
 		line.append("if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -525,6 +543,8 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		SectionNode.SectionName sectionKind = node.getSectionName();
 
+		line.append(indentation.toString());
+		
 		switch (sectionKind) {
 		case FUNCTIONS:
 			line.append("public static class Functions {\n");
@@ -537,7 +557,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		case REDUCE:
 			line
 					.append("public static class Reduce extends MapReduceBase implements Reducer");
-			walk(node.getSectionTypeNode());
+			walk(node.getSectionTypeNode())				;
 			break;
 		case MAIN:
 			line
