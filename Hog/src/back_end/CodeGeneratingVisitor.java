@@ -1,40 +1,6 @@
 package back_end;
 
-import util.ast.node.ArgumentsNode;
-import util.ast.node.BiOpNode;
-import util.ast.node.CatchesNode;
-import util.ast.node.ConstantNode;
-import util.ast.node.DerivedTypeNode;
-import util.ast.node.DictTypeNode;
-import util.ast.node.ElseIfStatementNode;
-import util.ast.node.ElseStatementNode;
-import util.ast.node.ExceptionTypeNode;
-import util.ast.node.ExpressionNode;
-import util.ast.node.FunctionNode;
-import util.ast.node.GuardingStatementNode;
-import util.ast.node.IdNode;
-import util.ast.node.IfElseStatementNode;
-import util.ast.node.IterationStatementNode;
-import util.ast.node.JumpStatementNode;
-import util.ast.node.MockExpressionNode;
-import util.ast.node.MockNode;
-import util.ast.node.Node;
-import util.ast.node.ParametersNode;
-import util.ast.node.PostfixExpressionNode;
-import util.ast.node.PrimaryExpressionNode;
-import util.ast.node.PrimitiveTypeNode;
-import util.ast.node.ProgramNode;
-import util.ast.node.RelationalExpressionNode;
-import util.ast.node.ReservedWordTypeNode;
-import util.ast.node.SectionNode;
-import util.ast.node.SectionTypeNode;
-import util.ast.node.SelectionStatementNode;
-import util.ast.node.StatementListNode;
-import util.ast.node.StatementNode;
-import util.ast.node.SwitchStatementNode;
-import util.ast.node.TypeNode;
-import util.ast.node.UnOpNode;
-
+import util.ast.node.*;
 import util.ast.AbstractSyntaxTree;
 import util.type.Types;
 
@@ -65,6 +31,16 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected StringBuilder code;
 	protected StringBuilder line;
 	protected StringBuilder indentation;
+	/*
+	 * below is program code specific, currently set with fixed variables for
+	 * development.
+	 */
+	protected String outputKeyClass = "Text";
+	protected String outputValueClass = "IntWritable";
+	protected String inputFormatClass;
+	protected String outputFormatClass;
+	protected String inputFile;
+	protected String outputFile;
 
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 
@@ -72,6 +48,15 @@ public class CodeGeneratingVisitor implements Visitor {
 		this.code = new StringBuilder();
 		this.line = new StringBuilder();
 		this.indentation = new StringBuilder();
+
+	}
+
+	public CodeGeneratingVisitor(AbstractSyntaxTree root, String inputFile,
+			String outputFile) {
+
+		this(root);
+		this.inputFile = inputFile;
+		this.outputFile = outputFile;
 
 	}
 
@@ -97,7 +82,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		if (node.isNewScope()) {
 			this.indentation.append("  ");
 		}
-		
+
 		node.accept(this);
 
 		if (node.isEndOfLine()) {
@@ -132,15 +117,15 @@ public class CodeGeneratingVisitor implements Visitor {
 				walk(child);
 			}
 		}
-		
+
 		if (node.isNewScope()) {
-			indentation.delete(indentation.length()-2, indentation.length());
+			indentation.delete(indentation.length() - 2, indentation.length());
 		}
 
 	}
 
 	private void writeHeader() {
-		LOGGER.fine("Writing header to code");
+		LOGGER.fine("Writing header to code.");
 		code.append("import java.io.IOException;\n");
 		code.append("import java.util.*;\n");
 		code.append("import org.apache.hadoop.fs.Path;\n");
@@ -148,6 +133,24 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append("import org.apache.hadoop.io.*;\n");
 		code.append("import org.apache.hadoop.mapred.*;\n");
 		code.append("public class Hog {\n");
+	}
+
+	private void writeMapReduce() {
+		LOGGER.fine("Writing mapReduce initialization code.");
+		code.append("JobConf conf = new JobConf(Hog.class);");
+		code.append("conf.setJobName(\"hog\");");
+		code.append("conf.setOutputKeyClass(" + outputKeyClass + ");");
+		code.append("conf.setOutputValueClass(" + outputValueClass + ");");
+		code.append("conf.setMapperClass(Map.class);");
+		code.append("conf.setCombinerClass(Reduce.class);");
+		code.append("conf.setReducerClass(Reduce.class);");
+		code.append("conf.setInputFormat(" + inputFormatClass + ");");
+		code.append("conf.setOutputFormat(" + outputFormatClass + ");");
+		code.append("FileInputFormat.setInputPaths(conf, new Path(\""
+				+ inputFile + "\"));");
+		code.append("FileOutputFormat.setOutputPath(conf, new Path(\"" + outputFile + "\"));");
+		code.append("JobClient.runJob(conf);");
+
 	}
 
 	private void writeFunction() {
@@ -275,8 +278,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
-		//indentation.delete(indentation.length()-2, indentation.length());
-		//line.append(indentation.toString());
+		// indentation.delete(indentation.length()-2, indentation.length());
+		// line.append(indentation.toString());
 		line.append("} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -292,7 +295,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseStatementNode node) {
 		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
-		indentation.delete(indentation.length()-2, indentation.length());
+		indentation.delete(indentation.length() - 2, indentation.length());
 		line.append(indentation.toString());
 		line.append("} else {\n");
 		indentation.append("  ");
@@ -354,7 +357,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		indentation.append("  ");
 		line.append(indentation.toString());
 		walk(node.getIfCondTrue());
-		indentation.delete(indentation.length()-2, indentation.length());
+		indentation.delete(indentation.length() - 2, indentation.length());
 		// check that buffer cleared
 		if (node.getCheckNext() != null) {
 			walk(node.getCheckNext());
@@ -546,7 +549,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		SectionNode.SectionName sectionKind = node.getSectionName();
 
 		line.append(indentation.toString());
-		
+
 		switch (sectionKind) {
 		case FUNCTIONS:
 			line.append("public static class Functions {\n");
@@ -559,7 +562,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		case REDUCE:
 			line
 					.append("public static class Reduce extends MapReduceBase implements Reducer");
-			walk(node.getSectionTypeNode())				;
+			walk(node.getSectionTypeNode());
 			break;
 		case MAIN:
 			line
