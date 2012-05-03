@@ -383,7 +383,9 @@ public class SymbolTableVisitor implements Visitor {
 		LOGGER.finer("visit(SectionNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
-		closeScope(node);
+		//if(node.getSectionName() != SectionNode.SectionName.FUNCTIONS){
+			closeScope(node);
+		//}
 	}
 
 	@Override

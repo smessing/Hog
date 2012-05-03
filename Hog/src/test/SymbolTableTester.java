@@ -38,6 +38,38 @@ public class SymbolTableTester {
 	}
 	
 	@Test
+	public void symbolTableTestTwo() {
+		/* 
+		 * create a new symbol table, this should be root 
+		 * and should be populated with all reserved words and functions
+		 */
+		String filename = "Factorial2.hog";
+		ProgramNode root = null;
+		FileReader fileReader;
+	    try {
+			fileReader = new FileReader(new File(filename));
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    //write tests
+	    SymbolTable.print();
+	}
+	
+	@Test
 	public void symbolTableTest() {
 		/* 
 		 * create a new symbol table, this should be root 
@@ -66,7 +98,39 @@ public class SymbolTableTester {
 	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
 	    symTabVisitor.walk();
 	    //write tests
-	    SymbolTable.printSymbolTable();
+	    SymbolTable.print();
+	}
+	
+	@Test
+	public void symbolTableTestThree() {
+		/* 
+		 * create a new symbol table, this should be root 
+		 * and should be populated with all reserved words and functions
+		 */
+		String filename = "TestProgram.hog";
+		ProgramNode root = null;
+		FileReader fileReader;
+	    try {
+			fileReader = new FileReader(new File(filename));
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    //write tests
+	    SymbolTable.print();
 
 	}
 

@@ -18,6 +18,7 @@ package back_end;
  * @author paul
  * 
  */
+import java.util.List;
 import java.util.logging.Logger;
 
 import util.ast.AbstractSyntaxTree;
@@ -60,234 +61,196 @@ public class TypeCheckingVisitor implements Visitor {
 
 	protected final static Logger LOGGER = Logger
 			.getLogger(TypeCheckingVisitor.class.getName());
-
-	/** Method visit(BiOpNode node) */
-	@Override
-	public void visit(BiOpNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking BiOpNode");
-	}
-
-	/** Method visit(ConstantNode node) */
-	@Override
-	public void visit(ConstantNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking ConstantNode");
-	}
-	/** Method visit(ExpressionNode node)
-	 * 
-	 */
-	@Override
-	public void visit(ExpressionNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking ExpressionNode");
-	}
-	/** Method visit(IdNode node)
-	 * 
-	 */
-	@Override
-	public void visit(IdNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking IdNode");
-	}
-	/** Method visit(MockNode node)
-	 * 
-	 */
-	@Override
-	public void visit(MockNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking MockNode");
-	}
-	/** Method visit(MockExpressionNode node)
-	 * 
-	 */
-	@Override
-	public void visit(MockExpressionNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking MockExpressionNode");
-	}
-	/** Method visit(Node node)
-	 * 
-	 */
-	@Override
-	public void visit(Node node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking Node");
-	}
-	/** Method visit(ParametersNode node)
-	 * 
-	 */
-	@Override
-	public void visit(ParametersNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking ParametersNode");
-	}
-	/** Method visit(PrimaryExpressionNode node)
-	 * 
-	 */
-	@Override
-	public void visit(PrimaryExpressionNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking PrimaryExpressionNode");
-	}
-
-	/** Method visit(RelationalExpressionNode node) */
-	@Override
-	public void visit(RelationalExpressionNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking RelationalExpressionNode");
-	}
-
-	/** Method visit(UnOpNode node) */
-	@Override
-	public void visit(UnOpNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking UnOpNode");
-	}
-	/** Method visit(ArgumentsNode node) */
-	@Override
-	public void visit(ArgumentsNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking ArgumentsNode");
-	}
-	/** Method visit(CatchesNode node) */
-	@Override
-	public void visit(CatchesNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking CatchesNode");
-	}
-	/** Method visit(DerivedTypeNode node) */
-	@Override
-	public void visit(DerivedTypeNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking DerivedTypeNode");
-	}
-	/** Method visit(ElseIfStatementNode node) */
-	@Override
-	public void visit(ElseIfStatementNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking ElseIfStatementNode");
-	}
-	/** Method visit(ElseIfStatementNode node) */
-	@Override
-	public void visit(ElseStatementNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking ElseStatementNode");
-	}
-	/** Method visit(ElseIfStatementNode node) */
-	@Override
-	public void visit(ExceptionTypeNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking ExceptionTypeNode");
-	}
-	/** Method visit(FunctionNode node) */
-	@Override
-	public void visit(FunctionNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking FunctionNode");
-	}
-	/** Method visit(GuardingStatementNode node) */
-	@Override
-	public void visit(GuardingStatementNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking GuardingStatementNode");
-	}
-	/** Method visit(IfElseStatementNode node) */
-	@Override
-	public void visit(IfElseStatementNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking IfElseStatementNode");
-	}
-	/** Method visit(IterationStatementNode node) */
-	@Override
-	public void visit(IterationStatementNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking IterationStatementNode");
-	}
-	/** Method visit(JumpStatementNode node) */
-	@Override
-	public void visit(JumpStatementNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking JumpStatementNode");
-	}
-	/** Method visit(PostfixExpressionNode node) */
-	@Override
-	public void visit(PostfixExpressionNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking PostfixExpressionNode");
-	}
-	/** Method visit(PrimitiveTypeNode node) */
-	@Override
-	public void visit(PrimitiveTypeNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking PrimitiveTypeNode");
-	}
-	/** Method visit(ProgramNode node) */
-	@Override
-	public void visit(ProgramNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking ProgramNode");
-	}
-	/** Method visit(SectionNode node) */
-	@Override
-	public void visit(SectionNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking SectionNode");
-	}
-	/** Method visit(SectionTypeNode node) */
-	@Override
-	public void visit(SectionTypeNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking SectionTypeNode");
-	}
-	/** Method visit(SelectionStatementsNode node) */
-	@Override
-	public void visit(SelectionStatementNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking SelectionStatementNode");
-	}
-	/** Method visit(StatementListNode node) */
-	@Override
-	public void visit(StatementListNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking StatementListNode");
-	}
-	/** Method visit(StatementNode node) */
-	@Override
-	public void visit(StatementNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking StatementNode");
-	}
-	/** Method visit(SwitchStatementNode node) */
-	@Override
-	public void visit(SwitchStatementNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking SwithStatementNode");
+	
+	protected AbstractSyntaxTree tree;
+	
+	public TypeCheckingVisitor(AbstractSyntaxTree tree) {
+		this.tree = tree;
 	}
 	
-	/** Method visit(TypeNode node) */
-	@Override
-	public void visit(TypeNode node) {
-		// node specific type checking operations here
-		LOGGER.fine("Type-checking TypeNode");
-	}
-
-	@Override
-	public void visit(DictTypeNode node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(ReservedWordTypeNode node) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void walk() {
 		// TODO Auto-generated method stub
+		ProgramNode treeRoot = (ProgramNode) this.tree.getRoot();
+		treeRoot.accept(this);
+	}
+	
+	private void visitAllChildrenStandard(Node node) {
+		// visit all children
+		List<Node> children = node.getChildren();
+		for (Node n : children) {
+			n.accept(this);
+		}
+	}
+	
+	@Override
+	public void visit(ArgumentsNode node){
 		
 	}
+	
+	@Override
+	public void visit(BiOpNode node){
+		
+	}
+	
+	@Override
+	public void visit(CatchesNode node){
+		
+	}
+	
+	@Override
+	public void visit(ConstantNode node){
+		
+	}
+	
+	@Override
+	public void visit(DerivedTypeNode node){
+		
+	}
+	
+	@Override
+	public void visit(DictTypeNode node){
+		
+	}
+	
+	@Override
+	public void visit(ElseIfStatementNode node){
+		
+	}
+	
+	@Override
+	public void visit(ElseStatementNode node){
+		
+	}
+	
+	@Override
+	public void visit(ExceptionTypeNode node){
+		
+	}
+	
+	@Override
+	public void visit(ExpressionNode node){
+		
+	}
+	
+	@Override
+	public void visit(FunctionNode node){
+		
+	}
+	
+	@Override
+	public void visit(GuardingStatementNode node){}
+	
+	@Override
+	public void visit(IdNode node){
+		
+	}
+	@Override
+	public void visit(IfElseStatementNode node){
+		
+	}
+	
+	@Override
+	public void visit(IterationStatementNode node){
+		
+	}
+	
+	@Override
+	public void visit(JumpStatementNode node){
+		
+	}
+	
+	@Override
+	public void visit(MockExpressionNode node){
+		
+	}
+	
+	@Override
+	public void visit(MockNode node){
+		
+	}
+	
+	@Override
+	public void visit(Node node){
+		
+	}
+	
+	@Override
+	public void visit(ParametersNode node)
+	{
+		
+	}
+	
+	@Override
+	public void visit(PostfixExpressionNode node){
+		
+	}
+	
+	@Override
+	public void visit(PrimaryExpressionNode node){
+		
+	}
+	
+	@Override
+	public void visit(PrimitiveTypeNode node){
+		
+	}
+	
+	@Override
+	public void visit(ProgramNode node){
+		
+	}
+	
+	@Override
+	public void visit(RelationalExpressionNode node){
+		
+	}
+	
+	@Override
+	public void visit(ReservedWordTypeNode node){
+		
+	}
+	
+	@Override
+	public void visit(SectionNode node){
+		
+	}
+	
+	@Override
+	public void visit(SectionTypeNode node){
+		
+	}
+	
+	@Override
+	public void visit(SelectionStatementNode node){
+		
+	}
+	
+	@Override
+	public void visit(StatementListNode node){
+		
+	}
+	
+	@Override
+	public void visit(StatementNode node){
+		
+	}
+	
+	@Override
+	public void visit(SwitchStatementNode node){
+		
+	}
+	
+	@Override
+	public void visit(TypeNode node){
+		
+	}
+	
+	@Override
+	public void visit(UnOpNode node){
+		
+	}
+
+	
 
 }
