@@ -43,6 +43,7 @@ public class PostfixExpressionNode extends ExpressionNode {
 		postfixType = PostfixType.METHOD_NO_PARAMS;
 		this.objectOfMethod = objectOfMethod;
 		this.addChild(objectOfMethod);
+		this.methodName = methodName;
 		this.addChild(methodName);
 	}
 	

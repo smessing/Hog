@@ -24,8 +24,9 @@ public class IterationStatementNode extends StatementNode {
 	protected ExpressionNode check;
 	protected StatementListNode increment;
 	protected StatementListNode block;
-	
-	
+	protected ExpressionNode part;
+	protected ExpressionNode whole;
+
 	/**
 	 * Constructor for 'while' loop
 	 * 
@@ -35,7 +36,9 @@ public class IterationStatementNode extends StatementNode {
 	public IterationStatementNode(ExpressionNode e, StatementListNode s) {
 		super(new ArrayList<Node>());
 		this.addChild(e);
+		this.check = e;
 		this.addChild(s);
+		this.block = s;
 		this.iterationType = IterationType.WHILE;
 		IterationStatementNode.LOGGER
 				.info("Constructing WHILE loop IterationStatementNode");
@@ -49,8 +52,9 @@ public class IterationStatementNode extends StatementNode {
 	 * @param E3
 	 * @param S
 	 */
-	public IterationStatementNode(StatementListNode initial, ExpressionNode check,
-			StatementListNode increment, StatementListNode block) {
+	public IterationStatementNode(StatementListNode initial,
+			ExpressionNode check, StatementListNode increment,
+			StatementListNode block) {
 		super(new ArrayList<Node>());
 		this.addChild(initial);
 		this.initial = initial;
@@ -76,8 +80,11 @@ public class IterationStatementNode extends StatementNode {
 			StatementListNode block) {
 		super(new ArrayList<Node>());
 		this.addChild(part);
+		this.part = part;
 		this.addChild(whole);
+		this.whole = whole;
 		this.addChild(block);
+		this.block = block;
 		this.iterationType = IterationType.FOREACH;
 		IterationStatementNode.LOGGER
 				.fine("Constructing FOREACH loop IterationStatementNode");
@@ -86,23 +93,47 @@ public class IterationStatementNode extends StatementNode {
 	public IterationType getIterationType() {
 		return iterationType;
 	}
-	
+
 	public StatementListNode getInitial() {
+		if (this.getIterationType() != IterationType.FOR) {
+			throw new UnsupportedOperationException(
+					"Tried to access initial statement for a non-for iteration node!");
+		}
 		return initial;
 	}
-	
+
 	public ExpressionNode getCheck() {
 		return check;
 	}
-	
+
 	public StatementListNode getIncrement() {
+		if (this.getIterationType() != IterationType.FOR) {
+			throw new UnsupportedOperationException(
+					"Tried to access increment statement for a non-for iteration node!");
+		}
 		return increment;
 	}
-	
+
 	public StatementListNode getBlock() {
 		return block;
 	}
-	
+
+	public ExpressionNode getPart() {
+		if (this.getIterationType() != IterationType.FOREACH) {
+			throw new UnsupportedOperationException(
+					"Tried to access a part for a non-for-each iteration node!");
+		}
+		return part;
+	}
+
+	public ExpressionNode getWhole() {
+		if (this.getIterationType() != IterationType.FOREACH) {
+			throw new UnsupportedOperationException(
+					"Tried to access a part for a non-for-each iteration node.");
+		}
+		return whole;
+	}
+
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);
@@ -110,7 +141,8 @@ public class IterationStatementNode extends StatementNode {
 
 	@Override
 	public String getName() {
-	    return id + "-IterationStatement: " + iterationType.toString() + " loop newscope: " + isNewScope();
+		return id + "-IterationStatement: " + iterationType.toString()
+				+ " loop newscope: " + isNewScope();
 	}
 
 	@Override
