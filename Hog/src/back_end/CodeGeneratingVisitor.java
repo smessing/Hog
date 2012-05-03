@@ -4,6 +4,7 @@ import util.ast.node.*;
 import util.ast.AbstractSyntaxTree;
 import util.type.Types;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
@@ -574,7 +575,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			line
 					.append("public static class Reduce extends MapReduceBase implements Reducer");
 			walk(node.getSectionTypeNode());
-			
+
 			break;
 		case MAIN:
 			line
@@ -585,6 +586,15 @@ public class CodeGeneratingVisitor implements Visitor {
 		walk(node.getBlock());
 		indentation.delete(indentation.length() - 2, indentation.length());
 		writeBlockEnd();
+
+		// need to write an additional block for inner methods in reduce and
+		// map:
+
+		switch (sectionKind) {
+		case MAP:
+		case REDUCE:
+			writeBlockEnd();
+		}
 
 	}
 
@@ -604,28 +614,49 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append("<"
 				+ Types.getHadoopType((PrimitiveTypeNode) node
 						.getInputKeyIdNode().getType())
-				+ ","
+				+ ", "
 				+ Types.getHadoopType((PrimitiveTypeNode) node
 						.getInputValueIdNode().getType())
-				+ ","
+				+ ", "
 				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnKey())
-				+ ","
+				+ ", "
 				+ Types
 						.getHadoopType((PrimitiveTypeNode) node
 								.getReturnValue()) + "> {\n");
+		indentation.append("  ");
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
-			indentation.append("  ");
 			line.append(indentation.toString());
 			line.append("public void reduce(");
 			line.append(Types.getHadoopType((PrimitiveTypeNode) node
-						.getInputKeyIdNode().getType()));
+					.getInputKeyIdNode().getType()));
 			line.append(" key, Iterator<");
-			Types.getHadoopType((PrimitiveTypeNode) node
-					.getInputValueIdNode().getType());
+			line.append(Types.getHadoopType((PrimitiveTypeNode) node
+					.getInputValueIdNode().getType()));
 			line.append("> values,  OutputCollector<");
+			line.append(Types.getHadoopType((PrimitiveTypeNode) node
+					.getReturnKey()));
+			line.append(", ");
+			line.append(Types.getHadoopType((PrimitiveTypeNode) node
+					.getReturnValue()));
+			line.append("> output, Reporter reporter) throws IOException {\n");
 		} else {
-			
+			line.append(indentation.toString());
+			line.append("public void map(");
+			line.append(Types.getHadoopType((PrimitiveTypeNode) node
+					.getInputKeyIdNode().getType()));
+			line.append(" key, ");
+			line.append(Types.getHadoopType((PrimitiveTypeNode) node
+					.getInputValueIdNode().getType()));
+			line.append(" value,  OutputCollector<");
+			line.append(Types.getHadoopType((PrimitiveTypeNode) node
+					.getReturnKey()));
+			line.append(", ");
+			line.append(Types.getHadoopType((PrimitiveTypeNode) node
+					.getReturnValue()));
+			line.append("> output, Reporter reporter) throws IOException {\n");
 		}
+		indentation.append(Types.getHadoopType((PrimitiveTypeNode) node
+				.getInputKeyIdNode().getType()));
 	}
 
 	@Override
