@@ -357,9 +357,9 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append("for ( ");
 			walk(node.getInitial());
 			line.append("; ");
-			walk(node.getIncrement());
-			line.append("; ");
 			walk(node.getCheck());
+			line.append("; ");
+			walk(node.getIncrement());
 			line.append(" ) {\n");
 			walk(node.getBlock());
 		case FOREACH:
@@ -564,6 +564,21 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(UnOpNode node) {
 		LOGGER.finer("visit(UnOpNode node) called on " + node);
+		
+		switch(node.getOpType()) {
+		case UMINUS:
+			break;
+		case NOT:
+			break;
+		case INCR:
+			break;
+		case DECR:
+			break;
+		case CAST:
+			break;
+		case NONE:
+			break;
+		}
 
 	}
 
