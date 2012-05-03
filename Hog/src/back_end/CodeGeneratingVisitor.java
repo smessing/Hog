@@ -33,8 +33,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	 * below is program code specific, currently set with fixed variables for
 	 * development.
 	 */
-	protected String outputKeyClass = "Text.class";
-	protected String outputValueClass = "IntWritable.class";
+	protected String outputKeyClass;
+	protected String outputValueClass;
 	protected String inputFile = "example.txt";
 	protected String outputFile = "example.txt";
 
@@ -590,6 +590,16 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(SectionTypeNode node) {
 		LOGGER.finer("visit(SectionTypeNode node) called on " + node);
+		// if we're at @Reduce, need to see output types for main
+		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
+			outputKeyClass = Types.getHadoopType((PrimitiveTypeNode) node
+					.getReturnKey())
+					+ ".class";
+			outputValueClass = Types.getHadoopType((PrimitiveTypeNode) node
+					.getReturnValue())
+					+ ".class";
+		}
+
 		line.append("<"
 				+ Types.getHadoopType((PrimitiveTypeNode) node
 						.getInputKeyIdNode().getType())

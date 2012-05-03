@@ -28,6 +28,10 @@ public class SectionTypeNode extends Node {
 		this.returnValue = returnValue;
 	}
 	
+	public SectionNode getSectionParent() {
+		return (SectionNode) this.parent;
+	}
+	
 	/** Method getType()
 	 * 
 	 * @return
