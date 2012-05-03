@@ -11,6 +11,9 @@ import back_end.Visitor;
  * 
  */
 public class ArgumentsNode extends ExpressionNode {
+	
+	protected ExpressionNode expNode;
+	protected ArgumentsNode argNode;
 
 	/**
 	 * 
@@ -19,13 +22,17 @@ public class ArgumentsNode extends ExpressionNode {
 	 * @param exp
 	 *            - a (not empty) expression representing one actual parameter
 	 *            to a function.
+	 *            
+	 *  Deepest node in the tree is the first argument
 	 */
-	public ArgumentsNode(ExpressionNode args, ExpressionNode exp) {
+	public ArgumentsNode(ArgumentsNode args, ExpressionNode exp) {
 		super();
 		if (exp == null) {
 			throw new UnsupportedOperationException(
 					"Attempted to create an ArgumentsNode with a null ExpressionNode!");
 		}
+		this.expNode = exp;
+		this.argNode = args;
 		this.addChild(args);
 		this.addChild(exp);
 		ArgumentsNode.LOGGER.fine("Constructing ArgumentsNode");
@@ -34,6 +41,14 @@ public class ArgumentsNode extends ExpressionNode {
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);
+	}
+	
+	public ArgumentsNode getArgumentsNode() {
+		return this.argNode;
+	}
+	
+	public ExpressionNode getExpressionNode() {
+		return this.expNode;
 	}
 
 	@Override

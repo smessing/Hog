@@ -18,6 +18,8 @@ package back_end;
  * @author jason, ben
  * 
  */
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -56,6 +58,11 @@ import util.ast.node.StatementNode;
 import util.ast.node.SwitchStatementNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
+import util.ast.node.PostfixExpressionNode.PostfixType;
+import util.error.InvalidFunctionArgumentsError;
+import util.error.InvalidFunctionArgumentsException;
+import util.symbol_table.FunctionSymbol;
+import util.symbol_table.SymbolTable;
 import util.type.Types;
 
 public class TypeCheckingVisitor implements Visitor {
@@ -86,27 +93,30 @@ public class TypeCheckingVisitor implements Visitor {
 	
 	@Override
 	public void visit(ArgumentsNode node){
+		LOGGER.finer("Type Check visit(ArgumentsNode node) called on " + node.getName());
+		node.getExpressionNode().accept(this);
+		if (node.getArgumentsNode() != null) {
+			node.getArgumentsNode().accept(this);
+		}
 		
 	}
 	
 	@Override
 	public void visit(BiOpNode node){
 		LOGGER.finer("Type Check visit(BiOpNode node) called on " + node.getName());
-		TypeNode leftNode  = node.getLeftNode().getType();
-		TypeNode rightNode = node.getRightNode().getType();
-		if(leftNode == null && rightNode == null){
-			System.out.println("both are null");
-		}
-		else if(leftNode == null && rightNode != null){
-			node.setType(rightNode);
-		}
-		else if(leftNode != null && rightNode == null){
-			node.setType(leftNode);
-		}
-		else{
-			PrimitiveTypeNode typeNode = Types.getHigherNumericType(leftNode, rightNode);
-			node.setType(typeNode);
-		}
+		
+		// call on left and right node
+		ExpressionNode leftNode = node.getLeftNode();
+		ExpressionNode rightNode = node.getRightNode();
+		leftNode.accept(this);
+		rightNode.accept(this);
+		
+		// check if they are compatible
+		Types.isCompatible(node.getOpType(), leftNode.getType(), rightNode.getType());
+		
+		// get return type
+		node.setType(Types.getResult(node.getOpType(), leftNode.getType(), rightNode.getType()));
+		
 	}
 	
 	@Override
@@ -173,6 +183,7 @@ public class TypeCheckingVisitor implements Visitor {
 	@Override
 	public void visit(IdNode node){
 		LOGGER.finer("Type Check visit(IdNode node) called on " + node.getName());
+		
 
 	}
 	@Override
@@ -219,6 +230,44 @@ public class TypeCheckingVisitor implements Visitor {
 	
 	@Override
 	public void visit(PostfixExpressionNode node){
+		
+		// handle Function Calls
+		if(node.getPostfixType() == PostfixType.FUNCTION_CALL) {
+			
+			// visit the arguments
+			if(node.hasArguments())
+				node.getArgsList().accept(this);
+			
+			// get the symbol for this function
+			FunctionSymbol funSym = (FunctionSymbol) SymbolTable.getSymbolForIdNode(node.getFunctionName());
+			
+			// set type to return type given in symbol table
+			TypeNode properReturnType = funSym.getType();
+			node.setType(properReturnType);
+			
+			// get all arguments as a list of expressionNodes
+			List<ExpressionNode> expressionNodeList = argumentsNodeToExpressionNodesList(node.getArgsList());
+			List<TypeNode> paramsList = funSym.getParametersTypeNodesList();
+			
+			// compare the arguments to the formal parameters
+			if (expressionNodeList.size() != paramsList.size()) {
+				throw new InvalidFunctionArgumentsError(node.getFunctionName().getIdentifier() + " does not take " +
+						expressionNodeList.size() + " parameters");
+			}
+			
+			// make sure arguments have same type as parameters
+			for (int i = 0; i < expressionNodeList.size(); i ++) {
+				if( !Types.isSameType(expressionNodeList.get(i).getType(), paramsList.get(i)) ) {
+					throw new InvalidFunctionArgumentsError(node.getFunctionName().getIdentifier() + " was passed parameters "
+							+ "of incorrect type");
+				}
+			}
+			
+		}
+		
+		// TODO: handle method calls
+		
+		
 		LOGGER.finer("Type Check visit(PostfixExpressionNode node) called on " + node.getName());
 
 	}
@@ -299,6 +348,33 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(UnOpNode node){
 		LOGGER.finer("Type Check visit(UnOpNode node) called on " + node.getName());
 
+	}
+	
+	/**
+	 * Returns a properly ordered list of TypeNodes for the parameters list in the functionsymbol
+	 * 
+	 * @param parametersNode
+	 * @return an ArrayList<TypeNode> that represents the types of the functions parameters in order
+	 */
+	private ArrayList<ExpressionNode> argumentsNodeToExpressionNodesList(ExpressionNode argumentsNode) {
+		ArrayList<ExpressionNode> argsExprNodeList = new ArrayList<ExpressionNode>();
+		
+		ArgumentsNode currNode = (ArgumentsNode) argumentsNode;
+		
+		// add expression of node passed in
+		argsExprNodeList.add(currNode.getExpressionNode());
+		
+		// recurse through args nodes, adding each expression to list
+		while(currNode.getArgumentsNode() != null) {
+			currNode = currNode.getArgumentsNode();
+			argsExprNodeList.add(currNode.getExpressionNode());
+		}
+		
+		// children in wrong order
+		Collections.reverse(argsExprNodeList);
+		
+		return argsExprNodeList;
+		
 	}
 
 	
