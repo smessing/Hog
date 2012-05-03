@@ -1691,6 +1691,34 @@ public class LexerTester {
 				tokenList.get(2).intValue());
 
 	}
+	
+	/**
+	 * Tests for correct parsing of  Text
+	 *
+	 * @throws IOException
+	 */
+	@Test
+	public void textTest() throws IOException {
+
+		String text = "text face";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 2 tokens for the string '" + text + "'", 2,
+				tokenList.size());
+		assertEquals("The first token should be TEXT", sym.TEXT, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a ID", sym.ID,
+				tokenList.get(1).intValue());
+	}
 
 	/**
 	 * Tests for correct parsing of the '@Reduce' symbol

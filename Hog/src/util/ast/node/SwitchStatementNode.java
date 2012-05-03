@@ -42,7 +42,7 @@ public class SwitchStatementNode extends SelectionStatementNode {
 	 */
 	@Override
 	public String getName() {
-		return id + "-SwitchStatementNode";
+		return id + "-SwitchStatementNode newscope: " + isNewScope();
 	}
 	/**
 	 * Method to accept a visitor accept(Visitor v)

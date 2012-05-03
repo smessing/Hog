@@ -26,10 +26,12 @@ public class SymbolTable {
 	   static SymbolTable top = root;
 	   public Map<String,Symbol> table;
 	   public SymbolTable outer;
+	   protected List<SymbolTable> children;
 	   
 	   static Map<Node, SymbolTable> nodeToSymbolTableMap = new HashMap<Node, SymbolTable>();
 	   
 	   private final static Logger LOGGER = Logger.getLogger(SymbolTable.class.getName());
+	   protected String symbolTableName;
 
 	   /*
 	    * Note From Wikipedia: Not only do type classes permit multiple type
@@ -43,6 +45,7 @@ public class SymbolTable {
     	if(root == null){
     		this.table = new HashMap<String, Symbol>();
     		this.outer = null;
+    		this.children = new ArrayList<SymbolTable>();
     		SymbolTable.top = this;
     		this.fillReservedTable();
     		root = this;
@@ -50,6 +53,7 @@ public class SymbolTable {
    
     	else{
     		this.table = new HashMap<String, Symbol>();
+    		this.children = new ArrayList<SymbolTable>();
         	this.outer = prev;
     	}
     }
@@ -67,6 +71,8 @@ public class SymbolTable {
     		LOGGER.severe("mapping representative node: " + node.getName() + " that has already been mapped to a symbol table.");
     		throw new Exception("Representative Node has already been mapped to a symbol table.");
     	}
+    	// name the symbol table
+    	top.setName(node.getName());
     }
     
     /**
@@ -90,6 +96,14 @@ public class SymbolTable {
     	top = top.outer;
     }
     
+    public void setName(String name) {
+    	this.symbolTableName = name;
+    }
+    
+    public String getName() {
+    	return this.symbolTableName;
+    }
+    
     /**
      * Adds a variable to the symbol table. 
      * First checks to make sure it is not a reserved word by
@@ -111,22 +125,71 @@ public class SymbolTable {
     }
     
     public static void push() {
+    	// save the parent
+    	SymbolTable parent = top;
+    	// push the new symbol table
     	top = new SymbolTable(top); 
+    	
+    	if (parent != null) {
+        	// add the child
+        	parent.addChild(top);
+    	}
+
       }
     
+    public static void putToRootSymbolTable(String name, Symbol symbol) {
+    	// save the parent
+    	root.table.put(name, symbol);
+
+      }
     
+    public void addChild(SymbolTable child) {
+    	this.children.add(child);
+    }
     
-     public static void printSymbolTable(){
+     public static void printSymbolTable() {
     	 Set<Node> nodeMapping = nodeToSymbolTableMap.keySet();
-    	 for (Node n: nodeMapping){
+    	 for (Node n: nodeMapping) {
     		 System.out.println("\n\nNode: \"" + n.getName() + "\" maps to symbol table: ");
     		 SymbolTable tempTable = nodeToSymbolTableMap.get(n);
     		 Set<String> symbolSet = tempTable.table.keySet();
-    		 for (String s : symbolSet){
+    		 for (String s : symbolSet) {
     			 System.out.println("key: " + s + "; value: " + tempTable.get(s).toString());
     		 }
-    	   }
     	 }
+     }
+     
+     /**
+ 	 * A pretty-printer for the subtree that this is a root of. Code taken from:
+ 	 * http
+ 	 * ://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
+ 	 * 
+ 	 */
+ 	public static void print() {
+ 		root.print("", true);
+ 	}
+
+ 	/**
+ 	 * A pretty printer for the subtree that this is a root of. Code taken from:
+ 	 * http
+ 	 * ://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
+ 	 */
+ 	private void print(String prefix, boolean isTail) {
+ 		System.out
+ 				.println(prefix + (isTail ? "L__ " : "|-- ") + this.getName());
+ 		if (children != null) {
+ 			for (int i = 0; i < children.size() - 1; i++) {
+ 				children.get(i).print(prefix + (isTail ? "    " : "|   "),
+ 						false);
+ 			}
+ 			if (children.size() >= 1) {
+ 				children.get(children.size() - 1).print(
+ 						prefix + (isTail ? "    " : "|   "), true);
+ 			}
+ 		}
+ 	}
+     
+
 
     /**
      * Returns whether the particular symbol is defined in this scope. If it isn't

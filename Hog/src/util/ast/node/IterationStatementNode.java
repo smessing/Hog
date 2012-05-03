@@ -20,6 +20,12 @@ public class IterationStatementNode extends StatementNode {
 
 	protected IterationType iterationType;
 
+	protected StatementListNode initial;
+	protected ExpressionNode check;
+	protected StatementListNode increment;
+	protected StatementListNode block;
+	
+	
 	/**
 	 * Constructor for 'while' loop
 	 * 
@@ -44,12 +50,16 @@ public class IterationStatementNode extends StatementNode {
 	 * @param S
 	 */
 	public IterationStatementNode(StatementListNode initial, ExpressionNode check,
-			StatementListNode increment, StatementListNode s) {
+			StatementListNode increment, StatementListNode block) {
 		super(new ArrayList<Node>());
 		this.addChild(initial);
+		this.initial = initial;
 		this.addChild(check);
+		this.check = check;
 		this.addChild(increment);
-		this.addChild(s);
+		this.increment = increment;
+		this.addChild(block);
+		this.block = block;
 		this.iterationType = IterationType.FOR;
 		IterationStatementNode.LOGGER
 				.info("Constructing FOR loop IterationStatementNode");
@@ -73,6 +83,26 @@ public class IterationStatementNode extends StatementNode {
 				.fine("Constructing FOREACH loop IterationStatementNode");
 	}
 
+	public IterationType getIterationType() {
+		return iterationType;
+	}
+	
+	public StatementListNode getInitial() {
+		return initial;
+	}
+	
+	public ExpressionNode getCheck() {
+		return check;
+	}
+	
+	public StatementListNode getIncrement() {
+		return increment;
+	}
+	
+	public StatementListNode getBlock() {
+		return block;
+	}
+	
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);
@@ -80,7 +110,7 @@ public class IterationStatementNode extends StatementNode {
 
 	@Override
 	public String getName() {
-	    return id + "-IterationStatement: " + iterationType.toString() + " loop";
+	    return id + "-IterationStatement: " + iterationType.toString() + " loop newscope: " + isNewScope();
 	}
 
 	@Override

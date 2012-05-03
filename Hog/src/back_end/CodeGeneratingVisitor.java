@@ -148,8 +148,8 @@ public class CodeGeneratingVisitor implements Visitor {
 		line = new StringBuilder();
 	}
 
-	private void writeFunctions() {
-		line.append("\n}\n");
+	private void writeBlockEnd() {
+		line.append("}\n");
 		code.append(line.toString());
 		LOGGER.fine("[writeFunctions] Writing to java source:\n"
 				+ line.toString());/**/
@@ -237,14 +237,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
 
-		line.append("\n} else if ( ");
+		line.append("} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
 		walk(node.getIfCondTrue());
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
 		}
-		line.append("\n");
 
 	}
 
@@ -254,7 +253,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		line.append("} else {\n");
 		walk(node.getBlock());
-		line.append("\n}\n");
+		line.append("}\n");
 
 	}
 
@@ -312,18 +311,38 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
 		walk(node.getIfCondTrue());
+		// check that buffer cleared
+		if (!line.toString().equals("")) {
+			writeStatement();
+		}
 		if (node.getCheckNext() != null) {
 			walk(node.getCheckNext());
 		}
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
 		}
-		line.append("\n}\n");
+		line.append("}\n");
 	}
 
 	@Override
 	public void visit(IterationStatementNode node) {
 		LOGGER.finer("visit(IterationStatementNode node) called on " + node);
+		
+		switch(node.getIterationType()) {
+		case FOR:
+			line.append("for ( ");
+			walk(node.getInitial());
+			line.append("; ");
+			walk(node.getIncrement());
+			line.append("; ");
+			walk(node.getCheck());
+			line.append(" ) {\n");
+			walk(node.getBlock());
+		case FOREACH:
+		case WHILE:
+		}
+		
+		writeBlockEnd();
 
 	}
 
@@ -467,7 +486,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		walk(node.getBlock());
 
-		//writeFunctions();
+		writeBlockEnd();
 
 	}
 
@@ -504,8 +523,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		for (Node child : node.getChildren()) {
 			walk(child);
 		}
-
-		writeFunctions();
 
 	}
 

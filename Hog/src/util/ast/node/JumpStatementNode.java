@@ -50,7 +50,7 @@ public class JumpStatementNode extends StatementNode {
 
 	@Override
 	public String getName() {
-		return id + "-JumpStatement: " + jumpType.toString();
+		return id + "-JumpStatement: " + jumpType.toString() + "newscope: " + isNewScope();
 	}
 
 	@Override
