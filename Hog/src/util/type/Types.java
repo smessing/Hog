@@ -37,7 +37,7 @@ public class Types {
 	 * <li>CHECK_INNER_TYPE: !TODO! WHAT AM I?</li>
 	 * </ul>
 	 * 
-	 * @author sam
+	 * @author sam, jason
 	 * 
 	 */
 	public static enum Primitive {
@@ -178,26 +178,65 @@ public class Types {
 
 		switch (op) {
 		case ASSIGN:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else if (Types.isSameType(left, right))
+				return true;
+			else 
+				return false;
 		case NOT_EQLS:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else if (Types.isSameType(left, right))
+				return true;
+			else 
+				return false;	
 		case DBL_EQLS:
-			return isSameType(left, right);
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else if (Types.isSameType(left, right))
+				return true;
+			else 
+				return false;
 		case PLUS:
 			if (left.isText() && right.isText())
 				return true;
+			else if (left.isNumeric() && right.isNumeric())
+				return true;
+			else 
+				return false;
 		case MINUS:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else 
+				return false;
 		case DIVIDE:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else 
+				return false;
 		case TIMES:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else 
+				return false;
 		case MOD:
 			return left.isNumeric() && right.isNumeric();
 		case OR:
+			return left.isBoolean() && right.isBoolean();
 		case AND:
 			return left.isBoolean() && right.isBoolean();
 		case LESS:
+			return left.isNumeric() && right.isNumeric();
 		case GRTR:
+			return left.isNumeric() && right.isNumeric();
 		case LESS_EQL:
+			return left.isNumeric() && right.isNumeric();
 		case GRTR_EQL:
-			return left.isPrimitive() && right.isPrimitive()
-					&& isSameType(left, right);
+			return left.isNumeric() && right.isNumeric();
+
+//			return left.isPrimitive() && right.isPrimitive()
+	//				&& isSameType(left, right);
 		}
 
 		// should never get here:
@@ -259,7 +298,9 @@ public class Types {
 
 		switch (op) {
 		case UMINUS:
+			return operand.isNumeric();
 		case INCR:
+			return operand.isNumeric();
 		case DECR:
 			return operand.isNumeric();
 		case CAST:

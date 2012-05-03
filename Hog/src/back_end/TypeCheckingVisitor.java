@@ -60,7 +60,8 @@ import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 import util.ast.node.PostfixExpressionNode.PostfixType;
 import util.error.InvalidFunctionArgumentsError;
-import util.error.InvalidFunctionArgumentsException;
+import util.error.InvalidFunctionArgumentsError;
+import util.error.TypeMismatchError;
 import util.symbol_table.FunctionSymbol;
 import util.symbol_table.SymbolTable;
 import util.type.Types;
@@ -347,6 +348,19 @@ public class TypeCheckingVisitor implements Visitor {
 	@Override
 	public void visit(UnOpNode node){
 		LOGGER.finer("Type Check visit(UnOpNode node) called on " + node.getName());
+		
+		//call on children
+		//technically only one child, but have to retrieve list of children to iterate
+		List<Node> childNode = node.getChildren();
+		for(Node n : childNode){
+			n.accept(this);
+		}
+		
+		// check if they are compatible
+		Types.isCompatible(node.getOpType(), node.getType());
+		
+		// set return type
+		node.setType(node.getType());	
 
 	}
 	
