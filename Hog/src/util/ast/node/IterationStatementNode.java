@@ -35,7 +35,9 @@ public class IterationStatementNode extends StatementNode {
 	public IterationStatementNode(ExpressionNode e, StatementListNode s) {
 		super(new ArrayList<Node>());
 		this.addChild(e);
+		this.check = e;
 		this.addChild(s);
+		this.block = s;
 		this.iterationType = IterationType.WHILE;
 		IterationStatementNode.LOGGER
 				.info("Constructing WHILE loop IterationStatementNode");

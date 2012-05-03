@@ -90,6 +90,10 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void walk(Node node) {
 
 		node.accept(this);
+		
+		if (node.isEndOfLine()) {
+			writeStatement();
+		}
 
 		// base cases (sometimes recursion needs to go through visit methods
 		// as with If Else statements).
@@ -158,7 +162,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeStatement() {
-		line.append(";\n");
+		if (!line.toString().endsWith("\n")) {
+			line.append(";\n");
+		}
 		code.append(line.toString());
 		LOGGER.fine("[writeStatement] Writing to java source:\n"
 				+ line.toString());/**/
@@ -332,7 +338,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		walk(node.getIfCondTrue());
 		// check that buffer cleared
 		if (!line.toString().equals("")) {
-			writeStatement();
+			//writeStatement();
 		}
 		if (node.getCheckNext() != null) {
 			walk(node.getCheckNext());
@@ -359,6 +365,10 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getBlock());
 		case FOREACH:
 		case WHILE:
+			line.append("while ( ");
+			walk(node.getCheck());
+			line.append(" ) {\n");
+			walk(node.getBlock());
 		}
 		
 		writeBlockEnd();
@@ -385,7 +395,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getExpressionNode());
 		}
 
-		writeStatement();
+		//writeStatement();
 	}
 
 	@Override
@@ -526,8 +536,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(StatementListNode node) called on " + node);
 
 		for (Node child : node.getChildren()) {
-			child.accept(this);
-			writeStatement();
+			//child.accept(this);
+			walk(child);
+			//writeStatement();
 		}
 
 		//writeStatement();

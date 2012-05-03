@@ -230,40 +230,49 @@ StatementList::=
 Statement::=
     ExpressionStatement:es
     {:
+      if (es != null) {
+        es.setEndOfLine();
+      }
       RESULT = es;
       CUP$Parser$actions.LOGGER.info("ExpressionStatement -> Statement");
     :}
   |
    SelectionStatement:ss
     {:
+      ss.setEndOfLine();
       RESULT = ss;
       CUP$Parser$actions.LOGGER.info("SelectionStatement -> Statement");
     :}
   |
     IterationStatement:is
     {:
+      is.setEndOfLine();
       RESULT = is;
       CUP$Parser$actions.LOGGER.info("IterationStatement -> Statement");
     :}
   |
     LabeledStatement:ls
     {:
+     ls.setEndOfLine();
      RESULT = ls;
      CUP$Parser$actions.LOGGER.info("LabeledStatement -> Statement");
     :}
   |
     JumpStatement:js
     {:
+      js.setEndOfLine();
       RESULT = js;
       CUP$Parser$actions.LOGGER.info("JumpStatement -> Statement");
     :}
   | DeclarationStatement:ds
     {:
+      ds.setEndOfLine();
       RESULT = ds;
       CUP$Parser$actions.LOGGER.info("DeclarationStatement -> Statement");
     :}
   | GuardingStatement:gs
     {:
+      gs.setEndOfLine();
       RESULT = gs;
       CUP$Parser$actions.LOGGER.info("GuardingStatement -> Statement");
     :}
