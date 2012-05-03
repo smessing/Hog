@@ -13,7 +13,7 @@ import back_end.Visitor;
 public class ArgumentsNode extends ExpressionNode {
 	
 	protected ExpressionNode expNode;
-	protected ArgumentsNode argNode;
+	protected ExpressionNode argNode;
 
 	/**
 	 * 
@@ -25,7 +25,7 @@ public class ArgumentsNode extends ExpressionNode {
 	 *            
 	 *  Deepest node in the tree is the first argument
 	 */
-	public ArgumentsNode(ArgumentsNode args, ExpressionNode exp) {
+	public ArgumentsNode(ExpressionNode args, ExpressionNode exp) {
 		super();
 		if (exp == null) {
 			throw new UnsupportedOperationException(
@@ -43,7 +43,7 @@ public class ArgumentsNode extends ExpressionNode {
 		v.visit(this);
 	}
 	
-	public ArgumentsNode getArgumentsNode() {
+	public ExpressionNode getArgumentsNode() {
 		return this.argNode;
 	}
 	

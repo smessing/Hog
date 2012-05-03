@@ -60,7 +60,6 @@ import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 import util.ast.node.PostfixExpressionNode.PostfixType;
 import util.error.InvalidFunctionArgumentsError;
-import util.error.InvalidFunctionArgumentsError;
 import util.error.TypeMismatchError;
 import util.symbol_table.FunctionSymbol;
 import util.symbol_table.SymbolTable;
@@ -380,7 +379,7 @@ public class TypeCheckingVisitor implements Visitor {
 		
 		// recurse through args nodes, adding each expression to list
 		while(currNode.getArgumentsNode() != null) {
-			currNode = currNode.getArgumentsNode();
+			currNode = (ArgumentsNode) currNode.getArgumentsNode();
 			argsExprNodeList.add(currNode.getExpressionNode());
 		}
 		
