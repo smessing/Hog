@@ -164,11 +164,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		if (!line.toString().endsWith("\n") && !line.toString().equals("")) {
 			line.append(";\n");
 		}
-		if (true) {
-			code.append(line.toString());
-			LOGGER.fine("[writeStatement] Writing to java source:\n"
-					+ line.toString());
-		}
+		code.append(line.toString());
+		LOGGER.fine("[writeStatement] Writing to java source:\n"
+				+ line.toString());
 		// reset line
 		line = new StringBuilder();
 	}
