@@ -197,6 +197,18 @@ public class CodeGeneratingVisitor implements Visitor {
 		case MINUS:
 			line.append(" - ");
 			break;
+		case LESS:
+			line.append(" < ");
+			break;
+		case LESS_EQL:
+			line.append(" <= ");
+			break;
+		case GRTR:
+			line.append(" > ");
+			break;
+		case GRTR_EQL:
+			line.append(" >= ");
+			break;
 		}
 
 		walk(node.getRightNode());
