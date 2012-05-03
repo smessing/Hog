@@ -228,6 +228,14 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
 		line.append(node.toSource());
+		Types.Primitive primType = ((PrimitiveTypeNode) node.getType()).getType();
+		switch (primType) {
+		case INT:
+		case BOOL:
+		case REAL:
+		case TEXT:
+				line.append(node.getValue());
+		}
 
 	}
 
@@ -427,7 +435,6 @@ public class CodeGeneratingVisitor implements Visitor {
 			if (node.hasArguments()) {
 				ExpressionNode functionArgsList = node.getArgsList();
 				if (functionArgsList.hasChildren()) {
-
 					Iterator<Node> l = functionArgsList.getChildren()
 							.iterator();
 					String args = "";
