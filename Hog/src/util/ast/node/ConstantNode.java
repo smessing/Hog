@@ -41,7 +41,7 @@ public class ConstantNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return id + "-ConstantNode<" + this.getTypeName() + ">";
+		return id + "-ConstantNode<" + this.getTypeName() + "> newscope: " + isNewScope();
 	}
 
 	public String getTypeShortName() {

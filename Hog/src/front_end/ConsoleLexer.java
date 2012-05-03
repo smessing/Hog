@@ -68,5 +68,7 @@ public class ConsoleLexer {
 	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
 	    symTabVisitor.walk();
 	    SymbolTable.printSymbolTable();
+	    System.out.println("\n\n\n");
+	    SymbolTable.print();
 	}
 }

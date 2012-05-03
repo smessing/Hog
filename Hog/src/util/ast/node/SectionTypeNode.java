@@ -66,7 +66,7 @@ public class SectionTypeNode extends Node {
 	 */
 	@Override
 	public String getName() {
-		return id + "-SectionTypeNode<" + this.getType() + ">";
+		return id + "-SectionTypeNode<" + this.getType() + "> newscope: " + isNewScope();
 	}
 
 	@Override

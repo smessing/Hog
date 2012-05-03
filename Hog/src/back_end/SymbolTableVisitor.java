@@ -43,8 +43,10 @@ public class SymbolTableVisitor implements Visitor {
 	
 	private void openScope(Node node) {
 		
+//		LOGGER.warning("Calling openScope for " + node.getName());
 		// push new scope
 		if(node.isNewScope()) {
+	//		LOGGER.warning("Scope opening for " + node.getName());
 			SymbolTable.push();
 			
 			// map this as representative node
@@ -78,7 +80,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ArgumentsNode node) {
-		LOGGER.info("SymbolTableVistor visiting ArgumentsNode");
+		LOGGER.finer("visit(ArgumentsNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -86,7 +88,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(BiOpNode node) {
-		LOGGER.info("SymbolTableVistor visiting BiOpNode");
+		LOGGER.finer("visit(BiOpNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -94,7 +96,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(CatchesNode node) {
-		LOGGER.info("SymbolTableVistor visiting CatchesNode");
+		LOGGER.finer("visit(CatchesNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -102,7 +104,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ConstantNode node) {
-		LOGGER.info("SymbolTableVistor visiting ConstantNode");
+		LOGGER.finer("visit(Constant node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -111,7 +113,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(DerivedTypeNode node) {
-		LOGGER.info("SymbolTableVistor visiting DerivedTypeNode");
+		LOGGER.finer("visit(DerivedType node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -120,7 +122,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(DictTypeNode node) {
-		LOGGER.info("SymbolTableVistor visiting DictTypeNode");
+		LOGGER.finer("visit(DictTypeNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -129,7 +131,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ElseIfStatementNode node) {
-		LOGGER.info("SymbolTableVistor visiting ElseIfStatementNode");
+		LOGGER.finer("visit(ElseIfStatementNodt node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -137,7 +139,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ElseStatementNode node) {
-		LOGGER.info("SymbolTableVistor visiting ElseStatementNode");
+		LOGGER.finer("visit(ElseStatementNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -146,16 +148,15 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ExceptionTypeNode node) {
-		LOGGER.info("SymbolTableVistor visiting ExceptionTypeNode");
+		LOGGER.finer("visit(ExceptionTypeNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
-
 	}
 
 	@Override
 	public void visit(ExpressionNode node) {
-		LOGGER.info("SymbolTableVistor visiting ExpressionNode");
+		LOGGER.finer("visit(ExpressionNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -164,17 +165,11 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(FunctionNode node) {
-		LOGGER.info("SymbolTableVistor visiting FunctionNode");
+		LOGGER.finer("visit(FunctionNode node) called on " + node.getName());
 		
 		// add function to symbol table - these need to be visible to entire program
 		FunctionSymbol funSym = new FunctionSymbol(node.getType(), node.getParametersNode());
-		try {
-			SymbolTable.put(node.getIdentifier(), funSym);
-		} catch (VariableRedefinedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
+		SymbolTable.putToRootSymbolTable(node.getIdentifier(), funSym);
 		
 		// open new scope - these are specific to within the function
 		openScope(node);
@@ -206,6 +201,8 @@ public class SymbolTableVisitor implements Visitor {
 			}
 		}
 		
+		visitAllChildrenStandard(node);
+		
 		// close scope
 		closeScope(node);
 
@@ -213,8 +210,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(GuardingStatementNode node) {
-		LOGGER.info("SymbolTableVistor visiting GuardingStatementNode");
-
+		LOGGER.finer("visit(GuardingStatementNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -222,19 +218,14 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(IdNode node) {
-		LOGGER.info("SymbolTableVistor visiting IdNode: " + node.getName());
+		LOGGER.finer("visit(IdNode node) called on " + node.getName());
 		openScope(node);
-		
-		LOGGER.info("SymbolTableVistor after openScope");
-		
 		// if it has a type, it is a declaration. Put it in the symbol table
 		if(node.getType() != null) {
 			try {
-				LOGGER.info("before put 1");	
 				SymbolTable.put(node.getIdentifier(), new VariableSymbol(node.getType()));
 			} catch (VariableRedefinedException e) {
 				// TODO Auto-generated catch block
-				LOGGER.info("put 1 failed");
 				e.printStackTrace();
 				System.exit(1);
 			}
@@ -242,9 +233,7 @@ public class SymbolTableVisitor implements Visitor {
 		
 		//else, it does not have a type, so we ensure it is already declared
 		else {
-			LOGGER.info("IdNode does not have a type. Before getMappedSymbolTable");
 			Symbol nodeSymbol = SymbolTable.getSymbolForIdNode(node);
-			LOGGER.info("After getMappedSymbolTable");
 			if (nodeSymbol == null) {
 				try {
 					throw new VariableUndeclaredException(node.getIdentifier() + " was used before it was declared.");
@@ -256,31 +245,39 @@ public class SymbolTableVisitor implements Visitor {
 			}
 			
 			// it has been declared. Now we decorate it with its type
-			LOGGER.finer("We are about to decorate a variable");
 			if(node.getType() == null) {
-				LOGGER.finer("The node we are decorating has a null typeNode.");
 			}
-			LOGGER.finer("The node we are decorating does not have a null typeNode.");
-			LOGGER.finer("The type of NodeSymbol is " + nodeSymbol.getType());
 			node.setType(nodeSymbol.getType());
 		}
 		
-		LOGGER.info("SymbolTableVistor after SymbolTable.put(...)");
-
 		closeScope(node);
 	}
 
 	@Override
 	public void visit(IfElseStatementNode node) {
-		LOGGER.info("SymbolTableVistor visiting IfElseStatementNode");
+		LOGGER.finer("visit(IfElseStatement node) called on " + node.getName());
 		openScope(node);
-		visitAllChildrenStandard(node);
+		
+		// first, visit the statements if condition is true
+		if(node.getIfCondTrue() != null) {
+			node.getIfCondTrue().accept(this);
+		}
+		
+		// then close scope, then visit any remaining children
 		closeScope(node);
+		
+		if(node.getCheckNext() != null) {
+			node.getCheckNext().accept(this);
+		}
+		
+		if(node.getIfCondFalse() != null) {
+			node.getIfCondFalse().accept(this);
+		}
 	}
 
 	@Override
 	public void visit(IterationStatementNode node) {
-		LOGGER.info("SymbolTableVistor visiting IterationStatementNode");
+		LOGGER.finer("visit(IterationStatementNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -288,7 +285,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(JumpStatementNode node) {
-		LOGGER.info("SymbolTableVistor visiting JumpStatementNode");
+		LOGGER.finer("visit(JumpStatementNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -296,7 +293,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(MockExpressionNode node) {
-		LOGGER.info("SymbolTableVistor visiting MockExpressionNode");
+		LOGGER.finer("visit(MockExpressionNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -304,7 +301,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(MockNode node) {
-		LOGGER.info("SymbolTableVistor visiting MockNode");
+		LOGGER.finer("visit(MockNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -312,7 +309,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(Node node) {
-		LOGGER.info("SymbolTableVistor visiting Node");
+		LOGGER.finer("visit(Node node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -320,7 +317,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ParametersNode node) {
-		LOGGER.info("SymbolTableVistor visiting ParametersNode");
+		LOGGER.finer("visit(ParametersNode node) called on " + node.getName());
 		openScope(node);
 		// we have already recursed through each paramater when visiting the function node
 		//visitAllChildrenStandard(node);
@@ -329,7 +326,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(PostfixExpressionNode node) {
-		LOGGER.info("SymbolTableVistor visiting PostFixExpressionNode");
+		LOGGER.finer("visit(PostfixExpressionNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -337,7 +334,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(PrimaryExpressionNode node) {
-		LOGGER.info("SymbolTableVistor visiting PrimaryExpressionNode");
+		LOGGER.finer("visit(PrimaryExpressionNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -345,7 +342,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(PrimitiveTypeNode node) {
-		LOGGER.info("SymbolTableVistor visiting PrimitiveExpressionNode");
+		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -353,7 +350,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ProgramNode node) {
-		LOGGER.info("SymbolTableVistor visiting ProgramNode");
+		LOGGER.finer("visit(ProgramNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -361,7 +358,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(RelationalExpressionNode node) {
-		LOGGER.info("SymbolTableVistor visiting RelationalExpressionNode");
+		LOGGER.finer("visit(RelationalExpressionNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -369,7 +366,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(ReservedWordTypeNode node) {
-		LOGGER.info("SymbolTableVistor visiting ReservedWordTypeNode");
+		LOGGER.finer("visit(ReservedWordTypeNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -377,15 +374,17 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(SectionNode node) {
-		LOGGER.info("SymbolTableVistor visiting SectionNode");
+		LOGGER.finer("visit(SectionNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
-		closeScope(node);
+		//if(node.getSectionName() != SectionNode.SectionName.FUNCTIONS){
+			closeScope(node);
+		//}
 	}
 
 	@Override
 	public void visit(SectionTypeNode node) {
-		LOGGER.info("SymbolTableVistor visiting SectionTypeNode");
+		LOGGER.finer("visit(SectionTypeNode node) called on " + node.getName());
 		
 		openScope(node);
 		
@@ -421,7 +420,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(SelectionStatementNode node) {
-		LOGGER.info("SymbolTableVistor visiting SelectionStatementNode");
+		LOGGER.finer("visit(SeletionStatementNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -429,7 +428,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(StatementListNode node) {
-		LOGGER.info("SymbolTableVistor visiting StatementListNode");
+		LOGGER.finer("visit(StatementListNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -437,7 +436,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(StatementNode node) {
-		LOGGER.info("SymbolTableVistor visiting StatementNode");
+		LOGGER.finer("visit(StatementNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -445,7 +444,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(SwitchStatementNode node) {
-		LOGGER.info("SymbolTableVistor visiting SwitchStatementNode");
+		LOGGER.finer("visit(SwitchStatementNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -453,7 +452,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(TypeNode node) {
-		LOGGER.info("SymbolTableVistor visiting TypeNode");
+		LOGGER.finer("visit(TypeNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);
@@ -461,7 +460,7 @@ public class SymbolTableVisitor implements Visitor {
 
 	@Override
 	public void visit(UnOpNode node) {
-		LOGGER.info("SymbolTableVistor visiting UnOpNode");
+		LOGGER.finer("visit(UnOpNode node) called on " + node.getName());
 		openScope(node);
 		visitAllChildrenStandard(node);
 		closeScope(node);

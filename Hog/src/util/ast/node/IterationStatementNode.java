@@ -110,7 +110,7 @@ public class IterationStatementNode extends StatementNode {
 
 	@Override
 	public String getName() {
-	    return id + "-IterationStatement: " + iterationType.toString() + " loop";
+	    return id + "-IterationStatement: " + iterationType.toString() + " loop newscope: " + isNewScope();
 	}
 
 	@Override

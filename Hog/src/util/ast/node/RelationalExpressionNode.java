@@ -45,7 +45,7 @@ public class RelationalExpressionNode extends BiOpNode {
 	@Override
 	public String getName() {
 		return id + "-RelationalExpressionNode<" + this.getTypeName() + ","
-				+ this.opType.toString() + ">";
+				+ this.opType.toString() + "> newscope: " + isNewScope();
 	}
 	
 	@Override

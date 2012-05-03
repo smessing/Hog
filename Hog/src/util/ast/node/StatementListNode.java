@@ -50,7 +50,7 @@ public class StatementListNode extends Node {
 	 */
 	@Override
 	public String getName() {
-		return id + "-StatementListNode";
+		return id + "-StatementListNode newscope: " + isNewScope();
 	}
 
 }
