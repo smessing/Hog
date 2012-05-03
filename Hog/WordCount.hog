@@ -24,7 +24,7 @@
 
 @Map (int lineNum, text line) -> (text, int) {
   
-  foreach text word in line.tokenize(' ') {
+  foreach text word in line.tokenize(" ") {
     emit(word, 1);
   }
   
