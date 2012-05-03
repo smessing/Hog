@@ -59,7 +59,7 @@ public class ProgramNode extends Node {
 	 */
 	@Override
 	public String getName() {
-		return id + "-ProgramNode";
+		return id + "-ProgramNode newscope: " + isNewScope();
 	}
 
 	@Override

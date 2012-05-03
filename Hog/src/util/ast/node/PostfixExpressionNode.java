@@ -105,7 +105,8 @@ public class PostfixExpressionNode extends ExpressionNode {
 		for (Node n : this.getChildren()) {
 			sb.append(n.getName() + "' ");
 		}
-		return id + "-" + postfixType.toString() + "<" + this.getTypeName() + ">" + sb.toString();
+		return id + "-" + postfixType.toString() + "<" + this.getTypeName() + ">" + sb.toString() +
+				"newscope: "+ isNewScope();
 	}
 
 	public boolean hasArguments(){

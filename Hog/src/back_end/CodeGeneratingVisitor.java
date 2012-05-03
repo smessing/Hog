@@ -184,6 +184,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		case DBL_EQLS:
 			line.append(" == ");
 			break;
+		case NOT_EQLS:
+			line.append(" != ");
+			break;
 		case PLUS:
 			line.append(" + ");
 			break;
@@ -196,14 +199,30 @@ public class CodeGeneratingVisitor implements Visitor {
 		case MINUS:
 			line.append(" - ");
 			break;
+		case LESS:
+			line.append(" < ");
+			break;
+		case LESS_EQL:
+			line.append(" <= ");
+			break;
+		case GRTR:
+			line.append(" > ");
+			break;
+		case GRTR_EQL:
+			line.append(" >= ");
+			break;
+		case DIVIDE:
+			line.append(" / ");
+			break;
+		case MOD:
+			line.append(" % ");
+			break;
+		case AND:
+			line.append(" && ");
+			break;
 		}
 
 		walk(node.getRightNode());
-
-		if (line.toString().length() == 0) {
-			throw new UnsupportedOperationException("BiOpType: "
-					+ node.getOpType() + " not supported yet.");
-		}
 
 	}
 
@@ -332,9 +351,9 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append("for ( ");
 			walk(node.getInitial());
 			line.append("; ");
-			walk(node.getIncrement());
-			line.append("; ");
 			walk(node.getCheck());
+			line.append("; ");
+			walk(node.getIncrement());
 			line.append(" ) {\n");
 			walk(node.getBlock());
 		case FOREACH:
@@ -544,6 +563,31 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(UnOpNode node) {
 		LOGGER.finer("visit(UnOpNode node) called on " + node);
+		
+		switch(node.getOpType()) {
+		case UMINUS:
+			line.append("-");
+			walk(node.getChildNode());
+			break;
+		case NOT:
+			line.append("!");
+			walk(node.getChildNode());
+			break;
+		case INCR:
+			walk(node.getChildNode());
+			line.append("++");
+			break;
+		case DECR:
+			walk(node.getChildNode());
+			line.append("--");
+			break;
+		case CAST:
+			throw new UnsupportedOperationException("Cast statements are NOT supported yet!");
+		case NONE:
+			// none means no unary operator applied.
+			walk(node.getChildNode());
+			break;
+		}
 
 	}
 

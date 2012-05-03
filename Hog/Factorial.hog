@@ -23,6 +23,5 @@
 }
 
 @Main {
-  one = 10;
   mapReduce();
 }

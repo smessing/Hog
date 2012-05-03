@@ -88,7 +88,7 @@ public class BiOpNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return id + "-BiOpNode<" + opType.toString() + ">";
+		return id + "-BiOpNode<" + opType.toString() + "> newscope: " + isNewScope();
 	}
 
 	@Override

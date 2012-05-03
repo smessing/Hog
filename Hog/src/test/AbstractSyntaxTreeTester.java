@@ -146,67 +146,6 @@ public class AbstractSyntaxTreeTester {
 	}
 	
 
-	/**
-	 * Tests to make sure the correct visit methods are being called 
-	 * by the nodes
-	 */
-	//@Test
-	public void nodeTypeCheckTest() {
-		
-		//Iterator<Node> postOrderTraversal = tree.postOrderTraversal();
-		TypeCheckingVisitor v = new TypeCheckingVisitor();
 
-		//while (postOrderTraversal.hasNext()) {
-			//Node nextNode = postOrderTraversal.next();
-			//assertEquals(
-				//	"It should call the appropriate visit methods for each node",
-		//			nextNode.visitorTest(v), 9);
-	//	}
-		
-		ConstantNode n = new ConstantNode(Types.Primitive.TEXT, "hello");
-		assertEquals(
-				"It should call the appropriate visit methods for ConstantNode",
-				n.visitorTest(v), 3);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for BiOpNode",
-				A.visitorTest(v), 19);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for BiOpNode",
-				B.visitorTest(v), 19);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for BiOpNode",
-				C.visitorTest(v), 19);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for MockExpressionNode",
-				D.visitorTest(v), 9);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for MockExpressionNode",
-				E.visitorTest(v), 9);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for MockExpressionNode",
-				F.visitorTest(v), 9);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for MockExpressionNode",
-				G.visitorTest(v), 9);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for UnOpNode",
-				H.visitorTest(v), 17);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for RelationalExpressionNode",
-				I.visitorTest(v), 15);
-		
-		assertEquals(
-				"It should call the appropriate visit methods for MockExpressionNode",
-				J.visitorTest(v), 9);
-	}
 
 }

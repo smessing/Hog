@@ -714,6 +714,7 @@ SelectionStatement::=
     IF Expression:e Block:b ElseIfStatement:elif ElseStatement:el
     {:
       RESULT = new IfElseStatementNode(e, b, elif, el);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("IF Expression Block " +
                                       "ElseIfStatement ElseStatment -> SelectionStatement");
     :}
@@ -722,6 +723,7 @@ SelectionStatement::=
     {:
     // NOT THINKING ABOUT SCOPE. TOO TIRED.
       RESULT = new SwitchStatementNode(e, s);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("SWITCH Expression L_BRACE " +
                                       "StatementList R_BRACE -> SelectionStatement");
     :}
@@ -731,6 +733,7 @@ ElseIfStatement::=
     ELSEIF Expression:e Block:b ElseIfStatement:elif
     {:
       RESULT = new ElseIfStatementNode(e, b, elif);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("ELSEIF L_PAREN Expression R_PAREN ElseIfStatement -> " +
                                       "ElseIfStatement");
     :}
@@ -745,6 +748,7 @@ ElseStatement::=
     ELSE Block:b
     {:
       RESULT = new ElseStatementNode(b);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("Block -> ElseStatement");
     :}
   |
@@ -758,6 +762,7 @@ IterationStatement::=
     WHILE L_PAREN Expression:e R_PAREN Block:b
     {:
       RESULT = new IterationStatementNode(e,b);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("WHILE L_PAREN Expression R_PAREN L_BRACE " +
                                       "StatementList R_BRACE -> IterationStatement");
     :}
@@ -772,6 +777,7 @@ IterationStatement::=
     FOR L_PAREN ForInit ForExpr R_PAREN Block:b
     {:
       //RESULT = new IterationStatementNode(e1,e2,e3,b);
+      //RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("FOR L_BRACEN ForInit ForExpr R_PAREN L_BRACE " +
                                       "StatementList R_BRACE -> IterationStatement");
     :}
@@ -780,6 +786,7 @@ IterationStatement::=
     {:
       IdNode idNode = new IdNode(t, i);
       RESULT = new IterationStatementNode(idNode,e2,b);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("FOREACH Expression IN Expression L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement"); 
     :}

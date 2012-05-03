@@ -39,7 +39,7 @@ public class IfElseStatementNode extends SelectionStatementNode {
 	
 	@Override
 	public String getName() {
-		return id + "-IfElseStatementNode";
+		return id + "-IfElseStatementNode newscope: " + isNewScope();
 	}
 
 }
