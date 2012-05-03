@@ -125,7 +125,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void writeHeader() {
 
 		LOGGER.fine("Writing header to code");
-
 		code.append("import java.io.IOException;\n");
 		code.append("import java.util.*;\n");
 		code.append("import org.apache.hadoop.fs.Path;\n");
@@ -175,9 +174,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(BiOpNode node) {
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
-		
+
 		walk(node.getLeftNode());
-		
+
 		switch (node.getOpType()) {
 		case ASSIGN:
 			line.append(" = ");
@@ -283,9 +282,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append(" " + params.getIdentifier());
 		line.append(")");
 		line.append(" {\n");
-		
+
 		walk(node.getInstructions());
-		
+
 		writeFunction();
 
 	}
@@ -327,8 +326,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(IterationStatementNode node) {
 		LOGGER.finer("visit(IterationStatementNode node) called on " + node);
-		
-		switch(node.getIterationType()) {
+
+		switch (node.getIterationType()) {
 		case FOR:
 			line.append("for ( ");
 			walk(node.getInitial());
@@ -341,7 +340,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		case FOREACH:
 		case WHILE:
 		}
-		
+
 		writeBlockEnd();
 
 	}
@@ -474,10 +473,12 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append("public static class Functions {\n");
 			break;
 		case MAP:
-			line.append("public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {\n");
+			line.append("public static class Map extends MapReduceBase implements Mapper");
+			walk(node.getSectionTypeNode());
 			break;
 		case REDUCE:
-			line.append("public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {\n");
+			line.append("public static class Reduce extends MapReduceBase implements Reducer");
+			walk(node.getSectionTypeNode());
 			break;
 		case MAIN:
 			line.append("public static void main(String[] args) throws Exception {\n");
@@ -493,7 +494,10 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(SectionTypeNode node) {
 		LOGGER.finer("visit(SectionTypeNode node) called on " + node);
-
+		line.append("<"+node.getInputKeyIdNode().toSource()+","
+				+ node.getInputValueIdNode().toSource()+","
+				+ node.getReturnKey().toSource()+","
+				+ node.getReturnValue().toSource()+">{\n");
 	}
 
 	@Override
@@ -511,7 +515,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			writeStatement();
 		}
 
-		//writeStatement();
+		// writeStatement();
 
 	}
 

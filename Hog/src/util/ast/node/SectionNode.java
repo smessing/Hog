@@ -26,10 +26,11 @@ public class SectionNode extends Node {
 	 * */
 	protected SectionName sectionName;
 	
+		
 	/** type field which has type SectionTypeNode 
 	 * Used to defined key-value pair types for input and ouput
 	 * */
-	protected SectionTypeNode type;
+	protected SectionTypeNode sectionTypeNode;
 	
 	protected StatementListNode block;
 
@@ -51,13 +52,14 @@ public class SectionNode extends Node {
 	 * @param list
 	 * @param sectionName
 	 */
-	public SectionNode(SectionTypeNode type, StatementListNode list, SectionName sectionName) {
+	public SectionNode(SectionTypeNode sectionTypeNode, StatementListNode list, SectionName sectionName) {
 		this.children = new ArrayList<Node>();
 		SectionNode.LOGGER.fine("adding list child to @Map or @Reduce SectionNode");
-		this.addChild(type);
+		this.addChild(sectionTypeNode);
 		this.addChild(list);
 		this.block = list;
 		this.sectionName = sectionName;
+		this.sectionTypeNode = sectionTypeNode;
 	}
 
 	@Override
@@ -78,6 +80,13 @@ public class SectionNode extends Node {
 
 	public StatementListNode getBlock() {
 		return block;
+	}
+	/** Method Returns SectionTypeNode Field
+	 * 
+	 * @return
+	 */
+	public SectionTypeNode getSectionTypeNode(){
+		return this.sectionTypeNode;
 	}
 	
 	@Override
