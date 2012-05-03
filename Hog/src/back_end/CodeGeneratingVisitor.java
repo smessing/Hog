@@ -362,6 +362,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
 		}
+		line.append(indentation.toString());
 		line.append("}\n");
 	}
 
@@ -369,6 +370,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(IterationStatementNode node) {
 		LOGGER.finer("visit(IterationStatementNode node) called on " + node);
 
+		line.append(indentation.toString());
 		switch (node.getIterationType()) {
 		case FOR:
 			line.append("for ( ");
