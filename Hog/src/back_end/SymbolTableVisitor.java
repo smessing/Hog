@@ -169,13 +169,7 @@ public class SymbolTableVisitor implements Visitor {
 		
 		// add function to symbol table - these need to be visible to entire program
 		FunctionSymbol funSym = new FunctionSymbol(node.getType(), node.getParametersNode());
-		try {
-			SymbolTable.put(node.getIdentifier(), funSym);
-		} catch (VariableRedefinedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
+		SymbolTable.putToRootSymbolTable(node.getIdentifier(), funSym);
 		
 		// open new scope - these are specific to within the function
 		openScope(node);

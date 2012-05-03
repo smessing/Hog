@@ -137,6 +137,12 @@ public class SymbolTable {
 
       }
     
+    public static void putToRootSymbolTable(String name, Symbol symbol) {
+    	// save the parent
+    	root.table.put(name, symbol);
+
+      }
+    
     public void addChild(SymbolTable child) {
     	this.children.add(child);
     }
