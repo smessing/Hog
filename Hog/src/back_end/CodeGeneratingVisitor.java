@@ -4,11 +4,7 @@ import util.ast.node.*;
 import util.ast.AbstractSyntaxTree;
 import util.type.Types;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -26,6 +22,8 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	protected final static Logger LOGGER = Logger
 			.getLogger(CodeGeneratingVisitor.class.getName());
+	protected final String inputFormatClass = "TextInputFormat.class";
+	protected final String outputFormatClass = "TextInputFormat.class";
 
 	protected AbstractSyntaxTree tree;
 	protected StringBuilder code;
@@ -35,12 +33,10 @@ public class CodeGeneratingVisitor implements Visitor {
 	 * below is program code specific, currently set with fixed variables for
 	 * development.
 	 */
-	protected String outputKeyClass = "Text";
-	protected String outputValueClass = "IntWritable";
-	protected String inputFormatClass;
-	protected String outputFormatClass;
-	protected String inputFile;
-	protected String outputFile;
+	protected String outputKeyClass = "Text.class";
+	protected String outputValueClass = "IntWritable.class";
+	protected String inputFile = "example.txt";
+	protected String outputFile = "example.txt";
 
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 
@@ -137,20 +133,30 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	private void writeMapReduce() {
 		LOGGER.fine("Writing mapReduce initialization code.");
-		code.append("JobConf conf = new JobConf(Hog.class);");
-		code.append("conf.setJobName(\"hog\");");
-		code.append("conf.setOutputKeyClass(" + outputKeyClass + ");");
-		code.append("conf.setOutputValueClass(" + outputValueClass + ");");
-		code.append("conf.setMapperClass(Map.class);");
-		code.append("conf.setCombinerClass(Reduce.class);");
-		code.append("conf.setReducerClass(Reduce.class);");
-		code.append("conf.setInputFormat(" + inputFormatClass + ");");
-		code.append("conf.setOutputFormat(" + outputFormatClass + ");");
-		code.append("FileInputFormat.setInputPaths(conf, new Path(\""
-				+ inputFile + "\"));");
-		code.append("FileOutputFormat.setOutputPath(conf, new Path(\"" + outputFile + "\"));");
-		code.append("JobClient.runJob(conf);");
-
+		line.append(indentation.toString()
+				+ "JobConf conf = new JobConf(Hog.class);\n");
+		line.append(indentation.toString() + "conf.setJobName(\"hog\");\n");
+		line.append(indentation.toString() + "conf.setOutputKeyClass("
+				+ outputKeyClass + ");\n");
+		line.append(indentation.toString() + "conf.setOutputValueClass("
+				+ outputValueClass + ");\n");
+		line.append(indentation.toString()
+				+ "conf.setMapperClass(Map.class);\n");
+		line.append(indentation.toString()
+				+ "conf.setCombinerClass(Reduce.class);\n");
+		line.append(indentation.toString()
+				+ "conf.setReducerClass(Reduce.class);\n");
+		line.append(indentation.toString() + "conf.setInputFormat("
+				+ inputFormatClass + ");\n");
+		line.append(indentation.toString() + "conf.setOutputFormat("
+				+ outputFormatClass + ");\n");
+		line.append(indentation.toString()
+				+ "FileInputFormat.setInputPaths(conf, new Path(\"" + inputFile
+				+ "\"));\n");
+		line.append(indentation.toString()
+				+ "FileOutputFormat.setOutputPath(conf, new Path(\""
+				+ outputFile + "\"));\n");
+		line.append(indentation.toString() + "JobClient.runJob(conf);\n");
 	}
 
 	private void writeFunction() {
@@ -479,6 +485,11 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case FUNCTION_CALL:
 			IdNode functionName = node.getFunctionName();
+			// check if this is our special mapReduce() call:
+			if (functionName.getIdentifier().equals("mapReduce")) {
+				writeMapReduce();
+				return;
+			}
 			if (node.hasArguments()) {
 				ExpressionNode functionArgsList = node.getArgsList();
 				if (functionArgsList.hasChildren()) {
@@ -569,9 +580,9 @@ public class CodeGeneratingVisitor implements Visitor {
 					.append("public static void main(String[] args) throws Exception {\n");
 			break;
 		}
-
+		indentation.append("  ");
 		walk(node.getBlock());
-
+		indentation.delete(indentation.length() - 2, indentation.length());
 		writeBlockEnd();
 
 	}
