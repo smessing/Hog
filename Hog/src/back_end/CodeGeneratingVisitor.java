@@ -64,12 +64,14 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected AbstractSyntaxTree tree;
 	protected StringBuilder code;
 	protected StringBuilder line;
+	protected int scopeCount;
 
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 
 		this.tree = root;
 		this.code = new StringBuilder();
 		this.line = new StringBuilder();
+		this.scopeCount = 0;
 
 	}
 
@@ -85,7 +87,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		// start recursive walk:
 
 		walk(tree.getRoot());
-		
+
 		code.append("\n}");
 
 	}
@@ -159,12 +161,14 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeStatement() {
-		if (!line.toString().endsWith("\n")) {
+		if (!line.toString().endsWith("\n") && !line.toString().equals("")) {
 			line.append(";\n");
 		}
-		code.append(line.toString());
-		LOGGER.fine("[writeStatement] Writing to java source:\n"
-				+ line.toString());/**/
+		if (true) {
+			code.append(line.toString());
+			LOGGER.fine("[writeStatement] Writing to java source:\n"
+					+ line.toString());
+		}
 		// reset line
 		line = new StringBuilder();
 	}
@@ -473,9 +477,9 @@ public class CodeGeneratingVisitor implements Visitor {
 					if (args.charAt(args.length() - 1) == ',') {
 						args = args.substring(0, args.length() - 1);
 					}
-					if(functionName.toSource().equalsIgnoreCase("emit")){
+					if (functionName.toSource().equalsIgnoreCase("emit")) {
 						line.append("output.collect" + "(" + args + ")");
-					}else
+					} else
 						line.append(functionName.toSource() + "(" + args + ")");
 				}
 			} else
@@ -528,15 +532,18 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append("public static class Functions {\n");
 			break;
 		case MAP:
-			line.append("public static class Map extends MapReduceBase implements Mapper");
+			line
+					.append("public static class Map extends MapReduceBase implements Mapper");
 			walk(node.getSectionTypeNode());
 			break;
 		case REDUCE:
-			line.append("public static class Reduce extends MapReduceBase implements Reducer");
+			line
+					.append("public static class Reduce extends MapReduceBase implements Reducer");
 			walk(node.getSectionTypeNode());
 			break;
 		case MAIN:
-			line.append("public static void main(String[] args) throws Exception {\n");
+			line
+					.append("public static void main(String[] args) throws Exception {\n");
 			break;
 		}
 
@@ -558,8 +565,9 @@ public class CodeGeneratingVisitor implements Visitor {
 				+ ","
 				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnKey())
 				+ ","
-				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnValue())
-				+ ">{\n");
+				+ Types
+						.getHadoopType((PrimitiveTypeNode) node
+								.getReturnValue()) + ">{\n");
 	}
 
 	@Override

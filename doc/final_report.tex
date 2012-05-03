@@ -16,7 +16,18 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-Use your updated White Paper.
+\section{Taming the Elephant}
+\label{sec:elephant}
+
+As data sets have grown in size, so have the complexities of dealing with them.
+For instance, consider wanting to generate counts for all the words in
+\emph{War and Peace} by means of distributed computation. Writing in Java and
+using Hadoop MapReduce (TM),\footnote{\texttt{http://hadoop.apache.org/}} a
+simple solution takes over 50 lines of code, as the programmer is required to
+specify intermediate objects not directly related to the desired computation,
+but required simply to get Hadoop to function properly. Our goal is to produce
+a language that can express the same computation in about 10 lines.
+
 
 \chapter{Tutorial}
 \label{chap:tutor}
@@ -39,15 +50,15 @@ the Hadoop MapReduce framework. As such, from the beginning we were interested
 in ways to make the implementation of the language as simple as possible.
 
 
-To be written by Sam.
+\section{Roles and Responsibilities}
 
-\begin{itemize}
-\item State what process used was used to develop the language and its translator.
-\item State the roles and responsibilities of each team member.
-\item Include the implementation style sheet used by the team.
-\item Show the timeline of what was done and when.
-\item Include your project log.
-\end{itemize}
+
+\section{Hog's Developer Style Sheet}
+
+\section{Project Timeline}
+
+\section{Project Log}
+
 
 \chapter{Language Evolution}
 \label{chap:evo}
