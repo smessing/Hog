@@ -655,8 +655,7 @@ public class CodeGeneratingVisitor implements Visitor {
 					.getReturnValue()));
 			line.append("> output, Reporter reporter) throws IOException {\n");
 		}
-		indentation.append(Types.getHadoopType((PrimitiveTypeNode) node
-				.getInputKeyIdNode().getType()));
+		indentation.append("  ");
 	}
 
 	@Override
