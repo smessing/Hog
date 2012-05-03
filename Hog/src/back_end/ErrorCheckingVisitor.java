@@ -4,6 +4,7 @@
 package back_end;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.ArgumentsNode;
@@ -48,238 +49,310 @@ import util.error.UnreachableCodeError;
  * 
  * This is the second walk performed after construction of the AST from source.
  * 
- * Performs the following validations:
- * - no dead code (statements after a return statement in the same basic block)
- * - no break/continue statements outside of iteration loops
- * - non-void functions have adequate number of return statements
- * - no case/default statements outside of immediate switch statement
+ * Performs the following validations: - no dead code (statements after a return
+ * statement in the same basic block) - no break/continue statements outside of
+ * iteration loops - non-void functions have adequate number of return
+ * statements - no case/default statements outside of immediate switch statement
  * 
  * @author paul
- *
+ * 
  */
 public class ErrorCheckingVisitor implements Visitor {
 
-    protected AbstractSyntaxTree tree;
-    
-    private boolean returnFlag;
-    
-    private void setReturnFlag() {
+	protected AbstractSyntaxTree tree;
+
+	protected final static Logger LOGGER = Logger
+			.getLogger(ErrorCheckingVisitor.class.getName());
+
+	private boolean returnFlag;
+
+	private void setReturnFlag() {
 		this.returnFlag = true;
 	}
-    
-    private void unsetReturnFlag(){
-    	this.returnFlag = false;
-    }
-    
-    public boolean isReturnFlagSet() {
+
+	private void unsetReturnFlag() {
+		this.returnFlag = false;
+	}
+
+	public boolean isReturnFlagSet() {
 		return this.returnFlag;
 	}
-    
+
 	public ErrorCheckingVisitor(AbstractSyntaxTree tree) {
 		this.tree = tree;
 	}
-	
-    public void walk() {
-		
+
+	public void walk() {
+
 		ProgramNode treeRoot = (ProgramNode) this.tree.getRoot();
 		treeRoot.accept(this);
 	}
-    
 
 	private void visitAllChildrenStandard(Node node) {
 		// visit all children of a given node
 		List<Node> children = node.getChildren();
 		for (Node n : children) {
 			n.accept(this);
-			if(n.isNewScope()){
-				this.unsetReturnFlag();
-			}
-			else{
-				if(this.isReturnFlagSet()){
-					throw new UnreachableCodeError("The following statement is unreachable: " + n.toSource());
+			if (!(n instanceof JumpStatementNode)) {
+				if (n.isNewScope()) {
+					LOGGER.finer("We are in a new scope now in node " + node);
+					this.unsetReturnFlag();
+				} else {
+					if (this.isReturnFlagSet()) {
+						throw new UnreachableCodeError(
+								"The following statement is unreachable: "
+										+ n.toSource());
+					}
 				}
 			}
 		}
 	}
-	
-	
+
 	@Override
 	public void visit(ArgumentsNode node) {
+		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
+		
 	}
 
 	@Override
 	public void visit(BiOpNode node) {
+		LOGGER.finer("visit(BiOpNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 
 	}
 
 	@Override
 	public void visit(CatchesNode node) {
+		LOGGER.finer("visit(CatchesNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(ConstantNode node) {
+		LOGGER.finer("visit(ConstantNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(DerivedTypeNode node) {
+		LOGGER.finer("visit(DerivedTypeNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(ElseIfStatementNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
+		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(ElseStatementNode node) {
+		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(ExceptionTypeNode node) {
+		LOGGER.finer("visit(ExceptionTypeNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	public void visit(ExpressionNode node) {
+		LOGGER.finer("visit(ExpressionNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	public void visit(FunctionNode node) {
+		LOGGER.finer("visit(FunctionNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(GuardingStatementNode node) {
+		LOGGER.finer("visit(GuardingStatementNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(IdNode node) {
+		LOGGER.finer("visit(IdNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(IfElseStatementNode node) {
-         visitAllChildrenStandard(node);
+		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
+		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(IterationStatementNode node) {
+		LOGGER.finer("visit(IterationStatementNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(JumpStatementNode node) {
-		node.accept(this);
-		if(node.getJumpType()==JumpType.RETURN){
+		LOGGER.finer("visit(JumpStatementNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
+		if (node.getJumpType() == JumpType.RETURN) {
 			this.setReturnFlag();
-		}
-		else{
-			if(this.isReturnFlagSet()){
-				throw new UnreachableCodeError("The following statement is unreachable: " + node.toSource());
+		} else {
+			if (this.isReturnFlagSet()) {
+				throw new UnreachableCodeError(
+						"The following statement is unreachable: "
+								+ node.toSource());
 			}
 		}
 	}
 
 	@Override
 	public void visit(MockExpressionNode node) {
+		LOGGER.finer("visit(MockExpressionNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 
 	}
 
 	@Override
 	public void visit(MockNode node) {
+		LOGGER.finer("visit(MockNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 
 	}
 
 	@Override
 	public void visit(Node node) {
+		LOGGER.finer("visit(Node node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(ParametersNode node) {
+		LOGGER.finer("visit(ParametersNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(PostfixExpressionNode node) {
+		LOGGER.finer("visit(PostfixExpressionNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(PrimaryExpressionNode node) {
+		LOGGER.finer("visit(PrimaryExpressionNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(PrimitiveTypeNode node) {
+		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(ProgramNode node) {
+		LOGGER.finer("visit(ProgramNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(RelationalExpressionNode node) {
+		LOGGER.finer("visit(RelationalExpressionNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(SectionNode node) {
+		LOGGER.finer("visit(SectionNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(SectionTypeNode node) {
+		LOGGER.finer("visit(SectionTypeNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(SelectionStatementNode node) {
+		LOGGER.finer("visit(SelectionStatementNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(StatementListNode node) {
+		LOGGER.finer("visit(StatementListNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(StatementNode node) {
+		LOGGER.finer("visit(StatementNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(SwitchStatementNode node) {
+		LOGGER.finer("visit(SwitchStatementNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(TypeNode node) {
+		LOGGER.finer("visit(TypeNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(UnOpNode node) {
+		LOGGER.finer("visit(UnOpNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(DictTypeNode node) {
+		LOGGER.finer("visit(DictTypeNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(ReservedWordTypeNode node) {
+		LOGGER.finer("visit(ReservedWordTypeNode node) called on " + node);
+		LOGGER.finer("Return Flag Value is " + this.isReturnFlagSet());
 		visitAllChildrenStandard(node);
 	}
 

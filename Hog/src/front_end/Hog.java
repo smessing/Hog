@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import back_end.CodeGeneratingVisitor;
+import back_end.ErrorCheckingVisitor;
 
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.ProgramNode;
@@ -73,10 +74,12 @@ public class Hog {
 		root.print();
 		
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
-		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
-		codeGenerator.walk();
+		ErrorCheckingVisitor errorChecker = new ErrorCheckingVisitor(tree);
+		errorChecker.walk();
+		//CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
+		//codeGenerator.walk();
 		
-		FileWriter fstream = null;
+		/*FileWriter fstream = null;
 		try {
 			fstream = new FileWriter("Hog.java");
 			BufferedWriter out = new BufferedWriter(fstream);
@@ -86,7 +89,7 @@ public class Hog {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+/**/
 	}
 
 	/**
