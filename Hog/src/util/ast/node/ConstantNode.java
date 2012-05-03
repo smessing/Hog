@@ -29,7 +29,6 @@ public class ConstantNode extends ExpressionNode {
 		this.value = value;
 		ConstantNode.LOGGER.fine("Constructing ConstantNode");
 	}
-
 	/**
 	 * Get a String representation of this value.
 	 * 
