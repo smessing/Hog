@@ -91,7 +91,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void walk(Node node) {
 
 		node.accept(this);
-		
+
 		if (node.isEndOfLine()) {
 			writeStatement();
 		}
@@ -234,13 +234,14 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
 		line.append(node.toSource());
-		Types.Primitive primType = ((PrimitiveTypeNode) node.getType()).getType();
+		Types.Primitive primType = ((PrimitiveTypeNode) node.getType())
+				.getType();
 		switch (primType) {
 		case INT:
 		case BOOL:
 		case REAL:
 		case TEXT:
-				line.append(node.getValue());
+			line.append(node.getValue());
 		}
 
 	}
@@ -330,7 +331,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		walk(node.getIfCondTrue());
 		// check that buffer cleared
 		if (!line.toString().equals("")) {
-			//writeStatement();
+			// writeStatement();
 		}
 		if (node.getCheckNext() != null) {
 			walk(node.getCheckNext());
@@ -358,6 +359,9 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case FOREACH:
 			line.append("for ( ");
+			line.append(Types.getHadoopType((PrimitiveTypeNode) node.getPart()
+					.getType()));
+			line.append(" ");
 			walk(node.getPart());
 			line.append(" : ");
 			walk(node.getWhole());
@@ -371,9 +375,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getBlock());
 			break;
 		}
-
 		writeBlockEnd();
-
 	}
 
 	@Override
@@ -396,7 +398,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getExpressionNode());
 		}
 
-		//writeStatement();
+		// writeStatement();
 	}
 
 	@Override
@@ -446,7 +448,6 @@ public class CodeGeneratingVisitor implements Visitor {
 						+ methodName.getIdentifier() + "("
 						+ argsList.toSource() + ")");
 			}
-
 			break;
 		case FUNCTION_CALL:
 			IdNode functionName = node.getFunctionName();
@@ -456,7 +457,6 @@ public class CodeGeneratingVisitor implements Visitor {
 					Iterator<Node> l = functionArgsList.getChildren()
 							.iterator();
 					String args = "";
-
 					while (l.hasNext()) {
 						Node n = l.next();
 						if (n instanceof ConstantNode) {
@@ -470,14 +470,15 @@ public class CodeGeneratingVisitor implements Visitor {
 					if (args.charAt(args.length() - 1) == ',') {
 						args = args.substring(0, args.length() - 1);
 					}
-					line.append(functionName.toSource() + "(" + args + ")");
+					if(functionName.toSource().equalsIgnoreCase("emit")){
+						line.append("output.collect" + "(" + args + ")");
+					}else
+						line.append(functionName.toSource() + "(" + args + ")");
 				}
 			} else
 				line.append(functionName.toSource() + "()");
 			break;
-
 		}
-
 	}
 
 	@Override
@@ -568,9 +569,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(StatementListNode node) {
 		LOGGER.finer("visit(StatementListNode node) called on " + node);
 		for (Node child : node.getChildren()) {
-			//child.accept(this);
+			// child.accept(this);
 			walk(child);
-			//writeStatement();
+			// writeStatement();
 		}
 		// writeStatement();
 
