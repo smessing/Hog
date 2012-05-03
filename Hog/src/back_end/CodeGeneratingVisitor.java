@@ -85,6 +85,8 @@ public class CodeGeneratingVisitor implements Visitor {
 		// start recursive walk:
 
 		walk(tree.getRoot());
+		
+		code.append("\n}");
 
 	}
 
@@ -135,6 +137,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append("import org.apache.hadoop.conf.*;\n");
 		code.append("import org.apache.hadoop.io.*;\n");
 		code.append("import org.apache.hadoop.mapred.*;\n");
+		code.append("public class Hog {\n");
 	}
 
 	private void writeFunction() {
