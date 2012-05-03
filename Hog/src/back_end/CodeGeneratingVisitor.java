@@ -225,11 +225,6 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		walk(node.getRightNode());
 
-		if (line.toString().length() == 0) {
-			throw new UnsupportedOperationException("BiOpType: "
-					+ node.getOpType() + " not supported yet.");
-		}
-
 	}
 
 	@Override
@@ -567,16 +562,26 @@ public class CodeGeneratingVisitor implements Visitor {
 		
 		switch(node.getOpType()) {
 		case UMINUS:
+			line.append("-");
+			walk(node.getChildNode());
 			break;
 		case NOT:
+			line.append("!");
+			walk(node.getChildNode());
 			break;
 		case INCR:
+			walk(node.getChildNode());
+			line.append("++");
 			break;
 		case DECR:
+			walk(node.getChildNode());
+			line.append("--");
 			break;
 		case CAST:
-			break;
+			throw new UnsupportedOperationException("Cast statements are NOT supported yet!");
 		case NONE:
+			// none means no unary operator applied.
+			walk(node.getChildNode());
 			break;
 		}
 
