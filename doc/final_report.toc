@@ -1,5 +1,7 @@
 \contentsline {chapter}{\numberline {1}Introduction}{5}
 \contentsline {section}{\numberline {1.1}Taming the Elephant}{5}
+\contentsline {subsection}{\numberline {1.1.1}Data-Oriented}{5}
+\contentsline {subsection}{\numberline {1.1.2}Simple}{6}
 \contentsline {chapter}{\numberline {2}Tutorial}{7}
 \contentsline {chapter}{\numberline {3}Language Reference Manual}{9}
 \contentsline {chapter}{\numberline {4}Project Plan}{11}

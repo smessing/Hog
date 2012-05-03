@@ -29,6 +29,59 @@ but required simply to get Hadoop to function properly. Our goal is to produce
 a language that can express the same computation in about 10 lines.
 
 
+Hog is a \textbf{data-oriented}, \textbf{high-level}, scripting language for
+creating MapReduce\cite{dean:2004} programs. Used alongside Hadoop, Hog enables
+users to efficiently carry out \textbf{distributed} computation. Hadoop
+MapReduce is an open-source framework for carrying out distributed computation,
+which is especially useful for working with large data sets. While it is
+possible to write code to carry out computations with Hadoop directly, the
+framework requires users to specify low-level details that are often irrelevant
+to their desired goal.
+
+By building a scripting language on top of Hadoop, we aim to simplify the
+process. Built around a \textbf{simple} and highly \textbf{readable} syntax,
+Hog will let users focus on \emph{what} computations they want done, and not
+\emph{how} they want to do them.  Hog takes care of all the low-level details
+required to run computations on Hadoop’s distributed network. All a user needs
+to do is tell Hog the location of their valid Hadoop instance, and Hog will do
+the rest. 
+
+\subsection{Data-Oriented}
+\label{sub:data-oriented}
+
+Hog is a powerful language that allows for the efficient handling of
+structured, unstructured and semi-structured data. Specifically, Hog simplifies
+the process of writing programs to handle the distributed processing of
+data-intensive applications. Programmers using Hog only have to express the
+steps for processing the data in the Map and Reduce functions without having to
+be concerned with relations and the constraints imposed by a traditional
+database schema. Hog also provides control flow structures to manipulate this
+data. In addition, Hog frees a programmer from having to write each step in a
+data processing task since many of those low-level processing details are
+handled by the language and the system.
+
+Hog uses Hadoop MapReduce (TM), an open-source MapReduce framework written in
+Java. Hadoop’s run time system takes care of the details of partitioning the
+input data, scheduling the program’s execution across machines, counteracting
+machine failures, and managing inter-machine communication. Hadoop also
+distributes data to machines and tries to collocate chunks of data with the
+nodes that need it, therefore maximizing data locality and giving good
+performance.
+
+\subsection{Simple}
+\label{sub:simple}
+
+To write a simple word count program in Java using the Hadoop framework
+requires over 59 lines of
+code.\footnote{\texttt{http://hadoop.apache.org/common/docs/current/mapred\_tutorial.html}}
+The same program written in Hog requires just 10 lines. The discrepancy comes
+from the fact that Hog takes care of the low-level details required to
+correctly communicate and interact with the Hadoop framework. This allows users
+to enhance the expressive potential of their programs, without sacrificing
+power. All that Hog requires a user to do is specify the location of their
+valid Hadoop instance, write a map function to process a segment of data, write
+a reduce function to combine the results, and Hog takes care of the rest.
+
 \chapter{Tutorial}
 \label{chap:tutor}
 

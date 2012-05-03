@@ -275,8 +275,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
-		indentation.delete(indentation.length()-2, indentation.length());
-		line.append(indentation.toString());
+		//indentation.delete(indentation.length()-2, indentation.length());
+		//line.append(indentation.toString());
 		line.append("} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -351,11 +351,11 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append("if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
+		indentation.append("  ");
+		line.append(indentation.toString());
 		walk(node.getIfCondTrue());
+		indentation.delete(indentation.length()-2, indentation.length());
 		// check that buffer cleared
-		if (!line.toString().equals("")) {
-			// writeStatement();
-		}
 		if (node.getCheckNext() != null) {
 			walk(node.getCheckNext());
 		}
@@ -600,11 +600,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(StatementListNode node) {
 		LOGGER.finer("visit(StatementListNode node) called on " + node);
 		for (Node child : node.getChildren()) {
-			// child.accept(this);
 			walk(child);
-			// writeStatement();
+			line.append(indentation.toString());
 		}
-		// writeStatement();
 
 	}
 
