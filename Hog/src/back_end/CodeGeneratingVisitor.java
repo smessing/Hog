@@ -574,6 +574,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			line
 					.append("public static class Reduce extends MapReduceBase implements Reducer");
 			walk(node.getSectionTypeNode());
+			
 			break;
 		case MAIN:
 			line
@@ -611,7 +612,20 @@ public class CodeGeneratingVisitor implements Visitor {
 				+ ","
 				+ Types
 						.getHadoopType((PrimitiveTypeNode) node
-								.getReturnValue()) + ">{\n");
+								.getReturnValue()) + "> {\n");
+		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
+			indentation.append("  ");
+			line.append(indentation.toString());
+			line.append("public void reduce(");
+			line.append(Types.getHadoopType((PrimitiveTypeNode) node
+						.getInputKeyIdNode().getType()));
+			line.append(" key, Iterator<");
+			Types.getHadoopType((PrimitiveTypeNode) node
+					.getInputValueIdNode().getType());
+			line.append("> values,  OutputCollector<");
+		} else {
+			
+		}
 	}
 
 	@Override
