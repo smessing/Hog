@@ -36,6 +36,7 @@ import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 
 import util.ast.AbstractSyntaxTree;
+import util.type.Types;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -123,19 +124,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeHeader() {
-
 		LOGGER.fine("Writing header to code");
 		code.append("import java.io.IOException;\n");
 		code.append("import java.util.*;\n");
 		code.append("import org.apache.hadoop.fs.Path;\n");
 		code.append("import org.apache.hadoop.conf.*;\n");
 		code.append("import org.apache.hadoop.io.*;\n");
-		code.append("import org.apache.hadoop.mapreduce.*;\n");
-		code.append("import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\n");
-		code.append("import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;\n");
-		code.append("import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\n");
-		code.append("import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;\n");
-
+		code.append("import org.apache.hadoop.mapred.*;\n");
 	}
 
 	private void writeFunction() {
@@ -174,9 +169,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(BiOpNode node) {
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
-
 		walk(node.getLeftNode());
-
 		switch (node.getOpType()) {
 		case ASSIGN:
 			line.append(" = ");
@@ -221,7 +214,6 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append(" && ");
 			break;
 		}
-
 		walk(node.getRightNode());
 
 	}
@@ -254,7 +246,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
-
 		line.append("} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -291,21 +282,16 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(FunctionNode node) {
 		LOGGER.finer("visit(FunctionNodeNode node) called on " + node);
-
 		line.append("public static " + node.getType().toSource() + " "
 				+ node.getIdentifier());
-
 		ParametersNode params = node.getParametersNode();
 		line.append("(");
 		line.append(params.getType().toSource());
 		line.append(" " + params.getIdentifier());
 		line.append(")");
 		line.append(" {\n");
-
 		walk(node.getInstructions());
-
 		writeFunction();
-
 	}
 
 	@Override
@@ -324,7 +310,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-
 		line.append("if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
@@ -441,10 +426,29 @@ public class CodeGeneratingVisitor implements Visitor {
 			IdNode functionName = node.getFunctionName();
 			if (node.hasArguments()) {
 				ExpressionNode functionArgsList = node.getArgsList();
-				line.append(functionName.getIdentifier() + "("
-						+ functionArgsList.toSource() + ")");
+				if (functionArgsList.hasChildren()) {
+
+					Iterator<Node> l = functionArgsList.getChildren()
+							.iterator();
+					String args = "";
+
+					while (l.hasNext()) {
+						Node n = l.next();
+						if (n instanceof ConstantNode) {
+							ConstantNode cn = (ConstantNode) n;
+							args = args + cn.getValue() + ",";
+						} else if (n instanceof IdNode) {
+							IdNode idNode = (IdNode) n;
+							args = args + idNode.getIdentifier() + ",";
+						}
+					}
+					if (args.charAt(args.length() - 1) == ',') {
+						args = args.substring(0, args.length() - 1);
+					}
+					line.append(functionName.toSource() + "(" + args + ")");
+				}
 			} else
-				line.append(functionName.getIdentifier() + "()");
+				line.append(functionName.toSource() + "()");
 			break;
 
 		}
@@ -454,6 +458,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(PrimaryExpressionNode node) {
 		LOGGER.finer("visit(PrimaryExpressionNode node) called on " + node);
+		System.out.println("PRIMARY EXPRESSION NODE VISITED");
+		System.out.println(node.toSource());
+		line.append(node.toSource());
 
 	}
 
@@ -513,10 +520,17 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(SectionTypeNode node) {
 		LOGGER.finer("visit(SectionTypeNode node) called on " + node);
-		line.append("<"+node.getInputKeyIdNode().toSource()+","
-				+ node.getInputValueIdNode().toSource()+","
-				+ node.getReturnKey().toSource()+","
-				+ node.getReturnValue().toSource()+">{\n");
+		line.append("<"
+				+ Types.getHadoopType((PrimitiveTypeNode) node
+						.getInputKeyIdNode().getType())
+				+ ","
+				+ Types.getHadoopType((PrimitiveTypeNode) node
+						.getInputValueIdNode().getType())
+				+ ","
+				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnKey())
+				+ ","
+				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnValue())
+				+ ">{\n");
 	}
 
 	@Override
@@ -528,25 +542,20 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(StatementListNode node) {
 		LOGGER.finer("visit(StatementListNode node) called on " + node);
-
 		for (Node child : node.getChildren()) {
 			child.accept(this);
 			writeStatement();
 		}
-
 		// writeStatement();
 
 	}
 
 	@Override
 	public void visit(StatementNode node) {
-
 		LOGGER.finer("visit(StatementNode node) called on " + node);
-
 		for (Node child : node.getChildren()) {
 			walk(child);
 		}
-
 	}
 
 	@Override
@@ -563,8 +572,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(UnOpNode node) {
 		LOGGER.finer("visit(UnOpNode node) called on " + node);
-		
-		switch(node.getOpType()) {
+
+		switch (node.getOpType()) {
 		case UMINUS:
 			line.append("-");
 			walk(node.getChildNode());
@@ -582,7 +591,8 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append("--");
 			break;
 		case CAST:
-			throw new UnsupportedOperationException("Cast statements are NOT supported yet!");
+			throw new UnsupportedOperationException(
+					"Cast statements are NOT supported yet!");
 		case NONE:
 			// none means no unary operator applied.
 			walk(node.getChildNode());

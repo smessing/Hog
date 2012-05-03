@@ -56,6 +56,10 @@ public class FunctionNode extends ExpressionNode {
 	}
 
 	@Override
+	public String toSource(){
+		return this.parameters.toSource();
+	}
+	@Override
 	public int visitorTest(Visitor v) {
 		// TODO Auto-generated method stub
 		return 0;

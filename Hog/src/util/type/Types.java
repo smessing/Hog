@@ -340,9 +340,11 @@ public class Types {
 	/**
 	 * Get a lower-case string representation of this node's type.
 	 * 
-	 * Note: for derived type, returns lower-case representation of the <i>local</i> type.
+	 * Note: for derived type, returns lower-case representation of the
+	 * <i>local</i> type.
 	 * 
-	 * @param node a TypeNode to get the string representation for.
+	 * @param node
+	 *            a TypeNode to get the string representation for.
 	 * @return a lower-case string of the TypeNode's type.
 	 */
 	public static String getLowercaseTypeName(TypeNode node) {
@@ -350,21 +352,23 @@ public class Types {
 		// prim: lower case version
 		// derived: lower case version of outer
 		// exception : lower case version of node
-		
-		
+
 		String typeName = null;
 
 		if (node instanceof PrimitiveTypeNode) {
-			
-			typeName = ((PrimitiveTypeNode) node).getType().toString().toLowerCase();
+
+			typeName = ((PrimitiveTypeNode) node).getType().toString()
+					.toLowerCase();
 
 		} else if (node instanceof DerivedTypeNode) {
-			
-			typeName = ((DerivedTypeNode) node).getLocalType().toString().toLowerCase();
+
+			typeName = ((DerivedTypeNode) node).getLocalType().toString()
+					.toLowerCase();
 
 		} else if (node instanceof ExceptionTypeNode) {
-			
-			typeName = ((ExceptionTypeNode) node).getExceptionType().toString().toLowerCase();
+
+			typeName = ((ExceptionTypeNode) node).getExceptionType().toString()
+					.toLowerCase();
 
 		} else {
 			throw new UnsupportedOperationException(
@@ -379,6 +383,62 @@ public class Types {
 			ArgumentsNode arguments) {
 
 		throw new UnsupportedOperationException("TODO");
+	}
+
+	/**
+	 * Ask for the java version of this type.
+	 * 
+	 * @param type a TypeNode
+	 * @return the String corresponding to the Java type that this type maps onto.
+	 */
+	public static String getJavaType(TypeNode type) {
+
+		if (type instanceof PrimitiveTypeNode) {
+			return getJavaType((PrimitiveTypeNode) type);
+		}
+
+		throw new UnsupportedOperationException("SAM NEEDS TO FINISH THIS");
+	}
+
+	private static String getJavaType(PrimitiveTypeNode type) {
+
+		switch (type.getType()) {
+		case BOOL:
+			return "Boolean";
+		case TEXT:
+			return "String";
+		case VOID:
+			return "void";
+		case INT:
+			return "Integer";
+		case REAL:
+			return "Double";
+		}
+
+		throw new UnsupportedOperationException("This should never happen.");
+	}
+
+	/**
+	 * Ask for the Hadoop type corresponding to this TypeNode.
+	 * 
+	 * @param type a PrimitiveTypeNode
+	 * @return the string corresponding to the Hadoop type.
+	 */
+	public static String getHadoopType(PrimitiveTypeNode type) {
+
+		switch (type.getType()) {
+		case BOOL:
+			return "BooleanWritable";
+		case TEXT:
+			return "Text";
+		case INT:
+			return "IntWritable";
+		case REAL:
+			return "DoubleWritable";
+		}
+
+		throw new UnsupportedOperationException(type
+				+ " is not allowed for @Map and @Reduce headers.");
 	}
 
 }
