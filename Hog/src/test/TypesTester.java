@@ -12,7 +12,7 @@ import util.ast.node.DictTypeNode;
 import util.ast.node.ExceptionTypeNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.TypeNode;
-import util.type.TypeMismatchError;
+import util.error.TypeMismatchError;
 import util.type.Types;
 
 /**

@@ -22,6 +22,16 @@ public class PostfixExpressionNode extends ExpressionNode {
 	/** postfixType field which is of type PostfixType */
 	protected PostfixType postfixType;
 
+	/** boolean field to indicate whether PostfixExpression Has Arguments */
+	protected boolean hasArguments;
+	
+	protected IdNode functionName;
+	protected IdNode objectName;
+	protected IdNode methodName;
+	protected IdNode objectOfMethod;
+	
+	protected ExpressionNode argsList;
+	
 	/**
 	 * Constructor for method calls with no parameters
 	 * 
@@ -31,6 +41,7 @@ public class PostfixExpressionNode extends ExpressionNode {
 	public PostfixExpressionNode(IdNode objectOfMethod, IdNode methodName) {
 		super();
 		postfixType = PostfixType.METHOD_NO_PARAMS;
+		this.objectOfMethod = objectOfMethod;
 		this.addChild(objectOfMethod);
 		this.addChild(methodName);
 	}
@@ -46,8 +57,16 @@ public class PostfixExpressionNode extends ExpressionNode {
 	public PostfixExpressionNode(PostfixType postfixType, IdNode functionName, ExpressionNode argsList) {
 		super();
 		this.postfixType = postfixType;
+		this.functionName = functionName;
 		this.addChild(functionName);
 		this.addChild(argsList);
+		
+		if(argsList != null){
+			this.hasArguments = true;
+			this.argsList = argsList;
+		}
+		
+		
 	}	
 
 
@@ -63,9 +82,15 @@ public class PostfixExpressionNode extends ExpressionNode {
 			ExpressionNode argsList) {
 		super();
 		this.postfixType = postFixType;
+		this.objectName = objectName;
+		this.methodName = methodName;
 		this.addChild(objectName);
 		this.addChild(methodName);
 		this.addChild(argsList);
+		if(argsList != null){
+			this.hasArguments = true;
+			this.argsList = argsList;
+		}
 	}
 
 	public PostfixType getPostfixType() {
@@ -84,6 +109,30 @@ public class PostfixExpressionNode extends ExpressionNode {
 				"newscope: "+ isNewScope();
 	}
 
+	public boolean hasArguments(){
+		return this.hasArguments;
+	}
+	
+	public IdNode getFunctionName(){
+		return this.functionName;
+	}
+	
+	public ExpressionNode getArgsList(){
+		return this.argsList;
+	}
+	
+	public IdNode getMethodName(){
+		return this.methodName;
+	}
+	
+	public IdNode getObjectName(){
+		return this.objectName;
+	}
+	
+	public IdNode getObjectOfMethod(){
+		return this.objectOfMethod;
+	}
+	
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);
