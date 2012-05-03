@@ -363,12 +363,21 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getIncrement());
 			line.append(" ) {\n");
 			walk(node.getBlock());
+			break;
 		case FOREACH:
+			line.append("for ( ");
+			walk(node.getPart());
+			line.append(" : ");
+			walk(node.getWhole());
+			line.append(" ) {\n");
+			walk(node.getBlock());
+			break;
 		case WHILE:
 			line.append("while ( ");
 			walk(node.getCheck());
 			line.append(" ) {\n");
 			walk(node.getBlock());
+			break;
 		}
 		
 		writeBlockEnd();
@@ -435,7 +444,6 @@ public class CodeGeneratingVisitor implements Visitor {
 			IdNode methodNameNoParam = node.getMethodName();
 			line.append(objectOfMethod.getIdentifier() + "."
 					+ methodNameNoParam.getIdentifier() + "()");
-
 			break;
 		case METHOD_WITH_PARAMS:
 			IdNode objectName = node.getObjectName();
