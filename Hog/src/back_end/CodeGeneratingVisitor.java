@@ -185,6 +185,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		case DBL_EQLS:
 			line.append(" == ");
 			break;
+		case NOT_EQLS:
+			line.append(" != ");
+			break;
 		case PLUS:
 			line.append(" + ");
 			break;
@@ -208,6 +211,15 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case GRTR_EQL:
 			line.append(" >= ");
+			break;
+		case DIVIDE:
+			line.append(" / ");
+			break;
+		case MOD:
+			line.append(" % ");
+			break;
+		case AND:
+			line.append(" && ");
 			break;
 		}
 
