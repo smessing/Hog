@@ -149,7 +149,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeFunctions() {
-		line.append("\n}\n");
+		line.append("}\n");
 		code.append(line.toString());
 		LOGGER.fine("[writeFunctions] Writing to java source:\n"
 				+ line.toString());/**/
