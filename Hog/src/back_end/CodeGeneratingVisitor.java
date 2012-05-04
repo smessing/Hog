@@ -30,10 +30,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected StringBuilder code;
 	protected StringBuilder line;
 	protected StringBuilder indentation;
-	/*
-	 * below is program code specific, currently set with fixed variables for
-	 * development.
-	 */
 	protected String outputKeyClass;
 	protected String outputValueClass;
 	protected String inputFile = "example.txt";
@@ -138,9 +134,9 @@ public class CodeGeneratingVisitor implements Visitor {
 				+ "JobConf conf = new JobConf(Hog.class);\n");
 		line.append(indentation.toString() + "conf.setJobName(\"hog\");\n");
 		line.append(indentation.toString() + "conf.setOutputKeyClass("
-				+ outputKeyClass + ");\n");
+				+ outputKeyClass + ".class);\n");
 		line.append(indentation.toString() + "conf.setOutputValueClass("
-				+ outputValueClass + ");\n");
+				+ outputValueClass + ".class);\n");
 		line.append(indentation.toString()
 				+ "conf.setMapperClass(Map.class);\n");
 		line.append(indentation.toString()
@@ -339,6 +335,8 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append(" {\n");
 		walk(node.getInstructions());
 		writeFunction();
+		
+		indentation.delete(indentation.length() - 2, indentation.length());
 	}
 
 	@Override
@@ -604,11 +602,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		// if we're at @Reduce, need to see output types for main
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
 			outputKeyClass = Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnKey())
-					+ ".class";
+					.getReturnKey());
 			outputValueClass = Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnValue())
-					+ ".class";
+					.getReturnValue());
 		}
 
 		line.append("<"
