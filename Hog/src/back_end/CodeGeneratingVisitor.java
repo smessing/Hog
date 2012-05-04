@@ -336,13 +336,16 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
-		
+
 		if (emit) {
 			walk(node.getType());
 			code.append("(");
 		}
+
 		code.append(node.getValue());
-		code.append(")");
+
+		if (emit)
+			code.append(")");
 	}
 
 	@Override
@@ -522,8 +525,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case FOREACH:
 			code.append("for (");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node.getPart()
-					.getType()));
+			code.append(Types.getJavaType(node.getPart().getType()));
 			code.append(" ");
 			walk(node.getPart());
 			code.append(" : ");
@@ -729,12 +731,15 @@ public class CodeGeneratingVisitor implements Visitor {
 					.getReturnValue());
 		}
 
-		code.append("<"
-				+ Types.getHadoopType(node.getInputKeyIdNode().getType())
-				+ ", "
-				+ Types.getHadoopType(node.getInputValueIdNode().getType())
-				+ ", " + Types.getHadoopType(node.getReturnKey()) + ", "
-				+ Types.getHadoopType(node.getReturnValue()) + "> {");
+		code.append("<");
+		code.append(Types.getHadoopType(node.getInputKeyIdNode().getType()));
+		code.append(", ");
+		code.append(Types.getHadoopType(node.getInputValueIdNode().getType()));
+		code.append(", ");
+		code.append(Types.getHadoopType(node.getReturnKey()));
+		code.append(", ");
+		code.append(Types.getHadoopType(node.getReturnValue()));
+		code.append("> {");
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
 			code.append("public void reduce(");
 			code
@@ -761,6 +766,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append(", ");
 			code.append(Types.getHadoopType(node.getReturnValue()));
 			code.append("> output, Reporter reporter) throws IOException {");
+			code.append("String line = value.toString();");
 		}
 
 	}
