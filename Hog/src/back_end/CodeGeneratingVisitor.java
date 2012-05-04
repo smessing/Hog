@@ -29,7 +29,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected AbstractSyntaxTree tree;
 	protected StringBuilder code;
 	protected StringBuilder line;
-	protected StringBuilder indentation;
 	protected String outputKeyClass;
 	protected String outputValueClass;
 	protected String inputFile = "example.txt";
@@ -40,7 +39,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		this.tree = root;
 		this.code = new StringBuilder();
 		this.line = new StringBuilder();
-		this.indentation = new StringBuilder();
 
 	}
 
@@ -71,10 +69,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void walk(Node node) {
-
-		if (node.isNewScope()) {
-			this.indentation.append("  ");
-		}
 
 		node.accept(this);
 
@@ -111,10 +105,6 @@ public class CodeGeneratingVisitor implements Visitor {
 			}
 		}
 
-		if (node.isNewScope()) {
-			indentation.delete(indentation.length() - 2, indentation.length());
-		}
-
 	}
 
 	private void writeHeader() {
@@ -130,30 +120,21 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	private void writeMapReduce() {
 		LOGGER.fine("Writing mapReduce initialization code.");
-		line.append(indentation.toString()
-				+ "JobConf conf = new JobConf(Hog.class);\n");
-		line.append(indentation.toString() + "conf.setJobName(\"hog\");\n");
-		line.append(indentation.toString() + "conf.setOutputKeyClass("
-				+ outputKeyClass + ".class);\n");
-		line.append(indentation.toString() + "conf.setOutputValueClass("
-				+ outputValueClass + ".class);\n");
-		line.append(indentation.toString()
-				+ "conf.setMapperClass(Map.class);\n");
-		line.append(indentation.toString()
-				+ "conf.setCombinerClass(Reduce.class);\n");
-		line.append(indentation.toString()
-				+ "conf.setReducerClass(Reduce.class);\n");
-		line.append(indentation.toString() + "conf.setInputFormat("
-				+ inputFormatClass + ");\n");
-		line.append(indentation.toString() + "conf.setOutputFormat("
-				+ outputFormatClass + ");\n");
-		line.append(indentation.toString()
-				+ "FileInputFormat.setInputPaths(conf, new Path(\"" + inputFile
-				+ "\"));\n");
-		line.append(indentation.toString()
-				+ "FileOutputFormat.setOutputPath(conf, new Path(\""
+		line.append("JobConf conf = new JobConf(Hog.class);\n");
+		line.append("conf.setJobName(\"hog\");\n");
+		line.append("conf.setOutputKeyClass(" + outputKeyClass + ".class);\n");
+		line.append("conf.setOutputValueClass(" + outputValueClass
+				+ ".class);\n");
+		line.append("conf.setMapperClass(Map.class);\n");
+		line.append("conf.setCombinerClass(Reduce.class);\n");
+		line.append("conf.setReducerClass(Reduce.class);\n");
+		line.append("conf.setInputFormat(" + inputFormatClass + ");\n");
+		line.append("conf.setOutputFormat(" + outputFormatClass + ");\n");
+		line.append("FileInputFormat.setInputPaths(conf, new Path(\""
+				+ inputFile + "\"));\n");
+		line.append("FileOutputFormat.setOutputPath(conf, new Path(\""
 				+ outputFile + "\"));\n");
-		line.append(indentation.toString() + "JobClient.runJob(conf);\n");
+		line.append("JobClient.runJob(conf);\n");
 	}
 
 	private void writeFunction() {
@@ -166,7 +147,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeBlockEnd() {
-		line.append(indentation.toString());
 		line.append("}\n");
 		code.append(line.toString());
 		LOGGER.fine("[writeFunctions] Writing to java source:\n"
@@ -253,7 +233,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
-		//line.append(node.toSource());
+		// line.append(node.toSource());
 		Types.Primitive primType = ((PrimitiveTypeNode) node.getType())
 				.getType();
 		switch (primType) {
@@ -286,8 +266,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append("} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
-		indentation.append("  ");
-		line.append(indentation.toString());
 		walk(node.getIfCondTrue());
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
@@ -298,11 +276,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseStatementNode node) {
 		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
-		indentation.delete(indentation.length() - 2, indentation.length());
-		line.append(indentation.toString());
 		line.append("} else {\n");
-		indentation.append("  ");
-		line.append(indentation.toString());
 		walk(node.getBlock());
 		line.append("}\n");
 
@@ -324,7 +298,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(FunctionNode node) {
 		LOGGER.finer("visit(FunctionNodeNode node) called on " + node);
-		line.append(indentation.toString());
 		line.append("public static " + node.getType().toSource() + " "
 				+ node.getIdentifier());
 		ParametersNode params = node.getParametersNode();
@@ -335,8 +308,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append(" {\n");
 		walk(node.getInstructions());
 		writeFunction();
-		
-		indentation.delete(indentation.length() - 2, indentation.length());
+
 	}
 
 	@Override
@@ -355,14 +327,10 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-		line.append(indentation.toString());
 		line.append("if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {\n");
-		indentation.append("  ");
-		line.append(indentation.toString());
 		walk(node.getIfCondTrue());
-		indentation.delete(indentation.length() - 2, indentation.length());
 		// check that buffer cleared
 		if (node.getCheckNext() != null) {
 			walk(node.getCheckNext());
@@ -370,7 +338,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
 		}
-		line.append(indentation.toString());
 		line.append("}\n");
 	}
 
@@ -378,7 +345,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(IterationStatementNode node) {
 		LOGGER.finer("visit(IterationStatementNode node) called on " + node);
 
-		line.append(indentation.toString());
 		switch (node.getIterationType()) {
 		case FOR:
 			line.append("for ( ");
@@ -556,8 +522,6 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		SectionNode.SectionName sectionKind = node.getSectionName();
 
-		line.append(indentation.toString());
-
 		switch (sectionKind) {
 		case FUNCTIONS:
 			line.append("public static class Functions {\n");
@@ -578,9 +542,7 @@ public class CodeGeneratingVisitor implements Visitor {
 					.append("public static void main(String[] args) throws Exception {\n");
 			break;
 		}
-		indentation.append("  ");
 		walk(node.getBlock());
-		indentation.delete(indentation.length() - 2, indentation.length());
 		writeBlockEnd();
 
 		// need to write an additional block for inner methods in reduce and
@@ -617,9 +579,7 @@ public class CodeGeneratingVisitor implements Visitor {
 				+ Types
 						.getHadoopType((PrimitiveTypeNode) node
 								.getReturnValue()) + "> {\n");
-		indentation.append("  ");
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
-			line.append(indentation.toString());
 			line.append("public void reduce(");
 			line.append(Types.getHadoopType((PrimitiveTypeNode) node
 					.getInputKeyIdNode().getType()));
@@ -634,7 +594,6 @@ public class CodeGeneratingVisitor implements Visitor {
 					.getReturnValue()));
 			line.append("> output, Reporter reporter) throws IOException {\n");
 		} else {
-			line.append(indentation.toString());
 			line.append("public void map(");
 			line.append(Types.getHadoopType((PrimitiveTypeNode) node
 					.getInputKeyIdNode().getType()));
@@ -649,7 +608,6 @@ public class CodeGeneratingVisitor implements Visitor {
 					.getReturnValue()));
 			line.append("> output, Reporter reporter) throws IOException {\n");
 		}
-		indentation.append("  ");
 	}
 
 	@Override
@@ -663,7 +621,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(StatementListNode node) called on " + node);
 		for (Node child : node.getChildren()) {
 			walk(child);
-			line.append(indentation.toString());
 		}
 
 	}
