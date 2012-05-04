@@ -41,3 +41,6 @@ Hog/bin/*
 
 # Hog test files
 WordCount.Hog
+
+# Logging
+logging.properties
