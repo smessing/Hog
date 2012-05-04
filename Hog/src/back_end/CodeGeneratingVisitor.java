@@ -522,8 +522,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(PrimaryExpressionNode node) {
 		LOGGER.finer("visit(PrimaryExpressionNode node) called on " + node);
-		System.out.println("PRIMARY EXPRESSION NODE VISITED");
-		System.out.println(node.toSource());
 		line.append(node.toSource());
 
 	}

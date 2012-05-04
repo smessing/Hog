@@ -23,7 +23,6 @@
 
 
 @Map (int lineNum, text line) -> (text, int) {
-  print(factorial(3));
   foreach text word in line.tokenize(" ") {
     emit(word, 1);
   }
