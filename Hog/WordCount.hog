@@ -1,6 +1,6 @@
 @Functions {
   int fib(int n) {
-  list<int> myList;
+  #list<list<int>> myList;
     if (n == 0) {
       int x = 5;
       return x;
@@ -31,8 +31,8 @@
 
 }
 
-@Reduce (text word, iter<int> values) -> (text, int) {
-  int count = 0;
+@Reduce (text word, iter<int> values) -> (text, real) {
+  real count = 0;
   while ( values.hasNext() ) {
     count = count + values.next();
   }
@@ -40,7 +40,5 @@
 }
 
 @Main {
-  int b;
-  #b = foo(1, 2, 3, 4);
   mapReduce();
 }

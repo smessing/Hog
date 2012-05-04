@@ -4,8 +4,11 @@ import util.ast.node.*;
 import util.ast.AbstractSyntaxTree;
 import util.type.Types;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -31,30 +34,42 @@ public class CodeGeneratingVisitor implements Visitor {
 	 */
 	protected final String inputFormatClass = "TextInputFormat.class";
 	/**
-	 * The format of the output files from the <code>reduce</code> class.
-	 * See {@link #inputFormatClass inputFormatClass} for more details.
+	 * The format of the output files from the <code>reduce</code> class. See
+	 * {@link #inputFormatClass inputFormatClass} for more details.
 	 */
 	protected final String outputFormatClass = "TextInputFormat.class";
 
 	protected AbstractSyntaxTree tree;
 	protected StringBuilder code;
-	protected StringBuilder line;
 	protected String outputKeyClass;
 	protected String outputValueClass;
 	protected String inputFile = "example.txt";
 	protected String outputFile = "example.txt";
+	/**
+	 * Remember when recursing if we're dealing with a declaration statement, as
+	 * the handling both DerivedTypeNodes and IdNodes is context-specific.
+	 */
+	protected boolean declarationStatement = false;
+	protected boolean rValue = false;
+	/**
+	 * Remember if we're writing the emit() function, as we need to cast to
+	 * Hadoop's Writable types;
+	 */
+	protected boolean emit = false;
 
 	/**
-	 * Construct a CodeGeneratingVisitor, but don't specify input file or output file.
+	 * Construct a CodeGeneratingVisitor, but don't specify input file or output
+	 * file.
 	 * <p>
 	 * Mainly used for testing/development purposes.
-	 * @param root the root of the AST representing the Hog source program.
+	 * 
+	 * @param root
+	 *            the root of the AST representing the Hog source program.
 	 */
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 
 		this.tree = root;
 		this.code = new StringBuilder();
-		this.line = new StringBuilder();
 
 	}
 
@@ -71,8 +86,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	 * @param inputFile
 	 *            The inputFile for the <code>map</code> class to read from.
 	 * @param outputFile
-	 *            The outputFile for the <code>reduce</code>
-	 * class to write to.
+	 *            The outputFile for the <code>reduce</code> class to write to.
 	 */
 	public CodeGeneratingVisitor(AbstractSyntaxTree root, String inputFile,
 			String outputFile) {
@@ -99,7 +113,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		writeHeader();
 
 		// start recursive walk:
-
 		walk(tree.getRoot());
 
 		code.append("}");
@@ -158,66 +171,40 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	private void writeMapReduce() {
 		LOGGER.fine("Writing mapReduce initialization code.");
-		line.append("JobConf conf = new JobConf(Hog.class);");
-		line.append("conf.setJobName(\"hog\");");
-		line.append("conf.setOutputKeyClass(" + outputKeyClass + ".class);");
-		line
+		code.append("JobConf conf = new JobConf(Hog.class);");
+		code.append("conf.setJobName(\"hog\");");
+		code.append("conf.setOutputKeyClass(" + outputKeyClass + ".class);");
+		code
 				.append("conf.setOutputValueClass(" + outputValueClass
 						+ ".class);");
-		line.append("conf.setMapperClass(Map.class);");
-		line.append("conf.setCombinerClass(Reduce.class);");
-		line.append("conf.setReducerClass(Reduce.class);");
-		line.append("conf.setInputFormat(" + inputFormatClass + ");");
-		line.append("conf.setOutputFormat(" + outputFormatClass + ");");
-		line.append("FileInputFormat.setInputPaths(conf, new Path(\""
+		code.append("conf.setMapperClass(Map.class);");
+		code.append("conf.setCombinerClass(Reduce.class);");
+		code.append("conf.setReducerClass(Reduce.class);");
+		code.append("conf.setInputFormat(" + inputFormatClass + ");");
+		code.append("conf.setOutputFormat(" + outputFormatClass + ");");
+		code.append("FileInputFormat.setInputPaths(conf, new Path(\""
 				+ inputFile + "\"));");
-		line.append("FileOutputFormat.setOutputPath(conf, new Path(\""
+		code.append("FileOutputFormat.setOutputPath(conf, new Path(\""
 				+ outputFile + "\"));");
-		line.append("JobClient.runJob(conf);");
+		code.append("JobClient.runJob(conf);");
 	}
 
-	private void writeFunction() {
-		line.append("");
-		code.append(line.toString());
-		LOGGER
-				.fine("[writeFunction] Writing to java source:"
-						+ line.toString());/**/
-		// reset line
-		line = new StringBuilder();
-	}
-
-	private void writeBlockEnd() {
-		line.append("}");
-		code.append(line.toString());
-		LOGGER.fine("[writeFunctions] Writing to java source:"
-				+ line.toString());/**/
-		// reset line
-		line = new StringBuilder();
-	}
-
-	/*
+	/**
 	 * Write the end of a statement.
 	 * 
 	 * Protects against writing multiple semicolons, as an ease for the
 	 * programmer.
 	 */
 	private void writeStatement() {
-		if (!line.toString().endsWith("}") && !line.toString().endsWith(";")
-				&& !code.toString().endsWith("}")
-				&& !code.toString().endsWith(";")) {
-			line.append(";");
+		if (!code.toString().endsWith("}") && !code.toString().endsWith(";")) {
+			code.append(";");
 		}
-		code.append(line.toString());
-		LOGGER.fine("[writeStatement] Writing to java source:"
-				+ line.toString());
-		// reset line
-		line = new StringBuilder();
 	}
 
-	/*
-	 * this.code originally is built as a monolithic string without newlines and
-	 * other formatting. formatCode() adds both newlines after statements and
-	 * proper indentation based on scope.
+	/**
+	 * <code>this.code</code> is originally built as a monolithic string without
+	 * newlines and other formatting. <code>formatCode()</code> adds both
+	 * newlines after statements and proper indentation based on scope.
 	 */
 	private void formatCode() {
 		int scopeCount = 0;
@@ -270,6 +257,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(ArgumentsNode node) {
 		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
 
+		if (node.hasMoreArgs()) {
+			walk(node.getMoreArgs());
+			code.append(", ");
+		}
+
+		walk(node.getArg());
+
 	}
 
 	@Override
@@ -278,49 +272,58 @@ public class CodeGeneratingVisitor implements Visitor {
 		walk(node.getLeftNode());
 		switch (node.getOpType()) {
 		case ASSIGN:
-			line.append(" = ");
+			code.append(" = ");
+			rValue = true;
 			break;
 		case DBL_EQLS:
-			line.append(" == ");
+			code.append(" == ");
 			break;
 		case NOT_EQLS:
-			line.append(" != ");
+			code.append(" != ");
 			break;
 		case PLUS:
-			line.append(" + ");
+			code.append(" + ");
 			break;
 		case OR:
-			line.append(" || ");
+			code.append(" || ");
 			break;
 		case TIMES:
-			line.append(" * ");
+			code.append(" * ");
 			break;
 		case MINUS:
-			line.append(" - ");
+			code.append(" - ");
 			break;
 		case LESS:
-			line.append(" < ");
+			code.append(" < ");
 			break;
 		case LESS_EQL:
-			line.append(" <= ");
+			code.append(" <= ");
 			break;
 		case GRTR:
-			line.append(" > ");
+			code.append(" > ");
 			break;
 		case GRTR_EQL:
-			line.append(" >= ");
+			code.append(" >= ");
 			break;
 		case DIVIDE:
-			line.append(" / ");
+			code.append(" / ");
 			break;
 		case MOD:
-			line.append(" % ");
+			code.append(" % ");
 			break;
 		case AND:
-			line.append(" && ");
+			code.append(" && ");
 			break;
 		}
+
 		walk(node.getRightNode());
+
+		// unset declaration flag that may have been set (when node.getOpType ==
+		// ASSIGN)
+		declarationStatement = false;
+		// unset the rValue flag that may have been set (when node.getOpType ==
+		// ASSIGN)
+		rValue = false;
 
 	}
 
@@ -333,12 +336,50 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
-		line.append(node.getValue());
+		code.append(node.getValue());
 	}
 
 	@Override
 	public void visit(DerivedTypeNode node) {
 		LOGGER.finer("visit(DerivedTypeNode node) called on " + node);
+
+		if (declarationStatement)
+			code.append("new ");
+
+		switch (node.getLocalType()) {
+		case LIST:
+			if (declarationStatement && rValue)
+				code.append("ArrayList<");
+			else
+				code.append("List<");
+			break;
+		case ITER:
+			code.append("Iterator<");
+			break;
+		case DICT:
+			throw new UnsupportedOperationException(
+					"Dictionaries not yet supported!");
+		case MULTISET:
+			throw new UnsupportedOperationException("Multisets not supported!");
+		case SET:
+			if (declarationStatement && rValue)
+				code.append("HashSet<");
+			else
+				code.append("Set<");
+			break;
+		}
+
+		// remember state for this particular node, but forget it for recursing
+		boolean declaration = declarationStatement;
+		declarationStatement = false;
+
+		walk(node.getInnerTypeNode());
+
+		// close inner types
+		code.append(">");
+
+		if (declaration)
+			code.append("()");
 
 	}
 
@@ -351,9 +392,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
-		line.append("} else if ( ");
+		code.append("} else if (");
 		walk(node.getCondition());
-		line.append(" ) {");
+		code.append(") {");
 		walk(node.getIfCondTrue());
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
@@ -364,9 +405,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseStatementNode node) {
 		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
-		line.append("} else {");
+		code.append("} else {");
 		walk(node.getBlock());
-		line.append("}");
+		code.append("}");
 
 	}
 
@@ -386,16 +427,17 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(FunctionNode node) {
 		LOGGER.finer("visit(FunctionNodeNode node) called on " + node);
-		line.append("public static " + node.getType().toSource() + " "
-				+ node.getIdentifier());
+		code.append("public static ");
+		walk(node.getType());
+		code.append(" ");
+		code.append(node.getIdentifier());
 		ParametersNode params = node.getParametersNode();
-		line.append("(");
-		line.append(params.getType().toSource());
-		line.append(" " + params.getIdentifier());
-		line.append(")");
-		line.append(" {");
+		code.append("(");
+		walk(params.getType());
+		code.append(" " + params.getIdentifier());
+		code.append(")");
+		code.append(" {");
 		walk(node.getInstructions());
-		writeFunction();
 
 	}
 
@@ -407,17 +449,44 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(IdNode node) {
-		LOGGER.finer("visit(IdNode node) called on " + node);
-		line.append(node.toSource());
+		LOGGER
+				.finer("visit(IdNode node) called on " + node + ", emit: "
+						+ emit);
+
+		if (node.isDeclaration()) {
+			walk(node.getType());
+			code.append(" ");
+			// set a flag so when writing the right side of an assignment
+			// statement
+			// we handle things appropriately.
+			declarationStatement = true;
+		}
+
+		if (emit) {
+			walk(node.getType());
+			code.append("(");
+		}
+
+		code.append(node.getIdentifier());
+
+		// derived IdNodes need to be instantiated manually
+		if (declarationStatement && node.getType() instanceof DerivedTypeNode) {
+			code.append(" = ");
+			rValue = true;
+			walk(node.getType());
+			rValue = false;
+		} else if (emit) {
+			code.append(")");
+		}
 
 	}
 
 	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-		line.append("if ( ");
+		code.append("if (");
 		walk(node.getCondition());
-		line.append(" ) {");
+		code.append(") {");
 		walk(node.getIfCondTrue());
 		// check that buffer cleared
 		if (node.getCheckNext() != null) {
@@ -426,7 +495,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
 		}
-		line.append("}");
+		code.append("}");
 	}
 
 	@Override
@@ -435,37 +504,37 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		switch (node.getIterationType()) {
 		case FOR:
-			line.append("for ( ");
+			code.append("for (");
 			walk(node.getInitial());
-			line.append("; ");
+			code.append("; ");
 			walk(node.getCheck());
-			line.append("; ");
+			code.append("; ");
 			walk(node.getIncrement());
-			line.append(" ) {");
+			code.append(") {");
 			walk(node.getBlock());
 			writeStatement();
 			break;
 		case FOREACH:
-			line.append("for ( ");
-			line.append(Types.getHadoopType((PrimitiveTypeNode) node.getPart()
+			code.append("for (");
+			code.append(Types.getHadoopType((PrimitiveTypeNode) node.getPart()
 					.getType()));
-			line.append(" ");
+			code.append(" ");
 			walk(node.getPart());
-			line.append(" : ");
+			code.append(" : ");
 			walk(node.getWhole());
-			line.append(" ) {");
+			code.append(") {");
 			walk(node.getBlock());
 			writeStatement();
 			break;
 		case WHILE:
-			line.append("while ( ");
+			code.append("while (");
 			walk(node.getCheck());
-			line.append(" ) {");
+			code.append(") {");
 			walk(node.getBlock());
 			writeStatement();
 			break;
 		}
-		writeBlockEnd();
+		code.append("}");
 	}
 
 	@Override
@@ -474,13 +543,13 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		switch (node.getJumpType()) {
 		case RETURN:
-			line.append("return ");
+			code.append("return ");
 			break;
 		case BREAK:
-			line.append("break");
+			code.append("break");
 			break;
 		case CONTINUE:
-			line.append("continue");
+			code.append("continue");
 			break;
 		}
 
@@ -523,7 +592,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		case METHOD_NO_PARAMS:
 			IdNode objectOfMethod = node.getObjectOfMethod();
 			IdNode methodNameNoParam = node.getMethodName();
-			line.append(objectOfMethod.getIdentifier() + "."
+			code.append(objectOfMethod.getIdentifier() + "."
 					+ methodNameNoParam.getIdentifier() + "()");
 			break;
 		case METHOD_WITH_PARAMS:
@@ -531,68 +600,57 @@ public class CodeGeneratingVisitor implements Visitor {
 			IdNode methodName = node.getMethodName();
 			if (node.hasArguments()) {
 				ExpressionNode argsList = node.getArgsList();
-				line.append(objectName.getIdentifier() + "."
+				code.append(objectName.getIdentifier() + "."
 						+ methodName.getIdentifier() + "("
 						+ argsList.toSource() + ")");
 			}
 			break;
 		case FUNCTION_CALL:
-			IdNode functionName = node.getFunctionName();
+			IdNode functionIdNode = node.getFunctionName();
 			// check if this is our special mapReduce() call:
-			if (functionName.getIdentifier().equals("mapReduce")) {
+			if (functionIdNode.getIdentifier().equals("mapReduce")) {
 				writeMapReduce();
 				return;
 			}
-			if (node.hasArguments()) {
-				ExpressionNode functionArgsList = node.getArgsList();
-				if (functionArgsList.hasChildren()) {
-					Iterator<Node> l = functionArgsList.getChildren()
-							.iterator();
-					String args = "";
-					String typeDeclaration = "";
-					while (l.hasNext()) {
-						Node n = l.next();
-						if (n instanceof ConstantNode) {
-							ConstantNode cn = (ConstantNode) n;
-							args = args + cn.getValue() + ",";
-							typeDeclaration = "new IntWritable";
-						} else if (n instanceof IdNode) {
-							IdNode idNode = (IdNode) n;
-							args = args + idNode.getIdentifier() + ",";
-							typeDeclaration = "";
-						}
-					}
-					if (args.charAt(args.length() - 1) == ',') {
-						args = args.substring(0, args.length() - 1);
-					}
-					if (functionName.toSource().equalsIgnoreCase("emit")) {
-						String[] output = args.split(",");
-						// fix this permanently later
-						if (output[1].contains("1")) {
-							line.append("output.collect" + "(" + output[0]
-									+ "," + typeDeclaration + "(" + output[1]
-									+ ")" + ")");
-						} else
-							line.append("output.collect" + "(" + args + ")");
-					} else
-						line.append(functionName.toSource() + "(" + args + ")");
-				}
-			} else
-				line.append(functionName.toSource() + "()");
-			break;
+
+			if (!node.getFunctionName().getIdentifier().equals("emit")) {
+				code.append("Functions.");
+				walk(node.getFunctionName());
+			} else {
+				code.append("output.Collect");
+				emit = true;
+			}
+
+			code.append("(");
+
+			// check for arguments
+			if (node.hasArguments())
+				walk(node.getArgsList());
+
+			code.append(")");
+
+			// unset emit flag which may have been set:
+			emit = false;
+
 		}
 	}
 
 	@Override
 	public void visit(PrimaryExpressionNode node) {
 		LOGGER.finer("visit(PrimaryExpressionNode node) called on " + node);
-		line.append(node.toSource());
+		code.append(node.toSource());
 
 	}
 
 	@Override
 	public void visit(PrimitiveTypeNode node) {
 		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
+
+		if (emit) {
+			code.append(Types.getHadoopType(node));
+		} else {
+			code.append(Types.getJavaType(node));
+		}
 
 	}
 
@@ -622,26 +680,26 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		switch (sectionKind) {
 		case FUNCTIONS:
-			line.append("public static class Functions {");
+			code.append("public static class Functions {");
 			break;
 		case MAP:
-			line
+			code
 					.append("public static class Map extends MapReduceBase implements Mapper");
 			walk(node.getSectionTypeNode());
 			break;
 		case REDUCE:
-			line
+			code
 					.append("public static class Reduce extends MapReduceBase implements Reducer");
 			walk(node.getSectionTypeNode());
 
 			break;
 		case MAIN:
-			line
+			code
 					.append("public static void main(String[] args) throws Exception {");
 			break;
 		}
 		walk(node.getBlock());
-		writeBlockEnd();
+		code.append("}");
 
 		// need to write an additional block for inner methods in reduce and
 		// map:
@@ -649,7 +707,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		switch (sectionKind) {
 		case MAP:
 		case REDUCE:
-			writeBlockEnd();
+			code.append("}");
 		}
 
 	}
@@ -665,47 +723,40 @@ public class CodeGeneratingVisitor implements Visitor {
 					.getReturnValue());
 		}
 
-		line.append("<"
-				+ Types.getHadoopType((PrimitiveTypeNode) node
-						.getInputKeyIdNode().getType())
+		code.append("<"
+				+ Types.getHadoopType(node.getInputKeyIdNode().getType())
 				+ ", "
-				+ Types.getHadoopType((PrimitiveTypeNode) node
-						.getInputValueIdNode().getType())
-				+ ", "
-				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnKey())
-				+ ", "
-				+ Types
-						.getHadoopType((PrimitiveTypeNode) node
-								.getReturnValue()) + "> {");
+				+ Types.getHadoopType(node.getInputValueIdNode().getType())
+				+ ", " + Types.getHadoopType(node.getReturnKey()) + ", "
+				+ Types.getHadoopType(node.getReturnValue()) + "> {");
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
-			line.append("public void reduce(");
-			line.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getInputKeyIdNode().getType()));
-			line.append(" key, Iterator<");
-			line.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getInputValueIdNode().getType()));
-			line.append("> values,  OutputCollector<");
-			line.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnKey()));
-			line.append(", ");
-			line.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnValue()));
-			line.append("> output, Reporter reporter) throws IOException {");
+			code.append("public void reduce(");
+			code
+					.append(Types.getHadoopType(node.getInputKeyIdNode()
+							.getType()));
+			code.append(" key, Iterator<");
+			code.append(Types.getHadoopType(node.getInputValueIdNode()
+					.getType()));
+			code.append("> values,  OutputCollector<");
+			code.append(Types.getHadoopType(node.getReturnKey()));
+			code.append(", ");
+			code.append(Types.getHadoopType(node.getReturnValue()));
+			code.append("> output, Reporter reporter) throws IOException {");
 		} else {
-			line.append("public void map(");
-			line.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getInputKeyIdNode().getType()));
-			line.append(" key, ");
-			line.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getInputValueIdNode().getType()));
-			line.append(" value,  OutputCollector<");
-			line.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnKey()));
-			line.append(", ");
-			line.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnValue()));
-			line.append("> output, Reporter reporter) throws IOException {");
+			code.append("public void map(");
+			code
+					.append(Types.getHadoopType(node.getInputKeyIdNode()
+							.getType()));
+			code.append(" key, ");
+			code.append(Types.getHadoopType(node.getInputValueIdNode()
+					.getType()));
+			code.append(" value,  OutputCollector<");
+			code.append(Types.getHadoopType(node.getReturnKey()));
+			code.append(", ");
+			code.append(Types.getHadoopType(node.getReturnValue()));
+			code.append("> output, Reporter reporter) throws IOException {");
 		}
+
 	}
 
 	@Override
@@ -741,7 +792,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(TypeNode node) {
 		LOGGER.finer("visit(TypeNode node) called on " + node);
-
+		// type node is too general, so call something more specific:
+		node.accept(this);
 	}
 
 	@Override
@@ -750,20 +802,20 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		switch (node.getOpType()) {
 		case UMINUS:
-			line.append("-");
+			code.append("-");
 			walk(node.getChildNode());
 			break;
 		case NOT:
-			line.append("!");
+			code.append("!");
 			walk(node.getChildNode());
 			break;
 		case INCR:
 			walk(node.getChildNode());
-			line.append("++");
+			code.append("++");
 			break;
 		case DECR:
 			walk(node.getChildNode());
-			line.append("--");
+			code.append("--");
 			break;
 		case CAST:
 			throw new UnsupportedOperationException(

@@ -7,7 +7,7 @@ import back_end.Visitor;
  * list of IdNodes which specify the arguments for the function, method, or
  * constructor.
  * 
- * @author ben
+ * @author Benjamin Rapaport
  * 
  */
 public class ArgumentsNode extends ExpressionNode {
@@ -15,6 +15,9 @@ public class ArgumentsNode extends ExpressionNode {
 	protected ExpressionNode expNode;
 	protected ExpressionNode argNode;
 
+	protected ExpressionNode argList;
+	protected ExpressionNode arg;
+	
 	/**
 	 * 
 	 * @param args
@@ -25,19 +28,35 @@ public class ArgumentsNode extends ExpressionNode {
 	 *            
 	 *  Deepest node in the tree is the first argument
 	 */
-	public ArgumentsNode(ExpressionNode args, ExpressionNode exp) {
+	public ArgumentsNode(ExpressionNode argList, ExpressionNode arg) {
 		super();
-		if (exp == null) {
+		if (arg == null) {
 			throw new UnsupportedOperationException(
 					"Attempted to create an ArgumentsNode with a null ExpressionNode!");
 		}
-		this.expNode = exp;
-		this.argNode = args;
-		this.addChild(args);
-		this.addChild(exp);
+		this.addChild(argList);
+		this.argList = argList;
+		this.addChild(arg);
+		this.arg = arg;
+		this.expNode = arg;
+		this.argNode = argList;
 		ArgumentsNode.LOGGER.fine("Constructing ArgumentsNode");
 	}
 
+	public boolean hasMoreArgs() {
+		return argList != null;
+	}
+	
+	public ExpressionNode getMoreArgs() {
+		return argList;
+	}
+	
+	public ExpressionNode getArg() {
+		return arg;
+	}
+	
+	
+	
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);

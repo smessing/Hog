@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import back_end.CodeGeneratingVisitor;
+import back_end.SymbolTableVisitor;
+import back_end.TypeCheckingVisitor;
 
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.ProgramNode;
@@ -65,15 +67,22 @@ public class Hog {
 		try {
 			root = (ProgramNode) parser.parse().value;
 		} catch (FileNotFoundException e) {
-			LOGGER.severe("Hog program " + source + "not found!");
+			LOGGER.severe("Hog program " + source + " not found!");
 			System.exit(1);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
-		root.print();
+		//root.print();
 		
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
+		// generate/populate symbol tables
+		SymbolTableVisitor symbolVisitor = new SymbolTableVisitor(tree);
+		symbolVisitor.walk();
+		// populate/propagate/check types
+		TypeCheckingVisitor typeVisitor = new TypeCheckingVisitor(tree);
+		typeVisitor.walk();
+		// generate source code:
 		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
 		codeGenerator.walk();
 		
@@ -83,7 +92,6 @@ public class Hog {
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(codeGenerator.getCode());
 			out.close();
-			System.out.println(codeGenerator.getCode());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
