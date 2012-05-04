@@ -42,6 +42,7 @@ public class PostfixExpressionNode extends ExpressionNode {
 		super();
 		postfixType = PostfixType.METHOD_NO_PARAMS;
 		this.objectOfMethod = objectOfMethod;
+		this.objectName = objectOfMethod; // sorry for this disgusting fix to a ridiculous problem
 		this.methodName = methodName;
 		this.addChild(objectOfMethod);
 		this.addChild(methodName);
@@ -84,6 +85,7 @@ public class PostfixExpressionNode extends ExpressionNode {
 		super();
 		this.postfixType = postFixType;
 		this.objectName = objectName;
+		this.objectOfMethod = objectName; // sorry for this disgusting fix to a ridiculous problem
 		this.methodName = methodName;
 		this.addChild(objectName);
 		this.addChild(methodName);

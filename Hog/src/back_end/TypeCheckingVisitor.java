@@ -267,7 +267,31 @@ public class TypeCheckingVisitor implements Visitor {
 				.getSymbolForIdNode(node.getFunctionName());
 
 		// set type to return type given in symbol table
-		node.setType(funSym.getType());
+		
+		// if it is a reservedWordTypeNode
+		if( funSym.getType() instanceof ReservedWordTypeNode) {
+			
+			// if it is check inner type, set type accordingly
+			if(((ReservedWordTypeNode) funSym.getType()).getType() == Types.Flags.CHECK_INNER_TYPE) {
+				TypeNode innerType = ((DerivedTypeNode) node.getType()).getInnerTypeNode();
+				node.setType(innerType);
+			}
+			
+			// if it is a check entire type, the return type is the typenode of the object the method is called on
+			else if(((ReservedWordTypeNode) funSym.getType()).getType() == Types.Flags.CHECK_ENTIRE_TYPE) {
+				node.setType(node.getObjectOfMethod().getType());
+			}
+			
+			else {
+				node.setType(funSym.getType());
+			}
+		}
+		
+		// otherwise, set the type to what is indicated in the symbol table
+		else {
+			node.setType(funSym.getType());
+		}
+		
 	
 	}
 

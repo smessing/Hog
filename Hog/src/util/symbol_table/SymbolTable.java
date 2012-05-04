@@ -270,7 +270,40 @@ public class SymbolTable {
     	else{
     		return nodeTable.get(n.getIdentifier());
     	}
-    } 
+    }
+    
+    /**
+     * This is called to get the symbol of a post fix expression
+     * @param p
+     * @return
+     */
+    public static FunctionSymbol getSymbolForPostFixExpressionNode(PostfixExpressionNode p) {
+    	// if it is a regular function call, 
+    	if(p.isFunction())
+    		return (FunctionSymbol) getSymbolForIdNode(p.getFunctionName());
+    	// if it is a method call
+    	else {
+    		return SymbolTable.getSymbolForMethodCall(p);
+    	}
+    }
+    
+    /**
+     * Gets a function symbol for a method call. If the node is not a method call, 
+     * throws an exception
+     * @param p
+     * @return
+     */
+    public static FunctionSymbol getSymbolForMethodCall(PostfixExpressionNode p) {
+    	if (!p.isMethod())
+    		throw new RuntimeException("PostFixExpressionNode must me a method call");
+    	
+    	String typeName = Types.getLowercaseTypeName(p.getObjectName().getType());
+    	String methodToLookup = typeName + "." + p.getMethodName().getIdentifier();
+    	
+    	return (FunctionSymbol) SymbolTable.getRootSymbolTable().get(methodToLookup);
+    	
+    	
+    }
     
     public void reserveWord(String word){ 
     	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(util.type.Types.Flags.RESERVED_WORD);
