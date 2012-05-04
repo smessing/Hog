@@ -78,13 +78,12 @@ public class FunctionSymbol extends Symbol {
 	@Override
 	public String toString() {
 		StringBuffer strBuff = new StringBuffer();
+		strBuff.append("num params: " + this.getNumParams());
 		strBuff.append("function, returns: ");
 		strBuff.append(this.type.toString());
 		strBuff.append(". ParamList: (");
-		for (TypeNode a : this.parametersNode) {
-			strBuff.append(a.toString());
-			strBuff.append(", ");
-		}
+		if(this.hasParameters())
+			strBuff.append(this.parametersNode.printForSymbolTable());
 		strBuff.append(')');
 		
 		return strBuff.toString();
