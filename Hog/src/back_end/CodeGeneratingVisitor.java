@@ -124,8 +124,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append("JobConf conf = new JobConf(Hog.class);");
 		line.append("conf.setJobName(\"hog\");");
 		line.append("conf.setOutputKeyClass(" + outputKeyClass + ".class);");
-		line.append("conf.setOutputValueClass(" + outputValueClass
-				+ ".class);");
+		line
+				.append("conf.setOutputValueClass(" + outputValueClass
+						+ ".class);");
 		line.append("conf.setMapperClass(Map.class);");
 		line.append("conf.setCombinerClass(Reduce.class);");
 		line.append("conf.setReducerClass(Reduce.class);");
@@ -141,8 +142,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void writeFunction() {
 		line.append("");
 		code.append(line.toString());
-		LOGGER.fine("[writeFunction] Writing to java source:"
-				+ line.toString());/**/
+		LOGGER
+				.fine("[writeFunction] Writing to java source:"
+						+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
 	}
@@ -166,25 +168,25 @@ public class CodeGeneratingVisitor implements Visitor {
 		// reset line
 		line = new StringBuilder();
 	}
-	
+
 	private void formatCode() {
 		int scopeCount = 0;
 		StringBuilder indentedCode = new StringBuilder();
 		for (int i = 0; i < code.length(); i++) {
-			switch(code.charAt(i)) {
+			switch (code.charAt(i)) {
 			case '{':
 				scopeCount++;
 				indentedCode.append("{\n");
-				indentedCode.append(repeat(' ', scopeCount));
+				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
 			case '}':
 				scopeCount--;
 				indentedCode.append("}\n");
-				indentedCode.append(repeat(' ', scopeCount));
+				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
 			case ';':
 				indentedCode.append(";\n");
-				indentedCode.append(repeat(' ', scopeCount));
+				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
 			default:
 				indentedCode.append(code.charAt(i));
@@ -194,11 +196,12 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private String repeat(char c, int times) {
-		   StringBuilder ret = new StringBuilder();
-		   for(int i = 0;i < times; i++) ret.append(c);
-		   return ret.toString();
-		}
-	
+		StringBuilder ret = new StringBuilder();
+		for (int i = 0; i < times; i++)
+			ret.append(c);
+		return ret.toString();
+	}
+
 	@Override
 	public void visit(ArgumentsNode node) {
 		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
