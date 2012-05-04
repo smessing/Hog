@@ -34,6 +34,10 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected String inputFile = "example.txt";
 	protected String outputFile = "example.txt";
 
+	/**
+	 * 
+	 * @param root
+	 */
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 
 		this.tree = root;
@@ -42,6 +46,21 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	}
 
+	/**
+	 * <h1>CodeGeneratingVisitor</h1><br/>
+	 * 
+	 * <code>public {@link CodeGeneratingVisitor CodeGeneratingVisitor}({@link AbstractSyntaxTree AbstractSyntaxTree} root, {@link String String} inputFile, {@link String String} outputFile)</code><br/><br/>
+	 * 
+	 * Construct a CodeGeneratingVisitor, specifying the input file name and the
+	 * output file name for the corresponding Hadoop job.
+	 * 
+	 * @param root
+	 *            The root node of the Hog source program's AST.
+	 * @param inputFile
+	 *            The inputFile for the <code>map</code> class to read from.
+	 * @param outputFile
+	 *            The outputFile for the <code>reduce</code> class to write to.
+	 */
 	public CodeGeneratingVisitor(AbstractSyntaxTree root, String inputFile,
 			String outputFile) {
 
@@ -124,7 +143,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append("JobConf conf = new JobConf(Hog.class);");
 		line.append("conf.setJobName(\"hog\");");
 		line.append("conf.setOutputKeyClass(" + outputKeyClass + ".class);");
-		line.append("conf.setOutputValueClass(" + outputValueClass + ".class);");
+		line
+				.append("conf.setOutputValueClass(" + outputValueClass
+						+ ".class);");
 		line.append("conf.setMapperClass(Map.class);");
 		line.append("conf.setCombinerClass(Reduce.class);");
 		line.append("conf.setReducerClass(Reduce.class);");
@@ -140,7 +161,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void writeFunction() {
 		line.append("");
 		code.append(line.toString());
-		LOGGER.fine("[writeFunction] Writing to java source:" + line.toString());/**/
+		LOGGER
+				.fine("[writeFunction] Writing to java source:"
+						+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
 	}
@@ -154,6 +177,12 @@ public class CodeGeneratingVisitor implements Visitor {
 		line = new StringBuilder();
 	}
 
+	/*
+	 * Write the end of a statement.
+	 * 
+	 * Protects against writing multiple semicolons, as an ease for the
+	 * programmer.
+	 */
 	private void writeStatement() {
 		if (!line.toString().endsWith("}") && !line.toString().endsWith(";")
 				&& !code.toString().endsWith("}")
@@ -167,6 +196,11 @@ public class CodeGeneratingVisitor implements Visitor {
 		line = new StringBuilder();
 	}
 
+	/*
+	 * this.code originally is built as a monolithic string without newlines and
+	 * other formatting. formatCode() adds both newlines after statements and
+	 * proper indentation based on scope.
+	 */
 	private void formatCode() {
 		int scopeCount = 0;
 		StringBuilder indentedCode = new StringBuilder();
@@ -181,8 +215,8 @@ public class CodeGeneratingVisitor implements Visitor {
 				scopeCount--;
 				// we're reducing scope, so need to undo the spaces previously
 				// written
-				indentedCode.delete(indentedCode.length() - 4,
-						indentedCode.length());
+				indentedCode.delete(indentedCode.length() - 4, indentedCode
+						.length());
 				indentedCode.append("}\n");
 				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
@@ -197,6 +231,16 @@ public class CodeGeneratingVisitor implements Visitor {
 		code = indentedCode;
 	}
 
+	/**
+	 * Repeat a character n times.
+	 * 
+	 * @param toRepeat
+	 *            the character to repeat
+	 * @param times
+	 *            the number of times to repeat <code>toRepeat</code>
+	 * @return the String formed by repeating <code>toRepeat</code> n=
+	 *         <code>times</code> times in a row.
+	 */
 	private String repeat(char toRepeat, int times) {
 		StringBuilder repeated = new StringBuilder();
 		for (int i = 0; i < times; i++)
@@ -525,11 +569,10 @@ public class CodeGeneratingVisitor implements Visitor {
 							line.append("output.collect" + "(" + output[0]
 									+ "," + typeDeclaration + "(" + output[1]
 									+ ")" + ")");
-						}
-						else
+						} else
 							line.append("output.collect" + "(" + args + ")");
-					}else
-						line.append(functionName.toSource()+"("+args+")");
+					} else
+						line.append(functionName.toSource() + "(" + args + ")");
 				}
 			} else
 				line.append(functionName.toSource() + "()");
@@ -579,16 +622,19 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append("public static class Functions {");
 			break;
 		case MAP:
-			line.append("public static class Map extends MapReduceBase implements Mapper");
+			line
+					.append("public static class Map extends MapReduceBase implements Mapper");
 			walk(node.getSectionTypeNode());
 			break;
 		case REDUCE:
-			line.append("public static class Reduce extends MapReduceBase implements Reducer");
+			line
+					.append("public static class Reduce extends MapReduceBase implements Reducer");
 			walk(node.getSectionTypeNode());
 
 			break;
 		case MAIN:
-			line.append("public static void main(String[] args) throws Exception {");
+			line
+					.append("public static void main(String[] args) throws Exception {");
 			break;
 		}
 		walk(node.getBlock());
@@ -625,8 +671,9 @@ public class CodeGeneratingVisitor implements Visitor {
 				+ ", "
 				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnKey())
 				+ ", "
-				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnValue())
-				+ "> {");
+				+ Types
+						.getHadoopType((PrimitiveTypeNode) node
+								.getReturnValue()) + "> {");
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
 			line.append("public void reduce(");
 			line.append(Types.getHadoopType((PrimitiveTypeNode) node
