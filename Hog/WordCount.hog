@@ -31,8 +31,8 @@
 
 }
 
-@Reduce (text word, iter<int> values) -> (text, real) {
-  real count = 0;
+@Reduce (text word, iter<int> values) -> (text, int) {
+  int count = 0;
   while ( values.hasNext() ) {
     count = count + values.next();
   }

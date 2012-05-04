@@ -336,6 +336,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
+		LOGGER.finer("Value: " + node.getValue());
 
 		if (emit) {
 			walk(node.getType());
@@ -604,14 +605,22 @@ public class CodeGeneratingVisitor implements Visitor {
 					+ methodNameNoParam.getIdentifier() + "()");
 			break;
 		case METHOD_WITH_PARAMS:
-			IdNode objectName = node.getObjectName();
-			IdNode methodName = node.getMethodName();
-			if (node.hasArguments()) {
-				ExpressionNode argsList = node.getArgsList();
-				code.append(objectName.getIdentifier() + "."
-						+ methodName.getIdentifier() + "("
-						+ argsList.toSource() + ")");
-			}
+			IdNode object = node.getObjectName();
+			IdNode method = node.getMethodName();
+			code.append(object.getIdentifier());
+			code.append(".");
+			if (method.getIdentifier().equals("tokenize"))
+				code.append("split");
+			else
+				code.append(method.getIdentifier());
+			code.append("(");
+			walk(node.getArgsList());
+			code.append(")");
+			/*
+			 * if (node.hasArguments()) { ExpressionNode argsList =
+			 * node.getArgsList(); code.append(object.getIdentifier() + "." +
+			 * method.getIdentifier() + "(" + argsList.toSource() + ")"); }
+			 */
 			break;
 		case FUNCTION_CALL:
 			IdNode functionIdNode = node.getFunctionName();
@@ -740,6 +749,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append(", ");
 		code.append(Types.getHadoopType(node.getReturnValue()));
 		code.append("> {");
+
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
 			code.append("public void reduce(");
 			code
