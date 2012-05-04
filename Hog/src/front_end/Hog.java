@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import back_end.CodeGeneratingVisitor;
+import back_end.SymbolTableVisitor;
+import back_end.TypeCheckingVisitor;
 
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.ProgramNode;
@@ -74,6 +76,13 @@ public class Hog {
 		root.print();
 		
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
+		// generate/populate symbol tables
+		SymbolTableVisitor symbolVisitor = new SymbolTableVisitor(tree);
+		symbolVisitor.walk();
+		// populate/propagate/check types
+		TypeCheckingVisitor typeVisitor = new TypeCheckingVisitor(tree);
+		typeVisitor.walk();
+		// generate source code:
 		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
 		codeGenerator.walk();
 		
