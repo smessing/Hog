@@ -238,8 +238,13 @@ public class SymbolTableVisitor implements Visitor {
 		//else, it does not have a type, so we ensure it is already declared
 		else {
 			Symbol nodeSymbol = SymbolTable.getSymbolForIdNode(node);
-			LOGGER.finer("IdNode has a null type. Symbol is  " + nodeSymbol.toString());
+			// if there is no nodeSymbol, this is being used before delcartion so throw an error
+			if( nodeSymbol == null ) {
+				LOGGER.finer("IdNode was used before it was declared. Throw an error.");
+				throw new VariableUndeclaredException("Use of " + node.getIdentifier() + " undefined.");
+			}
 			
+			LOGGER.finer("IdNode has a null type. Symbol is  " + nodeSymbol.toString());
 			// it has been declared. Now we decorate it with its type
 			node.setType(nodeSymbol.getType());
 			LOGGER.finer("We have set the IdNode type to" + nodeSymbol.getType().getName());
