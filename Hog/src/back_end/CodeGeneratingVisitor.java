@@ -336,7 +336,17 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
+		LOGGER.finer("Value: " + node.getValue());
+
+		if (emit) {
+			walk(node.getType());
+			code.append("(");
+		}
+
 		code.append(node.getValue());
+
+		if (emit)
+			code.append(")");
 	}
 
 	@Override
@@ -516,8 +526,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case FOREACH:
 			code.append("for (");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node.getPart()
-					.getType()));
+			code.append(Types.getJavaType(node.getPart().getType()));
 			code.append(" ");
 			walk(node.getPart());
 			code.append(" : ");
@@ -596,14 +605,17 @@ public class CodeGeneratingVisitor implements Visitor {
 					+ methodNameNoParam.getIdentifier() + "()");
 			break;
 		case METHOD_WITH_PARAMS:
-			IdNode objectName = node.getObjectName();
-			IdNode methodName = node.getMethodName();
-			if (node.hasArguments()) {
-				ExpressionNode argsList = node.getArgsList();
-				code.append(objectName.getIdentifier() + "."
-						+ methodName.getIdentifier() + "("
-						+ argsList.toSource() + ")");
-			}
+			IdNode object = node.getObjectName();
+			IdNode method = node.getMethodName();
+			code.append(object.getIdentifier());
+			code.append(".");
+			if (method.getIdentifier().equals("tokenize"))
+				code.append("split");
+			else
+				code.append(method.getIdentifier());
+			code.append("(");
+			walk(node.getArgsList());
+			code.append(")");
 			break;
 		case FUNCTION_CALL:
 			IdNode functionIdNode = node.getFunctionName();
@@ -723,12 +735,16 @@ public class CodeGeneratingVisitor implements Visitor {
 					.getReturnValue());
 		}
 
-		code.append("<"
-				+ Types.getHadoopType(node.getInputKeyIdNode().getType())
-				+ ", "
-				+ Types.getHadoopType(node.getInputValueIdNode().getType())
-				+ ", " + Types.getHadoopType(node.getReturnKey()) + ", "
-				+ Types.getHadoopType(node.getReturnValue()) + "> {");
+		code.append("<");
+		code.append(Types.getHadoopType(node.getInputKeyIdNode().getType()));
+		code.append(", ");
+		code.append(Types.getHadoopType(node.getInputValueIdNode().getType()));
+		code.append(", ");
+		code.append(Types.getHadoopType(node.getReturnKey()));
+		code.append(", ");
+		code.append(Types.getHadoopType(node.getReturnValue()));
+		code.append("> {");
+
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
 			code.append("public void reduce(");
 			code
@@ -755,6 +771,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append(", ");
 			code.append(Types.getHadoopType(node.getReturnValue()));
 			code.append("> output, Reporter reporter) throws IOException {");
+			code.append("String line = value.toString();");
 		}
 
 	}
