@@ -4,7 +4,6 @@ import util.ast.node.*;
 import util.ast.AbstractSyntaxTree;
 import util.type.Types;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
@@ -42,6 +41,10 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected String outputValueClass;
 	protected String inputFile = "example.txt";
 	protected String outputFile = "example.txt";
+	/**
+	 * Remember when recursing if we're dealing with a declaration statement,
+	 * as the handling both DerivedTypeNodes and IdNodes is context-specific.
+	 */
 	protected boolean declarationStatement = false;
 
 	/**
@@ -100,7 +103,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		writeHeader();
 
 		// start recursive walk:
-
 		walk(tree.getRoot());
 
 		code.append("}");
@@ -317,29 +319,44 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(DerivedTypeNode node) {
 		LOGGER.finer("visit(DerivedTypeNode node) called on " + node);
+		
+		if (declarationStatement)
+			code.append("new ");
+		
 		switch(node.getLocalType()) {
 		case LIST:
 			if (declarationStatement)
-				code.append("new List<");
+				code.append("ArrayList<");
 			else
 				code.append("List<");
 			break;
 		case ITER:
+			code.append("Iterator<");
 			break;
 		case DICT:
-			break;
+			throw new UnsupportedOperationException("Dictionaries not yet supported!");
 		case MULTISET:
-			break;
+			throw new UnsupportedOperationException("Multisets not supported!");
 		case SET:
+			if (declarationStatement)
+				code.append("HashSet<");
+			else
+				code.append("Set<");
 			break;
 		}
 		
+		// remember state for this particular node, but forget it for recursing
+		boolean declaration = declarationStatement;
 		declarationStatement = false;
+		
 		
 		walk(node.getInnerTypeNode());
 		
 		// close inner types
 		code.append(">");
+		
+		if (declaration)
+			code.append("()");
 
 	}
 
