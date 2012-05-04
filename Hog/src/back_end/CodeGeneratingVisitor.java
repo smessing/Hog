@@ -51,6 +51,11 @@ public class CodeGeneratingVisitor implements Visitor {
 	 */
 	protected boolean declarationStatement = false;
 	protected boolean rValue = false;
+	/**
+	 * Remember if we're writing the emit() function, as we need to cast to
+	 * Hadoop's Writable types;
+	 */
+	protected boolean emit = false;
 
 	/**
 	 * Construct a CodeGeneratingVisitor, but don't specify input file or output
@@ -251,7 +256,14 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ArgumentsNode node) {
 		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
-
+		
+		if (node.hasMoreArgs()) {
+			walk(node.getMoreArgs());
+			code.append(", ");
+		}
+		
+		walk(node.getArg());
+		
 	}
 
 	@Override
@@ -594,60 +606,47 @@ public class CodeGeneratingVisitor implements Visitor {
 				writeMapReduce();
 				return;
 			}
-			
+
 			if (!node.getFunctionName().getIdentifier().equals("emit")) {
 				code.append("Functions.");
 				walk(node.getFunctionName());
 			} else {
 				code.append("output.Collect");
+				emit = true;
 			}
-			
+
 			code.append("(");
-			
+
 			// check for arguments
-			
+			if (node.hasArguments())
+				walk(node.getArgsList());
+
 			code.append(")");
 			
+			// unset emit flag which may have been set:
+			emit = false;
+
 			/*
-			IdNode functionName = node.getFunctionName();
-			if (node.hasArguments()) {
-				ExpressionNode functionArgsList = node.getArgsList();
-				if (functionArgsList.hasChildren()) {
-					Iterator<Node> l = functionArgsList.getChildren()
-							.iterator();
-					String args = "";
-					String typeDeclaration = "";
-					while (l.hasNext()) {
-						Node n = l.next();
-						if (n instanceof ConstantNode) {
-							ConstantNode cn = (ConstantNode) n;
-							args = args + cn.getValue() + ",";
-							typeDeclaration = "new IntWritable";
-						} else if (n instanceof IdNode) {
-							IdNode idNode = (IdNode) n;
-							args = args + idNode.getIdentifier() + ",";
-							typeDeclaration = "";
-						}
-					}
-					if (args.charAt(args.length() - 1) == ',') {
-						args = args.substring(0, args.length() - 1);
-					}
-					if (functionName.toSource().equalsIgnoreCase("emit")) {
-						String[] output = args.split(",");
-						// fix this permanently later
-						if (output[1].contains("1")) {
-							code.append("output.collect" + "(" + output[0]
-									+ "," + typeDeclaration + "(" + output[1]
-									+ ")" + ")");
-						} else
-							code.append("output.collect" + "(" + args + ")");
-					} else
-						code.append(functionName.toSource() + "(" + args + ")");
-				}
-			} else
-				walk(functionIdNode);
-				//code.append("()");
-			break;/**/
+			 * IdNode functionName = node.getFunctionName(); if
+			 * (node.hasArguments()) { ExpressionNode functionArgsList =
+			 * node.getArgsList(); if (functionArgsList.hasChildren()) {
+			 * Iterator<Node> l = functionArgsList.getChildren() .iterator();
+			 * String args = ""; String typeDeclaration = ""; while
+			 * (l.hasNext()) { Node n = l.next(); if (n instanceof ConstantNode)
+			 * { ConstantNode cn = (ConstantNode) n; args = args + cn.getValue()
+			 * + ","; typeDeclaration = "new IntWritable"; } else if (n
+			 * instanceof IdNode) { IdNode idNode = (IdNode) n; args = args +
+			 * idNode.getIdentifier() + ","; typeDeclaration = ""; } } if
+			 * (args.charAt(args.length() - 1) == ',') { args =
+			 * args.substring(0, args.length() - 1); } if
+			 * (functionName.toSource().equalsIgnoreCase("emit")) { String[]
+			 * output = args.split(","); // fix this permanently later if
+			 * (output[1].contains("1")) { code.append("output.collect" + "(" +
+			 * output[0] + "," + typeDeclaration + "(" + output[1] + ")" + ")");
+			 * } else code.append("output.collect" + "(" + args + ")"); } else
+			 * code.append(functionName.toSource() + "(" + args + ")"); } } else
+			 * walk(functionIdNode); //code.append("()"); break;/*
+			 */
 		}
 	}
 
