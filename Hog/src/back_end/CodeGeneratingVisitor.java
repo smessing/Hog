@@ -177,7 +177,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeFunction() {
-		code.append("");
+		/*code.append("");
 		code.append(code.toString());
 		LOGGER
 				.fine("[writeFunction] Writing to java source:"
@@ -185,8 +185,10 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeBlockEnd() {
+		
+		code.append("}");
 
-		code.append(code.toString());
+		/*code.append(code.toString());
 		LOGGER.fine("[writeFunctions] Writing to java source:"
 				+ code.toString());/**/
 
