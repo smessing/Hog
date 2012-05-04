@@ -589,12 +589,15 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case FUNCTION_CALL:
 			IdNode functionIdNode = node.getFunctionName();
-			IdNode functionName = node.getFunctionName();
 			// check if this is our special mapReduce() call:
-			if (functionName.getIdentifier().equals("mapReduce")) {
+			if (functionIdNode.getIdentifier().equals("mapReduce")) {
 				writeMapReduce();
 				return;
 			}
+			code.append("Functions.");
+			
+			/*
+			IdNode functionName = node.getFunctionName();
 			if (node.hasArguments()) {
 				ExpressionNode functionArgsList = node.getArgsList();
 				if (functionArgsList.hasChildren()) {
@@ -632,7 +635,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			} else
 				walk(functionIdNode);
 				//code.append("()");
-			break;
+			break;/**/
 		}
 	}
 
