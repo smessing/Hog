@@ -616,11 +616,6 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append("(");
 			walk(node.getArgsList());
 			code.append(")");
-			/*
-			 * if (node.hasArguments()) { ExpressionNode argsList =
-			 * node.getArgsList(); code.append(object.getIdentifier() + "." +
-			 * method.getIdentifier() + "(" + argsList.toSource() + ")"); }
-			 */
 			break;
 		case FUNCTION_CALL:
 			IdNode functionIdNode = node.getFunctionName();
