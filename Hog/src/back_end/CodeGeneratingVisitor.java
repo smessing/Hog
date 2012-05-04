@@ -631,7 +631,7 @@ public class CodeGeneratingVisitor implements Visitor {
 				}
 			} else
 				walk(functionIdNode);
-				code.append("()");
+				//code.append("()");
 			break;
 		}
 	}
