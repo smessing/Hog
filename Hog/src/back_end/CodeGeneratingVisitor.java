@@ -124,9 +124,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append("JobConf conf = new JobConf(Hog.class);");
 		line.append("conf.setJobName(\"hog\");");
 		line.append("conf.setOutputKeyClass(" + outputKeyClass + ".class);");
-		line
-				.append("conf.setOutputValueClass(" + outputValueClass
-						+ ".class);");
+		line.append("conf.setOutputValueClass(" + outputValueClass + ".class);");
 		line.append("conf.setMapperClass(Map.class);");
 		line.append("conf.setCombinerClass(Reduce.class);");
 		line.append("conf.setReducerClass(Reduce.class);");
@@ -142,9 +140,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void writeFunction() {
 		line.append("");
 		code.append(line.toString());
-		LOGGER
-				.fine("[writeFunction] Writing to java source:"
-						+ line.toString());/**/
+		LOGGER.fine("[writeFunction] Writing to java source:" + line.toString());/**/
 		// reset line
 		line = new StringBuilder();
 	}
@@ -185,7 +181,8 @@ public class CodeGeneratingVisitor implements Visitor {
 				scopeCount--;
 				// we're reducing scope, so need to undo the spaces previously
 				// written
-				indentedCode.delete(indentedCode.length() - 4, indentedCode.length());
+				indentedCode.delete(indentedCode.length() - 4,
+						indentedCode.length());
 				indentedCode.append("}\n");
 				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
@@ -505,23 +502,34 @@ public class CodeGeneratingVisitor implements Visitor {
 					Iterator<Node> l = functionArgsList.getChildren()
 							.iterator();
 					String args = "";
+					String typeDeclaration = "";
 					while (l.hasNext()) {
 						Node n = l.next();
 						if (n instanceof ConstantNode) {
 							ConstantNode cn = (ConstantNode) n;
 							args = args + cn.getValue() + ",";
+							typeDeclaration = "new IntWritable";
 						} else if (n instanceof IdNode) {
 							IdNode idNode = (IdNode) n;
 							args = args + idNode.getIdentifier() + ",";
+							typeDeclaration = "";
 						}
 					}
 					if (args.charAt(args.length() - 1) == ',') {
 						args = args.substring(0, args.length() - 1);
 					}
 					if (functionName.toSource().equalsIgnoreCase("emit")) {
-						line.append("output.collect" + "(" + args + ")");
-					} else
-						line.append(functionName.toSource() + "(" + args + ")");
+						String[] output = args.split(",");
+						// fix this permanently later
+						if (output[1].contains("1")) {
+							line.append("output.collect" + "(" + output[0]
+									+ "," + typeDeclaration + "(" + output[1]
+									+ ")" + ")");
+						}
+						else
+							line.append("output.collect" + "(" + args + ")");
+					}else
+						line.append(functionName.toSource()+"("+args+")");
 				}
 			} else
 				line.append(functionName.toSource() + "()");
@@ -571,19 +579,16 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append("public static class Functions {");
 			break;
 		case MAP:
-			line
-					.append("public static class Map extends MapReduceBase implements Mapper");
+			line.append("public static class Map extends MapReduceBase implements Mapper");
 			walk(node.getSectionTypeNode());
 			break;
 		case REDUCE:
-			line
-					.append("public static class Reduce extends MapReduceBase implements Reducer");
+			line.append("public static class Reduce extends MapReduceBase implements Reducer");
 			walk(node.getSectionTypeNode());
 
 			break;
 		case MAIN:
-			line
-					.append("public static void main(String[] args) throws Exception {");
+			line.append("public static void main(String[] args) throws Exception {");
 			break;
 		}
 		walk(node.getBlock());
@@ -620,9 +625,8 @@ public class CodeGeneratingVisitor implements Visitor {
 				+ ", "
 				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnKey())
 				+ ", "
-				+ Types
-						.getHadoopType((PrimitiveTypeNode) node
-								.getReturnValue()) + "> {");
+				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnValue())
+				+ "> {");
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
 			line.append("public void reduce(");
 			line.append(Types.getHadoopType((PrimitiveTypeNode) node

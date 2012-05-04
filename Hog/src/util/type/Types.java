@@ -440,5 +440,24 @@ public class Types {
 		throw new UnsupportedOperationException(type
 				+ " is not allowed for @Map and @Reduce headers.");
 	}
+	/**
+	 * 
+	 * @param type a PrimitiveTypeNode
+	 * @return the string corresponding to the declaration of Hadoop type.
+	 */
+	public static String getNewHadoopTypeDeclaration(PrimitiveTypeNode type){
+		switch (type.getType()) {
+		case BOOL:
+			return "new BooleanWritable";
+		case TEXT:
+			return "new Text";
+		case INT:
+			return "new IntWritable";
+		case REAL:
+			return "new DoubleWritable";
+		}
+		throw new UnsupportedOperationException(type
+				+ " is not allowed for @Map and @Reduce headers.");
+	}
 
 }
