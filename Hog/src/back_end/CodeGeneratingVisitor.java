@@ -190,6 +190,7 @@ public class CodeGeneratingVisitor implements Visitor {
 				indentedCode.append(code.charAt(i));
 			}
 		}
+		code = indentedCode;
 	}
 
 	private String repeat(char c, int times) {
