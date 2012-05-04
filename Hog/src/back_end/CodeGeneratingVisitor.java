@@ -336,7 +336,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
+		
+		if (emit) {
+			walk(node.getType());
+			code.append("(");
+		}
 		code.append(node.getValue());
+		code.append(")");
 	}
 
 	@Override
