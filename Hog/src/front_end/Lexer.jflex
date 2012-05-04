@@ -14,6 +14,7 @@ import util.type.Types;
 %column
 %unicode
 %class Lexer
+%public
 
 %{
 
