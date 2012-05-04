@@ -64,7 +64,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		walk(tree.getRoot());
 
-		code.append("\n}");
+		code.append("}");
 
 	}
 
@@ -109,58 +109,58 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	private void writeHeader() {
 		LOGGER.fine("Writing header to code.");
-		code.append("import java.io.IOException;\n");
-		code.append("import java.util.*;\n");
-		code.append("import org.apache.hadoop.fs.Path;\n");
-		code.append("import org.apache.hadoop.conf.*;\n");
-		code.append("import org.apache.hadoop.io.*;\n");
-		code.append("import org.apache.hadoop.mapred.*;\n");
-		code.append("public class Hog {\n");
+		code.append("import java.io.IOException;");
+		code.append("import java.util.*;");
+		code.append("import org.apache.hadoop.fs.Path;");
+		code.append("import org.apache.hadoop.conf.*;");
+		code.append("import org.apache.hadoop.io.*;");
+		code.append("import org.apache.hadoop.mapred.*;");
+		code.append("public class Hog {");
 	}
 
 	private void writeMapReduce() {
 		LOGGER.fine("Writing mapReduce initialization code.");
-		line.append("JobConf conf = new JobConf(Hog.class);\n");
-		line.append("conf.setJobName(\"hog\");\n");
-		line.append("conf.setOutputKeyClass(" + outputKeyClass + ".class);\n");
+		line.append("JobConf conf = new JobConf(Hog.class);");
+		line.append("conf.setJobName(\"hog\");");
+		line.append("conf.setOutputKeyClass(" + outputKeyClass + ".class);");
 		line.append("conf.setOutputValueClass(" + outputValueClass
-				+ ".class);\n");
-		line.append("conf.setMapperClass(Map.class);\n");
-		line.append("conf.setCombinerClass(Reduce.class);\n");
-		line.append("conf.setReducerClass(Reduce.class);\n");
-		line.append("conf.setInputFormat(" + inputFormatClass + ");\n");
-		line.append("conf.setOutputFormat(" + outputFormatClass + ");\n");
+				+ ".class);");
+		line.append("conf.setMapperClass(Map.class);");
+		line.append("conf.setCombinerClass(Reduce.class);");
+		line.append("conf.setReducerClass(Reduce.class);");
+		line.append("conf.setInputFormat(" + inputFormatClass + ");");
+		line.append("conf.setOutputFormat(" + outputFormatClass + ");");
 		line.append("FileInputFormat.setInputPaths(conf, new Path(\""
-				+ inputFile + "\"));\n");
+				+ inputFile + "\"));");
 		line.append("FileOutputFormat.setOutputPath(conf, new Path(\""
-				+ outputFile + "\"));\n");
-		line.append("JobClient.runJob(conf);\n");
+				+ outputFile + "\"));");
+		line.append("JobClient.runJob(conf);");
 	}
 
 	private void writeFunction() {
-		line.append("\n");
+		line.append("");
 		code.append(line.toString());
-		LOGGER.fine("[writeFunction] Writing to java source:\n"
+		LOGGER.fine("[writeFunction] Writing to java source:"
 				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
 	}
 
 	private void writeBlockEnd() {
-		line.append("}\n");
+		line.append("}");
 		code.append(line.toString());
-		LOGGER.fine("[writeFunctions] Writing to java source:\n"
+		LOGGER.fine("[writeFunctions] Writing to java source:"
 				+ line.toString());/**/
 		// reset line
 		line = new StringBuilder();
 	}
 
 	private void writeStatement() {
-		if (!line.toString().endsWith("\n") && !line.toString().equals("")) {
-			line.append(";\n");
+		if (!line.toString().endsWith("") && !line.toString().equals("")) {
+			line.append(";");
 		}
 		code.append(line.toString());
-		LOGGER.fine("[writeStatement] Writing to java source:\n"
+		LOGGER.fine("[writeStatement] Writing to java source:"
 				+ line.toString());
 		// reset line
 		line = new StringBuilder();
@@ -265,7 +265,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		// line.append(indentation.toString());
 		line.append("} else if ( ");
 		line.append(node.getCondition().toSource());
-		line.append(" ) {\n");
+		line.append(" ) {");
 		walk(node.getIfCondTrue());
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
@@ -276,9 +276,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseStatementNode node) {
 		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
-		line.append("} else {\n");
+		line.append("} else {");
 		walk(node.getBlock());
-		line.append("}\n");
+		line.append("}");
 
 	}
 
@@ -305,7 +305,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		line.append(params.getType().toSource());
 		line.append(" " + params.getIdentifier());
 		line.append(")");
-		line.append(" {\n");
+		line.append(" {");
 		walk(node.getInstructions());
 		writeFunction();
 
@@ -329,7 +329,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
 		line.append("if ( ");
 		line.append(node.getCondition().toSource());
-		line.append(" ) {\n");
+		line.append(" ) {");
 		walk(node.getIfCondTrue());
 		// check that buffer cleared
 		if (node.getCheckNext() != null) {
@@ -338,7 +338,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
 		}
-		line.append("}\n");
+		line.append("}");
 	}
 
 	@Override
@@ -353,7 +353,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getCheck());
 			line.append("; ");
 			walk(node.getIncrement());
-			line.append(" ) {\n");
+			line.append(" ) {");
 			walk(node.getBlock());
 			break;
 		case FOREACH:
@@ -364,13 +364,13 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getPart());
 			line.append(" : ");
 			walk(node.getWhole());
-			line.append(" ) {\n");
+			line.append(" ) {");
 			walk(node.getBlock());
 			break;
 		case WHILE:
 			line.append("while ( ");
 			walk(node.getCheck());
-			line.append(" ) {\n");
+			line.append(" ) {");
 			walk(node.getBlock());
 			break;
 		}
@@ -524,7 +524,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		switch (sectionKind) {
 		case FUNCTIONS:
-			line.append("public static class Functions {\n");
+			line.append("public static class Functions {");
 			break;
 		case MAP:
 			line
@@ -539,7 +539,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case MAIN:
 			line
-					.append("public static void main(String[] args) throws Exception {\n");
+					.append("public static void main(String[] args) throws Exception {");
 			break;
 		}
 		walk(node.getBlock());
@@ -578,7 +578,7 @@ public class CodeGeneratingVisitor implements Visitor {
 				+ ", "
 				+ Types
 						.getHadoopType((PrimitiveTypeNode) node
-								.getReturnValue()) + "> {\n");
+								.getReturnValue()) + "> {");
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
 			line.append("public void reduce(");
 			line.append(Types.getHadoopType((PrimitiveTypeNode) node
@@ -592,7 +592,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append(", ");
 			line.append(Types.getHadoopType((PrimitiveTypeNode) node
 					.getReturnValue()));
-			line.append("> output, Reporter reporter) throws IOException {\n");
+			line.append("> output, Reporter reporter) throws IOException {");
 		} else {
 			line.append("public void map(");
 			line.append(Types.getHadoopType((PrimitiveTypeNode) node
@@ -606,7 +606,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			line.append(", ");
 			line.append(Types.getHadoopType((PrimitiveTypeNode) node
 					.getReturnValue()));
-			line.append("> output, Reporter reporter) throws IOException {\n");
+			line.append("> output, Reporter reporter) throws IOException {");
 		}
 	}
 
