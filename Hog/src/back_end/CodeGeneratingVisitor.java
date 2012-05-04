@@ -52,7 +52,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	public String getCode() {
-		formatCode();
+		//formatCode();
 		return code.toString();
 	}
 
@@ -159,7 +159,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeStatement() {
-		if (!line.toString().endsWith("}")) {
+		if (!line.toString().endsWith("}") && !line.toString().endsWith(";")) {
 			line.append(";");
 		}
 		code.append(line.toString());
@@ -181,6 +181,9 @@ public class CodeGeneratingVisitor implements Visitor {
 				break;
 			case '}':
 				scopeCount--;
+				// we're reducing scope, so need to undo the spaces previously written
+				indentedCode.delete(indentedCode.length() - 4, indentedCode
+						.length());
 				indentedCode.append("}\n");
 				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
