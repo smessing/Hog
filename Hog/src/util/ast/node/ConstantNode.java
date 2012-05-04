@@ -29,7 +29,6 @@ public class ConstantNode extends ExpressionNode {
 		this.value = value;
 		ConstantNode.LOGGER.fine("Constructing ConstantNode");
 	}
-
 	/**
 	 * Get a String representation of this value.
 	 * 
@@ -67,9 +66,8 @@ public class ConstantNode extends ExpressionNode {
 		case INT:
 		case BOOL:
 		case REAL:
-			return getValue();
 		case TEXT:
-			return '"' + getValue() + '"';
+			return getValue();
 		}
 
 		throw new UnsupportedOperationException("Primitive type: " + primType

@@ -45,6 +45,7 @@ public class UnOpNode extends ExpressionNode {
 		super(type);
 		// note implicitly sets child.parent = this
 		this.addChild(child);
+		this.child = child;
 		this.opType = opType;
 		this.child = child;
 	}
@@ -54,6 +55,10 @@ public class UnOpNode extends ExpressionNode {
 	 */
 	public OpType getOpType() {
 		return opType;
+	}
+
+	public ExpressionNode getChildNode() {
+		return child;
 	}
 
 	/** Method to Return the name getName()

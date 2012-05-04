@@ -7,7 +7,7 @@ import util.ast.node.Node;
 /**
  * Abstract class for specifying common behavior for ASTs.
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public class AbstractSyntaxTree {
@@ -16,24 +16,38 @@ public class AbstractSyntaxTree {
 	protected Node root;
 
 	/**
-	 * Constructor AbstractSyntabTree(Node root)
+	 * Construct a new tree.
+	 * 
+	 * <pre>
+	 * AbstractSyntaxTree(Node root)
+	 * </pre>
 	 * 
 	 * @param root
-	 *            Node
+	 *            The node whose posterity encompasses the entire tree.
 	 */
 	public AbstractSyntaxTree(Node root) {
 		this.root = root;
 	}
 
+	/**
+	 * Get the root of this tree.
+	 * 
+	 * @return The root of this tree.
+	 */
 	public Node getRoot() {
 		return root;
 	}
-	
+
 	/**
-	 * Method preOrderTraversal() Returns an Iterator<\Node> of AbstractSyntax
-	 * Tree in PreOrder
+	 * <pre>
+	 * preOrderTraversal()
+	 * </pre>
 	 * 
-	 * @return Iterator<\Node>
+	 * Returns an <code>Iterator<{@link Node}></code> of this AbstractSyntaxTree in
+	 * pre-order.
+	 * <p>
+	 * 
+	 * @return <code>Iterator<{@link Node}></code>
 	 */
 	public Iterator<Node> preOrderTraversal() {
 
@@ -43,10 +57,13 @@ public class AbstractSyntaxTree {
 	}
 
 	/**
-	 * Method postOrderTraversal() Returns an Iterator<\Node> of AbstractSyntax
-	 * Tree in PostOrder
+	 * <pre>
+	 * postOrderTraversal()
+	 * </pre>
 	 * 
-	 * @return Iterator<\Node>
+	 * Returns an <code>Iterator<{@link Node}></code> of AbstractSyntax Tree in post-order
+	 * 
+	 * @return <code>Iterator<{@link Node}></code>
 	 */
 	public Iterator<Node> postOrderTraversal() {
 
@@ -54,12 +71,15 @@ public class AbstractSyntaxTree {
 				TreeTraversalBuilder.traversalOrder.POSTORDER);
 
 	}
-	
+
 	/**
-	 * Method toLatex() Returns a String representation of the program in Latex
-	 * format
+	 * <pre>
+	 * toLatex()
+	 * </pre>
 	 * 
-	 * @return string String
+	 * Returns LaTeX code representing this tree. 
+	 * 
+	 * @return String the LaTeX code.
 	 */
 	public String toLatex() {
 
@@ -75,7 +95,8 @@ public class AbstractSyntaxTree {
 		sb.append("\\begin{document}\n");
 		sb.append("\\begin{landscape}\n");
 		sb.append("\\thispagestyle{empty}\n");
-		sb.append("\\hspace*{-0.1\\linewidth}\\resizebox{1.2\\linewidth}{!}{%\n");
+		sb
+				.append("\\hspace*{-0.1\\linewidth}\\resizebox{1.2\\linewidth}{!}{%\n");
 
 		sb.append("\\Tree[.{" + root.getName() + "}");
 
@@ -88,8 +109,8 @@ public class AbstractSyntaxTree {
 		sb.append("\\end{landscape}\n");
 		sb.append("\\end{document}\n");
 
-		return sb.toString().replaceAll("<", "\\$<\\$")
-				.replaceAll(">", "\\$>\\$").replaceAll("_", "-");
+		return sb.toString().replaceAll("<", "\\$<\\$").replaceAll(">",
+				"\\$>\\$").replaceAll("_", "-");
 	}
 
 	private String toLatexAux(Node node) {

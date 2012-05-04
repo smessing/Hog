@@ -37,7 +37,8 @@ import util.ast.node.ProgramNode;
  * File System). The class also handles downloading the output to the file
  * <code>war_and_peace_counts.txt</code>.
  * 
- * @author sam
+ * @author Samuel Messing
+ * @author Kurry Tran
  * 
  */
 public class Hog {

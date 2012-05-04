@@ -11,7 +11,7 @@ import back_end.Visitor;
  * A node within an AST. This is an abstract class that specifies behavior for
  * all node classes in Hog.
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public abstract class Node implements Comparable<Node> {
@@ -30,6 +30,7 @@ public abstract class Node implements Comparable<Node> {
 	
 	// for use in building symbol table tree
 	protected boolean newScope;
+	protected boolean endOfLine;
 
 	/**
 	 * Construct a new node. Creates an empty child list.
@@ -284,6 +285,14 @@ public abstract class Node implements Comparable<Node> {
 		return this.newScope;
 	}
 
+	public void setEndOfLine() {
+		endOfLine = true;
+	}
+	
+	public boolean isEndOfLine() {
+		return endOfLine;
+	}
+	
 		/** Method to Print Java Source
 	 * 
 	 * @return

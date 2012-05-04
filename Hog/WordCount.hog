@@ -1,5 +1,6 @@
 @Functions {
   int fib(int n) {
+  list<int> myList;
     if (n == 0) {
       int x = 5;
       return x;
@@ -23,40 +24,14 @@
 
 
 @Map (int lineNum, text line) -> (text, int) {
-  #{ this is a 
-       block comment }#
-  int count = 1;
-  #dict<int, real> face;
-  #real face = 1.0;
-  foreach text myCock in line.tokenize(' ') {
-    emit(myCock, 1);
+  foreach text word in line.tokenize(" ") {
+    emit(word, 1);
   }
-  if (count == 2) {
-    print('count equals 2!');
-  } elseif (count == 3) {
-    print('count equals 3!');
-    int benFuck = 10;
-  } else {
-    int face = 0;
-    int x = face + 1;
-    face++;
-    print('count equals something else');
-  }
-  
-  #list<int> face;
-  #try {
-   # face.get(0);
-  #} catch (FileNotFoundException exception) {
-   # print(exception);
-  #} catch (ArrayOutOfBoundsException exception) {
-  #  print (exception);
-  #}
-  #for (int i = 0; i < 4; i++;) {
-    #print(i);
-  #}
+
+
 }
 
-@Reduce (text word, iter<int> values) -> (text, int) {
+@Reduce (text word, int values) -> (text, int) {
   int count = 0;
   while ( values.hasNext() ) {
     count = count + values.next();
