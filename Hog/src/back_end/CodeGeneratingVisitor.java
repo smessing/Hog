@@ -157,7 +157,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeStatement() {
-		if (!line.toString().endsWith("") && !line.toString().equals("")) {
+		if (!line.toString().endsWith("}")) {
 			line.append(";");
 		}
 		code.append(line.toString());
@@ -174,12 +174,12 @@ public class CodeGeneratingVisitor implements Visitor {
 			switch(code.charAt(i)) {
 			case '{':
 				scopeCount++;
-				indentedCode.append("\n");
+				indentedCode.append("{\n");
 				indentedCode.append(repeat(' ', scopeCount));
 				break;
 			case '}':
 				scopeCount--;
-				indentedCode.append("\n");
+				indentedCode.append("}\n");
 				indentedCode.append(repeat(' ', scopeCount));
 				break;
 			case ';':
