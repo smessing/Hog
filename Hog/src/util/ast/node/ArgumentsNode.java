@@ -61,5 +61,29 @@ public class ArgumentsNode extends ExpressionNode {
 		// TODO Auto-generated method stub
 		return 41;
 	}
+	
+	/**
+	 * 
+	 * @return the number of arguments the node represents
+	 */
+	public int getNumArguments() {
+		return getNumArgsHelper(0);
+	}
+	
+	/**
+	 * Helper function to get number of arguments
+	 * @param numArgs
+	 * @return
+	 */
+	private int getNumArgsHelper(int numArgs) {
+		if (this.getArgumentsNode() == null) {
+			return numArgs + 1;
+		}
+		else {
+			return this.getNumArgsHelper(numArgs + 1);
+		}
+	}
+	
+	
 
 }

@@ -12,6 +12,7 @@ import back_end.Visitor;
 public class ParametersNode extends ExpressionNode {
 
 	protected String identifier;
+	protected ParametersNode paramChild;
 
 	public ParametersNode(TypeNode type, String identifier) {
 		super(type);
@@ -22,10 +23,11 @@ public class ParametersNode extends ExpressionNode {
 
 	// deepest node in this chain is the first parameter in the list
 	public ParametersNode(TypeNode type, String identifier,
-			ParametersNode child) {
+			ParametersNode paramChild) {
 		super(type);
-		this.addChild(child);
+		this.addChild(paramChild);
 		this.identifier = identifier;
+		this.paramChild = paramChild;
 		ParametersNode.LOGGER
 				.fine("Constructing ParametersNode with multiple params");
 	}
@@ -51,5 +53,31 @@ public class ParametersNode extends ExpressionNode {
 	public int visitorTest(Visitor v) {
 		v.visit(this);
 		return 12;
+	}
+	
+	public ParametersNode getParamChild() {
+		return this.paramChild;
+	}
+
+	/**
+	 * 
+	 * @return the number of parameters the node represents
+	 */
+	public int getNumParams() {
+		return getNumParamsHelper(0);
+	}
+	
+	/**
+	 * Helper function to get number of parameters
+	 * @param numParams
+	 * @return
+	 */
+	private int getNumParamsHelper(int numParams) {
+		if (this.getParamChild() == null) {
+			return numParams;
+		}
+		else {
+			return this.getParamChild().getNumParamsHelper(numParams + 1);
+		}
 	}
 }

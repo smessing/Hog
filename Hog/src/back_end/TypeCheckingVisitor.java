@@ -251,6 +251,7 @@ public class TypeCheckingVisitor implements Visitor {
 	@Override
 	public void visit(PostfixExpressionNode node) {
 
+		
 		// handle Function Calls
 		if (node.getPostfixType() == PostfixType.FUNCTION_CALL) {
 

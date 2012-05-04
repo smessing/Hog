@@ -4,12 +4,18 @@ import util.ast.node.ArgumentsNode;
 import util.ast.node.BiOpNode;
 import util.ast.node.ExceptionTypeNode;
 import util.ast.node.FunctionNode;
+import util.ast.node.ParametersNode;
+import util.ast.node.PostfixExpressionNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.DerivedTypeNode;
 import util.ast.node.DictTypeNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
+import util.ast.node.PostfixExpressionNode.PostfixType;
+import util.error.InvalidFunctionArgumentsError;
 import util.error.TypeMismatchError;
+import util.symbol_table.FunctionSymbol;
+import util.symbol_table.SymbolTable;
 
 /**
  * A convenience class for defining and manipulating internal type
@@ -416,10 +422,72 @@ public class Types {
 
 	}
 
-	public static boolean isCompatible(String functionName,
-			ArgumentsNode arguments) {
-
-		throw new UnsupportedOperationException("TODO");
+	/**
+	 * This takes a postFixExpressionNode and returns true if it is a legal function call
+	 * It will return false if the function is undeclared, if the arguments do not match the formal parameters
+	 * or if it is a method called on an unsupported type
+	 * @param postFixExpressionNode
+	 * @return
+	 */
+	public static boolean checkValidFunctionCall(PostfixExpressionNode postFixExpressionNode) {
+		
+		// get the postfix type
+		PostfixType postFixType = postFixExpressionNode.getPostfixType();
+		
+		// check if the function name exists
+		FunctionSymbol funSym = (FunctionSymbol) SymbolTable.getSymbolForIdNode(postFixExpressionNode.getNameOfFunctionOrMethod());
+		
+		// if it is a method, check if the type allows the method
+		if(postFixType == PostfixType.METHOD_NO_PARAMS || postFixType == PostfixType.METHOD_WITH_PARAMS) {
+			checkTypeHasMethod(postFixExpressionNode.getType(), postFixExpressionNode.getMethodName());
+		}
+		
+		// if it has arguments, check if they match the formal arguments
+		if(postFixExpressionNode.hasArguments()) {
+			ArgumentsNode argsNode = (ArgumentsNode) postFixExpressionNode.getArgsList();
+			
+			// throw error if not same amount of arguments
+			if(funSym.getParametersNode().getNumParams() != argsNode.getNumArguments()) {
+				throw new InvalidFunctionArgumentsError(postFixExpressionNode.getNameOfFunctionOrMethod().getIdentifier() +
+						" was called with the wrong number of arguments.");
+			}
+			
+			// throw an error if the types of the arguments don't match the types of the formal params
+			if (!argsMatchParams((ArgumentsNode) postFixExpressionNode.getArgsList(), 
+					funSym.getParametersNode()))
+				throw new InvalidFunctionArgumentsError(postFixExpressionNode.getNameOfFunctionOrMethod().getIdentifier() + 
+						" was called with an invalid argument list.");
+			
+		}
+		
+		// if it is a function call with 
+	}
+	
+	/**
+	 * Returns true of the types of the arguments match and are in the same order as the types of the parameters
+	 * 
+	 * @param args
+	 * @param params
+	 * @return
+	 */
+	
+	private static boolean argsMatchParams(ArgumentsNode args, ParametersNode params) {
+		
+		// if they have no sublists, return if they are the same type
+		if( args.getArgumentsNode() == null && params.getParamChild() == null) 
+			return isSameType(args.getType(), params.getType());
+			
+		// same number of args/params?
+		if( args.getNumArguments() != params.getNumParams() ) 
+			return false;
+		
+		// else, if they have the same type, recurse
+		if(isSameType(args.getType(), params.getType())) 
+			return argsMatchParams((ArgumentsNode) args.getArgumentsNode(), params.getParamChild());
+		
+		else 
+			return false;
+		
 	}
 
 }
