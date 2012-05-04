@@ -73,7 +73,7 @@ public class Hog {
 			ex.printStackTrace();
 		}
 
-		root.print();
+		//root.print();
 		
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
 		// generate/populate symbol tables

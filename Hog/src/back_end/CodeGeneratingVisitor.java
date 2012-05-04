@@ -256,14 +256,14 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ArgumentsNode node) {
 		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
-		
+
 		if (node.hasMoreArgs()) {
 			walk(node.getMoreArgs());
 			code.append(", ");
 		}
-		
+
 		walk(node.getArg());
-		
+
 	}
 
 	@Override
@@ -449,7 +449,9 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(IdNode node) {
-		LOGGER.finer("visit(IdNode node) called on " + node + ", emit: " + emit);
+		LOGGER
+				.finer("visit(IdNode node) called on " + node + ", emit: "
+						+ emit);
 
 		if (node.isDeclaration()) {
 			walk(node.getType());
@@ -459,7 +461,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			// we handle things appropriately.
 			declarationStatement = true;
 		}
-		
+
 		if (emit) {
 			walk(node.getType());
 			code.append("(");
@@ -626,7 +628,7 @@ public class CodeGeneratingVisitor implements Visitor {
 				walk(node.getArgsList());
 
 			code.append(")");
-			
+
 			// unset emit flag which may have been set:
 			emit = false;
 
@@ -643,7 +645,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(PrimitiveTypeNode node) {
 		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
-		
+
 		if (emit) {
 			code.append(Types.getHadoopType(node));
 		} else {
@@ -722,44 +724,36 @@ public class CodeGeneratingVisitor implements Visitor {
 		}
 
 		code.append("<"
-				+ Types.getHadoopType((PrimitiveTypeNode) node
-						.getInputKeyIdNode().getType())
+				+ Types.getHadoopType(node.getInputKeyIdNode().getType())
 				+ ", "
-				+ Types.getHadoopType((PrimitiveTypeNode) node
-						.getInputValueIdNode().getType())
-				+ ", "
-				+ Types.getHadoopType((PrimitiveTypeNode) node.getReturnKey())
-				+ ", "
-				+ Types
-						.getHadoopType((PrimitiveTypeNode) node
-								.getReturnValue()) + "> {");
+				+ Types.getHadoopType(node.getInputValueIdNode().getType())
+				+ ", " + Types.getHadoopType(node.getReturnKey()) + ", "
+				+ Types.getHadoopType(node.getReturnValue()) + "> {");
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
 			code.append("public void reduce(");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getInputKeyIdNode().getType()));
+			code
+					.append(Types.getHadoopType(node.getInputKeyIdNode()
+							.getType()));
 			code.append(" key, Iterator<");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getInputValueIdNode().getType()));
+			code.append(Types.getHadoopType(node.getInputValueIdNode()
+					.getType()));
 			code.append("> values,  OutputCollector<");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnKey()));
+			code.append(Types.getHadoopType(node.getReturnKey()));
 			code.append(", ");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnValue()));
+			code.append(Types.getHadoopType(node.getReturnValue()));
 			code.append("> output, Reporter reporter) throws IOException {");
 		} else {
 			code.append("public void map(");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getInputKeyIdNode().getType()));
+			code
+					.append(Types.getHadoopType(node.getInputKeyIdNode()
+							.getType()));
 			code.append(" key, ");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getInputValueIdNode().getType()));
+			code.append(Types.getHadoopType(node.getInputValueIdNode()
+					.getType()));
 			code.append(" value,  OutputCollector<");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnKey()));
+			code.append(Types.getHadoopType(node.getReturnKey()));
 			code.append(", ");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node
-					.getReturnValue()));
+			code.append(Types.getHadoopType(node.getReturnValue()));
 			code.append("> output, Reporter reporter) throws IOException {");
 		}
 	}
