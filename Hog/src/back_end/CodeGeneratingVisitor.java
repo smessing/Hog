@@ -209,6 +209,11 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void formatCode() {
 		int scopeCount = 0;
 		StringBuilder indentedCode = new StringBuilder();
+		// all the booleans below are strictly for pretty printing for loops
+		boolean withinForDeclaration = false;
+		boolean f = false;
+		boolean o = false;
+		int forSemicolonCount = 0;
 		for (int i = 0; i < code.length(); i++) {
 			switch (code.charAt(i)) {
 			case '{':
@@ -226,10 +231,38 @@ public class CodeGeneratingVisitor implements Visitor {
 				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
 			case ';':
-				indentedCode.append(";\n");
-				indentedCode.append(repeat(' ', 4 * scopeCount));
+				if (withinForDeclaration && forSemicolonCount < 2) {
+					indentedCode.append(';');
+					forSemicolonCount++;
+				}
+				else {
+					indentedCode.append(";\n");
+					forSemicolonCount = 0;
+					withinForDeclaration = false;
+				}
+				if (!withinForDeclaration)
+					indentedCode.append(repeat(' ', 4 * scopeCount));
+				break;
+			case 'f':
+				f = true;
+				indentedCode.append(code.charAt(i));
+				break;
+			case 'o':
+				if (f)
+					o = true;
+				indentedCode.append(code.charAt(i));
+				break;
+			case 'r':
+				if (f && o) {
+					withinForDeclaration = true;
+				}
+				indentedCode.append(code.charAt(i));
 				break;
 			default:
+				if (!withinForDeclaration) {
+					f = false;
+					o = false;
+				}
 				indentedCode.append(code.charAt(i));
 			}
 		}

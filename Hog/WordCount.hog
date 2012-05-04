@@ -54,4 +54,8 @@
     fooBar.add(i);
   }
   fooBar = reverseList(fooBar);
+  print("all done.");
+  for (int j = 0; j < 10; j++;) {
+    print("j");
+  }
 }
