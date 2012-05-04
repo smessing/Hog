@@ -159,7 +159,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	private void writeStatement() {
-		if (!line.toString().endsWith("}") && !line.toString().endsWith(";")) {
+		if (!line.toString().endsWith("}") && !line.toString().endsWith(";")
+				&& !code.toString().endsWith("}")
+				&& !code.toString().endsWith(";")) {
 			line.append(";");
 		}
 		code.append(line.toString());
@@ -181,9 +183,10 @@ public class CodeGeneratingVisitor implements Visitor {
 				break;
 			case '}':
 				scopeCount--;
-				// we're reducing scope, so need to undo the spaces previously written
-				indentedCode.delete(indentedCode.length() - 4, indentedCode
-						.length());
+				// we're reducing scope, so need to undo the spaces previously
+				// written
+				//indentedCode.delete(indentedCode.length() - 1, indentedCode
+				//		.length());
 				indentedCode.append("}\n");
 				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
@@ -198,11 +201,11 @@ public class CodeGeneratingVisitor implements Visitor {
 		code = indentedCode;
 	}
 
-	private String repeat(char c, int times) {
-		StringBuilder ret = new StringBuilder();
+	private String repeat(char toRepeat, int times) {
+		StringBuilder repeated = new StringBuilder();
 		for (int i = 0; i < times; i++)
-			ret.append(c);
-		return ret.toString();
+			repeated.append(toRepeat);
+		return repeated.toString();
 	}
 
 	@Override
@@ -436,7 +439,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getExpressionNode());
 		}
 
-		// writeStatement();
+		writeStatement();
 	}
 
 	@Override
