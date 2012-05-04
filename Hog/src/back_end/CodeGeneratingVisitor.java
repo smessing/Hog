@@ -397,6 +397,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getIncrement());
 			line.append(" ) {");
 			walk(node.getBlock());
+			writeStatement();
 			break;
 		case FOREACH:
 			line.append("for ( ");
@@ -408,12 +409,14 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getWhole());
 			line.append(" ) {");
 			walk(node.getBlock());
+			writeStatement();
 			break;
 		case WHILE:
 			line.append("while ( ");
 			walk(node.getCheck());
 			line.append(" ) {");
 			walk(node.getBlock());
+			writeStatement();
 			break;
 		}
 		writeBlockEnd();
@@ -674,6 +677,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		for (Node child : node.getChildren()) {
 			walk(child);
 		}
+		writeStatement();
 	}
 
 	@Override
