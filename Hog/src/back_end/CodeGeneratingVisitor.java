@@ -52,6 +52,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	public String getCode() {
+		formatCode();
 		return code.toString();
 	}
 
@@ -165,7 +166,38 @@ public class CodeGeneratingVisitor implements Visitor {
 		// reset line
 		line = new StringBuilder();
 	}
+	
+	private void formatCode() {
+		int scopeCount = 0;
+		StringBuilder indentedCode = new StringBuilder();
+		for (int i = 0; i < code.length(); i++) {
+			switch(code.charAt(i)) {
+			case '{':
+				scopeCount++;
+				indentedCode.append("\n");
+				indentedCode.append(repeat(' ', scopeCount));
+				break;
+			case '}':
+				scopeCount--;
+				indentedCode.append("\n");
+				indentedCode.append(repeat(' ', scopeCount));
+				break;
+			case ';':
+				indentedCode.append(";\n");
+				indentedCode.append(repeat(' ', scopeCount));
+				break;
+			default:
+				indentedCode.append(code.charAt(i));
+			}
+		}
+	}
 
+	private String repeat(char c, int times) {
+		   StringBuilder ret = new StringBuilder();
+		   for(int i = 0;i < times; i++) ret.append(c);
+		   return ret.toString();
+		}
+	
 	@Override
 	public void visit(ArgumentsNode node) {
 		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
