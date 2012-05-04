@@ -46,6 +46,10 @@ public class IdNode extends ExpressionNode {
 	public void setDeclaration() {
 		this.isDeclaration = true;
 	}
+	
+	public boolean isDeclaration() {
+		return isDeclaration;
+	}
 
 	@Override
 	public String getName() {
@@ -65,9 +69,4 @@ public class IdNode extends ExpressionNode {
 		return 6;
 	}
 
-	@Override
-	public String toSource() {
-		return (isDeclaration) ? this.getType().toSource() + " "
-				+ this.getIdentifier() : this.getIdentifier();
-	}
 }

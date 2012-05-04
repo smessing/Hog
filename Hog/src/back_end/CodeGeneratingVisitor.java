@@ -395,7 +395,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(IdNode node) {
 		LOGGER.finer("visit(IdNode node) called on " + node);
-		code.append(node.toSource());
+		code.append((node.isDeclaration()) ? node.getType().toSource() + " "
+				+ node.getIdentifier() : node.getIdentifier());
 
 	}
 
