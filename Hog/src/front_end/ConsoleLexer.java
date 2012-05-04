@@ -72,8 +72,12 @@ public class ConsoleLexer {
 	    System.out.println("\n\n\n");
 	    SymbolTable.print();
 	    
+	    root.print();
+	    
 	    TypeCheckingVisitor typeCheckVisitor = new TypeCheckingVisitor(ast);
 	    typeCheckVisitor.walk();
+	    
+	    root.print();
 	    
 	}
 }

@@ -96,6 +96,8 @@ public class TypeCheckingVisitor implements Visitor {
 		LOGGER.finer("Type Check visit(ArgumentsNode node) called on "
 				+ node.getName());
 		node.getExpressionNode().accept(this);
+		// set the type to the type of its child expressionNode
+		node.setType(node.getExpressionNode().getType());
 		if (node.getArgumentsNode() != null) {
 			node.getArgumentsNode().accept(this);
 		}

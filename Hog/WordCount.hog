@@ -51,9 +51,9 @@
   #} catch (ArrayOutOfBoundsException exception) {
   #  print (exception);
   #}
-  for (int i = 0; i < 4; i++;) {
-    print(i);
-  }
+  #for (int i = 0; i < 4; i++;) {
+    #print(i);
+  #}
 }
 
 @Reduce (text word, iter<int> values) -> (text, int) {
@@ -61,7 +61,7 @@
   while ( values.hasNext() ) {
     count = count + values.next();
   }
-  emit(count, word);
+  emit(word, count);
 }
 
 @Main {

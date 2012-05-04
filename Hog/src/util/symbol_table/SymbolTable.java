@@ -373,9 +373,13 @@ public class SymbolTable {
 		reserveWord("remove");
 		reserveWord("removeAll");
 		reserveWord("mapReduce");
-		reserveWord("print");
 		
 		/* add built-in list methods */
+		
+		ArrayList<TypeNode> printArguments = new ArrayList<TypeNode>();
+		printArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
+		
+		reserveFunction("print", new PrimitiveTypeNode(Types.Primitive.VOID), printArguments);
 		
 		// add()
 		ArrayList<TypeNode> listAddArguments = new ArrayList<TypeNode>();
@@ -484,7 +488,7 @@ public class SymbolTable {
 		// tokenize()
 		ArrayList<TypeNode> tokenizeArguments = new ArrayList<TypeNode>();
 		tokenizeArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
-		reserveFunction("text.tokenize", new PrimitiveTypeNode(Types.Primitive.TEXT), tokenizeArguments);
+		reserveFunction("text.tokenize", new DerivedTypeNode(Types.Derived.LIST, new PrimitiveTypeNode(Types.Primitive.TEXT)), tokenizeArguments);
 		
 		/**
 		 * DICT NOT IMPLEMENTED YET

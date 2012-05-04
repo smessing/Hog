@@ -80,7 +80,7 @@ public class ArgumentsNode extends ExpressionNode {
 			return numArgs + 1;
 		}
 		else {
-			return this.getNumArgsHelper(numArgs + 1);
+			return ((ArgumentsNode) this.argNode).getNumArgsHelper(numArgs + 1);
 		}
 	}
 	
