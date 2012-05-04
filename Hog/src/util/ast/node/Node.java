@@ -11,7 +11,7 @@ import back_end.Visitor;
  * A node within an AST. This is an abstract class that specifies behavior for
  * all node classes in Hog.
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public abstract class Node implements Comparable<Node> {

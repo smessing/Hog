@@ -16,14 +16,24 @@ import java.util.logging.Logger;
  * the translated Hog program.
  * 
  * 
- * @author kurry, sam
+ * @author Samuel Messing
+ * @author Kurry Tran
  * 
  */
 public class CodeGeneratingVisitor implements Visitor {
 
 	protected final static Logger LOGGER = Logger
 			.getLogger(CodeGeneratingVisitor.class.getName());
+	/**
+	 * The format of the input files to the <code>map</code> class. Currently
+	 * Hog only supports text formats, so this doesn't need to be set by the
+	 * constructor.
+	 */
 	protected final String inputFormatClass = "TextInputFormat.class";
+	/**
+	 * The format of the output files from the <code>reduce</code> class.
+	 * See {@link #inputFormatClass inputFormatClass} for more details.
+	 */
 	protected final String outputFormatClass = "TextInputFormat.class";
 
 	protected AbstractSyntaxTree tree;
@@ -35,8 +45,10 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected String outputFile = "example.txt";
 
 	/**
-	 * 
-	 * @param root
+	 * Construct a CodeGeneratingVisitor, but don't specify input file or output file.
+	 * <p>
+	 * Mainly used for testing/development purposes.
+	 * @param root the root of the AST representing the Hog source program.
 	 */
 	public CodeGeneratingVisitor(AbstractSyntaxTree root) {
 
@@ -47,19 +59,20 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	/**
-	 * <h1>CodeGeneratingVisitor</h1><br/>
-	 * 
-	 * <code>public {@link CodeGeneratingVisitor CodeGeneratingVisitor}({@link AbstractSyntaxTree AbstractSyntaxTree} root, {@link String String} inputFile, {@link String String} outputFile)</code><br/><br/>
-	 * 
 	 * Construct a CodeGeneratingVisitor, specifying the input file name and the
 	 * output file name for the corresponding Hadoop job.
+	 * 
+	 * <pre>
+	 * public {@link CodeGeneratingVisitor CodeGeneratingVisitor}({@link AbstractSyntaxTree AbstractSyntaxTree} root, {@link String String} inputFile, {@link String String} outputFile)
+	 * </pre>
 	 * 
 	 * @param root
 	 *            The root node of the Hog source program's AST.
 	 * @param inputFile
 	 *            The inputFile for the <code>map</code> class to read from.
 	 * @param outputFile
-	 *            The outputFile for the <code>reduce</code> class to write to.
+	 *            The outputFile for the <code>reduce</code>
+	 * class to write to.
 	 */
 	public CodeGeneratingVisitor(AbstractSyntaxTree root, String inputFile,
 			String outputFile) {
@@ -70,6 +83,11 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	}
 
+	/**
+	 * Return the Java source code translated from the AST.
+	 * 
+	 * @return a string representation (formatted) of the java source code.
+	 */
 	public String getCode() {
 		formatCode();
 		return code.toString();
@@ -315,17 +333,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
-		// line.append(node.toSource());
-		Types.Primitive primType = ((PrimitiveTypeNode) node.getType())
-				.getType();
-		switch (primType) {
-		case INT:
-		case BOOL:
-		case REAL:
-		case TEXT:
-			line.append(node.getValue());
-		}
-
+		line.append(node.getValue());
 	}
 
 	@Override
@@ -343,8 +351,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
-		// indentation.delete(indentation.length()-2, indentation.length());
-		// line.append(indentation.toString());
 		line.append("} else if ( ");
 		line.append(node.getCondition().toSource());
 		line.append(" ) {");
