@@ -633,27 +633,6 @@ public class CodeGeneratingVisitor implements Visitor {
 			// unset emit flag which may have been set:
 			emit = false;
 
-			/*
-			 * IdNode functionName = node.getFunctionName(); if
-			 * (node.hasArguments()) { ExpressionNode functionArgsList =
-			 * node.getArgsList(); if (functionArgsList.hasChildren()) {
-			 * Iterator<Node> l = functionArgsList.getChildren() .iterator();
-			 * String args = ""; String typeDeclaration = ""; while
-			 * (l.hasNext()) { Node n = l.next(); if (n instanceof ConstantNode)
-			 * { ConstantNode cn = (ConstantNode) n; args = args + cn.getValue()
-			 * + ","; typeDeclaration = "new IntWritable"; } else if (n
-			 * instanceof IdNode) { IdNode idNode = (IdNode) n; args = args +
-			 * idNode.getIdentifier() + ","; typeDeclaration = ""; } } if
-			 * (args.charAt(args.length() - 1) == ',') { args =
-			 * args.substring(0, args.length() - 1); } if
-			 * (functionName.toSource().equalsIgnoreCase("emit")) { String[]
-			 * output = args.split(","); // fix this permanently later if
-			 * (output[1].contains("1")) { code.append("output.collect" + "(" +
-			 * output[0] + "," + typeDeclaration + "(" + output[1] + ")" + ")");
-			 * } else code.append("output.collect" + "(" + args + ")"); } else
-			 * code.append(functionName.toSource() + "(" + args + ")"); } } else
-			 * walk(functionIdNode); //code.append("()"); break;/*
-			 */
 		}
 	}
 
