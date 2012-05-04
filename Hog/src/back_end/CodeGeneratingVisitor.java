@@ -63,7 +63,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	 * output file name for the corresponding Hadoop job.
 	 * 
 	 * <pre>
-	 * public {@link CodeGeneratingVisitor CodeGeneratingVisitor}({@link AbstractSyntaxTree AbstractSyntaxTree} root, {@link String String} inputFile, {@link String String} outputFile)
+	 * public {@link CodeGeneratingVisitor}({@link AbstractSyntaxTree} root, {@link String} inputFile, {@link String} outputFile)
 	 * </pre>
 	 * 
 	 * @param root
@@ -352,7 +352,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
 		line.append("} else if ( ");
-		line.append(node.getCondition().toSource());
+		walk(node.getCondition());
 		line.append(" ) {");
 		walk(node.getIfCondTrue());
 		if (node.getIfCondFalse() != null) {
@@ -416,7 +416,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
 		line.append("if ( ");
-		line.append(node.getCondition().toSource());
+		walk(node.getCondition());
 		line.append(" ) {");
 		walk(node.getIfCondTrue());
 		// check that buffer cleared
