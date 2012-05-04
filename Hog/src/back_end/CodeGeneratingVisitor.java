@@ -52,7 +52,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	public String getCode() {
-		//formatCode();
+		formatCode();
 		return code.toString();
 	}
 
@@ -663,6 +663,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(StatementListNode node) called on " + node);
 		for (Node child : node.getChildren()) {
 			walk(child);
+			writeStatement();
 		}
 
 	}
