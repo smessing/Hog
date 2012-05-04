@@ -42,6 +42,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected String outputValueClass;
 	protected String inputFile = "example.txt";
 	protected String outputFile = "example.txt";
+	protected boolean declarationStatement = false;
 
 	/**
 	 * Construct a CodeGeneratingVisitor, but don't specify input file or output
@@ -295,6 +296,9 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		}
 		walk(node.getRightNode());
+		
+		// unset declaration flag that may have been set (when node.getOpType == ASSIGN)
+		declarationStatement = false;
 
 	}
 
@@ -315,6 +319,10 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(DerivedTypeNode node) called on " + node);
 		switch(node.getLocalType()) {
 		case LIST:
+			if (declarationStatement)
+				code.append("new List<");
+			else
+				code.append("List<");
 			break;
 		case ITER:
 			break;
@@ -325,6 +333,10 @@ public class CodeGeneratingVisitor implements Visitor {
 		case SET:
 			break;
 		}
+		
+		declarationStatement = false;
+		
+		walk(node.getInnerTypeNode());
 
 	}
 
@@ -398,6 +410,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		if (node.isDeclaration()) {
 			walk(node.getType());
 			code.append(" ");
+			// set a flag so when writting the right side of an assignment statement
+			// we handle things appropriately.
+			declarationStatement = true;
 		}
 		code.append(node.getIdentifier());
 
