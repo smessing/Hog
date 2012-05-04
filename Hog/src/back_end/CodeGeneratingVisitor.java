@@ -720,13 +720,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(RelationalExpressionNode node) {
 		LOGGER.finer("visit(RelationalNode node) called on " + node);
-
+		throw new UnsupportedOperationException("I should never see a relational expression node!");
 	}
 
 	@Override
 	public void visit(ReservedWordTypeNode node) {
 		LOGGER.finer("visit(ReservedWordTypeNode node) called on " + node);
-
+		throw new UnsupportedOperationException("I shouldn't be seeing a ReservedWordTypeNode!");
 	}
 
 	@Override
@@ -824,6 +824,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(SelectionStatementNode node) {
 		LOGGER.finer("visit(SelectionStatementNode node) called on " + node);
+		throw new UnsupportedOperationException("I should never see a SelectionStatementNode!");
 
 	}
 
@@ -849,6 +850,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(SwitchStatementNode node) {
 		LOGGER.finer("visit(SwitchStatementNode node) called on " + node);
+		throw new UnsupportedOperationException("Switch statements are not supported!");
 	}
 
 	@Override
