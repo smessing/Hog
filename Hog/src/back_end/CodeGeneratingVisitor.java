@@ -337,6 +337,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		declarationStatement = false;
 		
 		walk(node.getInnerTypeNode());
+		
+		// close inner types
+		code.append(">");
 
 	}
 
