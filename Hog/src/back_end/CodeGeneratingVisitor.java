@@ -756,6 +756,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append(Types.getHadoopType(node.getReturnValue()));
 			code.append("> output, Reporter reporter) throws IOException {");
 		}
+
 	}
 
 	@Override

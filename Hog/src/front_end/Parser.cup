@@ -355,9 +355,9 @@ Catch::=
 CatchHeader::=
    CATCH L_PAREN EXCEPTION:ex ID:i R_PAREN
    {:
-      IdNode catch = new IdNode(ex, i);
-      catch.setDeclaration();
-      RESULT = catch;
+      IdNode catchNode = new IdNode(ex, i);
+      catchNode.setDeclaration();
+      RESULT = catchNode;
       CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader");
    :}
   ;
