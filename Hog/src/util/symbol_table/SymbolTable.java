@@ -2,6 +2,7 @@ package util.symbol_table;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -269,20 +270,59 @@ public class SymbolTable {
     	else{
     		return nodeTable.get(n.getIdentifier());
     	}
-    } 
+    }
+    
+    /**
+     * This is called to get the symbol of a post fix expression
+     * @param p
+     * @return
+     */
+    public static FunctionSymbol getSymbolForPostFixExpressionNode(PostfixExpressionNode p) {
+    	// if it is a regular function call, 
+    	if(p.isFunction())
+    		return (FunctionSymbol) getSymbolForIdNode(p.getFunctionName());
+    	// if it is a method call
+    	else {
+    		return SymbolTable.getSymbolForMethodCall(p);
+    	}
+    }
+    
+    /**
+     * Gets a function symbol for a method call. If the node is not a method call, 
+     * throws an exception
+     * @param p
+     * @return
+     */
+    public static FunctionSymbol getSymbolForMethodCall(PostfixExpressionNode p) {
+    	if (!p.isMethod())
+    		throw new RuntimeException("PostFixExpressionNode must me a method call");
+    	
+    	String typeName = Types.getLowercaseTypeName(p.getObjectName().getType());
+    	String methodToLookup = typeName + "." + p.getMethodName().getIdentifier();
+    	
+    	return (FunctionSymbol) SymbolTable.getRootSymbolTable().get(methodToLookup);
+    	
+    	
+    }
     
     public void reserveWord(String word){ 
     	ReservedWordTypeNode typeNode = new ReservedWordTypeNode(util.type.Types.Flags.RESERVED_WORD);
 		this.table.put(word, new VariableSymbol(typeNode));  
 	}
     
-    public void reserveFunction(String word, TypeNode returnType, List<TypeNode> argumentList){ 
-		this.table.put(word, new FunctionSymbol(returnType, argumentList));  
+    public void reserveFunction(String word, TypeNode returnType, ParametersNode paramNode){ 
+		this.table.put(word, new FunctionSymbol(returnType, paramNode));  
+		
 	}
+    
+    public void reserveFunction(String word, TypeNode returnType, List<TypeNode> paramList) {
+    	this.table.put(word,  new FunctionSymbol(returnType, paramList));
+    }
     
     public void reserveFunction(String word, TypeNode returnType){ 
 		this.table.put(word, new FunctionSymbol(returnType));  
 	}
+    
 	
     
     public void fillReservedTable(){
@@ -333,9 +373,13 @@ public class SymbolTable {
 		reserveWord("remove");
 		reserveWord("removeAll");
 		reserveWord("mapReduce");
-		reserveWord("print");
 		
 		/* add built-in list methods */
+		
+		ArrayList<TypeNode> printArguments = new ArrayList<TypeNode>();
+		printArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
+		
+		reserveFunction("print", new PrimitiveTypeNode(Types.Primitive.VOID), printArguments);
 		
 		// add()
 		ArrayList<TypeNode> listAddArguments = new ArrayList<TypeNode>();
@@ -444,7 +488,7 @@ public class SymbolTable {
 		// tokenize()
 		ArrayList<TypeNode> tokenizeArguments = new ArrayList<TypeNode>();
 		tokenizeArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
-		reserveFunction("text.tokenize", new PrimitiveTypeNode(Types.Primitive.TEXT), tokenizeArguments);
+		reserveFunction("text.tokenize", new DerivedTypeNode(Types.Derived.LIST, new PrimitiveTypeNode(Types.Primitive.TEXT)), tokenizeArguments);
 		
 		/**
 		 * DICT NOT IMPLEMENTED YET
@@ -466,5 +510,7 @@ public class SymbolTable {
 		reserveFunction("dict.reverseDict", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
 */
     }
+
+	
     
 }

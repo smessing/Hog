@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.logging.*;
 
 import back_end.SymbolTableVisitor;
+import back_end.TypeCheckingVisitor;
 
 /**
  * A console front-end to the Lexer class for dynamically testing the Lexer.
@@ -70,5 +71,13 @@ public class ConsoleLexer {
 	    SymbolTable.printSymbolTable();
 	    System.out.println("\n\n\n");
 	    SymbolTable.print();
+	    
+	    root.print();
+	    
+	    TypeCheckingVisitor typeCheckVisitor = new TypeCheckingVisitor(ast);
+	    typeCheckVisitor.walk();
+	    
+	    root.print();
+	    
 	}
 }

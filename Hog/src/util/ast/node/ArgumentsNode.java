@@ -11,6 +11,9 @@ import back_end.Visitor;
  * 
  */
 public class ArgumentsNode extends ExpressionNode {
+	
+	protected ExpressionNode expNode;
+	protected ExpressionNode argNode;
 
 	protected ExpressionNode argList;
 	protected ExpressionNode arg;
@@ -22,6 +25,8 @@ public class ArgumentsNode extends ExpressionNode {
 	 * @param exp
 	 *            - a (not empty) expression representing one actual parameter
 	 *            to a function.
+	 *            
+	 *  Deepest node in the tree is the first argument
 	 */
 	public ArgumentsNode(ExpressionNode argList, ExpressionNode arg) {
 		super();
@@ -33,6 +38,8 @@ public class ArgumentsNode extends ExpressionNode {
 		this.argList = argList;
 		this.addChild(arg);
 		this.arg = arg;
+		this.expNode = arg;
+		this.argNode = argList;
 		ArgumentsNode.LOGGER.fine("Constructing ArgumentsNode");
 	}
 
@@ -54,6 +61,14 @@ public class ArgumentsNode extends ExpressionNode {
 	public void accept(Visitor v) {
 		v.visit(this);
 	}
+	
+	public ExpressionNode getArgumentsNode() {
+		return this.argNode;
+	}
+	
+	public ExpressionNode getExpressionNode() {
+		return this.expNode;
+	}
 
 	@Override
 	public String getName() {
@@ -65,5 +80,29 @@ public class ArgumentsNode extends ExpressionNode {
 		// TODO Auto-generated method stub
 		return 41;
 	}
+	
+	/**
+	 * 
+	 * @return the number of arguments the node represents
+	 */
+	public int getNumArguments() {
+		return getNumArgsHelper(0);
+	}
+	
+	/**
+	 * Helper function to get number of arguments
+	 * @param numArgs
+	 * @return
+	 */
+	private int getNumArgsHelper(int numArgs) {
+		if (this.getArgumentsNode() == null) {
+			return numArgs + 1;
+		}
+		else {
+			return ((ArgumentsNode) this.argNode).getNumArgsHelper(numArgs + 1);
+		}
+	}
+	
+	
 
 }

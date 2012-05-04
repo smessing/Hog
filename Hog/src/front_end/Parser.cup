@@ -656,7 +656,7 @@ PostfixExpression::=
 ArgumentExpressionList::=
     Expression:e
     {:
-      RESULT = e;
+      RESULT = new ArgumentsNode(null,e);
       CUP$Parser$actions.LOGGER.info("Expression -> ArgumentExpressionList");
     :}
   |

@@ -17,7 +17,7 @@ import back_end.Visitor;
 public class PostfixExpressionNode extends ExpressionNode {
 	
 	public static enum PostfixType {
-		ARRAY_INDEX, METHOD_NO_PARAMS, METHOD_WITH_PARAMS, FUNCTION_CALL
+		METHOD_NO_PARAMS, METHOD_WITH_PARAMS, FUNCTION_CALL
 	}
 	/** postfixType field which is of type PostfixType */
 	protected PostfixType postfixType;
@@ -42,6 +42,8 @@ public class PostfixExpressionNode extends ExpressionNode {
 		super();
 		postfixType = PostfixType.METHOD_NO_PARAMS;
 		this.objectOfMethod = objectOfMethod;
+		this.objectName = objectOfMethod; // sorry for this disgusting fix to a ridiculous problem
+		this.methodName = methodName;
 		this.addChild(objectOfMethod);
 		this.methodName = methodName;
 		this.addChild(methodName);
@@ -84,6 +86,7 @@ public class PostfixExpressionNode extends ExpressionNode {
 		super();
 		this.postfixType = postFixType;
 		this.objectName = objectName;
+		this.objectOfMethod = objectName; // sorry for this disgusting fix to a ridiculous problem
 		this.methodName = methodName;
 		this.addChild(objectName);
 		this.addChild(methodName);
@@ -132,6 +135,37 @@ public class PostfixExpressionNode extends ExpressionNode {
 	
 	public IdNode getObjectOfMethod(){
 		return this.objectOfMethod;
+	}
+	
+	/**
+	 * returns true if this is a function call (as opposed to a method call)
+	 * @return
+	 */
+	public boolean isFunction() {
+		return (this.postfixType == PostfixType.FUNCTION_CALL);
+	}
+	
+	/**
+	 * returns true if this is a method call with or without params
+	 * as opposed to a function call
+	 * @return
+	 */
+	public boolean isMethod() {
+		return (this.postfixType == PostfixType.METHOD_NO_PARAMS  || 
+				this.postfixType == PostfixType.METHOD_WITH_PARAMS);
+	}
+	/**
+	 * Regardless of whether this is a function call or a method call, this
+	 * will return the name of the function.
+	 * eg. myList.add() would return the IdNode for add
+	 *     emit(1, 2) would return the IdNode for emit
+	 * @return
+	 */
+	public IdNode getNameOfFunctionOrMethod() {
+		if (this.isFunction())
+			return this.getFunctionName();
+		else
+			return this.getMethodName();
 	}
 	
 	@Override
