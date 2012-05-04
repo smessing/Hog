@@ -40,5 +40,7 @@
 }
 
 @Main {
+  int b;
+  #b = foo(1, 2, 3, 4);
   mapReduce();
 }
