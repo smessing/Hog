@@ -19,6 +19,14 @@
     return n * factorial(n-1);
     }
   }
+  
+  list<int> reverseList(list<int> oldList) {
+    list<int> newList;
+    for (int i = oldList.size() - 1; i >= 0; i--;) {
+      newList.add(oldList.get(i));
+    }
+    return newList;
+  }
 }
 
 
@@ -31,8 +39,8 @@
 
 }
 
-@Reduce (text word, iter<int> values) -> (text, real) {
-  real count = 0;
+@Reduce (text word, iter<int> values) -> (text, int) {
+  int count = 0;
   while ( values.hasNext() ) {
     count = count + values.next();
   }
@@ -41,4 +49,9 @@
 
 @Main {
   mapReduce();
+  list<int> fooBar;
+  for (int i = 0; i < 10; i++;) {
+    fooBar.add(i);
+  }
+  fooBar = reverseList(fooBar);
 }
