@@ -185,8 +185,7 @@ public class CodeGeneratingVisitor implements Visitor {
 				scopeCount--;
 				// we're reducing scope, so need to undo the spaces previously
 				// written
-				//indentedCode.delete(indentedCode.length() - 1, indentedCode
-				//		.length());
+				indentedCode.delete(indentedCode.length() - 4, indentedCode.length());
 				indentedCode.append("}\n");
 				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
