@@ -459,6 +459,11 @@ public class CodeGeneratingVisitor implements Visitor {
 			// we handle things appropriately.
 			declarationStatement = true;
 		}
+		
+		if (emit) {
+			walk(node.getType());
+			code.append("(");
+		}
 
 		code.append(node.getIdentifier());
 
@@ -468,6 +473,8 @@ public class CodeGeneratingVisitor implements Visitor {
 			rValue = true;
 			walk(node.getType());
 			rValue = false;
+		} else if (emit) {
+			code.append(")");
 		}
 
 	}
@@ -660,7 +667,15 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(PrimitiveTypeNode node) {
 		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
-		code.append(node.toSource());
+		
+		// YOU ARE HERE
+		
+		if (emit) {
+			code.append(Types.getHadoopType(node));
+		} else {
+			code.append(Types.getJavaType(node));
+		}
+		
 
 	}
 
