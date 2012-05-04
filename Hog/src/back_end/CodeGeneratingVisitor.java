@@ -257,7 +257,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
-		line.append(node.toSource());
+		//line.append(node.toSource());
 		Types.Primitive primType = ((PrimitiveTypeNode) node.getType())
 				.getType();
 		switch (primType) {
