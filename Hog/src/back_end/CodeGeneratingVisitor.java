@@ -392,9 +392,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
-		code.append("} else if ( ");
+		code.append("} else if (");
 		walk(node.getCondition());
-		code.append(" ) {");
+		code.append(") {");
 		walk(node.getIfCondTrue());
 		if (node.getIfCondFalse() != null) {
 			walk(node.getIfCondFalse());
@@ -475,9 +475,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-		code.append("if ( ");
+		code.append("if (");
 		walk(node.getCondition());
-		code.append(" ) {");
+		code.append(") {");
 		walk(node.getIfCondTrue());
 		// check that buffer cleared
 		if (node.getCheckNext() != null) {
@@ -495,32 +495,32 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		switch (node.getIterationType()) {
 		case FOR:
-			code.append("for ( ");
+			code.append("for (");
 			walk(node.getInitial());
 			code.append("; ");
 			walk(node.getCheck());
 			code.append("; ");
 			walk(node.getIncrement());
-			code.append(" ) {");
+			code.append(") {");
 			walk(node.getBlock());
 			writeStatement();
 			break;
 		case FOREACH:
-			code.append("for ( ");
+			code.append("for (");
 			code.append(Types.getHadoopType((PrimitiveTypeNode) node.getPart()
 					.getType()));
 			code.append(" ");
 			walk(node.getPart());
 			code.append(" : ");
 			walk(node.getWhole());
-			code.append(" ) {");
+			code.append(") {");
 			walk(node.getBlock());
 			writeStatement();
 			break;
 		case WHILE:
-			code.append("while ( ");
+			code.append("while (");
 			walk(node.getCheck());
-			code.append(" ) {");
+			code.append(") {");
 			walk(node.getBlock());
 			writeStatement();
 			break;
