@@ -14,6 +14,7 @@ import util.type.Types;
 %column
 %unicode
 %class Lexer
+%public
 
 %{
 
@@ -45,7 +46,7 @@ digit           = [0-9]
 alphanumeric    = {letter}|{digit}
 other_id_char   = [_]
 text_literal_old    = [a-zA-Z_ ]?\"(\\.|[^\\'])*\" 
-text_literal       = \".*\"|\'.*\'
+text_literal       = \".*\"
 identifier      = {letter}({alphanumeric}|{other_id_char})*
 integer         = {digit}*
 real            = {integer}\.{integer}

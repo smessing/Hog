@@ -38,7 +38,8 @@ import util.ast.node.ProgramNode;
  * File System). The class also handles downloading the output to the file
  * <code>war_and_peace_counts.txt</code>.
  * 
- * @author sam
+ * @author Samuel Messing
+ * @author Kurry Tran
  * 
  */
 public class Hog {
@@ -65,7 +66,7 @@ public class Hog {
 		try {
 			root = (ProgramNode) parser.parse().value;
 		} catch (FileNotFoundException e) {
-			LOGGER.severe("Hog program " + source + "not found!");
+			LOGGER.severe("Hog program " + source + " not found!");
 			System.exit(1);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -74,8 +75,10 @@ public class Hog {
 		root.print();
 		
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
+		
 		ErrorCheckingVisitor errorChecker = new ErrorCheckingVisitor(tree);
 		errorChecker.walk();
+	}
 		//CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
 		//codeGenerator.walk();
 		
@@ -85,11 +88,9 @@ public class Hog {
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(codeGenerator.getCode());
 			out.close();
-			System.out.println(codeGenerator.getCode());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-/**/
 	}
 
 	/**

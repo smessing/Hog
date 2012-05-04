@@ -1,7 +1,15 @@
 \contentsline {chapter}{\numberline {1}Introduction}{5}
+\contentsline {section}{\numberline {1.1}Taming the Elephant}{5}
+\contentsline {subsection}{\numberline {1.1.1}Data-Oriented}{5}
+\contentsline {subsection}{\numberline {1.1.2}Simple}{6}
 \contentsline {chapter}{\numberline {2}Tutorial}{7}
 \contentsline {chapter}{\numberline {3}Language Reference Manual}{9}
 \contentsline {chapter}{\numberline {4}Project Plan}{11}
+\contentsline {section}{\numberline {4.1}Development Process}{11}
+\contentsline {section}{\numberline {4.2}Roles and Responsibilities}{11}
+\contentsline {section}{\numberline {4.3}Hog's Developer Style Sheet}{11}
+\contentsline {section}{\numberline {4.4}Project Timeline}{11}
+\contentsline {section}{\numberline {4.5}Project Log}{11}
 \contentsline {chapter}{\numberline {5}Language Evolution}{13}
 \contentsline {chapter}{\numberline {6}Translator Architecture}{15}
 \contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{17}
@@ -15,4 +23,4 @@
 \contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{21}
 \contentsline {section}{\numberline {9.2}Advice for Other Teams}{21}
 \contentsline {section}{\numberline {9.3}Suggestions for Instructor}{21}
-\contentsline {chapter}{\numberline {A}Code Listing}{25}
+\contentsline {chapter}{\numberline {A}Code Listing}{23}

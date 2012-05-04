@@ -41,7 +41,8 @@ public class ConstantNode extends ExpressionNode {
 
 	@Override
 	public String getName() {
-		return id + "-ConstantNode<" + this.getTypeName() + "> newscope: " + isNewScope();
+		return id + "-ConstantNode<" + this.getTypeName() + "> newscope: "
+				+ isNewScope() + " value: " + value;
 	}
 
 	public String getTypeShortName() {
@@ -67,15 +68,14 @@ public class ConstantNode extends ExpressionNode {
 		case INT:
 		case BOOL:
 		case REAL:
-			return getValue();
 		case TEXT:
-			return '"' + getValue() + '"';
+			return getValue();
 		}
 
 		throw new UnsupportedOperationException("Primitive type: " + primType
 				+ " not yet supported.");
 	}
-	
+
 	public String toDeclarationSource() {
 		Types.Primitive primType = ((PrimitiveTypeNode) type).getType();
 		switch (primType) {

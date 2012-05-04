@@ -90,6 +90,7 @@ public class SymbolTableVisitor implements Visitor {
 	public void visit(BiOpNode node) {
 		LOGGER.finer("visit(BiOpNode node) called on " + node.getName());
 		openScope(node);
+		LOGGER.finer("The children of this BiNoNode are: " + node.getChildrenString());
 		visitAllChildrenStandard(node);
 		closeScope(node);
 	}
@@ -222,6 +223,9 @@ public class SymbolTableVisitor implements Visitor {
 		openScope(node);
 		// if it has a type, it is a declaration. Put it in the symbol table
 		if(node.getType() != null) {
+			
+			LOGGER.finer("IdNode has a non null type which is: " + node.getTypeName());
+			
 			try {
 				SymbolTable.put(node.getIdentifier(), new VariableSymbol(node.getType()));
 			} catch (VariableRedefinedException e) {
@@ -234,20 +238,16 @@ public class SymbolTableVisitor implements Visitor {
 		//else, it does not have a type, so we ensure it is already declared
 		else {
 			Symbol nodeSymbol = SymbolTable.getSymbolForIdNode(node);
-			if (nodeSymbol == null) {
-				try {
-					throw new VariableUndeclaredException(node.getIdentifier() + " was used before it was declared.");
-				} catch (VariableUndeclaredException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					System.exit(1);
-				}
+			// if there is no nodeSymbol, this is being used before delcartion so throw an error
+			if( nodeSymbol == null ) {
+				LOGGER.finer("IdNode was used before it was declared. Throw an error.");
+				throw new VariableUndeclaredException("Use of " + node.getIdentifier() + " undefined.");
 			}
 			
+			LOGGER.finer("IdNode has a null type. Symbol is  " + nodeSymbol.toString());
 			// it has been declared. Now we decorate it with its type
-			if(node.getType() == null) {
-			}
 			node.setType(nodeSymbol.getType());
+			LOGGER.finer("We have set the IdNode type to" + nodeSymbol.getType().getName());
 		}
 		
 		closeScope(node);
@@ -256,10 +256,16 @@ public class SymbolTableVisitor implements Visitor {
 	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatement node) called on " + node.getName());
+
+		// first visit the condition
+		if(node.getCondition() != null)
+			node.getCondition().accept(this);
+		
+		// open scope
 		openScope(node);
 		
-		// first, visit the statements if condition is true
 		if(node.getIfCondTrue() != null) {
+			LOGGER.finer("we are in the getIfCondTrue");
 			node.getIfCondTrue().accept(this);
 		}
 		
@@ -267,6 +273,7 @@ public class SymbolTableVisitor implements Visitor {
 		closeScope(node);
 		
 		if(node.getCheckNext() != null) {
+			
 			node.getCheckNext().accept(this);
 		}
 		

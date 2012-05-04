@@ -9,19 +9,21 @@ import util.ast.node.TypeNode;
 
 public class FunctionSymbol extends Symbol {
 	
-	List<TypeNode> argumentList;
+	ParametersNode parametersNode;
 	
 	/**
 	 * Constructor for a function with no parameters
 	 * 
+	 * 
 	 * @param returnType
 	 */
-	public FunctionSymbol(TypeNode returnType){		
-		this(returnType, new ArrayList<TypeNode>());
+	public FunctionSymbol(TypeNode returnType){	
+		super(returnType);
 	}
 	
 	/**
-	 * Constructor takes a parameters node and flattens it into a list of TypeNodes
+	 * Constructor takes a returnType and a parametersNode
+	 * 
 	 * @param returnType
 	 * @param parameterNode
 	 */
@@ -29,78 +31,91 @@ public class FunctionSymbol extends Symbol {
 		super(returnType);
 		// deepest node of parametersNode is first argument in the list
 		
-		this.argumentList = parametersNodeToTypeNodesList(parametersNode);
+		this.parametersNode = parametersNode;
 	}
 	
 	/**
-	 * Constructor that takes the flat argumentsList - used to populate reserved functions 
-	 * and used internally after flattening ParametersNode
-	 * 
+	 * Constructor takes a returnType and a list of typenodes for parameters in the order they
+	 * will need to be passed in by the user, and constructs a parametersNode
+	 *
 	 * @param returnType
-	 * @param argumentList
+	 * @param listOfTypeNodesAsParams
 	 */
-	public FunctionSymbol(TypeNode returnType, List<TypeNode> argumentList){
+	public FunctionSymbol(TypeNode returnType, List<TypeNode> listOfTypeNodesAsParams) {
 		super(returnType);
-		this.argumentList = argumentList;
+		ParametersNode paramNode = FunctionSymbol.listOfTypeNodesToParametersNode(listOfTypeNodesAsParams);
+		this.parametersNode = paramNode;
 	}
 	
 	/**
-	 * Returns a properly ordered list of TypeNodes for the parameters list in the functionsymbol
 	 * 
-	 * @param parametersNode
-	 * @return an ArrayList<TypeNode> that represents the types of the functions parameters in order
+	 * @return true if the function takes parameters
 	 */
-	private ArrayList<TypeNode> parametersNodeToTypeNodesList(ParametersNode parametersNode) {
-		ArrayList<TypeNode> paramsTypeNodeList = new ArrayList<TypeNode>();
-		
-		ParametersNode currNode = parametersNode;
-		
-		// add type of node passed in
-		paramsTypeNodeList.add(currNode.getType());
-		
-		// recurse through, adding each child to list
-		while(currNode.hasChildren()) {
-			currNode = (ParametersNode) currNode.getChildren().get(0);
-			paramsTypeNodeList.add(currNode.getType());
-		}
-		
-		// children in wrong order
-		Collections.reverse(paramsTypeNodeList);
-		
-		return paramsTypeNodeList;
-		
+	public boolean hasParameters() {
+		return (this.getParametersNode() != null);
 	}
 	
 	/**
-	 * Returns a List of TypeNodes, which represent the types of the parameters to the functions
-	 * @return
+	 * 
+	 * @return the root parametersNode of the function
 	 */
-	public List<TypeNode> getParametersTypeNodesList() {
-		return this.argumentList;
+	public ParametersNode getParametersNode() {
+		return this.parametersNode;
 	}
+	
 	
 	/**
 	 * Returns the number of parameters a function takes
 	 * @return
 	 */
 	public int getNumParams() {
-		return this.argumentList.size();
+		if (!this.hasParameters()) 
+			return 0;
+		else
+			return this.getParametersNode().getNumParams();
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer strBuff = new StringBuffer();
+		strBuff.append("num params: " + this.getNumParams());
 		strBuff.append("function, returns: ");
 		strBuff.append(this.type.toString());
 		strBuff.append(". ParamList: (");
-		for (TypeNode a : this.argumentList) {
-			strBuff.append(a.toString());
-			strBuff.append(", ");
-		}
+		if(this.hasParameters())
+			strBuff.append(this.parametersNode.printForSymbolTable());
 		strBuff.append(')');
 		
 		return strBuff.toString();
 	}
+	
+	/**
+     * This function takes a list of type nodes that represent formal parameters and returns
+     * a ParametersNode properly constructed to represent the list
+     * 
+     * @param listOfTypeNodes
+     * @return
+     */
+    private static ParametersNode listOfTypeNodesToParametersNode(List<TypeNode> listOfTypeNodes) {
+    	// if null or empty list
+    	if (listOfTypeNodes == null || listOfTypeNodes.isEmpty())
+    		return null;
+    	
+    	// reverse order of list - first node in list will now be root of the tree and represents the last parameter
+    	Collections.reverse(listOfTypeNodes);
+    	
+    	ParametersNode root = new ParametersNode(listOfTypeNodes.get(0));
+    	ParametersNode currNode = root;
+    	ParametersNode child;
+    	
+    	for(int i=1; i<listOfTypeNodes.size(); i++) {
+    		child = new ParametersNode(listOfTypeNodes.get(i));
+    		currNode.setParamChild(child);
+    		currNode = child;
+    	}
+    	
+    	return root;
+    }
 	
 	
 }

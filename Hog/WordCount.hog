@@ -1,12 +1,10 @@
 @Functions {
   int fib(int n) {
-    if n == 0 {
-      int a = 3;
-      return 0;
-      #int b = 4;
-      #return 3;
-    } 
-      elseif n == 1 {
+  #list<list<int>> myList;
+    if (n == 0) {
+      int x = 5;
+      return x;
+    } elseif (n == 1) {
       return 1;
       } 
       else {
@@ -18,49 +16,46 @@
   }
   
   int factorial(int n) {
-    if (n==0 or n==1) {
+    if ((n==0) or (n==1)) {
       return 1;
     }
     else {
     return n * factorial(n-1);
     }
   }
+  
+  int max(int x, int y) {
+    if (x >= y) {
+      return x;
+    } else {
+      return y;
+    }
+  }
+  
+ # text tooManyArgs(int x, list<int> y, set<list<int>> foo, real percentage, bool doNothing) {
+ #   if (not doNothing) {
+ #     return "something";
+ #   }
+ #   return "nothing";
+ # }
+  
+  list<int> reverseList(list<int> oldList) {
+    list<int> newList;
+    for (int i = oldList.size() - 1; i >= 0; i--;) {
+      newList.add(oldList.get(i));
+    }
+    return newList;
+  }
 }
 
 
 
 @Map (int lineNum, text line) -> (text, int) {
-  #{ this is a 
-       block comment }#
-  int count = 1;
-  #dict<int, real> face;
-  #real face = 1.0;
-  foreach text myCock in line.tokenize(' ') {
-    emit(myCock, 1);
+  foreach text word in line.tokenize(" ") {
+    emit(word, 1);
   }
-  if (count == 2) {
-    print('count equals 2!');
-  } elseif (count == 3) {
-    print('count equals 3!');
-    int benFuck = 10;
-  } else {
-    int face = 0;
-    int x = face + 1;
-    face++;
-    print('count equals something else');
-  }
-  
-  #list<int> face;
-  #try {
-   # face.get(0);
-  #} catch (FileNotFoundException exception) {
-   # print(exception);
-  #} catch (ArrayOutOfBoundsException exception) {
-  #  print (exception);
-  #}
-  for (int i = 0; i < 4; i++;) {
-    print(i);
-  }
+
+
 }
 
 @Reduce (text word, iter<int> values) -> (text, int) {
@@ -68,9 +63,18 @@
   while ( values.hasNext() ) {
     count = count + values.next();
   }
-  emit(count, word);
+  emit(word, count);
 }
 
 @Main {
   mapReduce();
+  list<int> fooBar;
+  for (int i = 0; i < 10; i++;) {
+    fooBar.add(i);
+  }
+  fooBar = reverseList(fooBar);
+  print("all done.");
+  for (int j = 0; j < 10; j++;) {
+    print("j");
+  }
 }

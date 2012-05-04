@@ -21,6 +21,7 @@ public class UnOpNode extends ExpressionNode {
 	}
 	
 	protected OpType opType;
+	protected ExpressionNode child;
 	
 	/** Constructor of upOpNode(OpType opType, ExpressionNode child)
 	 * @param opType OpType node representing the operation type
@@ -30,6 +31,7 @@ public class UnOpNode extends ExpressionNode {
 	 */
 	public UnOpNode(OpType opType, ExpressionNode child) {
 		this(null, opType, child);
+		this.child = child;
 	}
 	
 	/** Constructor of upOpNode(TypeNode type, OpType opType, ExpressionNode child)
@@ -43,7 +45,9 @@ public class UnOpNode extends ExpressionNode {
 		super(type);
 		// note implicitly sets child.parent = this
 		this.addChild(child);
+		this.child = child;
 		this.opType = opType;
+		this.child = child;
 	}
 	
 	/** Method to Return the opType getOpType()
@@ -51,6 +55,10 @@ public class UnOpNode extends ExpressionNode {
 	 */
 	public OpType getOpType() {
 		return opType;
+	}
+
+	public ExpressionNode getChildNode() {
+		return child;
 	}
 
 	/** Method to Return the name getName()
@@ -76,5 +84,9 @@ public class UnOpNode extends ExpressionNode {
 	public int visitorTest(Visitor v){
 		v.visit(this);
 		return 17;
+	}
+	
+	public ExpressionNode getChild() {
+		return this.child;
 	}
 }

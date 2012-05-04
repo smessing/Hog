@@ -1,15 +1,27 @@
 package util.type;
 
+import java.util.logging.Logger;
+
+import back_end.TypeCheckingVisitor;
+
 import util.ast.node.ArgumentsNode;
 import util.ast.node.BiOpNode;
 import util.ast.node.ExceptionTypeNode;
 import util.ast.node.FunctionNode;
+import util.ast.node.ParametersNode;
+import util.ast.node.PostfixExpressionNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.DerivedTypeNode;
 import util.ast.node.DictTypeNode;
+import util.ast.node.ReservedWordTypeNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
+import util.ast.node.PostfixExpressionNode.PostfixType;
+import util.error.InvalidFunctionArgumentsError;
+import util.error.FunctionNotDefinedError;
 import util.error.TypeMismatchError;
+import util.symbol_table.FunctionSymbol;
+import util.symbol_table.SymbolTable;
 
 /**
  * A convenience class for defining and manipulating internal type
@@ -19,10 +31,13 @@ import util.error.TypeMismatchError;
  * ExceptionTypeNode, PrimitiveTypeNode}, in conjunction with the static enums
  * Primitive, Derived and Exception defined by this class.
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public class Types {
+
+	protected final static Logger LOGGER = Logger.getLogger(Types.class
+			.getName());
 
 	/**
 	 * Primitive types in hog.
@@ -37,7 +52,7 @@ public class Types {
 	 * <li>CHECK_INNER_TYPE: !TODO! WHAT AM I?</li>
 	 * </ul>
 	 * 
-	 * @author sam
+	 * @author sam, jason
 	 * 
 	 */
 	public static enum Primitive {
@@ -178,26 +193,65 @@ public class Types {
 
 		switch (op) {
 		case ASSIGN:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else if (Types.isSameType(left, right))
+				return true;
+			else
+				return false;
 		case NOT_EQLS:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else if (Types.isSameType(left, right))
+				return true;
+			else
+				return false;
 		case DBL_EQLS:
-			return isSameType(left, right);
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else if (Types.isSameType(left, right))
+				return true;
+			else
+				return false;
 		case PLUS:
 			if (left.isText() && right.isText())
 				return true;
+			else if (left.isNumeric() && right.isNumeric())
+				return true;
+			else
+				return false;
 		case MINUS:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else
+				return false;
 		case DIVIDE:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else
+				return false;
 		case TIMES:
+			if (left.isNumeric() && right.isNumeric())
+				return true;
+			else
+				return false;
 		case MOD:
 			return left.isNumeric() && right.isNumeric();
 		case OR:
+			return left.isBoolean() && right.isBoolean();
 		case AND:
 			return left.isBoolean() && right.isBoolean();
 		case LESS:
+			return left.isNumeric() && right.isNumeric();
 		case GRTR:
+			return left.isNumeric() && right.isNumeric();
 		case LESS_EQL:
+			return left.isNumeric() && right.isNumeric();
 		case GRTR_EQL:
-			return left.isPrimitive() && right.isPrimitive()
-					&& isSameType(left, right);
+			return left.isNumeric() && right.isNumeric();
+
+			// return left.isPrimitive() && right.isPrimitive()
+			// && isSameType(left, right);
 		}
 
 		// should never get here:
@@ -259,7 +313,9 @@ public class Types {
 
 		switch (op) {
 		case UMINUS:
+			return operand.isNumeric();
 		case INCR:
+			return operand.isNumeric();
 		case DECR:
 			return operand.isNumeric();
 		case CAST:
@@ -285,7 +341,7 @@ public class Types {
 	public static TypeNode getResult(UnOpNode.OpType op, TypeNode operand)
 			throws TypeMismatchError {
 
-		if (isCompatible(op, operand)) {
+		if (!isCompatible(op, operand)) {
 			throw new TypeMismatchError("Tried to call " + op + " on "
 					+ operand + "!");
 		}
@@ -340,9 +396,11 @@ public class Types {
 	/**
 	 * Get a lower-case string representation of this node's type.
 	 * 
-	 * Note: for derived type, returns lower-case representation of the <i>local</i> type.
+	 * Note: for derived type, returns lower-case representation of the
+	 * <i>local</i> type.
 	 * 
-	 * @param node a TypeNode to get the string representation for.
+	 * @param node
+	 *            a TypeNode to get the string representation for.
 	 * @return a lower-case string of the TypeNode's type.
 	 */
 	public static String getLowercaseTypeName(TypeNode node) {
@@ -350,21 +408,23 @@ public class Types {
 		// prim: lower case version
 		// derived: lower case version of outer
 		// exception : lower case version of node
-		
-		
+
 		String typeName = null;
 
 		if (node instanceof PrimitiveTypeNode) {
-			
-			typeName = ((PrimitiveTypeNode) node).getType().toString().toLowerCase();
+
+			typeName = ((PrimitiveTypeNode) node).getType().toString()
+					.toLowerCase();
 
 		} else if (node instanceof DerivedTypeNode) {
-			
-			typeName = ((DerivedTypeNode) node).getLocalType().toString().toLowerCase();
+
+			typeName = ((DerivedTypeNode) node).getLocalType().toString()
+					.toLowerCase();
 
 		} else if (node instanceof ExceptionTypeNode) {
-			
-			typeName = ((ExceptionTypeNode) node).getExceptionType().toString().toLowerCase();
+
+			typeName = ((ExceptionTypeNode) node).getExceptionType().toString()
+					.toLowerCase();
 
 		} else {
 			throw new UnsupportedOperationException(
@@ -375,10 +435,240 @@ public class Types {
 
 	}
 
-	public static boolean isCompatible(String functionName,
-			ArgumentsNode arguments) {
+	public static boolean checkTypeHasMethod(TypeNode typeNode, String method) {
 
-		throw new UnsupportedOperationException("TODO");
+		LOGGER.finer("checkTypeHasMethod on method name: " + method);
+		LOGGER.finer(" and Typenode: " + typeNode.toString());
+
+		// get the type name for this type node as a string
+		String typeName = getLowercaseTypeName(typeNode);
+
+		// form a string to check the reserved symbol table for this method
+		String methodToLookup = typeName + "." + method;
+
+		if (SymbolTable.getRootSymbolTable().isDefinedInScope(methodToLookup)) {
+			return true;
+		}
+		throw new FunctionNotDefinedError("The function: " + method
+				+ " is not supported for the type " + typeNode.getName());
+
+	}
+
+	/**
+	 * This takes a postFixExpressionNode and returns true if it is a legal
+	 * function call It will return false if the function is undeclared, if the
+	 * arguments do not match the formal parameters or if it is a method called
+	 * on an unsupported type
+	 * 
+	 * @param postFixExpressionNode
+	 * @return
+	 */
+	public static boolean checkValidFunctionCall(
+			PostfixExpressionNode postFixExpressionNode) {
+
+		// get the postfix type
+		PostfixType postFixType = postFixExpressionNode.getPostfixType();
+
+		FunctionSymbol funSym;
+		// check if the function name exists - this throws exception if it is
+		// not in the symbol table
+		if (postFixExpressionNode.isFunction()) {
+			funSym = (FunctionSymbol) SymbolTable
+					.getSymbolForIdNode(postFixExpressionNode
+							.getNameOfFunctionOrMethod());
+		} else {
+			funSym = SymbolTable.getSymbolForMethodCall(postFixExpressionNode);
+		}
+
+		// if it is a method, check if the type allows the method
+		if (postFixType == PostfixType.METHOD_NO_PARAMS
+				|| postFixType == PostfixType.METHOD_WITH_PARAMS) {
+			checkTypeHasMethod(postFixExpressionNode.getObjectName().getType(),
+					postFixExpressionNode.getMethodName().getIdentifier());
+		}
+
+		// if it has arguments, check if they match the formal arguments
+		if (postFixExpressionNode.hasArguments()) {
+			ArgumentsNode argsNode = (ArgumentsNode) postFixExpressionNode
+					.getArgsList();
+
+			// throw error if not same amount of arguments
+			if (funSym.getParametersNode().getNumParams() != argsNode
+					.getNumArguments()) {
+				throw new InvalidFunctionArgumentsError(postFixExpressionNode
+						.getNameOfFunctionOrMethod().getIdentifier()
+						+ " was called with the wrong number of arguments.");
+			}
+
+			TypeNode innerTypeOfMethodCall = null;
+			if (postFixExpressionNode.isMethod())
+				innerTypeOfMethodCall = postFixExpressionNode
+						.getObjectOfMethod().getType();
+
+			// throw an error if the types of the arguments don't match the
+			// types of the formal params
+			if (!argsMatchParams((ArgumentsNode) postFixExpressionNode
+					.getArgsList(), funSym.getParametersNode(),
+					innerTypeOfMethodCall))
+				throw new InvalidFunctionArgumentsError(postFixExpressionNode
+						.getNameOfFunctionOrMethod().getIdentifier()
+						+ " was called with an invalid argument list.");
+		}
+
+		// if it doesn't have arguments, ensure that the formal parameters don't
+		// require arguments
+		else {
+			if (funSym.hasParameters())
+				throw new InvalidFunctionArgumentsError(postFixExpressionNode
+						.getNameOfFunctionOrMethod().getIdentifier()
+						+ " was called with an invalid argument list.");
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns true of the types of the arguments match and are in the same
+	 * order as the types of the parameters
+	 * 
+	 * @param args
+	 * @param params
+	 * @return
+	 */
+
+	private static boolean argsMatchParams(ArgumentsNode args,
+			ParametersNode params, TypeNode innerTypeOfMethodCall) {
+
+		// if they have no sublists, return if they are the same type
+		if (args.getArgumentsNode() == null && params.getParamChild() == null)
+			return isSameType(args.getExpressionNode().getType(), params
+					.getType());
+
+		// same number of args/params?
+		if (args.getNumArguments() != params.getNumParams())
+			return false;
+
+		// if the param is CHECK_INNER_TYPE, we need to check the inner type
+		// against the argument
+		if (params.getType() instanceof ReservedWordTypeNode
+				&& ((ReservedWordTypeNode) params.getType()).getType() == Types.Flags.CHECK_INNER_TYPE) {
+			if (isSameType(args.getExpressionNode().getType(),
+					innerTypeOfMethodCall)) {
+				return argsMatchParams((ArgumentsNode) args.getArgumentsNode(),
+						params.getParamChild(), innerTypeOfMethodCall);
+			}
+		}
+		// else, if they have the same type, recurse
+		if (isSameType(args.getType(), params.getType()))
+			return argsMatchParams((ArgumentsNode) args.getArgumentsNode(),
+					params.getParamChild(), innerTypeOfMethodCall);
+
+		else
+			return false;
+
+	}
+
+	/**
+	 * Ask for the java version of this type.
+	 * 
+	 * @param type
+	 *            a TypeNode
+	 * @return the String corresponding to the Java type that this type maps
+	 *         onto.
+	 */
+	public static String getJavaType(TypeNode type) {
+
+		if (type instanceof PrimitiveTypeNode) {
+			return getJavaType((PrimitiveTypeNode) type);
+		}
+
+		throw new UnsupportedOperationException("SAM NEEDS TO FINISH THIS");
+	}
+
+	private static String getJavaType(PrimitiveTypeNode type) {
+
+		switch (type.getType()) {
+		case BOOL:
+			return "Boolean";
+		case TEXT:
+			return "String";
+		case VOID:
+			return "void";
+		case INT:
+			return "Integer";
+		case REAL:
+			return "Double";
+		}
+
+		throw new UnsupportedOperationException("This should never happen.");
+	}
+
+	/**
+	 * Ask for the Hadoop type corresponding to this TypeNode.
+	 * 
+	 * @param type
+	 *            a TypeNode
+	 * @return the string corresponding to the Hadoop type.
+	 */
+	public static String getHadoopType(TypeNode type) {
+		
+		if (type instanceof PrimitiveTypeNode) {
+			return getHadoopType((PrimitiveTypeNode) type);
+		} else if (type instanceof DerivedTypeNode) {
+			return getHadoopType((DerivedTypeNode) type);
+		}
+
+		throw new UnsupportedOperationException(type
+				+ " is not allowed for @Map and @Reduce headers.");
+	}
+
+	private static String getHadoopType(PrimitiveTypeNode type) {
+
+		switch (type.getType()) {
+		case BOOL:
+			return "BooleanWritable";
+		case TEXT:
+			return "Text";
+		case INT:
+			return "IntWritable";
+		case REAL:
+			return "DoubleWritable";
+		}
+
+		throw new UnsupportedOperationException(type
+				+ " is not allowed for @Map and @Reduce headers.");
+	}
+
+	private static String getHadoopType(DerivedTypeNode type) {
+
+		switch (type.getLocalType()) {
+		case ITER:
+			return getHadoopType(type.getInnerTypeNode());
+		}
+
+		throw new UnsupportedOperationException(type
+				+ " is not allowed for @Map and @Reduce headers.");
+	}
+
+	/**
+	 * 
+	 * @param type
+	 *            a PrimitiveTypeNode
+	 * @return the string corresponding to the declaration of Hadoop type.
+	 */
+	public static String getNewHadoopTypeDeclaration(PrimitiveTypeNode type) {
+		switch (type.getType()) {
+		case BOOL:
+			return "new BooleanWritable";
+		case TEXT:
+			return "new Text";
+		case INT:
+			return "new IntWritable";
+		case REAL:
+			return "new DoubleWritable";
+		}
+		throw new UnsupportedOperationException(type
+				+ " is not allowed for @Map and @Reduce headers.");
 	}
 
 }
