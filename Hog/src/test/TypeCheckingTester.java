@@ -12,6 +12,7 @@ import org.junit.Test;
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.IdNode;
 import util.ast.node.Node;
+import util.ast.node.PostfixExpressionNode;
 import util.ast.node.ProgramNode;
 import util.symbol_table.Symbol;
 import util.symbol_table.SymbolTable;
@@ -60,11 +61,17 @@ public class TypeCheckingTester {
 		Iterator<Node> postOrderTraversal = ast.postOrderTraversal();
 		Node nextNode;
 		Symbol tempSymbol;
+		PostfixExpressionNode n;
 		while (postOrderTraversal.hasNext()) {
-			nextNode = postOrderTraversal.next();
+			nextNode = postOrderTraversal.next(); 
 			if(nextNode instanceof IdNode){
 				tempSymbol = SymbolTable.getSymbolForIdNode((IdNode)nextNode);
 				System.out.println("Identifier: " + ((IdNode) nextNode).getIdentifier() + " " + tempSymbol.getType().toString());
+			}
+			if(nextNode instanceof PostfixExpressionNode){
+				n = (PostfixExpressionNode)nextNode;
+				//tempSymbol = SymbolTable.getSymbolForIdNode((IdNode)nextNode);
+				System.out.println("Function Name : " + n.getNameOfFunctionOrMethod() + " " + n.getTypeName().toString());
 			}
 		}
 
@@ -108,11 +115,17 @@ public class TypeCheckingTester {
 		Iterator<Node> postOrderTraversal = ast.postOrderTraversal();
 		Node nextNode;
 		Symbol tempSymbol;
+		PostfixExpressionNode n;
 		while (postOrderTraversal.hasNext()) {
-			nextNode = postOrderTraversal.next();
+			nextNode = postOrderTraversal.next(); 
 			if(nextNode instanceof IdNode){
 				tempSymbol = SymbolTable.getSymbolForIdNode((IdNode)nextNode);
 				System.out.println("Identifier: " + ((IdNode) nextNode).getIdentifier() + " " + tempSymbol.getType().toString());
+			}
+			if(nextNode instanceof PostfixExpressionNode){
+				n = (PostfixExpressionNode)nextNode;
+				//tempSymbol = SymbolTable.getSymbolForIdNode((IdNode)nextNode);
+				System.out.println("Function Name : " + n.getNameOfFunctionOrMethod() + " " + n.getTypeName().toString());
 			}
 		}
 
