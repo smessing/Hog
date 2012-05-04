@@ -9,7 +9,9 @@ import util.ast.node.DerivedTypeNode;
 import util.ast.node.DictTypeNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
+import util.error.FunctionNotDefinedError;
 import util.error.TypeMismatchError;
+import util.symbol_table.SymbolTable;
 
 /**
  * A convenience class for defining and manipulating internal type
@@ -414,6 +416,22 @@ public class Types {
 
 		return typeName;
 
+	}
+	
+	public static boolean checkTypeHasMethod(TypeNode typeNode, String method){
+		
+		//get the type name for this type node as a string
+		String typeName = getLowercaseTypeName(typeNode);
+		
+		//form a string to check the reserved symbol table for this method
+		String methodToLookup = typeName + "." + method;
+		
+		if(SymbolTable.getRootSymbolTable().isDefinedInScope(methodToLookup)){
+			return true;
+		}	
+		throw new FunctionNotDefinedError(
+				"The function: " + method + " is not supported for the type " + typeNode.getName());
+		
 	}
 
 	public static boolean isCompatible(String functionName,

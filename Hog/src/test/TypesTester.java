@@ -15,6 +15,7 @@ import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 import util.error.TypeMismatchError;
+import util.symbol_table.SymbolTable;
 import util.type.Types;
 
 /**
@@ -36,6 +37,7 @@ public class TypesTester {
 	private TypeNode listSetBool;
 	private TypeNode listListSetBool;
 	private TypeNode setListListSetBool;
+	private TypeNode iterNode;
 
 	@Before
 	public void setUp() {
@@ -49,6 +51,7 @@ public class TypesTester {
 				Types.Exception.FILE_NOT_FOUND);
 		dict_Text_ListInt = new DictTypeNode(Types.Primitive.TEXT, listInt);
 		setBool = new DerivedTypeNode(Types.Derived.SET, boolNode);
+		iterNode = new DerivedTypeNode(Types.Derived.ITER, intNode);
 		listSetBool = new DerivedTypeNode(Types.Derived.LIST, setBool);
 		listListSetBool = new DerivedTypeNode(Types.Derived.LIST, listSetBool);
 		setListListSetBool = new DerivedTypeNode(Types.Derived.SET,
@@ -181,7 +184,49 @@ public class TypesTester {
 		assertTrue(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, listInt, listInt));
 
 	}
-
+	
+	@Test
+	public void checkTypeHasMethodTest() {		
+		assertTrue(Types.checkTypeHasMethod(setBool, "add"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "clear"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "contains"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "containsAll"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "isEmpty"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "iterator"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "remove"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "removeAll"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "size"));
+		assertFalse(Types.checkTypeHasMethod(setBool, "length"));
+		assertFalse(Types.checkTypeHasMethod(setBool, "replace"));
+		assertFalse(Types.checkTypeHasMethod(setBool, "hasNext"));
+		assertFalse(Types.checkTypeHasMethod(setBool, "next"));
+		
+		assertTrue(Types.checkTypeHasMethod(listInt, "add"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "clear"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "get"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "iterator"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "size"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "sort"));
+		assertFalse(Types.checkTypeHasMethod(listInt, "next"));
+		assertFalse(Types.checkTypeHasMethod(listInt, "isEmpty"));
+		assertFalse(Types.checkTypeHasMethod(listInt, "containsAll"));
+		
+		assertTrue(Types.checkTypeHasMethod(textNode, "length"));
+		assertTrue(Types.checkTypeHasMethod(textNode, "replace"));
+		assertTrue(Types.checkTypeHasMethod(textNode, "tokenize"));
+		assertFalse(Types.checkTypeHasMethod(textNode, "isEmpty"));
+		assertFalse(Types.checkTypeHasMethod(textNode, "peek"));
+		assertFalse(Types.checkTypeHasMethod(textNode, "size"));
+		assertFalse(Types.checkTypeHasMethod(textNode, "add"));
+		
+		assertTrue(Types.checkTypeHasMethod(iterNode, "next"));
+		assertTrue(Types.checkTypeHasMethod(iterNode, "hasNext"));
+		assertTrue(Types.checkTypeHasMethod(iterNode, "peek"));
+		assertFalse(Types.checkTypeHasMethod(iterNode, "replace"));
+		assertFalse(Types.checkTypeHasMethod(iterNode, "size"));
+		assertFalse(Types.checkTypeHasMethod(iterNode, "clear"));
+	}
+	
 	@Test(expected = TypeMismatchError.class)
 	public void testGetHigherNumericType2() throws TypeMismatchError {
 		Types.getHigherNumericType(boolNode, setBool);
