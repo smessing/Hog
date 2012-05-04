@@ -13,6 +13,7 @@ import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 import util.ast.node.PostfixExpressionNode.PostfixType;
 import util.error.InvalidFunctionArgumentsError;
+import util.error.FunctionNotDefinedError;
 import util.error.TypeMismatchError;
 import util.symbol_table.FunctionSymbol;
 import util.symbol_table.SymbolTable;
@@ -421,6 +422,22 @@ public class Types {
 		return typeName;
 
 	}
+	
+	public static boolean checkTypeHasMethod(TypeNode typeNode, String method){
+		
+		//get the type name for this type node as a string
+		String typeName = getLowercaseTypeName(typeNode);
+		
+		//form a string to check the reserved symbol table for this method
+		String methodToLookup = typeName + "." + method;
+		
+		if(SymbolTable.getRootSymbolTable().isDefinedInScope(methodToLookup)){
+			return true;
+		}	
+		throw new FunctionNotDefinedError(
+				"The function: " + method + " is not supported for the type " + typeNode.getName());
+		
+	}
 
 	/**
 	 * This takes a postFixExpressionNode and returns true if it is a legal function call
@@ -434,12 +451,12 @@ public class Types {
 		// get the postfix type
 		PostfixType postFixType = postFixExpressionNode.getPostfixType();
 		
-		// check if the function name exists
+		// check if the function name exists - this throws exception if it is not in the symbol table
 		FunctionSymbol funSym = (FunctionSymbol) SymbolTable.getSymbolForIdNode(postFixExpressionNode.getNameOfFunctionOrMethod());
 		
 		// if it is a method, check if the type allows the method
 		if(postFixType == PostfixType.METHOD_NO_PARAMS || postFixType == PostfixType.METHOD_WITH_PARAMS) {
-			checkTypeHasMethod(postFixExpressionNode.getType(), postFixExpressionNode.getMethodName());
+			checkTypeHasMethod(postFixExpressionNode.getType(), postFixExpressionNode.getMethodName().getIdentifier());
 		}
 		
 		// if it has arguments, check if they match the formal arguments
@@ -457,10 +474,16 @@ public class Types {
 					funSym.getParametersNode()))
 				throw new InvalidFunctionArgumentsError(postFixExpressionNode.getNameOfFunctionOrMethod().getIdentifier() + 
 						" was called with an invalid argument list.");
-			
 		}
 		
-		// if it is a function call with 
+		// if it doesn't have arguments, ensure that the formal parameters don't require arguments
+		else {
+			if(funSym.hasParameters())
+				throw new InvalidFunctionArgumentsError(postFixExpressionNode.getNameOfFunctionOrMethod().getIdentifier() + 
+						" was called with an invalid argument list.");		
+			}
+		
+		return true;
 	}
 	
 	/**

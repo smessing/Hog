@@ -1,5 +1,7 @@
 package util.ast.node;
 
+import java.util.List;
+
 import back_end.Visitor;
 
 /**
@@ -13,6 +15,10 @@ public class ParametersNode extends ExpressionNode {
 
 	protected String identifier;
 	protected ParametersNode paramChild;
+	
+	public ParametersNode(TypeNode paramType) {
+		super(paramType);
+	}
 
 	public ParametersNode(TypeNode type, String identifier) {
 		super(type);
@@ -57,6 +63,11 @@ public class ParametersNode extends ExpressionNode {
 	
 	public ParametersNode getParamChild() {
 		return this.paramChild;
+	}
+	
+	public void setParamChild(ParametersNode child) {
+		this.paramChild = child;
+		this.addChild(child);
 	}
 
 	/**

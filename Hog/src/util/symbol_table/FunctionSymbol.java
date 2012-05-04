@@ -22,7 +22,8 @@ public class FunctionSymbol extends Symbol {
 	}
 	
 	/**
-	 * Constructor takes a parameters node and flattens it into a list of TypeNodes
+	 * Constructor takes a returnType and a parametersNode
+	 * 
 	 * @param returnType
 	 * @param parameterNode
 	 */
@@ -31,6 +32,19 @@ public class FunctionSymbol extends Symbol {
 		// deepest node of parametersNode is first argument in the list
 		
 		this.parametersNode = parametersNode;
+	}
+	
+	/**
+	 * Constructor takes a returnType and a list of typenodes for parameters in the order they
+	 * will need to be passed in by the user, and constructs a parametersNode
+	 *
+	 * @param returnType
+	 * @param listOfTypeNodesAsParams
+	 */
+	public FunctionSymbol(TypeNode returnType, List<TypeNode> listOfTypeNodesAsParams) {
+		super(returnType);
+		ParametersNode paramNode = FunctionSymbol.listOfTypeNodesToParametersNode(listOfTypeNodesAsParams);
+		this.parametersNode = paramNode;
 	}
 	
 	/**
@@ -75,6 +89,34 @@ public class FunctionSymbol extends Symbol {
 		
 		return strBuff.toString();
 	}
+	
+	/**
+     * This function takes a list of type nodes that represent formal parameters and returns
+     * a ParametersNode properly constructed to represent the list
+     * 
+     * @param listOfTypeNodes
+     * @return
+     */
+    private static ParametersNode listOfTypeNodesToParametersNode(List<TypeNode> listOfTypeNodes) {
+    	// if null or empty list
+    	if (listOfTypeNodes == null || listOfTypeNodes.isEmpty())
+    		return null;
+    	
+    	// reverse order of list - first node in list will now be root of the tree and represents the last parameter
+    	Collections.reverse(listOfTypeNodes);
+    	
+    	ParametersNode root = new ParametersNode(listOfTypeNodes.get(0));
+    	ParametersNode currNode = root;
+    	ParametersNode child;
+    	
+    	for(int i=1; i<listOfTypeNodes.size(); i++) {
+    		child = new ParametersNode(listOfTypeNodes.get(i));
+    		currNode.setParamChild(child);
+    		currNode = child;
+    	}
+    	
+    	return root;
+    }
 	
 	
 }

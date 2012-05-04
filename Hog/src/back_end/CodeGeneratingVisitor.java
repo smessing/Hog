@@ -398,9 +398,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(PostfixExpressionNode node) called on " + node);
 
 		switch (node.getPostfixType()) {
-		case ARRAY_INDEX:
-			throw new UnsupportedOperationException(
-					"Array Indexes have been removed from the grammar. Something's wrong.");
 		case METHOD_NO_PARAMS:
 			IdNode objectOfMethod = node.getObjectOfMethod();
 			IdNode methodNameNoParam = node.getMethodName();

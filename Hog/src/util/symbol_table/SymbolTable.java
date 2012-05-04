@@ -2,6 +2,7 @@ package util.symbol_table;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -276,13 +277,19 @@ public class SymbolTable {
 		this.table.put(word, new VariableSymbol(typeNode));  
 	}
     
-    public void reserveFunction(String word, TypeNode returnType, List<TypeNode> argumentList){ 
-		this.table.put(word, new FunctionSymbol(returnType, argumentList));  
+    public void reserveFunction(String word, TypeNode returnType, ParametersNode paramNode){ 
+		this.table.put(word, new FunctionSymbol(returnType, paramNode));  
+		
 	}
+    
+    public void reserveFunction(String word, TypeNode returnType, List<TypeNode> paramList) {
+    	this.table.put(word,  new FunctionSymbol(returnType, paramList));
+    }
     
     public void reserveFunction(String word, TypeNode returnType){ 
 		this.table.put(word, new FunctionSymbol(returnType));  
 	}
+    
 	
     
     public void fillReservedTable(){
@@ -466,5 +473,7 @@ public class SymbolTable {
 		reserveFunction("dict.reverseDict", new PrimitiveTypeNode(Types.Primitive.CHECK_INNER_TYPE));
 */
     }
+
+	
     
 }

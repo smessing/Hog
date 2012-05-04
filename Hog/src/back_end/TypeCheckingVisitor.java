@@ -250,53 +250,25 @@ public class TypeCheckingVisitor implements Visitor {
 
 	@Override
 	public void visit(PostfixExpressionNode node) {
-
 		
-		// handle Function Calls
-		if (node.getPostfixType() == PostfixType.FUNCTION_CALL) {
-
-			// visit the arguments
-			if (node.hasArguments())
-				node.getArgsList().accept(this);
-
-			// get the symbol for this function
-			FunctionSymbol funSym = (FunctionSymbol) SymbolTable
-					.getSymbolForIdNode(node.getFunctionName());
-
-			// set type to return type given in symbol table
-			TypeNode properReturnType = funSym.getType();
-			node.setType(properReturnType);
-
-			// get all arguments as a list of expressionNodes
-			List<ExpressionNode> expressionNodeList = argumentsNodeToExpressionNodesList(node
-					.getArgsList());
-			List<TypeNode> paramsList = funSym.getParametersTypeNodesList();
-
-			// compare the arguments to the formal parameters
-			if (expressionNodeList.size() != paramsList.size()) {
-				throw new InvalidFunctionArgumentsError(node.getFunctionName()
-						.getIdentifier()
-						+ " does not take "
-						+ expressionNodeList.size() + " parameters");
-			}
-
-			// make sure arguments have same type as parameters
-			for (int i = 0; i < expressionNodeList.size(); i++) {
-				if (!Types.isSameType(expressionNodeList.get(i).getType(),
-						paramsList.get(i))) {
-					throw new InvalidFunctionArgumentsError(node
-							.getFunctionName().getIdentifier()
-							+ " was passed parameters " + "of incorrect type");
-				}
-			}
-
-		}
-
-		// TODO: handle method calls
 
 		LOGGER.finer("Type Check visit(PostfixExpressionNode node) called on "
 				+ node.getName());
 
+		
+		// visit all children
+		visitAllChildrenStandard(node);
+
+		// make all checks on function call
+		Types.checkValidFunctionCall(node);
+		
+		// get the symbol for this function
+		FunctionSymbol funSym = (FunctionSymbol) SymbolTable
+				.getSymbolForIdNode(node.getFunctionName());
+
+		// set type to return type given in symbol table
+		node.setType(funSym.getType());
+	
 	}
 
 	@Override
