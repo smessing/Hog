@@ -594,7 +594,19 @@ public class CodeGeneratingVisitor implements Visitor {
 				writeMapReduce();
 				return;
 			}
-			code.append("Functions.");
+			
+			if (!node.getFunctionName().getIdentifier().equals("emit")) {
+				code.append("Functions.");
+				walk(node.getFunctionName());
+			} else {
+				code.append("output.Collect");
+			}
+			
+			code.append("(");
+			
+			// check for arguments
+			
+			code.append(")");
 			
 			/*
 			IdNode functionName = node.getFunctionName();
