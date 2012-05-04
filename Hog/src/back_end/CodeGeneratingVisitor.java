@@ -360,8 +360,12 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(FunctionNode node) {
 		LOGGER.finer("visit(FunctionNodeNode node) called on " + node);
-		code.append("public static " + node.getType().toSource() + " "
-				+ node.getIdentifier());
+		code.append("public static ");
+		walk(node.getType());
+		code.append(" ");
+		code.append(node.getIdentifier());
+		//code.append("public static " + node.getType().toSource() + " "
+		//		+ node.getIdentifier());
 		ParametersNode params = node.getParametersNode();
 		code.append("(");
 		code.append(params.getType().toSource());
@@ -569,6 +573,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(PrimitiveTypeNode node) {
 		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
+		code.append(node.toSource());
 
 	}
 
@@ -717,7 +722,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(TypeNode node) {
 		LOGGER.finer("visit(TypeNode node) called on " + node);
-
+		// type node is too general, so call something more specific:
+		node.accept(this);
 	}
 
 	@Override
