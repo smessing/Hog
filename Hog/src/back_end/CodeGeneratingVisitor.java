@@ -449,7 +449,7 @@ public class CodeGeneratingVisitor implements Visitor {
 
 	@Override
 	public void visit(IdNode node) {
-		LOGGER.finer("visit(IdNode node) called on " + node);
+		LOGGER.finer("visit(IdNode node) called on " + node + ", emit: " + emit);
 
 		if (node.isDeclaration()) {
 			walk(node.getType());
@@ -668,14 +668,11 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(PrimitiveTypeNode node) {
 		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
 		
-		// YOU ARE HERE
-		
 		if (emit) {
 			code.append(Types.getHadoopType(node));
 		} else {
 			code.append(Types.getJavaType(node));
 		}
-		
 
 	}
 
