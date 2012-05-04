@@ -348,6 +348,7 @@ Catch::=
    CatchHeader:c Block:b
     {:
       RESULT = new CatchesNode(c, b);
+      RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("CatchHeader Block -> Catch");
     :}
   ;
