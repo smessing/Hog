@@ -450,7 +450,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
 		code.append("} else {");
 		walk(node.getBlock());
-		code.append("}");
 
 	}
 
@@ -476,11 +475,13 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append(node.getIdentifier());
 		ParametersNode params = node.getParametersNode();
 		code.append("(");
-		walk(params.getType());
-		code.append(" " + params.getIdentifier());
+		walk(params);
+		//walk(params.getType());
+		//code.append(" " + params.getIdentifier());
 		code.append(")");
 		code.append(" {");
 		walk(node.getInstructions());
+		code.append(" }");
 
 	}
 
@@ -576,7 +577,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			writeStatement();
 			break;
 		}
-		code.append("}");
+		code.append(" }");
 	}
 
 	@Override
@@ -623,6 +624,17 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ParametersNode node) {
 		LOGGER.finer("visit(ParametersNode node) called on " + node);
+		
+		if (node.hasParamChild()) {
+			walk(node.getParamChild());
+			code.append(", ");
+		}
+		
+		walk(node.getType());
+		code.append(" ");
+		code.append(node.getIdentifier());
+
+		//walk(node.getParamChild());
 
 	}
 
