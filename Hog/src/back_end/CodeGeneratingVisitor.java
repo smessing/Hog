@@ -313,6 +313,18 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(DerivedTypeNode node) {
 		LOGGER.finer("visit(DerivedTypeNode node) called on " + node);
+		switch(node.getLocalType()) {
+		case LIST:
+			break;
+		case ITER:
+			break;
+		case DICT:
+			break;
+		case MULTISET:
+			break;
+		case SET:
+			break;
+		}
 
 	}
 
@@ -364,11 +376,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		walk(node.getType());
 		code.append(" ");
 		code.append(node.getIdentifier());
-		//code.append("public static " + node.getType().toSource() + " "
-		//		+ node.getIdentifier());
 		ParametersNode params = node.getParametersNode();
 		code.append("(");
-		code.append(params.getType().toSource());
+		walk(params.getType());
 		code.append(" " + params.getIdentifier());
 		code.append(")");
 		code.append(" {");

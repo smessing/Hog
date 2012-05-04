@@ -19,7 +19,7 @@ import util.error.TypeMismatchError;
  * ExceptionTypeNode, PrimitiveTypeNode}, in conjunction with the static enums
  * Primitive, Derived and Exception defined by this class.
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public class Types {
