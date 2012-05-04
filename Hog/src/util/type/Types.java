@@ -9,6 +9,7 @@ import util.ast.node.PostfixExpressionNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.DerivedTypeNode;
 import util.ast.node.DictTypeNode;
+import util.ast.node.ReservedWordTypeNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 import util.ast.node.PostfixExpressionNode.PostfixType;
@@ -469,9 +470,10 @@ public class Types {
 						" was called with the wrong number of arguments.");
 			}
 			
+			TypeNode innerTypeOfMethodCall = postFixExpressionNode.getObjectOfMethod().getType();
 			// throw an error if the types of the arguments don't match the types of the formal params
 			if (!argsMatchParams((ArgumentsNode) postFixExpressionNode.getArgsList(), 
-					funSym.getParametersNode()))
+					funSym.getParametersNode(), innerTypeOfMethodCall))
 				throw new InvalidFunctionArgumentsError(postFixExpressionNode.getNameOfFunctionOrMethod().getIdentifier() + 
 						" was called with an invalid argument list.");
 		}
@@ -494,7 +496,7 @@ public class Types {
 	 * @return
 	 */
 	
-	private static boolean argsMatchParams(ArgumentsNode args, ParametersNode params) {
+	private static boolean argsMatchParams(ArgumentsNode args, ParametersNode params, TypeNode innerTypeOfMethodCall) {
 		
 		// if they have no sublists, return if they are the same type
 		if( args.getArgumentsNode() == null && params.getParamChild() == null) 
@@ -504,13 +506,20 @@ public class Types {
 		if( args.getNumArguments() != params.getNumParams() ) 
 			return false;
 		
+		// if the param is CHECK_INNER_TYPE, we need to check the inner type against the argument
+		if(params.getType() instanceof ReservedWordTypeNode &&
+				((ReservedWordTypeNode) params.getType()).getType() == Types.Flags.CHECK_INNER_TYPE ) {
+			if(isSameType(args.getType(), innerTypeOfMethodCall)) {
+				return argsMatchParams((ArgumentsNode) args.getArgumentsNode(), params.getParamChild(), innerTypeOfMethodCall);
+			}
+		}
 		// else, if they have the same type, recurse
 		if(isSameType(args.getType(), params.getType())) 
-			return argsMatchParams((ArgumentsNode) args.getArgumentsNode(), params.getParamChild());
+			return argsMatchParams((ArgumentsNode) args.getArgumentsNode(), params.getParamChild(), innerTypeOfMethodCall);
 		
 		else 
 			return false;
 		
-	}
+	}	
 
 }

@@ -127,6 +127,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(CatchesNode node) {
 		LOGGER.finer("Type Check visit(CatchesNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -134,6 +135,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(ConstantNode node) {
 		LOGGER.finer("Type Check visit(ConstantNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -141,6 +143,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(DerivedTypeNode node) {
 		LOGGER.finer("Type Check visit(DerivedTypeNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -148,6 +151,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(DictTypeNode node) {
 		LOGGER.finer("Type Check visit(DictTypeNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -155,6 +159,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("Type Check visit(ElseIfStatementNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -162,6 +167,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(ElseStatementNode node) {
 		LOGGER.finer("Type Check visit(ElseStatementNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -169,6 +175,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(ExceptionTypeNode node) {
 		LOGGER.finer("Type Check visit(ExceptionTypeNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -176,6 +183,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(ExpressionNode node) {
 		LOGGER.finer("Type Check visit(ExpressionNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -183,6 +191,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(FunctionNode node) {
 		LOGGER.finer("Type Check visit(FunctionNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -190,6 +199,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(GuardingStatementNode node) {
 		LOGGER.finer("Type Check visit(GuardingStatementNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -197,6 +207,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(IdNode node) {
 		LOGGER.finer("Type Check visit(IdNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -204,6 +215,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("Type Check visit(IfElseStatementNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -211,6 +223,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(IterationStatementNode node) {
 		LOGGER.finer("Type Check visit(IterationStatementNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -218,6 +231,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(JumpStatementNode node) {
 		LOGGER.finer("Type Check visit(JumpStatementNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -225,6 +239,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(MockExpressionNode node) {
 		LOGGER.finer("Type Check visit(MockExpressionNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -232,6 +247,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(MockNode node) {
 		LOGGER.finer("Type Check visit(MockNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -239,12 +255,14 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(Node node) {
 		LOGGER.finer("Type Check visit(Node node) called on " + node.getName());
 
+		visitAllChildrenStandard(node);
 	}
 
 	@Override
 	public void visit(ParametersNode node) {
 		LOGGER.finer("Type Check visit(ParametersNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -263,17 +281,15 @@ public class TypeCheckingVisitor implements Visitor {
 		Types.checkValidFunctionCall(node);
 		
 		// get the symbol for this function
-		FunctionSymbol funSym = (FunctionSymbol) SymbolTable
-				.getSymbolForIdNode(node.getFunctionName());
+		FunctionSymbol funSym = SymbolTable.getSymbolForPostFixExpressionNode(node);
 
 		// set type to return type given in symbol table
-		
 		// if it is a reservedWordTypeNode
 		if( funSym.getType() instanceof ReservedWordTypeNode) {
 			
 			// if it is check inner type, set type accordingly
 			if(((ReservedWordTypeNode) funSym.getType()).getType() == Types.Flags.CHECK_INNER_TYPE) {
-				TypeNode innerType = ((DerivedTypeNode) node.getType()).getInnerTypeNode();
+				TypeNode innerType = (((DerivedTypeNode) node.getObjectOfMethod().getType()).getInnerTypeNode());
 				node.setType(innerType);
 			}
 			
@@ -291,14 +307,13 @@ public class TypeCheckingVisitor implements Visitor {
 		else {
 			node.setType(funSym.getType());
 		}
-		
-	
 	}
 
 	@Override
 	public void visit(PrimaryExpressionNode node) {
 		LOGGER.finer("Type Check visit(PrimaryExpressionNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -306,6 +321,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(PrimitiveTypeNode node) {
 		LOGGER.finer("Type Check visit(PrimitiveTypeNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -313,6 +329,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(ProgramNode node) {
 		LOGGER.finer("Type Check visit(ProgramNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -320,6 +337,9 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(RelationalExpressionNode node) {
 		LOGGER.finer("Type Check visit(RelationalExpressionNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
+		node.setType(Types.getResult(node.getOpType(), node.getLeftNode().getType(), node.getRightNode().getType()));
+		
 
 	}
 
@@ -327,6 +347,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(ReservedWordTypeNode node) {
 		LOGGER.finer("Type Check visit(ReservedWordTypeNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -334,6 +355,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(SectionNode node) {
 		LOGGER.finer("Type Check visit(SectionNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -341,6 +363,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(SectionTypeNode node) {
 		LOGGER.finer("Type Check visit(SectionTypeNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -348,6 +371,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(SelectionStatementNode node) {
 		LOGGER.finer("Type Check visit(SelectionStatementNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -355,6 +379,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(StatementListNode node) {
 		LOGGER.finer("Type Check visit(StatementListNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -362,6 +387,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(StatementNode node) {
 		LOGGER.finer("Type Check visit(StatementNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -369,6 +395,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(SwitchStatementNode node) {
 		LOGGER.finer("Type Check visit(SwitchStatementNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -376,6 +403,7 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(TypeNode node) {
 		LOGGER.finer("Type Check visit(TypeNode node) called on "
 				+ node.getName());
+		visitAllChildrenStandard(node);
 
 	}
 
@@ -397,36 +425,6 @@ public class TypeCheckingVisitor implements Visitor {
 		// set type of this UnOpNode
 		node.setType(Types.getResult(node.getOpType(), node.getChild()
 				.getType()));
-
-	}
-
-	/**
-	 * Returns a properly ordered list of TypeNodes for the parameters list in
-	 * the functionsymbol
-	 * 
-	 * @param parametersNode
-	 * @return an ArrayList<TypeNode> that represents the types of the functions
-	 *         parameters in order
-	 */
-	private ArrayList<ExpressionNode> argumentsNodeToExpressionNodesList(
-			ExpressionNode argumentsNode) {
-		ArrayList<ExpressionNode> argsExprNodeList = new ArrayList<ExpressionNode>();
-
-		ArgumentsNode currNode = (ArgumentsNode) argumentsNode;
-
-		// add expression of node passed in
-		argsExprNodeList.add(currNode.getExpressionNode());
-
-		// recurse through args nodes, adding each expression to list
-		while (currNode.getArgumentsNode() != null) {
-			currNode = (ArgumentsNode) currNode.getArgumentsNode();
-			argsExprNodeList.add(currNode.getExpressionNode());
-		}
-
-		// children in wrong order
-		Collections.reverse(argsExprNodeList);
-
-		return argsExprNodeList;
 
 	}
 
