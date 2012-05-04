@@ -4,7 +4,11 @@ import util.ast.node.*;
 import util.ast.AbstractSyntaxTree;
 import util.type.Types;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -42,10 +46,11 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected String inputFile = "example.txt";
 	protected String outputFile = "example.txt";
 	/**
-	 * Remember when recursing if we're dealing with a declaration statement,
-	 * as the handling both DerivedTypeNodes and IdNodes is context-specific.
+	 * Remember when recursing if we're dealing with a declaration statement, as
+	 * the handling both DerivedTypeNodes and IdNodes is context-specific.
 	 */
 	protected boolean declarationStatement = false;
+	protected boolean rValue = false;
 
 	/**
 	 * Construct a CodeGeneratingVisitor, but don't specify input file or output
@@ -192,9 +197,9 @@ public class CodeGeneratingVisitor implements Visitor {
 	}
 
 	/**
-	 * <code>this.code</code> is originally built as a monolithic string without newlines and
-	 * other formatting. <code>formatCode()</code> adds both newlines after statements and
-	 * proper indentation based on scope.
+	 * <code>this.code</code> is originally built as a monolithic string without
+	 * newlines and other formatting. <code>formatCode()</code> adds both
+	 * newlines after statements and proper indentation based on scope.
 	 */
 	private void formatCode() {
 		int scopeCount = 0;
@@ -256,6 +261,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		switch (node.getOpType()) {
 		case ASSIGN:
 			code.append(" = ");
+			rValue = true;
 			break;
 		case DBL_EQLS:
 			code.append(" == ");
@@ -297,10 +303,15 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append(" && ");
 			break;
 		}
+
 		walk(node.getRightNode());
-		
-		// unset declaration flag that may have been set (when node.getOpType == ASSIGN)
+
+		// unset declaration flag that may have been set (when node.getOpType ==
+		// ASSIGN)
 		declarationStatement = false;
+		// unset the rValue flag that may have been set (when node.getOpType ==
+		// ASSIGN)
+		rValue = false;
 
 	}
 
@@ -319,13 +330,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(DerivedTypeNode node) {
 		LOGGER.finer("visit(DerivedTypeNode node) called on " + node);
-		
+
 		if (declarationStatement)
 			code.append("new ");
-		
-		switch(node.getLocalType()) {
+
+		switch (node.getLocalType()) {
 		case LIST:
-			if (declarationStatement)
+			if (declarationStatement && rValue)
 				code.append("ArrayList<");
 			else
 				code.append("List<");
@@ -334,27 +345,27 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append("Iterator<");
 			break;
 		case DICT:
-			throw new UnsupportedOperationException("Dictionaries not yet supported!");
+			throw new UnsupportedOperationException(
+					"Dictionaries not yet supported!");
 		case MULTISET:
 			throw new UnsupportedOperationException("Multisets not supported!");
 		case SET:
-			if (declarationStatement)
+			if (declarationStatement && rValue)
 				code.append("HashSet<");
 			else
 				code.append("Set<");
 			break;
 		}
-		
+
 		// remember state for this particular node, but forget it for recursing
 		boolean declaration = declarationStatement;
 		declarationStatement = false;
-		
-		
+
 		walk(node.getInnerTypeNode());
-		
+
 		// close inner types
 		code.append(">");
-		
+
 		if (declaration)
 			code.append("()");
 
@@ -427,14 +438,25 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(IdNode node) {
 		LOGGER.finer("visit(IdNode node) called on " + node);
+
 		if (node.isDeclaration()) {
 			walk(node.getType());
 			code.append(" ");
-			// set a flag so when writting the right side of an assignment statement
+			// set a flag so when writing the right side of an assignment
+			// statement
 			// we handle things appropriately.
 			declarationStatement = true;
 		}
+
 		code.append(node.getIdentifier());
+
+		// derived IdNodes need to be instantiated manually
+		if (declarationStatement && node.getType() instanceof DerivedTypeNode) {
+			code.append(" = ");
+			rValue = true;
+			walk(node.getType());
+			rValue = false;
+		}
 
 	}
 
@@ -566,6 +588,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			}
 			break;
 		case FUNCTION_CALL:
+			IdNode functionIdNode = node.getFunctionName();
 			IdNode functionName = node.getFunctionName();
 			// check if this is our special mapReduce() call:
 			if (functionName.getIdentifier().equals("mapReduce")) {
@@ -607,7 +630,8 @@ public class CodeGeneratingVisitor implements Visitor {
 						code.append(functionName.toSource() + "(" + args + ")");
 				}
 			} else
-				code.append(functionName.toSource() + "()");
+				walk(functionIdNode);
+				code.append("()");
 			break;
 		}
 	}

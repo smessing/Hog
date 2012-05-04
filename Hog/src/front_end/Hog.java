@@ -65,7 +65,7 @@ public class Hog {
 		try {
 			root = (ProgramNode) parser.parse().value;
 		} catch (FileNotFoundException e) {
-			LOGGER.severe("Hog program " + source + "not found!");
+			LOGGER.severe("Hog program " + source + " not found!");
 			System.exit(1);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -83,7 +83,6 @@ public class Hog {
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(codeGenerator.getCode());
 			out.close();
-			System.out.println(codeGenerator.getCode());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
