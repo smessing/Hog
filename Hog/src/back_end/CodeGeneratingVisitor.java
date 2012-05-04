@@ -176,25 +176,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append("JobClient.runJob(conf);");
 	}
 
-	private void writeFunction() {
-		/*code.append("");
-		code.append(code.toString());
-		LOGGER
-				.fine("[writeFunction] Writing to java source:"
-						+ code.toString());/**/
-	}
-
-	private void writeBlockEnd() {
-		
-		code.append("}");
-
-		/*code.append(code.toString());
-		LOGGER.fine("[writeFunctions] Writing to java source:"
-				+ code.toString());/**/
-
-	}
-
-	/*
+	/**
 	 * Write the end of a statement.
 	 * 
 	 * Protects against writing multiple semicolons, as an ease for the
@@ -206,9 +188,9 @@ public class CodeGeneratingVisitor implements Visitor {
 		}
 	}
 
-	/*
-	 * this.code originally is built as a monolithic string without newlines and
-	 * other formatting. formatCode() adds both newlines after statements and
+	/**
+	 * <code>this.code</code> is originally built as a monolithic string without newlines and
+	 * other formatting. <code>formatCode()</code> adds both newlines after statements and
 	 * proper indentation based on scope.
 	 */
 	private void formatCode() {
@@ -387,7 +369,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append(")");
 		code.append(" {");
 		walk(node.getInstructions());
-		writeFunction();
 
 	}
 
@@ -457,7 +438,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			writeStatement();
 			break;
 		}
-		writeBlockEnd();
+		code.append("}");
 	}
 
 	@Override
@@ -636,7 +617,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		}
 		walk(node.getBlock());
-		writeBlockEnd();
+		code.append("}");
 
 		// need to write an additional block for inner methods in reduce and
 		// map:
@@ -644,7 +625,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		switch (sectionKind) {
 		case MAP:
 		case REDUCE:
-			writeBlockEnd();
+			code.append("}");
 		}
 
 	}
