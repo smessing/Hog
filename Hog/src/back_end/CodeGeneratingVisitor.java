@@ -410,8 +410,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		case ITER:
 			code.append("Iterator<");
 			break;
-		case MULTISET:
-			throw new UnsupportedOperationException("Multisets not supported!");
 		case SET:
 			if (declarationStatement && rValue)
 				code.append("HashSet<");

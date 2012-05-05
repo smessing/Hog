@@ -74,7 +74,7 @@ public class Types {
 	 * 
 	 */
 	public static enum Derived {
-		LIST, ITER, DICT, MULTISET, SET
+		LIST, ITER, MULTISET, SET
 	}
 
 	/**

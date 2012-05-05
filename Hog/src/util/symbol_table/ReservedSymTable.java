@@ -83,7 +83,6 @@ public final class ReservedSymTable{
 		reserve(new Word("text", sym.TEXT));
 		reserve(new Word("default", sym.DEFAULT));
 		reserve(new Word("set", sym.SET));
-		reserve(new Word("dict", sym.DICT));
 		reserve(new Word("iter", sym.ITER));
 		reserve(new Word("==", sym.DBL_EQLS));
 		reserve(new Word("!=", sym.NOT_EQLS));
