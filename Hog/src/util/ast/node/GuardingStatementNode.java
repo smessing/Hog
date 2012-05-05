@@ -55,7 +55,7 @@ public class GuardingStatementNode extends StatementNode {
 	}
 	
 	public boolean hasFinally() {
-		return (finallyStatements == null);
+		return (finallyStatements != null);
 	}
 	
 	public StatementListNode getFinally() {
