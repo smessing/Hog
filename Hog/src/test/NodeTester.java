@@ -106,7 +106,7 @@ public class NodeTester {
 		 */
 		__statementListNode = new StatementListNode(new BiOpNode(BiOpNode.OpType.ASSIGN,new IdNode("count"),new ConstantNode(Types.Primitive.INT,"constant")));
 		__sectionNode = new SectionNode(__statementListNode, SectionNode.SectionName.MAIN);
-		__biOpNode = new BiOpNode(null, A, B);
+		__biOpNode = new BiOpNode(BiOpNode.OpType.ASSIGN, A, B);
 		__catchesNode = new CatchesNode(__idNode, __statementListNode);
 		__constantNode = new ConstantNode(null, null);
 		__derivedTypeNode = new DerivedTypeNode(Types.Derived.DICT, null);
@@ -114,7 +114,7 @@ public class NodeTester {
 		__exceptionTypeNode = new ExceptionTypeNode(null);
 		__functionNode = new FunctionNode(null, null, __parametersNode, __statementListNode);
 		__guardingStatementNode = new GuardingStatementNode(__statementListNode, __catchesNode);
-		__idNode = new IdNode(null);
+		__idNode = new IdNode("foo");
 		__ifElseStatementNode = new IfElseStatementNode(A, __statementListNode, __elseIfStatementNode, null);
 		__iterationStatementNode = new IterationStatementNode(A, A, __statementListNode) ;
 		__jumpStatementNode = new JumpStatementNode(null);

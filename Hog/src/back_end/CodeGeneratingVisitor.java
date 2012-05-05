@@ -718,6 +718,37 @@ public class CodeGeneratingVisitor implements Visitor {
 				writeMapReduce();
 				return;
 			}
+			// check if this is a cast function:
+			String functionName = functionIdNode.getIdentifier(); 
+			if (functionName.equals("text2int")) {
+				code.append("Integer.parseInt(");
+				walk(node.getArgsList());
+				code.append(")");
+				return;
+			} else if (functionName.equals("int2text")) {
+				code.append("Integer.toString(");
+				walk(node.getArgsList());
+				code.append(")");
+				return;
+			} else if (functionName.equals("text2real")) {
+				code.append("Double.parseDouble(");
+				walk(node.getArgsList());
+				code.append(")");
+				return;
+			} else if (functionName.equals("real2text")) {
+				code.append("Double.toString(");
+				walk(node.getArgsList());
+				code.append(")");
+				return;
+			} else if (functionName.equals("real2int")) {
+				code.append("(int) ");
+				walk(node.getArgsList());
+				return;
+			} else if (functionName.equals("int2real")) {
+				code.append("(double) ");
+				walk(node.getArgsList());
+				return;
+			}
 
 			if (!node.getFunctionName().getIdentifier().equals("emit")) {
 				code.append("Functions.");
