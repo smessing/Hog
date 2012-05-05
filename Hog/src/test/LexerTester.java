@@ -23,7 +23,8 @@ import java_cup.runtime.Symbol;
  * Tests Lexer's performance on decomposing different inputs into the correct
  * sequence of tokens.
  * 
- * @author jason, sam
+ * @author Jason Halpern
+ * @author Samuel MEssing
  * 
  */
 public class LexerTester {

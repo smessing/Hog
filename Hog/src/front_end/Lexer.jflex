@@ -4,6 +4,12 @@ import java_cup.runtime.*;
 import util.ast.node.ExceptionTypeNode;
 import util.type.Types;
 
+/**
+ * The lexer used by Parser.java to generate a token stream for a particular input file.
+ *
+ * @author Samuel Messing
+ */
+
 %%
 /**
  * LEXICAL FUNCTIONS:
@@ -77,10 +83,8 @@ bool            { return newSym(sym.BOOL); }
 int             { return newSym(sym.INT); }
 real            { return newSym(sym.REAL); }
 list            { return newSym(sym.LIST); }
-dict            { return newSym(sym.DICT); }
 set             { return newSym(sym.SET); }
 iter            { return newSym(sym.ITER); }
-multiset        { return newSym(sym.MULTISET); }
 void            { return newSym(sym.VOID); }
 not             { return newSym(sym.NOT); }
 switch          { return newSym(sym.SWITCH); }

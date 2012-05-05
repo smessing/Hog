@@ -61,6 +61,8 @@ public class Hog {
 	public static void main(String[] args) {
 		usage(args);
 
+		System.out.println("Loading source file " + source);
+		System.out.println("Parsing file...");
 		Parser parser = new Parser(new Lexer(source));
 		ProgramNode root = null;
 

@@ -1,7 +1,5 @@
 package util.ast.node;
 
-import java.util.ArrayList;
-
 import back_end.Visitor;
 
 /**
@@ -11,27 +9,28 @@ import back_end.Visitor;
  * 
  * Can check which it represents by calling getPostFixType
  * 
- * @author ben
+ * @author Benjamin Rapaport
  * 
  */
 public class PostfixExpressionNode extends ExpressionNode {
-	
+
 	public static enum PostfixType {
 		METHOD_NO_PARAMS, METHOD_WITH_PARAMS, FUNCTION_CALL
 	}
+
 	/** postfixType field which is of type PostfixType */
 	protected PostfixType postfixType;
 
 	/** boolean field to indicate whether PostfixExpression Has Arguments */
 	protected boolean hasArguments;
-	
+
 	protected IdNode functionName;
 	protected IdNode objectName;
 	protected IdNode methodName;
 	protected IdNode objectOfMethod;
-	
+
 	protected ExpressionNode argsList;
-	
+
 	/**
 	 * Constructor for method calls with no parameters
 	 * 
@@ -41,57 +40,64 @@ public class PostfixExpressionNode extends ExpressionNode {
 	public PostfixExpressionNode(IdNode objectOfMethod, IdNode methodName) {
 		super();
 		postfixType = PostfixType.METHOD_NO_PARAMS;
+		// note that objectOfMethod and objectName are the same, this is an
+		// artifact
+		// of the fact that different functions use different fields.
 		this.objectOfMethod = objectOfMethod;
-		this.objectName = objectOfMethod; // sorry for this disgusting fix to a ridiculous problem
+		this.objectName = objectOfMethod;
 		this.methodName = methodName;
 		this.addChild(objectOfMethod);
 		this.methodName = methodName;
 		this.addChild(methodName);
 	}
-	
+
 	/**
-	 * Constructor for function calls
-	 * If there are no arguments passed in, this will not have the argsList child, since it won't be added successfully
+	 * Constructor for function calls If there are no arguments passed in, this
+	 * will not have the argsList child, since it won't be added successfully
 	 * 
-	 * @param postfixType - must be PostfixType.FUNCTION_CALL
+	 * @param postfixType
+	 *            - must be PostfixType.FUNCTION_CALL
 	 * @param functionName
 	 * @param argsList
 	 */
-	public PostfixExpressionNode(PostfixType postfixType, IdNode functionName, ExpressionNode argsList) {
+	public PostfixExpressionNode(PostfixType postfixType, IdNode functionName,
+			ExpressionNode argsList) {
 		super();
 		this.postfixType = postfixType;
 		this.functionName = functionName;
 		this.addChild(functionName);
 		this.addChild(argsList);
-		
-		if(argsList != null){
+
+		if (argsList != null) {
 			this.hasArguments = true;
 			this.argsList = argsList;
 		}
-		
-		
-	}	
 
+	}
 
 	/**
 	 * Constructor for method calls with params
-	 * @param postFixType - must be PostfixType.METHOD_WITH_PARAMS
+	 * 
+	 * @param postFixType
+	 *            - must be PostfixType.METHOD_WITH_PARAMS
 	 * @param objectName
 	 * @param methodName
 	 * @param argsList
 	 */
-	public PostfixExpressionNode(PostfixType postFixType,
-			IdNode objectName, IdNode methodName,
-			ExpressionNode argsList) {
+	public PostfixExpressionNode(PostfixType postFixType, IdNode objectName,
+			IdNode methodName, ExpressionNode argsList) {
 		super();
 		this.postfixType = postFixType;
+		// note that objectOfMethod and objectName are the same, this is an
+		// artifact
+		// of the fact that different functions use different fields.
 		this.objectName = objectName;
-		this.objectOfMethod = objectName; // sorry for this disgusting fix to a ridiculous problem
+		this.objectOfMethod = objectName;
 		this.methodName = methodName;
 		this.addChild(objectName);
 		this.addChild(methodName);
 		this.addChild(argsList);
-		if(argsList != null){
+		if (argsList != null) {
 			this.hasArguments = true;
 			this.argsList = argsList;
 		}
@@ -100,7 +106,10 @@ public class PostfixExpressionNode extends ExpressionNode {
 	public PostfixType getPostfixType() {
 		return postfixType;
 	}
-	/** Method to Return the name getName()
+
+	/**
+	 * Method to Return the name getName()
+	 * 
 	 * @return Returns a string with the node's name
 	 */
 	@Override
@@ -109,56 +118,58 @@ public class PostfixExpressionNode extends ExpressionNode {
 		for (Node n : this.getChildren()) {
 			sb.append(n.getName() + "' ");
 		}
-		return id + "-" + postfixType.toString() + "<" + this.getTypeName() + ">" + sb.toString() +
-				"newscope: "+ isNewScope();
+		return id + "-" + postfixType.toString() + "<" + this.getTypeName()
+				+ ">" + sb.toString() + "newscope: " + isNewScope();
 	}
 
-	public boolean hasArguments(){
+	public boolean hasArguments() {
 		return this.hasArguments;
 	}
-	
-	public IdNode getFunctionName(){
+
+	public IdNode getFunctionName() {
 		return this.functionName;
 	}
-	
-	public ExpressionNode getArgsList(){
+
+	public ExpressionNode getArgsList() {
 		return this.argsList;
 	}
-	
-	public IdNode getMethodName(){
+
+	public IdNode getMethodName() {
 		return this.methodName;
 	}
-	
-	public IdNode getObjectName(){
+
+	public IdNode getObjectName() {
 		return this.objectName;
 	}
-	
-	public IdNode getObjectOfMethod(){
+
+	public IdNode getObjectOfMethod() {
 		return this.objectOfMethod;
 	}
-	
+
 	/**
 	 * returns true if this is a function call (as opposed to a method call)
+	 * 
 	 * @return
 	 */
 	public boolean isFunction() {
 		return (this.postfixType == PostfixType.FUNCTION_CALL);
 	}
-	
+
 	/**
-	 * returns true if this is a method call with or without params
-	 * as opposed to a function call
+	 * returns true if this is a method call with or without params as opposed
+	 * to a function call
+	 * 
 	 * @return
 	 */
 	public boolean isMethod() {
-		return (this.postfixType == PostfixType.METHOD_NO_PARAMS  || 
-				this.postfixType == PostfixType.METHOD_WITH_PARAMS);
+		return (this.postfixType == PostfixType.METHOD_NO_PARAMS || this.postfixType == PostfixType.METHOD_WITH_PARAMS);
 	}
+
 	/**
-	 * Regardless of whether this is a function call or a method call, this
-	 * will return the name of the function.
-	 * eg. myList.add() would return the IdNode for add
-	 *     emit(1, 2) would return the IdNode for emit
+	 * Regardless of whether this is a function call or a method call, this will
+	 * return the name of the function. eg. myList.add() would return the IdNode
+	 * for add emit(1, 2) would return the IdNode for emit
+	 * 
 	 * @return
 	 */
 	public IdNode getNameOfFunctionOrMethod() {
@@ -167,7 +178,7 @@ public class PostfixExpressionNode extends ExpressionNode {
 		else
 			return this.getMethodName();
 	}
-	
+
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);

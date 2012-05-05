@@ -4,11 +4,6 @@ import util.ast.node.*;
 import util.ast.AbstractSyntaxTree;
 import util.type.Types;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -56,11 +51,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	 * Hadoop's Writable types;
 	 */
 	protected boolean emit = false;
-	/**
-	 * Remember if we're writing a try/catch block, as we need to handle
-	 * ArgumentNodes differently.
-	 */
-	protected boolean tryBlock = false;
 
 	/**
 	 * Construct a CodeGeneratingVisitor, but don't specify input file or output
@@ -313,6 +303,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(BiOpNode node) {
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
+		
 		walk(node.getLeftNode());
 		switch (node.getOpType()) {
 		case ASSIGN:
@@ -419,11 +410,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		case ITER:
 			code.append("Iterator<");
 			break;
-		case DICT:
-			throw new UnsupportedOperationException(
-					"Dictionaries not yet supported!");
-		case MULTISET:
-			throw new UnsupportedOperationException("Multisets not supported!");
 		case SET:
 			if (declarationStatement && rValue)
 				code.append("HashSet<");
@@ -447,12 +433,6 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		if (declaration)
 			code.append("()");
-
-	}
-
-	@Override
-	public void visit(DictTypeNode node) {
-		LOGGER.finer("visit(DictTypeNode node) called on " + node);
 
 	}
 
@@ -725,6 +705,37 @@ public class CodeGeneratingVisitor implements Visitor {
 			// check if this is our special mapReduce() call:
 			if (functionIdNode.getIdentifier().equals("mapReduce")) {
 				writeMapReduce();
+				return;
+			}
+			// check if this is a cast function:
+			String functionName = functionIdNode.getIdentifier(); 
+			if (functionName.equals("text2int")) {
+				code.append("Integer.parseInt(");
+				walk(node.getArgsList());
+				code.append(")");
+				return;
+			} else if (functionName.equals("int2text")) {
+				code.append("Integer.toString(");
+				walk(node.getArgsList());
+				code.append(")");
+				return;
+			} else if (functionName.equals("text2real")) {
+				code.append("Double.parseDouble(");
+				walk(node.getArgsList());
+				code.append(")");
+				return;
+			} else if (functionName.equals("real2text")) {
+				code.append("Double.toString(");
+				walk(node.getArgsList());
+				code.append(")");
+				return;
+			} else if (functionName.equals("real2int")) {
+				code.append("(int) ");
+				walk(node.getArgsList());
+				return;
+			} else if (functionName.equals("int2real")) {
+				code.append("(double) ");
+				walk(node.getArgsList());
 				return;
 			}
 

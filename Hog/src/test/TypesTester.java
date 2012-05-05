@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import util.ast.node.BiOpNode;
 import util.ast.node.DerivedTypeNode;
-import util.ast.node.DictTypeNode;
 import util.ast.node.ExceptionTypeNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.TypeNode;
@@ -49,7 +48,6 @@ public class TypesTester {
 		listInt = new DerivedTypeNode(Types.Derived.LIST, intNode);
 		exceptionFileNotFound = new ExceptionTypeNode(
 				Types.Exception.FILE_NOT_FOUND);
-		dict_Text_ListInt = new DictTypeNode(Types.Primitive.TEXT, listInt);
 		setBool = new DerivedTypeNode(Types.Derived.SET, boolNode);
 		iterNode = new DerivedTypeNode(Types.Derived.ITER, intNode);
 		listSetBool = new DerivedTypeNode(Types.Derived.LIST, setBool);

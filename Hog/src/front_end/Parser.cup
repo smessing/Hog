@@ -6,6 +6,14 @@ import util.ast.node.*;
 import util.type.*;
 import java.util.logging.*;
 
+/**
+ * Parse a source program based on the Hog language syntax.
+ *
+ * @author Samuel Messing
+ * @author Benjamin Rapaport
+ * @author Paul Tylkin
+ */
+
 action code
   {:
     Hashtable table = new Hashtable();
@@ -56,13 +64,12 @@ terminal AND, OR, NOT;
 terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
 terminal FUNCTIONS, MAIN, MAP, REDUCE;
 terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA;
-terminal LIST, ITER, DICT, MULTISET, SET;
+terminal LIST, ITER, SET;
 terminal TRY, CATCH, FINALLY;
 terminal ExceptionTypeNode EXCEPTION;
 
 nonterminal GuardingStatementNode GuardingStatement;
 nonterminal CatchesNode Catches;
-nonterminal CatchesNode Catch;
 nonterminal IdNode CatchHeader;
 nonterminal StatementListNode Finally;
 nonterminal StatementListNode Block;
@@ -889,40 +896,7 @@ Type::=
       RESULT = new DerivedTypeNode(d, t);
       CUP$Parser$actions.LOGGER.fine("DerivedType LESS Type GRTR -> Type");
     :}
-  |
-    DictType:m
-    {:
-      RESULT = m;
-      CUP$Parser$actions.LOGGER.fine("DictType -> Type");
-    :}
   ;
-  
-DictType::=
-    DICT LESS INT COMMA Type:t GRTR
-    {:
-      RESULT = new DictTypeNode(Types.Primitive.INT, t);
-      CUP$Parser$actions.LOGGER.fine("DICT LESS INT COMMA Type GRTR -> MapType");
-    :}
-  |
-    DICT LESS TEXT COMMA Type:t GRTR
-    {:
-      RESULT = new DictTypeNode(Types.Primitive.TEXT, t);
-      CUP$Parser$actions.LOGGER.fine("DICT LESS TEXT COMMA Type GRTR -> MapType");
-    :}
-  |
-    DICT LESS BOOL COMMA Type:t GRTR
-    {:
-      RESULT = new DictTypeNode(Types.Primitive.BOOL, t);
-      CUP$Parser$actions.LOGGER.fine("DICT LESS BOOL COMMA Type GRTR -> MapType");
-    :}
-  |
-    DICT LESS REAL COMMA Type:t GRTR
-    {:
-      RESULT = new DictTypeNode(Types.Primitive.REAL, t);
-      CUP$Parser$actions.LOGGER.fine("DICT LESS REAL COMMA Type GRTR -> MapType");
-    :}
-  ;
-  
 
 DerivedType::=
     LIST
@@ -935,12 +909,6 @@ DerivedType::=
     {:
       RESULT = Types.Derived.ITER;
       CUP$Parser$actions.LOGGER.fine("ITER -> DerivedType");
-    :}
-  |
-    MULTISET
-    {:
-      RESULT = Types.Derived.MULTISET;
-      CUP$Parser$actions.LOGGER.fine("MULTISET -> DerivedType");
     :}
   |
     SET
