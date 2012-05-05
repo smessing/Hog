@@ -56,6 +56,11 @@ public class CodeGeneratingVisitor implements Visitor {
 	 * Hadoop's Writable types;
 	 */
 	protected boolean emit = false;
+	/**
+	 * Remember if we're writing a try/catch block, as we need to handle ArgumentNodes
+	 * differently.
+	 */
+	protected boolean tryBlock = false;
 
 	/**
 	 * Construct a CodeGeneratingVisitor, but don't specify input file or output
@@ -289,7 +294,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ArgumentsNode node) {
 		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
-
+		
 		if (node.hasMoreArgs()) {
 			walk(node.getMoreArgs());
 			code.append(", ");
@@ -363,6 +368,14 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(CatchesNode node) {
 		LOGGER.finer("visit(CatchesNode node) called on " + node);
+		
+		if (node.hasNext())
+			walk(node.getNext());
+		code.append("catch (");
+		walk(node.getHeader());
+		code.append(") {");
+		walk(node.getBlock());
+		code.append(" }");
 
 	}
 
@@ -456,6 +469,28 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ExceptionTypeNode node) {
 		LOGGER.finer("visit(ExceptionTypeNode node) called on " + node);
+		
+		switch(node.getExceptionType()) {
+		case ARITHMETIC:
+			code.append("ArithmeticException");
+			break;
+		case ARRAY_OUT_OF_BOUNDS:
+			code.append("ArrayIndexOutOfBoundsException");
+			break;
+		case FILE_LOAD:
+		case FILE_NOT_FOUND:
+			code.append("IOException");
+			break;
+		case INCORRECT_ARGUMENT:
+			code.append("IllegalArgumentException");
+			break;
+		case TYPE_MISMATCH:
+			code.append("TypeMismatchException");
+			break;
+		case NULL_REFERENCE:
+			code.append("NullPointerException");
+			break;
+		}
 
 	}
 
@@ -488,6 +523,17 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(GuardingStatementNode node) {
 		LOGGER.finer("visit(GuardingStatementNode node) called on " + node);
+		
+		code.append("try {");
+		walk(node.getBlock());
+		code.append(" }");
+		if (node.hasCatches())
+			walk(node.getCatches());
+		if (node.hasFinally()) {
+			code.append("finally {");
+			walk(node.getFinally());
+			code.append(" }");
+		}
 
 	}
 
@@ -720,13 +766,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(RelationalExpressionNode node) {
 		LOGGER.finer("visit(RelationalNode node) called on " + node);
-
+		throw new UnsupportedOperationException("I should never see a relational expression node!");
 	}
 
 	@Override
 	public void visit(ReservedWordTypeNode node) {
 		LOGGER.finer("visit(ReservedWordTypeNode node) called on " + node);
-
+		throw new UnsupportedOperationException("I shouldn't be seeing a ReservedWordTypeNode!");
 	}
 
 	@Override
@@ -824,6 +870,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(SelectionStatementNode node) {
 		LOGGER.finer("visit(SelectionStatementNode node) called on " + node);
+		throw new UnsupportedOperationException("I should never see a SelectionStatementNode!");
 
 	}
 
@@ -849,6 +896,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(SwitchStatementNode node) {
 		LOGGER.finer("visit(SwitchStatementNode node) called on " + node);
+		throw new UnsupportedOperationException("Switch statements are not supported!");
 	}
 
 	@Override

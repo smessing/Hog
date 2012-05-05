@@ -84,7 +84,7 @@ public class CatchesNode extends StatementListNode {
 	 * @return - true if there is another catch block, false otherwise.
 	 */
 	public boolean hasNext() {
-		return (next == null);
+		return (next != null);
 	}
 
 	/**
