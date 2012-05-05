@@ -257,12 +257,13 @@ public class SymbolTableVisitor implements Visitor {
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatement node) called on " + node.getName());
 
+		// open scope
+		openScope(node);
+		
 		// first visit the condition
 		if(node.getCondition() != null)
 			node.getCondition().accept(this);
-		
-		// open scope
-		openScope(node);
+
 		
 		if(node.getIfCondTrue() != null) {
 			LOGGER.finer("we are in the getIfCondTrue");

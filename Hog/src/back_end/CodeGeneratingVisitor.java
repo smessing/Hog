@@ -209,6 +209,11 @@ public class CodeGeneratingVisitor implements Visitor {
 	private void formatCode() {
 		int scopeCount = 0;
 		StringBuilder indentedCode = new StringBuilder();
+		// all the booleans below are strictly for pretty printing for loops
+		boolean withinForDeclaration = false;
+		boolean f = false;
+		boolean o = false;
+		int forSemicolonCount = 0;
 		for (int i = 0; i < code.length(); i++) {
 			switch (code.charAt(i)) {
 			case '{':
@@ -226,10 +231,38 @@ public class CodeGeneratingVisitor implements Visitor {
 				indentedCode.append(repeat(' ', 4 * scopeCount));
 				break;
 			case ';':
-				indentedCode.append(";\n");
-				indentedCode.append(repeat(' ', 4 * scopeCount));
+				if (withinForDeclaration && forSemicolonCount < 2) {
+					indentedCode.append(';');
+					forSemicolonCount++;
+				}
+				else {
+					indentedCode.append(";\n");
+					forSemicolonCount = 0;
+					withinForDeclaration = false;
+				}
+				if (!withinForDeclaration)
+					indentedCode.append(repeat(' ', 4 * scopeCount));
+				break;
+			case 'f':
+				f = true;
+				indentedCode.append(code.charAt(i));
+				break;
+			case 'o':
+				if (f)
+					o = true;
+				indentedCode.append(code.charAt(i));
+				break;
+			case 'r':
+				if (f && o) {
+					withinForDeclaration = true;
+				}
+				indentedCode.append(code.charAt(i));
 				break;
 			default:
+				if (!withinForDeclaration) {
+					f = false;
+					o = false;
+				}
 				indentedCode.append(code.charAt(i));
 			}
 		}
@@ -336,7 +369,17 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
+		LOGGER.finer("Value: " + node.getValue());
+
+		if (emit) {
+			walk(node.getType());
+			code.append("(");
+		}
+
 		code.append(node.getValue());
+
+		if (emit)
+			code.append(")");
 	}
 
 	@Override
@@ -407,7 +450,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
 		code.append("} else {");
 		walk(node.getBlock());
-		code.append("}");
 
 	}
 
@@ -433,11 +475,13 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append(node.getIdentifier());
 		ParametersNode params = node.getParametersNode();
 		code.append("(");
-		walk(params.getType());
-		code.append(" " + params.getIdentifier());
+		walk(params);
+		//walk(params.getType());
+		//code.append(" " + params.getIdentifier());
 		code.append(")");
 		code.append(" {");
 		walk(node.getInstructions());
+		code.append(" }");
 
 	}
 
@@ -516,8 +560,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case FOREACH:
 			code.append("for (");
-			code.append(Types.getHadoopType((PrimitiveTypeNode) node.getPart()
-					.getType()));
+			code.append(Types.getJavaType(node.getPart().getType()));
 			code.append(" ");
 			walk(node.getPart());
 			code.append(" : ");
@@ -534,7 +577,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			writeStatement();
 			break;
 		}
-		code.append("}");
+		code.append(" }");
 	}
 
 	@Override
@@ -581,6 +624,17 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ParametersNode node) {
 		LOGGER.finer("visit(ParametersNode node) called on " + node);
+		
+		if (node.hasParamChild()) {
+			walk(node.getParamChild());
+			code.append(", ");
+		}
+		
+		walk(node.getType());
+		code.append(" ");
+		code.append(node.getIdentifier());
+
+		//walk(node.getParamChild());
 
 	}
 
@@ -596,14 +650,17 @@ public class CodeGeneratingVisitor implements Visitor {
 					+ methodNameNoParam.getIdentifier() + "()");
 			break;
 		case METHOD_WITH_PARAMS:
-			IdNode objectName = node.getObjectName();
-			IdNode methodName = node.getMethodName();
-			if (node.hasArguments()) {
-				ExpressionNode argsList = node.getArgsList();
-				code.append(objectName.getIdentifier() + "."
-						+ methodName.getIdentifier() + "("
-						+ argsList.toSource() + ")");
-			}
+			IdNode object = node.getObjectName();
+			IdNode method = node.getMethodName();
+			code.append(object.getIdentifier());
+			code.append(".");
+			if (method.getIdentifier().equals("tokenize"))
+				code.append("split");
+			else
+				code.append(method.getIdentifier());
+			code.append("(");
+			walk(node.getArgsList());
+			code.append(")");
 			break;
 		case FUNCTION_CALL:
 			IdNode functionIdNode = node.getFunctionName();
@@ -723,12 +780,16 @@ public class CodeGeneratingVisitor implements Visitor {
 					.getReturnValue());
 		}
 
-		code.append("<"
-				+ Types.getHadoopType(node.getInputKeyIdNode().getType())
-				+ ", "
-				+ Types.getHadoopType(node.getInputValueIdNode().getType())
-				+ ", " + Types.getHadoopType(node.getReturnKey()) + ", "
-				+ Types.getHadoopType(node.getReturnValue()) + "> {");
+		code.append("<");
+		code.append(Types.getHadoopType(node.getInputKeyIdNode().getType()));
+		code.append(", ");
+		code.append(Types.getHadoopType(node.getInputValueIdNode().getType()));
+		code.append(", ");
+		code.append(Types.getHadoopType(node.getReturnKey()));
+		code.append(", ");
+		code.append(Types.getHadoopType(node.getReturnValue()));
+		code.append("> {");
+
 		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.REDUCE) {
 			code.append("public void reduce(");
 			code
@@ -755,6 +816,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append(", ");
 			code.append(Types.getHadoopType(node.getReturnValue()));
 			code.append("> output, Reporter reporter) throws IOException {");
+			code.append("String line = value.toString();");
 		}
 
 	}

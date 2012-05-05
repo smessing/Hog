@@ -10,7 +10,6 @@
 
 import java.io.IOException;
 import java.util.*;
-
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.io.*;
@@ -18,16 +17,13 @@ import org.apache.hadoop.util.*;
 import org.apache.hadoop.mapred.*;
 
 public class WordCount {
-
 	public static class Functions {
 		public static Integer fib(Integer n) {
 			if (n == 0) {
 				return 0;
 			} else if (n == 1) {
 				return 1;
-			}
-
-			else {
+			} else {
 				return fib(n - 1) + fib(n - 2);
 			}
 		}
@@ -88,7 +84,5 @@ public class WordCount {
 		FileInputFormat.setInputPaths(conf, new Path(args[0]));
 		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
 		JobClient.runJob(conf);
-
 	}
-
 }
