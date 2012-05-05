@@ -326,32 +326,20 @@ Finally::=
 ;
 
 Catches::=
-    Catch:c
-    {:
-      RESULT = c;
-      CUP$Parser$actions.LOGGER.info("Catch -> Catches");
-    :}
-   | 
-    Catches:cs Catch:c
-    {:
-      // TODO show the team this and see if it's too hacky
-      IdNode header = cs.getHeader();
-      StatementListNode block = cs.getBlock();
-      header.unsetParent();
-      block.unsetParent();
-      RESULT = new CatchesNode(header, block, c);
-      CUP$Parser$actions.LOGGER.info("Catches Catch -> Catches");
-    :}
-;
-
-Catch::=
-   CatchHeader:c Block:b
+    CatchHeader:c Block:b
     {:
       RESULT = new CatchesNode(c, b);
       RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("CatchHeader Block -> Catch");
     :}
-  ;
+   | 
+    Catches:cs CatchHeader:c Block:b
+    {:
+      RESULT = new CatchesNode(c, b, cs);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.info("Catches CatchHeader Block -> Catches");
+    :}
+;
 
 CatchHeader::=
    CATCH L_PAREN EXCEPTION:ex ID:i R_PAREN

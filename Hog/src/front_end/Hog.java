@@ -73,7 +73,7 @@ public class Hog {
 			ex.printStackTrace();
 		}
 
-		root.print();
+		//root.print();
 		
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
 		LOGGER.info("Generating symbol tables...");
@@ -84,6 +84,7 @@ public class Hog {
 		// populate/propagate/check types
 		TypeCheckingVisitor typeVisitor = new TypeCheckingVisitor(tree);
 		typeVisitor.walk();
+		root.print();
 		LOGGER.info("Generating Java source...");
 		// generate source code:
 		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);

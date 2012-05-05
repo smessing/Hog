@@ -294,7 +294,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ArgumentsNode node) {
 		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
-
+		
 		if (node.hasMoreArgs()) {
 			walk(node.getMoreArgs());
 			code.append(", ");
@@ -368,6 +368,13 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(CatchesNode node) {
 		LOGGER.finer("visit(CatchesNode node) called on " + node);
+		code.append("catch (");
+		walk(node.getHeader());
+		code.append(") {");
+		walk(node.getBlock());
+		code.append("} ");
+		if (node.hasNext())
+			walk(node.getNext());
 
 	}
 
@@ -494,7 +501,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	public void visit(GuardingStatementNode node) {
 		LOGGER.finer("visit(GuardingStatementNode node) called on " + node);
 		
-		tryBlock = true;
 		code.append("try {");
 		walk(node.getBlock());
 		if (node.hasCatches())
@@ -504,7 +510,6 @@ public class CodeGeneratingVisitor implements Visitor {
 			walk(node.getFinally());
 			code.append(" }");
 		}
-		tryBlock = false;
 
 	}
 
