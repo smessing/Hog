@@ -263,6 +263,12 @@ public class CodeGeneratingVisitor implements Visitor {
 				}
 				indentedCode.append(code.charAt(i));
 				break;
+			case ':':
+				f = false;
+				o = false;
+				withinForDeclaration = false;
+				indentedCode.append(code.charAt(i));
+				break;
 			default:
 				if (!withinForDeclaration) {
 					f = false;
@@ -368,13 +374,14 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(CatchesNode node) {
 		LOGGER.finer("visit(CatchesNode node) called on " + node);
+		
+		if (node.hasNext())
+			walk(node.getNext());
 		code.append("catch (");
 		walk(node.getHeader());
 		code.append(") {");
 		walk(node.getBlock());
-		code.append("} ");
-		if (node.hasNext())
-			walk(node.getNext());
+		code.append(" }");
 
 	}
 
@@ -468,6 +475,28 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ExceptionTypeNode node) {
 		LOGGER.finer("visit(ExceptionTypeNode node) called on " + node);
+		
+		switch(node.getExceptionType()) {
+		case ARITHMETIC:
+			code.append("ArithmeticException");
+			break;
+		case ARRAY_OUT_OF_BOUNDS:
+			code.append("ArrayIndexOutOfBoundsException");
+			break;
+		case FILE_LOAD:
+		case FILE_NOT_FOUND:
+			code.append("IOException");
+			break;
+		case INCORRECT_ARGUMENT:
+			code.append("IllegalArgumentException");
+			break;
+		case TYPE_MISMATCH:
+			code.append("TypeMismatchException");
+			break;
+		case NULL_REFERENCE:
+			code.append("NullPointerException");
+			break;
+		}
 
 	}
 
@@ -488,8 +517,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		ParametersNode params = node.getParametersNode();
 		code.append("(");
 		walk(params);
-		//walk(params.getType());
-		//code.append(" " + params.getIdentifier());
 		code.append(")");
 		code.append(" {");
 		walk(node.getInstructions());
@@ -503,6 +530,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		
 		code.append("try {");
 		walk(node.getBlock());
+		code.append(" }");
 		if (node.hasCatches())
 			walk(node.getCatches());
 		if (node.hasFinally()) {

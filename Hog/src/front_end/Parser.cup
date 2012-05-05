@@ -339,7 +339,7 @@ Catches::=
       RESULT.setNewScope();
       CUP$Parser$actions.LOGGER.info("Catches CatchHeader Block -> Catches");
     :}
-;
+    ;
 
 CatchHeader::=
    CATCH L_PAREN EXCEPTION:ex ID:i R_PAREN
@@ -349,7 +349,7 @@ CatchHeader::=
       RESULT = catchNode;
       CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader");
    :}
-  ;
+   ;
  
 DeclarationStatement::=
     Type:t ID:i
