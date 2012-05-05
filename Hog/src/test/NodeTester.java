@@ -109,7 +109,7 @@ public class NodeTester {
 		__biOpNode = new BiOpNode(BiOpNode.OpType.ASSIGN, A, B);
 		__catchesNode = new CatchesNode(__idNode, __statementListNode);
 		__constantNode = new ConstantNode(null, null);
-		__derivedTypeNode = new DerivedTypeNode(Types.Derived.DICT, null);
+		__derivedTypeNode = new DerivedTypeNode(Types.Derived.LIST, null);
 		__elseIfStatementNode = new ElseIfStatementNode(A, __statementListNode, __elseIfStatementNode);
 		__exceptionTypeNode = new ExceptionTypeNode(null);
 		__functionNode = new FunctionNode(null, null, __parametersNode, __statementListNode);

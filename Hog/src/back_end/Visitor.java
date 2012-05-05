@@ -22,7 +22,6 @@ public interface Visitor {
 	public abstract void visit(CatchesNode node);
 	public abstract void visit(ConstantNode node);
 	public abstract void visit(DerivedTypeNode node);
-	public abstract void visit(DictTypeNode node);
 	public abstract void visit(ElseIfStatementNode node);
 	public abstract void visit(ElseStatementNode node);
 	public abstract void visit(ExceptionTypeNode node);

@@ -896,40 +896,7 @@ Type::=
       RESULT = new DerivedTypeNode(d, t);
       CUP$Parser$actions.LOGGER.fine("DerivedType LESS Type GRTR -> Type");
     :}
-  |
-    DictType:m
-    {:
-      RESULT = m;
-      CUP$Parser$actions.LOGGER.fine("DictType -> Type");
-    :}
   ;
-  
-DictType::=
-    DICT LESS INT COMMA Type:t GRTR
-    {:
-      RESULT = new DictTypeNode(Types.Primitive.INT, t);
-      CUP$Parser$actions.LOGGER.fine("DICT LESS INT COMMA Type GRTR -> MapType");
-    :}
-  |
-    DICT LESS TEXT COMMA Type:t GRTR
-    {:
-      RESULT = new DictTypeNode(Types.Primitive.TEXT, t);
-      CUP$Parser$actions.LOGGER.fine("DICT LESS TEXT COMMA Type GRTR -> MapType");
-    :}
-  |
-    DICT LESS BOOL COMMA Type:t GRTR
-    {:
-      RESULT = new DictTypeNode(Types.Primitive.BOOL, t);
-      CUP$Parser$actions.LOGGER.fine("DICT LESS BOOL COMMA Type GRTR -> MapType");
-    :}
-  |
-    DICT LESS REAL COMMA Type:t GRTR
-    {:
-      RESULT = new DictTypeNode(Types.Primitive.REAL, t);
-      CUP$Parser$actions.LOGGER.fine("DICT LESS REAL COMMA Type GRTR -> MapType");
-    :}
-  ;
-  
 
 DerivedType::=
     LIST

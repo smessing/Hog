@@ -128,15 +128,7 @@ public class TypeCheckingVisitor implements Visitor {
 		visitAllChildrenStandard(node);
 
 	}
-
-	@Override
-	public void visit(DictTypeNode node) {
-		LOGGER.finer("Type Check visit(DictTypeNode node) called on "
-				+ node.getName());
-		visitAllChildrenStandard(node);
-
-	}
-
+	
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("Type Check visit(ElseIfStatementNode node) called on "

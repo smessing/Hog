@@ -9,7 +9,6 @@ import util.ast.node.BiOpNode;
 import util.ast.node.CatchesNode;
 import util.ast.node.ConstantNode;
 import util.ast.node.DerivedTypeNode;
-import util.ast.node.DictTypeNode;
 import util.ast.node.ElseIfStatementNode;
 import util.ast.node.ElseStatementNode;
 import util.ast.node.ExceptionTypeNode;
@@ -341,12 +340,6 @@ public class ErrorCheckingVisitor implements Visitor {
 	public void visit(UnOpNode node) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void visit(DictTypeNode node) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

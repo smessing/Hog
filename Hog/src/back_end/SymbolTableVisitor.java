@@ -127,15 +127,6 @@ public class SymbolTableVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(DictTypeNode node) {
-		LOGGER.finer("visit(DictTypeNode node) called on " + node.getName());
-		openScope(node);
-		visitAllChildrenStandard(node);
-		closeScope(node);
-
-	}
-
-	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("visit(ElseIfStatementNodt node) called on " + node.getName());
 		openScope(node);

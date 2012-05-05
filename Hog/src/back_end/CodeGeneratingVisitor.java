@@ -410,9 +410,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		case ITER:
 			code.append("Iterator<");
 			break;
-		case DICT:
-			throw new UnsupportedOperationException(
-					"Dictionaries not yet supported!");
 		case MULTISET:
 			throw new UnsupportedOperationException("Multisets not supported!");
 		case SET:
@@ -438,12 +435,6 @@ public class CodeGeneratingVisitor implements Visitor {
 
 		if (declaration)
 			code.append("()");
-
-	}
-
-	@Override
-	public void visit(DictTypeNode node) {
-		LOGGER.finer("visit(DictTypeNode node) called on " + node);
 
 	}
 
