@@ -864,7 +864,7 @@ public class CodeGeneratingVisitor implements Visitor {
 					.getType()));
 			code.append("> ");
 			code.append(node.getInputValueIdNode().getIdentifier());
-			code.append("> values,  OutputCollector<");
+			code.append(",  OutputCollector<");
 			code.append(Types.getHadoopType(node.getReturnKey()));
 			code.append(", ");
 			code.append(Types.getHadoopType(node.getReturnValue()));
