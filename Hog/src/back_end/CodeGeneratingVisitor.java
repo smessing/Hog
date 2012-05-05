@@ -738,6 +738,13 @@ public class CodeGeneratingVisitor implements Visitor {
 				walk(node.getArgsList());
 				return;
 			}
+			// check if this is a print statement:
+			if (functionName.equals("print")) {
+				code.append("System.out.println(");
+				walk(node.getArgsList());
+				code.append(")");
+				return;
+			}
 
 			if (!node.getFunctionName().getIdentifier().equals("emit")) {
 				code.append("Functions.");
