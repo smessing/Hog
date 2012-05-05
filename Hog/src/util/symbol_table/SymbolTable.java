@@ -378,7 +378,6 @@ public class SymbolTable {
 		
 		ArrayList<TypeNode> printArguments = new ArrayList<TypeNode>();
 		printArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
-		
 		reserveFunction("print", new PrimitiveTypeNode(Types.Primitive.VOID), printArguments);
 		
 		// add()

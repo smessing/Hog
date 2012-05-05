@@ -465,6 +465,7 @@ public class Types {
 	 */
 	public static boolean checkValidFunctionCall(
 			PostfixExpressionNode postFixExpressionNode) {
+		LOGGER.severe("check valid function call" + postFixExpressionNode.getNameOfFunctionOrMethod());
 
 		// get the postfix type
 		PostfixType postFixType = postFixExpressionNode.getPostfixType();
@@ -491,7 +492,11 @@ public class Types {
 		if (postFixExpressionNode.hasArguments()) {
 			ArgumentsNode argsNode = (ArgumentsNode) postFixExpressionNode
 					.getArgsList();
+			
+			LOGGER.severe("PRINTTT Function Name: " + postFixExpressionNode.getNameOfFunctionOrMethod() + " Number of params: " + funSym.getParametersNode().getNumParams() + ", number of arguments: " + argsNode
+					.getNumArguments());
 
+			
 			// throw error if not same amount of arguments
 			if (funSym.getParametersNode().getNumParams() != argsNode
 					.getNumArguments()) {
