@@ -39,7 +39,7 @@ public class JumpStatementNode extends StatementNode {
 		return jumpType;
 	}
 
-	public StatementNode getExpressionNode() {
+	public ExpressionNode getExpressionNode() {
 		return expression;
 	}
 
