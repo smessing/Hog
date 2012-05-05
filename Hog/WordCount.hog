@@ -38,7 +38,13 @@
   list<int> reverseList(list<int> oldList) {
     list<int> newList;
     for (int i = oldList.size() - 1; i >= 0; i--;) {
-      newList.add(oldList.get(i));
+      try {
+        newList.add(oldList.get(i));
+      } catch (ArrayOutOfBoundsException exception) {
+        print("this might print");
+      } finally {
+        print("this definitely prints");
+      }
     }
     return newList;
   }
@@ -47,6 +53,11 @@
 
 
 @Map (int lineNum, text line) -> (text, int) {
+  print();
+  iter<int> foo;
+  iter<list<int>> bar;
+  int a = 5;
+  foo.hasNext();
   foreach text word in line.tokenize(" ") {
     emit(word, 1);
   }
