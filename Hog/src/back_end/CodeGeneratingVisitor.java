@@ -726,7 +726,7 @@ public class CodeGeneratingVisitor implements Visitor {
 				code.append("Functions.");
 				walk(node.getFunctionName());
 			} else {
-				code.append("output.Collect");
+				code.append("output.collect");
 				emit = true;
 			}
 
