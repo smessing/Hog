@@ -699,6 +699,9 @@ public class CodeGeneratingVisitor implements Visitor {
 			IdNode methodNameNoParam = node.getMethodName();
 			code.append(objectOfMethod.getIdentifier() + "."
 					+ methodNameNoParam.getIdentifier() + "()");
+			if (methodNameNoParam.getIdentifier().equals("next")) {
+				code.append(".get()");
+			}
 			break;
 		case METHOD_WITH_PARAMS:
 			IdNode object = node.getObjectName();
