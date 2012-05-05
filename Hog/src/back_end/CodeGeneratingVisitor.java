@@ -56,6 +56,11 @@ public class CodeGeneratingVisitor implements Visitor {
 	 * Hadoop's Writable types;
 	 */
 	protected boolean emit = false;
+	/**
+	 * Remember if we're writing a try/catch block, as we need to handle ArgumentNodes
+	 * differently.
+	 */
+	protected boolean tryBlock = false;
 
 	/**
 	 * Construct a CodeGeneratingVisitor, but don't specify input file or output
@@ -488,6 +493,18 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(GuardingStatementNode node) {
 		LOGGER.finer("visit(GuardingStatementNode node) called on " + node);
+		
+		tryBlock = true;
+		code.append("try {");
+		walk(node.getBlock());
+		if (node.hasCatches())
+			walk(node.getCatches());
+		if (node.hasFinally()) {
+			code.append("finally {");
+			walk(node.getFinally());
+			code.append(" }");
+		}
+		tryBlock = false;
 
 	}
 

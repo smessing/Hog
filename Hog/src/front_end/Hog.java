@@ -83,7 +83,7 @@ public class Hog {
 		LOGGER.info("Populating types...");
 		// populate/propagate/check types
 		TypeCheckingVisitor typeVisitor = new TypeCheckingVisitor(tree);
-		//typeVisitor.walk();
+		typeVisitor.walk();
 		LOGGER.info("Generating Java source...");
 		// generate source code:
 		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);

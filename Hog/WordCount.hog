@@ -42,6 +42,8 @@
         newList.add(oldList.get(i));
       } catch (ArrayOutOfBoundsException exception) {
         print("something went wrong!");
+      } catch (ArrayOutOfBoundsException exception) {
+        print("we'll never use this one!");
       }
     }
     return newList;
