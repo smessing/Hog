@@ -43,8 +43,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	protected StringBuilder code;
 	protected String outputKeyClass;
 	protected String outputValueClass;
-	protected String inputFile = "example.txt";
-	protected String outputFile = "example.txt";
+	protected String inputFile = "args[0]";
+	protected String outputFile = "args[1]";
 	/**
 	 * Remember when recursing if we're dealing with a declaration statement, as
 	 * the handling both DerivedTypeNodes and IdNodes is context-specific.

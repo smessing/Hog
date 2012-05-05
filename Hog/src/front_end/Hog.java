@@ -110,7 +110,6 @@ public class Hog {
 	private static void usage(String[] args) {
 
 		if (args.length < 2) {
-			// printUsage();
 			die();
 		}
 
