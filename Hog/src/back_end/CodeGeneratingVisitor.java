@@ -263,6 +263,12 @@ public class CodeGeneratingVisitor implements Visitor {
 				}
 				indentedCode.append(code.charAt(i));
 				break;
+			case ':':
+				f = false;
+				o = false;
+				withinForDeclaration = false;
+				indentedCode.append(code.charAt(i));
+				break;
 			default:
 				if (!withinForDeclaration) {
 					f = false;
@@ -511,8 +517,6 @@ public class CodeGeneratingVisitor implements Visitor {
 		ParametersNode params = node.getParametersNode();
 		code.append("(");
 		walk(params);
-		//walk(params.getType());
-		//code.append(" " + params.getIdentifier());
 		code.append(")");
 		code.append(" {");
 		walk(node.getInstructions());
