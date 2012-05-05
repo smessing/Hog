@@ -98,10 +98,33 @@ Use your update LRM.
 \section{Development Process}
 
 The scope of the Hog programming language was ambitious from the start. Our
-stated goal was to create a general-purpose scripting language designed around
-the Hadoop MapReduce framework. As such, from the beginning we were interested
-in ways to make the implementation of the language as simple as possible.
+stated goal was to create a general-purpose scripting language which made
+carrying out distributed computation simple and intuitive. As such, from the
+beginning we were interested in ways to make the implementation of the language
+as simple as possible. The following goals were identified early on:
 
+\begin{itemize}
+\item make the build system as simple as possible,
+\item make the logic of our individual modules as similar as possible,
+\item document everything,
+\item use a distributed version control system,
+\item write verbose and informative log statements.
+\end{itemize}
+
+Focusing on these goals throughout the development enabled use to work concurrently
+on different aspects of the compiler and maintain a codebase that was both readable
+and easy to understand.  
+
+
+\subsection{Simplicity of Build System}
+
+As project manager, I worked early on with both the System Architect (Ben) and
+the System Integrator (Kurry) to come up with a build system that was simple and
+easily extensible. After trying a few different options, we decided on Ant,
+a build system similar to Make, specialized for the Java programming language.
+Another advantage of going with Ant is that both JFlex and Cup, the frameworks
+we used to construct the lexer and parser, respectively, have native Ant support.
+Identifying and implementing our build system early on  
 
 \section{Roles and Responsibilities}
 

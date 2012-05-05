@@ -598,13 +598,6 @@ PostfixExpression::=
       RESULT = p;
       CUP$Parser$actions.LOGGER.fine("PrimaryExpression -> PostFixExpression");
     :}
-//  |
-//    PostfixExpression:p L_BRKT Expression:e R_BRKT
-//    {:
-//      // array indexing
-//      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.ARRAY_INDEX, p, e);
-//      CUP$Parser$actions.LOGGER.fine("PostfixExpression L_BRKT Expression R_BRKT -> PostFixExpression");
-//    :}
   |
     ID:objectName DOT ID:methodName
     {:
