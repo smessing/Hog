@@ -53,7 +53,7 @@
 
 
 @Map (int lineNum, text line) -> (text, int) {
-  print();
+  #print();
   iter<int> foo;
   iter<list<int>> bar;
   int a = 5;
