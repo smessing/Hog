@@ -28,7 +28,7 @@
     }
   }
   
-  text tooManyArgs(int x, list<int> y, set<list<int>> foo, real percentage, bool doNothing) {
+  int tooManyArgs(int x, list<int> y, set<list<int>> foo, real percentage, bool doNothing) {
     if (not doNothing) {
       return 1;
     }
@@ -38,13 +38,7 @@
   list<int> reverseList(list<int> oldList) {
     list<int> newList;
     for (int i = oldList.size() - 1; i >= 0; i--;) {
-      try {
-        newList.add(oldList.get(i));
-      } catch (ArrayOutOfBoundsException exception) {
-        print("something went wrong!");
-      } catch (ArrayOutOfBoundsException exception) {
-        print("we'll never use this one!");
-      }
+      newList.add(oldList.get(i));
     }
     return newList;
   }
@@ -69,21 +63,5 @@
 }
 
 @Main {
-  for (int i = 0; i < 10; i++;) {
-     i = 10;
-  }
-  
-  for (int i = 0; i < 10; i++;) {
-    i = -10;
-  }
   mapReduce();
-  list<int> fooBar;
-  for (int i = 0; i < 10; i++;) {
-    fooBar.add(i);
-  }
-  fooBar = reverseList(fooBar);
-  print("all done.");
-  for (int j = 0; j < 10; j++;) {
-    print("j");
-  }
 }

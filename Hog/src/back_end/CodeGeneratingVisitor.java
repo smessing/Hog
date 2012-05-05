@@ -169,6 +169,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append("import java.util.*;");
 		code.append("import org.apache.hadoop.fs.Path;");
 		code.append("import org.apache.hadoop.conf.*;");
+		code.append("import org.apache.hadoop.util.*;");
 		code.append("import org.apache.hadoop.io.*;");
 		code.append("import org.apache.hadoop.mapred.*;");
 		code.append("public class Hog {");
@@ -380,7 +381,8 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append("catch (");
 		walk(node.getHeader());
 		code.append(") {");
-		walk(node.getBlock());
+		if (node.hasBlock())
+			walk(node.getBlock());
 		code.append(" }");
 
 	}
@@ -754,6 +756,7 @@ public class CodeGeneratingVisitor implements Visitor {
 		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
 
 		if (emit) {
+			code.append("new ");
 			code.append(Types.getHadoopType(node));
 		} else {
 			code.append(Types.getJavaType(node));
