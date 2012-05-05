@@ -4,11 +4,6 @@ import util.ast.node.*;
 import util.ast.AbstractSyntaxTree;
 import util.type.Types;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -56,11 +51,6 @@ public class CodeGeneratingVisitor implements Visitor {
 	 * Hadoop's Writable types;
 	 */
 	protected boolean emit = false;
-	/**
-	 * Remember if we're writing a try/catch block, as we need to handle
-	 * ArgumentNodes differently.
-	 */
-	protected boolean tryBlock = false;
 
 	/**
 	 * Construct a CodeGeneratingVisitor, but don't specify input file or output
@@ -313,6 +303,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(BiOpNode node) {
 		LOGGER.finer("visit(BiOpNode node) called on " + node);
+		
 		walk(node.getLeftNode());
 		switch (node.getOpType()) {
 		case ASSIGN:
