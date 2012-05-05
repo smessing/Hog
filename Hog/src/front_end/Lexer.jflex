@@ -4,6 +4,12 @@ import java_cup.runtime.*;
 import util.ast.node.ExceptionTypeNode;
 import util.type.Types;
 
+/**
+ * The lexer used by Parser.java to generate a token stream for a particular input file.
+ *
+ * @author Samuel Messing
+ */
+
 %%
 /**
  * LEXICAL FUNCTIONS:
@@ -46,7 +52,7 @@ digit           = [0-9]
 alphanumeric    = {letter}|{digit}
 other_id_char   = [_]
 text_literal_old    = [a-zA-Z_ ]?\"(\\.|[^\\'])*\" 
-text_literal       = \".*\"
+text_literal       = \"[^\"]*\"
 identifier      = {letter}({alphanumeric}|{other_id_char})*
 integer         = {digit}*
 real            = {integer}\.{integer}
@@ -77,10 +83,8 @@ bool            { return newSym(sym.BOOL); }
 int             { return newSym(sym.INT); }
 real            { return newSym(sym.REAL); }
 list            { return newSym(sym.LIST); }
-dict            { return newSym(sym.DICT); }
 set             { return newSym(sym.SET); }
 iter            { return newSym(sym.ITER); }
-multiset        { return newSym(sym.MULTISET); }
 void            { return newSym(sym.VOID); }
 not             { return newSym(sym.NOT); }
 switch          { return newSym(sym.SWITCH); }
@@ -91,6 +95,7 @@ return          { return newSym(sym.RETURN); }
 iter            { return newSym(sym.ITER); }
 try             { return newSym(sym.TRY); }
 catch           { return newSym(sym.CATCH); }
+finally         { return newSym(sym.FINALLY); }
 @Functions      { return newSym(sym.FUNCTIONS); }
 @Map            { return newSym(sym.MAP); }
 @Reduce         { return newSym(sym.REDUCE); }

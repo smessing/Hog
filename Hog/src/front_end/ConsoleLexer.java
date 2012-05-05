@@ -30,9 +30,10 @@ import back_end.SymbolTableVisitor;
 import back_end.TypeCheckingVisitor;
 
 /**
- * A console front-end to the Lexer class for dynamically testing the Lexer.
+ * A console front-end to the Lexer class for dynamically testing the Lexer,
+ * and development. Not intended to be used/accessible by/to users.
  * 
- * @author sam
+ * @author Samuel Messing
  *
  */
 @SuppressWarnings("unused")

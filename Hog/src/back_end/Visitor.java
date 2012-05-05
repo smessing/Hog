@@ -1,18 +1,19 @@
 package back_end;
 
-import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
-import util.type.VariableRedefinedException;
-import util.type.VariableUndeclaredException;
 
 /**
- * Visitor interface
- * All visitors implement this interface
+ * Visitor interface.
  * 
- * @author jason
+ * All visitors implement this interface.
+ * 
+ * Structured to follow the Visitor Pattern found in Design Patterns:
+ * Elements of Reusable Object-Oriented Code, by Erich Gamma, Richard Helm,
+ * Ralph Johnson, and John Vlissides.
+ * 
+ * @author Jason Halpern
  *
  */
-
 public interface Visitor {
 	
 	public abstract void walk();
@@ -21,7 +22,6 @@ public interface Visitor {
 	public abstract void visit(CatchesNode node);
 	public abstract void visit(ConstantNode node);
 	public abstract void visit(DerivedTypeNode node);
-	public abstract void visit(DictTypeNode node);
 	public abstract void visit(ElseIfStatementNode node);
 	public abstract void visit(ElseStatementNode node);
 	public abstract void visit(ExceptionTypeNode node);

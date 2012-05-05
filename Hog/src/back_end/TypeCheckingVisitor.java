@@ -1,5 +1,15 @@
 package back_end;
 
+import java.util.List;
+import java.util.logging.Logger;
+
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.*;
+import util.error.TypeMismatchError;
+import util.symbol_table.FunctionSymbol;
+import util.symbol_table.SymbolTable;
+import util.type.Types;
+
 /**
  * Visitor class for type checking. 
  * 
@@ -15,56 +25,10 @@ package back_end;
  * - section types of map/reduce are appropriate.
  * - actual parameters to a procedure match formal parameters.
  * 
- * @author jason, ben
+ * @author Jason Halpern
+ * @author Benjamin Rapaport
  * 
  */
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Logger;
-
-import util.ast.AbstractSyntaxTree;
-import util.ast.node.ArgumentsNode;
-import util.ast.node.BiOpNode;
-import util.ast.node.CatchesNode;
-import util.ast.node.ConstantNode;
-import util.ast.node.DerivedTypeNode;
-import util.ast.node.DictTypeNode;
-import util.ast.node.ElseIfStatementNode;
-import util.ast.node.ElseStatementNode;
-import util.ast.node.ExceptionTypeNode;
-import util.ast.node.ExpressionNode;
-import util.ast.node.FunctionNode;
-import util.ast.node.GuardingStatementNode;
-import util.ast.node.IdNode;
-import util.ast.node.IfElseStatementNode;
-import util.ast.node.IterationStatementNode;
-import util.ast.node.JumpStatementNode;
-import util.ast.node.MockExpressionNode;
-import util.ast.node.MockNode;
-import util.ast.node.Node;
-import util.ast.node.ParametersNode;
-import util.ast.node.PostfixExpressionNode;
-import util.ast.node.PrimaryExpressionNode;
-import util.ast.node.PrimitiveTypeNode;
-import util.ast.node.ProgramNode;
-import util.ast.node.RelationalExpressionNode;
-import util.ast.node.ReservedWordTypeNode;
-import util.ast.node.SectionNode;
-import util.ast.node.SectionTypeNode;
-import util.ast.node.SelectionStatementNode;
-import util.ast.node.StatementListNode;
-import util.ast.node.StatementNode;
-import util.ast.node.SwitchStatementNode;
-import util.ast.node.TypeNode;
-import util.ast.node.UnOpNode;
-import util.ast.node.PostfixExpressionNode.PostfixType;
-import util.error.InvalidFunctionArgumentsError;
-import util.error.TypeMismatchError;
-import util.symbol_table.FunctionSymbol;
-import util.symbol_table.SymbolTable;
-import util.type.Types;
-
 public class TypeCheckingVisitor implements Visitor {
 
 	protected final static Logger LOGGER = Logger
@@ -164,15 +128,7 @@ public class TypeCheckingVisitor implements Visitor {
 		visitAllChildrenStandard(node);
 
 	}
-
-	@Override
-	public void visit(DictTypeNode node) {
-		LOGGER.finer("Type Check visit(DictTypeNode node) called on "
-				+ node.getName());
-		visitAllChildrenStandard(node);
-
-	}
-
+	
 	@Override
 	public void visit(ElseIfStatementNode node) {
 		LOGGER.finer("Type Check visit(ElseIfStatementNode node) called on "

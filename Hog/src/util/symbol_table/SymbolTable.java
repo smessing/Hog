@@ -16,7 +16,7 @@ import util.type.VariableRedefinedException;
 
 /**
  * 
- * @author ben, jason
+ * @author ben, jason, paul
  *
  */
 
@@ -388,6 +388,31 @@ public class SymbolTable {
 		// clear()
 		reserveFunction("list.clear", new PrimitiveTypeNode(Types.Primitive.VOID));
 
+		// type casting functions
+		ArrayList<TypeNode> text2intArguments = new ArrayList<TypeNode>();
+		text2intArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
+		reserveFunction("text2int", new PrimitiveTypeNode(Types.Primitive.INT));
+		
+		ArrayList<TypeNode> text2realArguments = new ArrayList<TypeNode>();
+		text2realArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
+		reserveFunction("text2real", new PrimitiveTypeNode(Types.Primitive.REAL));
+		
+		ArrayList<TypeNode> int2textArguments = new ArrayList<TypeNode>();
+		int2textArguments.add(new PrimitiveTypeNode(Types.Primitive.INT));
+		reserveFunction("int2text", new PrimitiveTypeNode(Types.Primitive.TEXT));
+		
+		ArrayList<TypeNode> real2textArguments = new ArrayList<TypeNode>();
+		real2textArguments.add(new PrimitiveTypeNode(Types.Primitive.REAL));
+		reserveFunction("real2text", new PrimitiveTypeNode(Types.Primitive.TEXT));
+		
+		ArrayList<TypeNode> real2intArguments = new ArrayList<TypeNode>();
+		real2intArguments.add(new PrimitiveTypeNode(Types.Primitive.REAL));
+		reserveFunction("real2int", new PrimitiveTypeNode(Types.Primitive.INT));
+
+		ArrayList<TypeNode> int2realArguments = new ArrayList<TypeNode>();
+		int2realArguments.add(new PrimitiveTypeNode(Types.Primitive.INT));
+		reserveFunction("int2real", new PrimitiveTypeNode(Types.Primitive.REAL));
+
 		// get()
 		ArrayList<TypeNode> listGetArguments = new ArrayList<TypeNode>();
 		listGetArguments.add(new PrimitiveTypeNode(Types.Primitive.INT));
@@ -401,6 +426,8 @@ public class SymbolTable {
 		
 		// sort()
 		reserveFunction("list.sort", new PrimitiveTypeNode(Types.Primitive.VOID));
+		
+		
 		
 		/* add built-in iter methods */
 		reserveFunction("iter.next", new ReservedWordTypeNode(Types.Flags.CHECK_INNER_TYPE));

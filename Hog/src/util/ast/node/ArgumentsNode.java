@@ -43,19 +43,32 @@ public class ArgumentsNode extends ExpressionNode {
 		ArgumentsNode.LOGGER.fine("Constructing ArgumentsNode");
 	}
 
+	/**
+	 * Ask if this node has more arguments (children nodes).
+	 * 
+	 * @return true if this ndoe has children, false otherwise.
+	 */
 	public boolean hasMoreArgs() {
 		return argList != null;
 	}
 	
+	/**
+	 * Get the child of this node.
+	 * 
+	 * @return the child node (note: possibly null!).
+	 */
 	public ExpressionNode getMoreArgs() {
 		return argList;
 	}
 	
+	/**
+	 * Get the argument that this node represents.
+	 * 
+	 * @return the ExpressionNode representing this argument.
+	 */
 	public ExpressionNode getArg() {
 		return arg;
 	}
-	
-	
 	
 	@Override
 	public void accept(Visitor v) {

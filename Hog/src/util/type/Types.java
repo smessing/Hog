@@ -12,7 +12,6 @@ import util.ast.node.ParametersNode;
 import util.ast.node.PostfixExpressionNode;
 import util.ast.node.PrimitiveTypeNode;
 import util.ast.node.DerivedTypeNode;
-import util.ast.node.DictTypeNode;
 import util.ast.node.ReservedWordTypeNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
@@ -75,7 +74,7 @@ public class Types {
 	 * 
 	 */
 	public static enum Derived {
-		LIST, ITER, DICT, MULTISET, SET
+		LIST, ITER, MULTISET, SET
 	}
 
 	/**
@@ -121,8 +120,6 @@ public class Types {
 
 		if (one.isPrimitive() && two.isPrimitive()) {
 			return isSameType((PrimitiveTypeNode) one, (PrimitiveTypeNode) two);
-		} else if (one.isDict() && two.isDict()) {
-			return isSameType((DictTypeNode) one, (DictTypeNode) two);
 		} else if (one.isDerived() && two.isDerived()) {
 			return isSameType((DerivedTypeNode) one, (DerivedTypeNode) two);
 		} else if (one.isException() && two.isException()) {
@@ -142,19 +139,6 @@ public class Types {
 	private static boolean isSameType(ExceptionTypeNode one,
 			ExceptionTypeNode two) {
 		return one.getExceptionType() == two.getExceptionType();
-	}
-
-	/**
-	 * 
-	 * @param one
-	 * @param two
-	 * @return
-	 */
-	private static boolean isSameType(DictTypeNode one, DictTypeNode two) {
-		if (one.getKeyType() == two.getKeyType()) {
-			return isSameType(one.getValueType(), two.getValueType());
-		}
-		return false;
 	}
 
 	/**
