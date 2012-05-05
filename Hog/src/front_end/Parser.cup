@@ -70,7 +70,6 @@ terminal ExceptionTypeNode EXCEPTION;
 
 nonterminal GuardingStatementNode GuardingStatement;
 nonterminal CatchesNode Catches;
-nonterminal CatchesNode Catch;
 nonterminal IdNode CatchHeader;
 nonterminal StatementListNode Finally;
 nonterminal StatementListNode Block;
