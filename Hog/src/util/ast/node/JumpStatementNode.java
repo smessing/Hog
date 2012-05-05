@@ -17,9 +17,9 @@ public class JumpStatementNode extends StatementNode {
 	}
 
 	protected JumpType jumpType;
-	protected StatementNode expression;
+	protected ExpressionNode expression;
 
-	public JumpStatementNode(JumpType jumpType, StatementNode e) {
+	public JumpStatementNode(JumpType jumpType, ExpressionNode e) {
 		this(jumpType);
 		if (jumpType != JumpType.RETURN) {
 			throw new UnsupportedOperationException(
@@ -39,7 +39,7 @@ public class JumpStatementNode extends StatementNode {
 		return jumpType;
 	}
 
-	public StatementNode getExpressionNode() {
+	public ExpressionNode getExpressionNode() {
 		return expression;
 	}
 

@@ -47,7 +47,7 @@ public class GuardingStatementNode extends StatementNode {
 	}
 	
 	public boolean hasCatches() {
-		return (catches == null);
+		return (catches != null);
 	}
 	
 	public CatchesNode getCatches() {
@@ -55,7 +55,7 @@ public class GuardingStatementNode extends StatementNode {
 	}
 	
 	public boolean hasFinally() {
-		return (finallyStatements == null);
+		return (finallyStatements != null);
 	}
 	
 	public StatementListNode getFinally() {

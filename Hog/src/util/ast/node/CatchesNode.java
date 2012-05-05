@@ -84,7 +84,7 @@ public class CatchesNode extends StatementListNode {
 	 * @return - true if there is another catch block, false otherwise.
 	 */
 	public boolean hasNext() {
-		return (next == null);
+		return (next != null);
 	}
 
 	/**
@@ -99,6 +99,14 @@ public class CatchesNode extends StatementListNode {
 					+ this + "'s next CatchesNode, but it doesn't have one!");
 		}
 		return next;
+	}
+	
+	/**
+	 * Ask if the block has any code in it
+	 * @return true if there is a block, false otherwise
+	 */
+	public boolean hasBlock() {
+		return this.block != null;
 	}
 
 	@Override

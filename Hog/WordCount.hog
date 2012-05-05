@@ -30,15 +30,21 @@
   
   text tooManyArgs(int x, list<int> y, set<list<int>> foo, real percentage, bool doNothing) {
     if (not doNothing) {
-      return "something";
+      return 1;
     }
-    return "nothing";
+    return 1;
   }
   
   list<int> reverseList(list<int> oldList) {
     list<int> newList;
     for (int i = oldList.size() - 1; i >= 0; i--;) {
-      newList.add(oldList.get(i));
+      try {
+        newList.add(oldList.get(i));
+      } catch (ArrayOutOfBoundsException exception) {
+        print("something went wrong!");
+      } catch (ArrayOutOfBoundsException exception) {
+        print("we'll never use this one!");
+      }
     }
     return newList;
   }
