@@ -57,8 +57,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	 */
 	protected boolean emit = false;
 	/**
-	 * Remember if we're writing a try/catch block, as we need to handle ArgumentNodes
-	 * differently.
+	 * Remember if we're writing a try/catch block, as we need to handle
+	 * ArgumentNodes differently.
 	 */
 	protected boolean tryBlock = false;
 
@@ -188,10 +188,10 @@ public class CodeGeneratingVisitor implements Visitor {
 		code.append("conf.setReducerClass(Reduce.class);");
 		code.append("conf.setInputFormat(" + inputFormatClass + ");");
 		code.append("conf.setOutputFormat(" + outputFormatClass + ");");
-		code.append("FileInputFormat.setInputPaths(conf, new Path(\""
-				+ inputFile + "\"));");
-		code.append("FileOutputFormat.setOutputPath(conf, new Path(\""
-				+ outputFile + "\"));");
+		code.append("FileInputFormat.setInputPaths(conf, new Path(" + inputFile
+				+ "));");
+		code.append("FileOutputFormat.setOutputPath(conf, new Path("
+				+ outputFile + "));");
 		code.append("JobClient.runJob(conf);");
 	}
 
@@ -240,8 +240,7 @@ public class CodeGeneratingVisitor implements Visitor {
 				if (withinForDeclaration && forSemicolonCount < 2) {
 					indentedCode.append(';');
 					forSemicolonCount++;
-				}
-				else {
+				} else {
 					indentedCode.append(";\n");
 					forSemicolonCount = 0;
 					withinForDeclaration = false;
@@ -301,7 +300,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ArgumentsNode node) {
 		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
-		
+
 		if (node.hasMoreArgs()) {
 			walk(node.getMoreArgs());
 			code.append(", ");
@@ -375,7 +374,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(CatchesNode node) {
 		LOGGER.finer("visit(CatchesNode node) called on " + node);
-		
+
 		if (node.hasNext())
 			walk(node.getNext());
 		code.append("catch (");
@@ -477,8 +476,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ExceptionTypeNode node) {
 		LOGGER.finer("visit(ExceptionTypeNode node) called on " + node);
-		
-		switch(node.getExceptionType()) {
+
+		switch (node.getExceptionType()) {
 		case ARITHMETIC:
 			code.append("ArithmeticException");
 			break;
@@ -529,7 +528,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(GuardingStatementNode node) {
 		LOGGER.finer("visit(GuardingStatementNode node) called on " + node);
-		
+
 		code.append("try {");
 		walk(node.getBlock());
 		code.append(" }");
@@ -676,17 +675,17 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(ParametersNode node) {
 		LOGGER.finer("visit(ParametersNode node) called on " + node);
-		
+
 		if (node.hasParamChild()) {
 			walk(node.getParamChild());
 			code.append(", ");
 		}
-		
+
 		walk(node.getType());
 		code.append(" ");
 		code.append(node.getIdentifier());
 
-		//walk(node.getParamChild());
+		// walk(node.getParamChild());
 
 	}
 
@@ -773,13 +772,15 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(RelationalExpressionNode node) {
 		LOGGER.finer("visit(RelationalNode node) called on " + node);
-		throw new UnsupportedOperationException("I should never see a relational expression node!");
+		throw new UnsupportedOperationException(
+				"I should never see a relational expression node!");
 	}
 
 	@Override
 	public void visit(ReservedWordTypeNode node) {
 		LOGGER.finer("visit(ReservedWordTypeNode node) called on " + node);
-		throw new UnsupportedOperationException("I shouldn't be seeing a ReservedWordTypeNode!");
+		throw new UnsupportedOperationException(
+				"I shouldn't be seeing a ReservedWordTypeNode!");
 	}
 
 	@Override
@@ -877,7 +878,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(SelectionStatementNode node) {
 		LOGGER.finer("visit(SelectionStatementNode node) called on " + node);
-		throw new UnsupportedOperationException("I should never see a SelectionStatementNode!");
+		throw new UnsupportedOperationException(
+				"I should never see a SelectionStatementNode!");
 
 	}
 
@@ -903,7 +905,8 @@ public class CodeGeneratingVisitor implements Visitor {
 	@Override
 	public void visit(SwitchStatementNode node) {
 		LOGGER.finer("visit(SwitchStatementNode node) called on " + node);
-		throw new UnsupportedOperationException("Switch statements are not supported!");
+		throw new UnsupportedOperationException(
+				"Switch statements are not supported!");
 	}
 
 	@Override
