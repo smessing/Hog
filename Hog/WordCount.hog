@@ -1,6 +1,6 @@
 @Functions {
   int fib(int n) {
-  #list<list<int>> myList;
+  list<list<int>> myList;
     if (n == 0) {
       int x = 5;
       return x;
@@ -9,7 +9,7 @@
       } 
       else {
       return fib(n-1) + fib(n-2);  
-      #if n > 3 {
+      #if (n > 3) {
       # int a = 4;
       #}
     }
@@ -32,17 +32,24 @@
     }
   }
   
- # text tooManyArgs(int x, list<int> y, set<list<int>> foo, real percentage, bool doNothing) {
- #   if (not doNothing) {
- #     return "something";
- #   }
- #   return "nothing";
- # }
+  text tooManyArgs(int x, list<int> y, set<list<int>> foo, real percentage, bool doNothing) {
+    
+    if (not doNothing) {
+      return "something";
+    }
+    
+    if (true) {
+      return "fun";
+    }
+    
+    return "test";
+    
+  }
   
   list<int> reverseList(list<int> oldList) {
     list<int> newList;
     for (int i = oldList.size() - 1; i >= 0; i--;) {
-      newList.add(oldList.get(i));
+     newList.add(oldList.get(i));
     }
     return newList;
   }
@@ -67,6 +74,13 @@
 }
 
 @Main {
+  for (int i = 0; i < 10; i++;) {
+     i = 10;
+  }
+  
+  for (int i = 0; i < 10; i++;) {
+    i = -10;
+  }
   mapReduce();
   list<int> fooBar;
   for (int i = 0; i < 10; i++;) {

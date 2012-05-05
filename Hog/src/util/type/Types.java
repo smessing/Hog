@@ -501,18 +501,24 @@ public class Types {
 			}
 
 			TypeNode innerTypeOfMethodCall = null;
-			if (postFixExpressionNode.isMethod())
-				innerTypeOfMethodCall = postFixExpressionNode
-						.getObjectOfMethod().getType();
+			if (postFixExpressionNode.isMethod()) {
+				TypeNode typeOfObject = postFixExpressionNode.getObjectOfMethod().getType();
+				if( typeOfObject instanceof DerivedTypeNode ) {
+					innerTypeOfMethodCall = ((DerivedTypeNode) typeOfObject).getInnerTypeNode();
+				} else {
+					innerTypeOfMethodCall = typeOfObject;
+				}
+			}
 
 			// throw an error if the types of the arguments don't match the
 			// types of the formal params
-			if (!argsMatchParams((ArgumentsNode) postFixExpressionNode
-					.getArgsList(), funSym.getParametersNode(),
+			if (!argsMatchParams(argsNode, funSym.getParametersNode(),
 					innerTypeOfMethodCall))
 				throw new InvalidFunctionArgumentsError(postFixExpressionNode
 						.getNameOfFunctionOrMethod().getIdentifier()
-						+ " was called with an invalid argument list.");
+						+ " was called with an invalid argument list. \n Node: " 
+						+ postFixExpressionNode.getName()
+						+ " \nArgs Node = " + postFixExpressionNode.getArgsList().getName());
 		}
 
 		// if it doesn't have arguments, ensure that the formal parameters don't
@@ -539,8 +545,16 @@ public class Types {
 	private static boolean argsMatchParams(ArgumentsNode args,
 			ParametersNode params, TypeNode innerTypeOfMethodCall) {
 
-		// if they have no sublists, return if they are the same type
-		if (args.getArgumentsNode() == null && params.getParamChild() == null)
+		// if they have no sublists, and the type of the param
+		// is CHECK INNER TYPE. we check the type of the argument
+		// and the innertype are the same
+		if (args.getArgumentsNode() == null && params.getParamChild() == null
+				&& params.getType() instanceof ReservedWordTypeNode
+				&& ((ReservedWordTypeNode) params.getType()).getType() == Types.Flags.CHECK_INNER_TYPE)
+			return isSameType(args.getExpressionNode().getType(), innerTypeOfMethodCall);
+		
+		// else if they have no sublists, return if they are the same type
+		else if (args.getArgumentsNode() == null && params.getParamChild() == null)
 			return isSameType(args.getExpressionNode().getType(), params
 					.getType());
 
