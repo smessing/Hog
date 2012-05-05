@@ -40,7 +40,7 @@
 	<property name="java.source.version" value="1.6" />
 	<property name="java.target.version" value="1.6" />
 	<property name="lexer.specification" value="${front_end.dir}/Lexer.jflex" />
-	<property name="dev.main-class" value="front_end.ConsoleLexer" />
+	<property name="dev.main-class" value="front_end.Hog" />
 	<property name="jflex.main-class" value="JFlex.Main" />
 	<property name="cup.main-class" value="java_cup.Main" />
 	<property name="parser.specification" value="${front_end.dir}/Parser.cup" />
@@ -105,7 +105,7 @@
 
 	<target name="run" depends="jar">
 		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" >
-		    <sysproperty key="java.util.logging.config.file" value="${logging.properties}"/>
+		    <sysproperty key="java.util.logging.config.file" value="../../${logging.properties}"/>
 		</java>
 	</target>
 

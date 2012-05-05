@@ -98,9 +98,16 @@ public class SymbolTableVisitor implements Visitor {
 	@Override
 	public void visit(CatchesNode node) {
 		LOGGER.finer("visit(CatchesNode node) called on " + node.getName());
+		
 		openScope(node);
-		visitAllChildrenStandard(node);
+	
+		node.getHeader().accept(this);
+		if (node.hasBlock())
+			node.getBlock().accept(this);
 		closeScope(node);
+		if (node.hasNext())
+			node.getNext().accept(this);
+
 	}
 
 	@Override

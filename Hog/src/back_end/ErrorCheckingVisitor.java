@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import util.type.Types;
+
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.ArgumentsNode;
 import util.ast.node.BiOpNode;
@@ -148,12 +150,18 @@ public class ErrorCheckingVisitor implements Visitor {
     	*
     	*
     	*/
-    	
 		if (node instanceof FunctionNode){
-			if (node.getExpressionNode().getType()){
-				nonVoidFunctionFlag = true;
+			List<Node> children = node.getChildren();
+			
+			if (Types.isVoidType(((FunctionNode)node).getType())){
+		    	this.nonVoidFunctionFlag = true;
+		    	for (Node n : children) {
+				
+		    	}
 			}
+		   
 		}
+		
 	}
 	
 	@Override

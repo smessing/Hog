@@ -82,6 +82,22 @@ public class TypeCheckingVisitor implements Visitor {
 		ProgramNode treeRoot = (ProgramNode) this.tree.getRoot();
 		treeRoot.accept(this);
 	}
+	
+	public TypeNode getExpectedReturnType(Node node) {
+		// TODO Auto-generated method stub
+		
+		Node tempNode;
+		
+		while(node.hasParent()){
+			tempNode = node.getParent();
+			if(tempNode instanceof FunctionNode){
+				return ((FunctionNode) tempNode).getType();
+			}
+			node = tempNode;
+		}
+		
+		return null;
+	}
 
 	private void visitAllChildrenStandard(Node node) {
 		// visit all children
@@ -233,13 +249,26 @@ public class TypeCheckingVisitor implements Visitor {
 	public void visit(JumpStatementNode node) {
 		LOGGER.finer("Type Check visit(JumpStatementNode node) called on "
 				+ node.getName());
+		
+		//System.out.println("type check jump statement node");
 		visitAllChildrenStandard(node);
-
+		
+		TypeNode expectedReturnType;
+		if(node.getJumpType() == JumpStatementNode.JumpType.RETURN){
+			//System.out.println("cehcking return");
+			expectedReturnType = this.getExpectedReturnType(node);
+			//System.out.println("EXPECTED: " + expectedReturnType + " ACTUAL:" + node.getExpressionNode().getType());
+			if(!Types.isSameType(node.getExpressionNode().getType(), expectedReturnType)){
+				throw new TypeMismatchError("Return statement " + node.getExpressionNode().getType() + "does not match the expected return type of "+
+						expectedReturnType);
+			}
+		}
 	}
 
 	@Override
 	public void visit(MockExpressionNode node) {
-		LOGGER.finer("Type Check visit(MockExpressionNode node) called on "
+		LOGGER.finer("" +
+				" visit(MockExpressionNode node) called on "
 				+ node.getName());
 		visitAllChildrenStandard(node);
 

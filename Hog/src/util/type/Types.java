@@ -132,6 +132,18 @@ public class Types {
 		return false;
 
 	}
+	/* @author paul
+	 */
+	
+	public static boolean isVoidType(TypeNode node){
+		if (node.isPrimitive()){
+			if (((PrimitiveTypeNode) node).getType()==Types.Primitive.VOID){
+				return true;
+			}
+		
+		}
+		return false;
+	}
 
 	/**
 	 * 
@@ -603,6 +615,24 @@ public class Types {
 
 		switch (type.getType()) {
 		case BOOL:
+			return "boolean";
+		case TEXT:
+			return "String";
+		case VOID:
+			return "void";
+		case INT:
+			return "int";
+		case REAL:
+			return "double";
+		}
+
+		throw new UnsupportedOperationException("This should never happen.");
+	}
+	
+	public static String getJavaObjectType(PrimitiveTypeNode type) {
+	
+		switch (type.getType()) {
+		case BOOL:
 			return "Boolean";
 		case TEXT:
 			return "String";
@@ -615,6 +645,7 @@ public class Types {
 		}
 
 		throw new UnsupportedOperationException("This should never happen.");
+		
 	}
 
 	/**
