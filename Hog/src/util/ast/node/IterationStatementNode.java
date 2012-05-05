@@ -41,7 +41,7 @@ public class IterationStatementNode extends StatementNode {
 		this.block = s;
 		this.iterationType = IterationType.WHILE;
 		IterationStatementNode.LOGGER
-				.info("Constructing WHILE loop IterationStatementNode");
+				.fine("Constructing WHILE loop IterationStatementNode");
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class IterationStatementNode extends StatementNode {
 		this.block = block;
 		this.iterationType = IterationType.FOR;
 		IterationStatementNode.LOGGER
-				.info("Constructing FOR loop IterationStatementNode");
+				.fine("Constructing FOR loop IterationStatementNode");
 	}
 
 	/**

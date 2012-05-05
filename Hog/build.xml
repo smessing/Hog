@@ -105,7 +105,7 @@
 
 	<target name="run" depends="jar">
 		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" >
-		    <sysproperty key="java.util.logging.config.file" value="${logging.properties}"/>
+		    <sysproperty key="java.util.logging.config.file" value="../../${logging.properties}"/>
 		</java>
 	</target>
 

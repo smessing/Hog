@@ -73,23 +73,22 @@ public class Hog {
 			ex.printStackTrace();
 		}
 
-		//root.print();
-		
+		// root.print();
+
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
-		LOGGER.info("Generating symbol tables...");
+		System.out.println("Generating symbol tables...");
 		// generate/populate symbol tables
 		SymbolTableVisitor symbolVisitor = new SymbolTableVisitor(tree);
 		symbolVisitor.walk();
-		LOGGER.info("Populating types...");
+		System.out.println("Populating types...");
 		// populate/propagate/check types
 		TypeCheckingVisitor typeVisitor = new TypeCheckingVisitor(tree);
 		typeVisitor.walk();
-		root.print();
-		LOGGER.info("Generating Java source...");
+		System.out.println("Generating Java source...");
 		// generate source code:
 		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
 		codeGenerator.walk();
-		
+
 		FileWriter fstream = null;
 		try {
 			fstream = new FileWriter("Hog.java");
@@ -99,7 +98,7 @@ public class Hog {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
@@ -111,10 +110,10 @@ public class Hog {
 	private static void usage(String[] args) {
 
 		if (args.length < 2) {
-			//printUsage();
+			// printUsage();
 			die();
 		}
-		
+
 		if (args[0].equals("--help")) {
 			printUsage();
 		}
@@ -166,9 +165,9 @@ public class Hog {
 	 * standard out.
 	 */
 	private static void printUsage() {
-		LOGGER.info("Hog --- a scripting MapReduce language");
-		LOGGER
-				.info("Usage: Hog [--hdfs|--local] source [--input file] [--output file]");
+		System.out.println("Hog --- a scripting MapReduce language");
+		System.out
+				.println("Usage: Hog [--hdfs|--local] source [--input file] [--output file]");
 	}
 
 }

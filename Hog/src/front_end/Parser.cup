@@ -121,7 +121,7 @@ Program::=
     {:
       RESULT = new ProgramNode(f, m, r, n);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("Functions Map Reduce Main -> Program");
+      CUP$Parser$actions.LOGGER.fine("Functions Map Reduce Main -> Program");
     :}
   ;
 
@@ -130,12 +130,12 @@ Functions::=
     {:
       RESULT = new SectionNode(fl, SectionNode.SectionName.FUNCTIONS);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("FUNCTIONS L_BRACE FunctionList R_BRACE -> Functions");
+      CUP$Parser$actions.LOGGER.fine("FUNCTIONS L_BRACE FunctionList R_BRACE -> Functions");
     :}
   |
     /* epsilon */
     {:
-      CUP$Parser$actions.LOGGER.info("epsilon -> Functions");
+      CUP$Parser$actions.LOGGER.fine("epsilon -> Functions");
     :}
   ; 
  
@@ -143,13 +143,13 @@ FunctionList::=
     Function:f
     {:
       RESULT = f;
-      CUP$Parser$actions.LOGGER.info("Function -> FunctionList");
+      CUP$Parser$actions.LOGGER.fine("Function -> FunctionList");
     :}
   |
     FunctionList:fl Function:f
     {:
       RESULT = new StatementNode(fl, f);
-      CUP$Parser$actions.LOGGER.info("FunctionList Function -> FunctionList");
+      CUP$Parser$actions.LOGGER.fine("FunctionList Function -> FunctionList");
     :}
   ;
 
@@ -158,7 +158,7 @@ Function::=
     {:
       RESULT = new FunctionNode(t, i, pl, sl); 
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE -> Function");
+      CUP$Parser$actions.LOGGER.fine("Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE -> Function");
     :}
   ;
 
@@ -166,13 +166,13 @@ ParameterList::=
     ParameterList:pl COMMA Type:t ID:i
     {:
       RESULT = new ParametersNode(t, i, pl);
-      CUP$Parser$actions.LOGGER.info("ParameterList COMMA Type ID: " + i + " -> ParameterList");
+      CUP$Parser$actions.LOGGER.fine("ParameterList COMMA Type ID: " + i + " -> ParameterList");
     :}
   |
     Type:t ID:i
     {:
       RESULT = new ParametersNode(t, i);
-      CUP$Parser$actions.LOGGER.info("Type ID: " + i + " -> ParameterList");
+      CUP$Parser$actions.LOGGER.fine("Type ID: " + i + " -> ParameterList");
     :}
   |
     /* epsilon */
@@ -183,7 +183,7 @@ Map::=
     {:
       RESULT = new SectionNode(st, sl, SectionNode.SectionName.MAP);
       RESULT.setNewScope();      
-      CUP$Parser$actions.LOGGER.info("MAP SectionType L_BRACE StatementList R_BRACE -> Map");
+      CUP$Parser$actions.LOGGER.fine("MAP SectionType L_BRACE StatementList R_BRACE -> Map");
     :}
   ;
 
@@ -192,7 +192,7 @@ Reduce::=
     {:
       RESULT = new SectionNode(st, sl, SectionNode.SectionName.REDUCE);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("REDUCE SectionType L_BRACE StatementList R_BRACE -> Reduce");
+      CUP$Parser$actions.LOGGER.fine("REDUCE SectionType L_BRACE StatementList R_BRACE -> Reduce");
     :}
   ;
 
@@ -200,7 +200,7 @@ SectionType::=
     L_PAREN Type:t1 ID:i1 COMMA Type:t2 ID:i2 R_PAREN ARROW L_PAREN Type:t3 COMMA Type:t4 R_PAREN
     {:
      RESULT = new SectionTypeNode(new IdNode(t1, i1), new IdNode(t2, i2), t3, t4);
-     CUP$Parser$actions.LOGGER.info("L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN -> SectionType");
+     CUP$Parser$actions.LOGGER.fine("L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN -> SectionType");
     :}
   ;
 
@@ -209,7 +209,7 @@ Main::=
     {:
       RESULT = new SectionNode(sl, SectionNode.SectionName.MAIN);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("MAIN L_BRACE StatementList R_BRACE -> Main");
+      CUP$Parser$actions.LOGGER.fine("MAIN L_BRACE StatementList R_BRACE -> Main");
     :}
   ;
 
@@ -217,13 +217,13 @@ StatementList::=
     Statement:s
     {:
       RESULT = s;
-      CUP$Parser$actions.LOGGER.info("Statement -> StatementList");
+      CUP$Parser$actions.LOGGER.fine("Statement -> StatementList");
     :}
   |
     StatementList:sl Statement:s
     {:
       RESULT = new StatementListNode(sl, s);
-      CUP$Parser$actions.LOGGER.info("StatementList Statement -> StatementList");
+      CUP$Parser$actions.LOGGER.fine("StatementList Statement -> StatementList");
     :}
   ;
 
@@ -234,52 +234,52 @@ Statement::=
         es.setEndOfLine();
       }
       RESULT = es;
-      CUP$Parser$actions.LOGGER.info("ExpressionStatement -> Statement");
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatement -> Statement");
     :}
   |
    SelectionStatement:ss
     {:
       ss.setEndOfLine();
       RESULT = ss;
-      CUP$Parser$actions.LOGGER.info("SelectionStatement -> Statement");
+      CUP$Parser$actions.LOGGER.fine("SelectionStatement -> Statement");
     :}
   |
     IterationStatement:is
     {:
       is.setEndOfLine();
       RESULT = is;
-      CUP$Parser$actions.LOGGER.info("IterationStatement -> Statement");
+      CUP$Parser$actions.LOGGER.fine("IterationStatement -> Statement");
     :}
   |
     LabeledStatement:ls
     {:
      ls.setEndOfLine();
      RESULT = ls;
-     CUP$Parser$actions.LOGGER.info("LabeledStatement -> Statement");
+     CUP$Parser$actions.LOGGER.fine("LabeledStatement -> Statement");
     :}
   |
     JumpStatement:js
     {:
       js.setEndOfLine();
       RESULT = js;
-      CUP$Parser$actions.LOGGER.info("JumpStatement -> Statement");
+      CUP$Parser$actions.LOGGER.fine("JumpStatement -> Statement");
     :}
   | DeclarationStatement:ds
     {:
       ds.setEndOfLine();
       RESULT = ds;
-      CUP$Parser$actions.LOGGER.info("DeclarationStatement -> Statement");
+      CUP$Parser$actions.LOGGER.fine("DeclarationStatement -> Statement");
     :}
   | GuardingStatement:gs
     {:
       gs.setEndOfLine();
       RESULT = gs;
-      CUP$Parser$actions.LOGGER.info("GuardingStatement -> Statement");
+      CUP$Parser$actions.LOGGER.fine("GuardingStatement -> Statement");
     :}
   | Block:b
     {:
       //RESULT = b;
-      CUP$Parser$actions.LOGGER.info("Block -> Statement");
+      CUP$Parser$actions.LOGGER.fine("Block -> Statement");
     :}
   ;
 
@@ -287,19 +287,19 @@ GuardingStatement::=
     TRY Block:b Finally:f
     {:
       RESULT = new GuardingStatementNode(b, f);
-      CUP$Parser$actions.LOGGER.info("TRY Block Finally -> GuardingStatment");
+      CUP$Parser$actions.LOGGER.fine("TRY Block Finally -> GuardingStatment");
     :}
    |
     TRY Block:b Catches:c
     {:
       RESULT = new GuardingStatementNode(b, c);
-      CUP$Parser$actions.LOGGER.info("TRY Block Catches -> GuardingStatment");
+      CUP$Parser$actions.LOGGER.fine("TRY Block Catches -> GuardingStatment");
     :}
    | 
     TRY Block:b Catches:c Finally:f
     {:
       RESULT = new GuardingStatementNode(b, c, f);
-      CUP$Parser$actions.LOGGER.info("TRY Block Catches Finally -> GuardingStatment");
+      CUP$Parser$actions.LOGGER.fine("TRY Block Catches Finally -> GuardingStatment");
     :}
 ;
 
@@ -308,12 +308,12 @@ Block::=
     {:
       RESULT = sl;
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("L_BRACE StatementList R_BRACE -> Block");
+      CUP$Parser$actions.LOGGER.fine("L_BRACE StatementList R_BRACE -> Block");
     :}
   | 
     L_BRACE R_BRACE
     {:
-      CUP$Parser$actions.LOGGER.info("L_BRACE R_BRACE -> Block");
+      CUP$Parser$actions.LOGGER.fine("L_BRACE R_BRACE -> Block");
     :}
 ;
 
@@ -321,7 +321,7 @@ Finally::=
     FINALLY Block:b
     {:
       RESULT = b;
-      CUP$Parser$actions.LOGGER.info("FINALLY Block -> Finally");
+      CUP$Parser$actions.LOGGER.fine("FINALLY Block -> Finally");
     :}
 ;
 
@@ -330,14 +330,14 @@ Catches::=
     {:
       RESULT = new CatchesNode(c, b);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("CatchHeader Block -> Catch");
+      CUP$Parser$actions.LOGGER.fine("CatchHeader Block -> Catch");
     :}
    | 
     Catches:cs CatchHeader:c Block:b
     {:
       RESULT = new CatchesNode(c, b, cs);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("Catches CatchHeader Block -> Catches");
+      CUP$Parser$actions.LOGGER.fine("Catches CatchHeader Block -> Catches");
     :}
     ;
 
@@ -347,7 +347,7 @@ CatchHeader::=
       IdNode catchNode = new IdNode(ex, i);
       catchNode.setDeclaration();
       RESULT = catchNode;
-      CUP$Parser$actions.LOGGER.info("CATCH L_PAREN Type ID R_PAREN -> CatchHeader");
+      CUP$Parser$actions.LOGGER.fine("CATCH L_PAREN Type ID R_PAREN -> CatchHeader");
    :}
    ;
  
@@ -357,7 +357,7 @@ DeclarationStatement::=
       IdNode declaration = new IdNode(t, i);
       declaration.setDeclaration();
       RESULT = declaration;
-      CUP$Parser$actions.LOGGER.info("Type ID -> DeclarationStatement");
+      CUP$Parser$actions.LOGGER.fine("Type ID -> DeclarationStatement");
     :}
   |
     Type:t ID:i ASSIGN Expression:e
@@ -365,7 +365,7 @@ DeclarationStatement::=
       IdNode declaration = new IdNode(t, i);
       declaration.setDeclaration();
       RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, declaration, e);
-      CUP$Parser$actions.LOGGER.info("Type ID ASSIGN Expression -> DeclarationStatement");
+      CUP$Parser$actions.LOGGER.fine("Type ID ASSIGN Expression -> DeclarationStatement");
     :}
   ;
  
@@ -373,32 +373,32 @@ JumpStatement::=
     CONTINUE
     {:
       RESULT = new JumpStatementNode(JumpStatementNode.JumpType.CONTINUE);
-      CUP$Parser$actions.LOGGER.info("CONTINUE -> JumpStatement");
+      CUP$Parser$actions.LOGGER.fine("CONTINUE -> JumpStatement");
     :}
   |
     BREAK
     {:
       RESULT = new JumpStatementNode(JumpStatementNode.JumpType.BREAK);
-      CUP$Parser$actions.LOGGER.info("BREAK -> JumpStatement");
+      CUP$Parser$actions.LOGGER.fine("BREAK -> JumpStatement");
     :}
   |
     RETURN ExpressionStatement:es
     {:
       RESULT = new JumpStatementNode(JumpStatementNode.JumpType.RETURN, es);
-      CUP$Parser$actions.LOGGER.info("RETURN Expression -> JumpStatement");
+      CUP$Parser$actions.LOGGER.fine("RETURN Expression -> JumpStatement");
     :}
   ;
  
 ExpressionStatement::=
     SEMICOL
     {:
-      CUP$Parser$actions.LOGGER.info("SEMICOL -> ExpressionStatement: NO RESULT STATEMENT");
+      CUP$Parser$actions.LOGGER.fine("SEMICOL -> ExpressionStatement: NO RESULT STATEMENT");
     :}
   |
     Expression:e SEMICOL
     {:
       RESULT = e;
-      CUP$Parser$actions.LOGGER.info("Expression SEMICOL -> ExpressionStatement");
+      CUP$Parser$actions.LOGGER.fine("Expression SEMICOL -> ExpressionStatement");
     :}
   ;
 
@@ -406,13 +406,13 @@ Expression::=
     LogicalExpression:le
     {:
      RESULT = le;
-     CUP$Parser$actions.LOGGER.info("LogicalExpression -> Expression");
+     CUP$Parser$actions.LOGGER.fine("LogicalExpression -> Expression");
     :}
   |
     UnaryExpression:ue ASSIGN Expression:e
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, ue, e);
-      CUP$Parser$actions.LOGGER.info("UnaryExpression ASSIGN Expression -> Expression");
+      CUP$Parser$actions.LOGGER.fine("UnaryExpression ASSIGN Expression -> Expression");
     :}
   ;
 
@@ -420,13 +420,13 @@ LogicalExpression::=
     LogicalExpression:le OR LogicalTerm:lt
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.OR, le, lt);
-      CUP$Parser$actions.LOGGER.info("LogicalExpression OR LogicalTerm -> LogicalExpression");
+      CUP$Parser$actions.LOGGER.fine("LogicalExpression OR LogicalTerm -> LogicalExpression");
     :}
   |
     LogicalTerm:l
     {:
       RESULT = l;
-      CUP$Parser$actions.LOGGER.info("LogicalTerm -> LogicalExpression");
+      CUP$Parser$actions.LOGGER.fine("LogicalTerm -> LogicalExpression");
     :}
   ;
 
@@ -434,13 +434,13 @@ LogicalTerm::=
     LogicalTerm:l AND EqualityExpression:e
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.AND, l, e);
-      CUP$Parser$actions.LOGGER.info("LogicalTerm AND EqualityExpression -> LogicalTerm");
+      CUP$Parser$actions.LOGGER.fine("LogicalTerm AND EqualityExpression -> LogicalTerm");
     :}
   |
     EqualityExpression:e
     {:
       RESULT = e;
-      CUP$Parser$actions.LOGGER.info("EqualityExpression -> LogicalTerm");
+      CUP$Parser$actions.LOGGER.fine("EqualityExpression -> LogicalTerm");
     :}
   ;
 
@@ -448,19 +448,19 @@ EqualityExpression::=
     RelationalExpression:r
     {: 
       RESULT = r; 
-      CUP$Parser$actions.LOGGER.info("RelationalExpression -> EqualityExpression");
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression -> EqualityExpression");
     :}
   |
     EqualityExpression:e DBL_EQLS RelationalExpression:r
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.DBL_EQLS, e, r);
-      CUP$Parser$actions.LOGGER.info("EqualityExpression DBL_EQLS RelationalExpression -> EqualityExpression");
+      CUP$Parser$actions.LOGGER.fine("EqualityExpression DBL_EQLS RelationalExpression -> EqualityExpression");
     :}
   |
     EqualityExpression:e NOT_EQLS RelationalExpression:r
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.NOT_EQLS, e, r);
-      CUP$Parser$actions.LOGGER.info("EqualityExpression NOT_EQLS RelationalExpression -> EqualityExpression");
+      CUP$Parser$actions.LOGGER.fine("EqualityExpression NOT_EQLS RelationalExpression -> EqualityExpression");
     :}
   ;
 
@@ -468,31 +468,31 @@ RelationalExpression::=
     AdditiveExpression:a
     {:
       RESULT = a;
-      CUP$Parser$actions.LOGGER.info("AdditiveExpression -> RelationalExpression");
+      CUP$Parser$actions.LOGGER.fine("AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r LESS AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.LESS, r, a);
-      CUP$Parser$actions.LOGGER.info("RelationalExpression LESS AdditiveExpression -> RelationalExpression");
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression LESS AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r GRTR AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.GRTR, r, a);
-      CUP$Parser$actions.LOGGER.info("RelationalExpression GRTR AdditiveExpression -> RelationalExpression");
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression GRTR AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r LESS_EQL AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.LESS_EQL, r, a);
-      CUP$Parser$actions.LOGGER.info("RelationalExpression LESS_EQL AdditiveExpression -> RelationalExpression");
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression LESS_EQL AdditiveExpression -> RelationalExpression");
     :}
   |
     RelationalExpression:r GRTR_EQL AdditiveExpression:a
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.GRTR_EQL, r, a);
-      CUP$Parser$actions.LOGGER.info("RelationalExpression GRTR_EQL AdditiveExpression -> RelationalExpression");
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression GRTR_EQL AdditiveExpression -> RelationalExpression");
     :}
   ;
 
@@ -500,19 +500,19 @@ AdditiveExpression::=
     MultiplicativeExpression:m
     {:
       RESULT = m;
-      CUP$Parser$actions.LOGGER.info("MultiplicativeExpreesion -> AdditiveExpression");
+      CUP$Parser$actions.LOGGER.fine("MultiplicativeExpreesion -> AdditiveExpression");
     :}
   |
     AdditiveExpression:a PLUS MultiplicativeExpression:m
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.PLUS, a, m);
-      CUP$Parser$actions.LOGGER.info("AdditiveExpression PLUS MultiplicativeExpression -> AdditiveExpression");
+      CUP$Parser$actions.LOGGER.fine("AdditiveExpression PLUS MultiplicativeExpression -> AdditiveExpression");
     :}
   |
     AdditiveExpression:a MINUS MultiplicativeExpression:m
     {: 
       RESULT = new BiOpNode(BiOpNode.OpType.MINUS, a, m);
-      CUP$Parser$actions.LOGGER.info("AdditiveExpression MINUS MultiplicativeExpression -> AdditiveExpression");
+      CUP$Parser$actions.LOGGER.fine("AdditiveExpression MINUS MultiplicativeExpression -> AdditiveExpression");
     :}
   ;
 
@@ -520,25 +520,25 @@ MultiplicativeExpression::=
     CastExpression:c
     {:
       RESULT = c;
-      CUP$Parser$actions.LOGGER.info("CastExpression -> MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.fine("CastExpression -> MultiplicativeExpression");
     :}
   |
     MultiplicativeExpression:m TIMES CastExpression:c
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.TIMES, m, c);
-      CUP$Parser$actions.LOGGER.info("MultipliativeExpression TIMES CastExpression -> MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.fine("MultipliativeExpression TIMES CastExpression -> MultiplicativeExpression");
     :}
   |
     MultiplicativeExpression:m DIVIDE CastExpression:c
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.DIVIDE, m, c);
-      CUP$Parser$actions.LOGGER.info("MultipliativeExpression DIVIDE CastExpression -> MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.fine("MultipliativeExpression DIVIDE CastExpression -> MultiplicativeExpression");
     :}
   |
     MultiplicativeExpression:m MOD CastExpression:c
     {:
       RESULT = new BiOpNode(BiOpNode.OpType.MOD, m, c);
-      CUP$Parser$actions.LOGGER.info("MultipliativeExpression MOD CastExpression -> MultiplicativeExpression");
+      CUP$Parser$actions.LOGGER.fine("MultipliativeExpression MOD CastExpression -> MultiplicativeExpression");
     :}
   ;
 
@@ -546,13 +546,13 @@ CastExpression::=
     UnaryExpression:u
     {:
       RESULT = u;
-      CUP$Parser$actions.LOGGER.info("UnaryExpression -> CastExpression");
+      CUP$Parser$actions.LOGGER.fine("UnaryExpression -> CastExpression");
     :}
   |
     L_PAREN Type:t R_PAREN CastExpression:c
     {:
       RESULT = new UnOpNode(t, UnOpNode.OpType.CAST, c);
-      CUP$Parser$actions.LOGGER.info("L_PAREN Type R_PAREN CastExpression -> CastExpression");
+      CUP$Parser$actions.LOGGER.fine("L_PAREN Type R_PAREN CastExpression -> CastExpression");
     :}
   ;
 
@@ -560,13 +560,13 @@ UnaryExpression::=
     UnaryOperator:u CastExpression:c
     {:
       RESULT = new UnOpNode(u, c);
-      CUP$Parser$actions.LOGGER.info("UnaryOperator CastExpression -> UnaryExpression");
+      CUP$Parser$actions.LOGGER.fine("UnaryOperator CastExpression -> UnaryExpression");
     :}
   |
     PostfixExpression:p
     {:
       RESULT = p;
-      CUP$Parser$actions.LOGGER.info("PostfixExpression -> UnaryExpression");
+      CUP$Parser$actions.LOGGER.fine("PostfixExpression -> UnaryExpression");
     :}
   ;
   
@@ -574,14 +574,14 @@ UnaryOperator::=
     MINUS 
     {:
       RESULT = UnOpNode.OpType.UMINUS;
-      CUP$Parser$actions.LOGGER.info("UMINUS -> UnaryOperator");
+      CUP$Parser$actions.LOGGER.fine("UMINUS -> UnaryOperator");
     :}
     %prec UMINUS
   |
     NOT
     {:
       RESULT = UnOpNode.OpType.NOT;
-      CUP$Parser$actions.LOGGER.info("NOT -> UnaryOperator");
+      CUP$Parser$actions.LOGGER.fine("NOT -> UnaryOperator");
     :}
   ;
 
@@ -589,14 +589,14 @@ PostfixExpression::=
     PrimaryExpression:p
     {:
       RESULT = p;
-      CUP$Parser$actions.LOGGER.info("PrimaryExpression -> PostFixExpression");
+      CUP$Parser$actions.LOGGER.fine("PrimaryExpression -> PostFixExpression");
     :}
 //  |
 //    PostfixExpression:p L_BRKT Expression:e R_BRKT
 //    {:
 //      // array indexing
 //      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.ARRAY_INDEX, p, e);
-//      CUP$Parser$actions.LOGGER.info("PostfixExpression L_BRKT Expression R_BRKT -> PostFixExpression");
+//      CUP$Parser$actions.LOGGER.fine("PostfixExpression L_BRKT Expression R_BRKT -> PostFixExpression");
 //    :}
   |
     ID:objectName DOT ID:methodName
@@ -605,7 +605,7 @@ PostfixExpression::=
       IdNode obj = new IdNode(objectName);
       IdNode method = new IdNode(methodName);
       RESULT = new PostfixExpressionNode(obj, method);
-      CUP$Parser$actions.LOGGER.info("ID: " + objectName + " DOT ID: " + methodName + " -> PostFixExpression");
+      CUP$Parser$actions.LOGGER.fine("ID: " + objectName + " DOT ID: " + methodName + " -> PostFixExpression");
     :}
   |
     ID:objectName DOT ID:methodName L_PAREN ArgumentExpressionList:a R_PAREN
@@ -619,7 +619,7 @@ PostfixExpression::=
       } else {
         RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, object, method, a);
       }
-      CUP$Parser$actions.LOGGER.info("ID " + objectName + " DOT ID: " + methodName + "L_PAREN ArgumentList R_PAREN -> PostFixExpression");
+      CUP$Parser$actions.LOGGER.fine("ID " + objectName + " DOT ID: " + methodName + "L_PAREN ArgumentList R_PAREN -> PostFixExpression");
     :}
   |
   
@@ -628,19 +628,19 @@ PostfixExpression::=
       //function call
       IdNode functionName = new IdNode(i);
       RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.FUNCTION_CALL, functionName, a);
-      CUP$Parser$actions.LOGGER.info("PostfixExpression L_PAREN ArgumentExpressionList R_PAREN -> PostFixExpression");
+      CUP$Parser$actions.LOGGER.fine("PostfixExpression L_PAREN ArgumentExpressionList R_PAREN -> PostFixExpression");
     :}
   |
     PostfixExpression:p INCR
     {:
       RESULT = new UnOpNode(UnOpNode.OpType.INCR, p);
-      CUP$Parser$actions.LOGGER.info("PostfixExpression INCR -> PostFixExpression");
+      CUP$Parser$actions.LOGGER.fine("PostfixExpression INCR -> PostFixExpression");
     :}
   |
     PostfixExpression:p DECR
     {:
       RESULT = new UnOpNode(UnOpNode.OpType.DECR, p);
-      CUP$Parser$actions.LOGGER.info("PostfixExpression DECR -> PostFixExpression");
+      CUP$Parser$actions.LOGGER.fine("PostfixExpression DECR -> PostFixExpression");
     :}
   ;
 
@@ -648,18 +648,18 @@ ArgumentExpressionList::=
     Expression:e
     {:
       RESULT = new ArgumentsNode(null,e);
-      CUP$Parser$actions.LOGGER.info("Expression -> ArgumentExpressionList");
+      CUP$Parser$actions.LOGGER.fine("Expression -> ArgumentExpressionList");
     :}
   |
     ArgumentExpressionList:a COMMA Expression:e
     {:
       RESULT = new ArgumentsNode(a,e);
-      CUP$Parser$actions.LOGGER.info("ArgumentExpressionList COMMA Expression -> ArgumentExpressionList");
+      CUP$Parser$actions.LOGGER.fine("ArgumentExpressionList COMMA Expression -> ArgumentExpressionList");
     :}
   |
     /* epsilon */
     {:
-      CUP$Parser$actions.LOGGER.info("epsilon -> ArgumentExpressionList");
+      CUP$Parser$actions.LOGGER.fine("epsilon -> ArgumentExpressionList");
     :}
  
  ;
@@ -668,19 +668,19 @@ PrimaryExpression::=
     ID:i
     {:
       RESULT = new IdNode(i);
-      CUP$Parser$actions.LOGGER.info("ID: " + i + " -> PrimaryExpression");
+      CUP$Parser$actions.LOGGER.fine("ID: " + i + " -> PrimaryExpression");
     :}
   |
     Constant:c
     {:
       RESULT = c;
-      CUP$Parser$actions.LOGGER.info("Constant -> PrimaryExpression");
+      CUP$Parser$actions.LOGGER.fine("Constant -> PrimaryExpression");
     :}
   |
     L_PAREN Expression:e R_PAREN
     {:
       RESULT = e;
-      CUP$Parser$actions.LOGGER.info("L_PAREN Expression R_PAREN -> PrimaryExpression");
+      CUP$Parser$actions.LOGGER.fine("L_PAREN Expression R_PAREN -> PrimaryExpression");
     :}
   ;
 
@@ -688,25 +688,25 @@ Constant::=
     INT_CONST:i
     {:
       RESULT = new ConstantNode(Types.Primitive.INT, i);
-      CUP$Parser$actions.LOGGER.info("INT_CONST: " + i + " -> Constant");
+      CUP$Parser$actions.LOGGER.fine("INT_CONST: " + i + " -> Constant");
     :}
   |
     REAL_CONST:d
     {:
       RESULT = new ConstantNode(Types.Primitive.REAL, d);
-      CUP$Parser$actions.LOGGER.info("REAL_CONST: " + d + " -> Constant");
+      CUP$Parser$actions.LOGGER.fine("REAL_CONST: " + d + " -> Constant");
     :}
   |
     BOOL_CONST:b
     {:
       RESULT = new ConstantNode(Types.Primitive.BOOL, b);
-      CUP$Parser$actions.LOGGER.info("BOOL_CONST: " + b + " -> Constant");
+      CUP$Parser$actions.LOGGER.fine("BOOL_CONST: " + b + " -> Constant");
     :}
   |
     TEXT_LITERAL:t
     {:
       RESULT = new ConstantNode(Types.Primitive.TEXT, t);
-      CUP$Parser$actions.LOGGER.info("TEXT_LITERAL: " + t + " -> Constant");
+      CUP$Parser$actions.LOGGER.fine("TEXT_LITERAL: " + t + " -> Constant");
     :}
   ;
 
@@ -715,7 +715,7 @@ SelectionStatement::=
     {:
       RESULT = new IfElseStatementNode(e, b, elif, el);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("IF Expression Block " +
+      CUP$Parser$actions.LOGGER.fine("IF Expression Block " +
                                       "ElseIfStatement ElseStatment -> SelectionStatement");
     :}
   |
@@ -724,7 +724,7 @@ SelectionStatement::=
     // NOT THINKING ABOUT SCOPE. TOO TIRED.
       RESULT = new SwitchStatementNode(e, s);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("SWITCH Expression L_BRACE " +
+      CUP$Parser$actions.LOGGER.fine("SWITCH Expression L_BRACE " +
                                       "StatementList R_BRACE -> SelectionStatement");
     :}
   ;
@@ -734,13 +734,13 @@ ElseIfStatement::=
     {:
       RESULT = new ElseIfStatementNode(e, b, elif);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("ELSEIF L_PAREN Expression R_PAREN ElseIfStatement -> " +
+      CUP$Parser$actions.LOGGER.fine("ELSEIF L_PAREN Expression R_PAREN ElseIfStatement -> " +
                                       "ElseIfStatement");
     :}
   |
     /* epsilon */
     {:
-      CUP$Parser$actions.LOGGER.info("epsilon -> ElseIfStatement");
+      CUP$Parser$actions.LOGGER.fine("epsilon -> ElseIfStatement");
     :}
   ;
 
@@ -749,12 +749,12 @@ ElseStatement::=
     {:
       RESULT = new ElseStatementNode(b);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("Block -> ElseStatement");
+      CUP$Parser$actions.LOGGER.fine("Block -> ElseStatement");
     :}
   |
     /* epsilon */
     {:
-      CUP$Parser$actions.LOGGER.info("epsilon -> ElseStatement");
+      CUP$Parser$actions.LOGGER.fine("epsilon -> ElseStatement");
     :}
   ;
 
@@ -763,7 +763,7 @@ IterationStatement::=
     {:
       RESULT = new IterationStatementNode(e,b);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("WHILE L_PAREN Expression R_PAREN L_BRACE " +
+      CUP$Parser$actions.LOGGER.fine("WHILE L_PAREN Expression R_PAREN L_BRACE " +
                                       "StatementList R_BRACE -> IterationStatement");
     :}
   |
@@ -771,7 +771,7 @@ IterationStatement::=
     {:
       RESULT = new IterationStatementNode(init, test, incr, b);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("FOR ForInit ForExpr ForInc L_BRACE StatementList " +
+      CUP$Parser$actions.LOGGER.fine("FOR ForInit ForExpr ForInc L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement");
     :}
   |
@@ -779,7 +779,7 @@ IterationStatement::=
     {:
       //RESULT = new IterationStatementNode(e1,e2,e3,b);
       //RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("FOR L_BRACEN ForInit ForExpr R_PAREN L_BRACE " +
+      CUP$Parser$actions.LOGGER.fine("FOR L_BRACEN ForInit ForExpr R_PAREN L_BRACE " +
                                       "StatementList R_BRACE -> IterationStatement");
     :}
   |
@@ -788,7 +788,7 @@ IterationStatement::=
       IdNode idNode = new IdNode(t, i);
       RESULT = new IterationStatementNode(idNode,e2,b);
       RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.info("FOREACH Expression IN Expression L_BRACE StatementList " +
+      CUP$Parser$actions.LOGGER.fine("FOREACH Expression IN Expression L_BRACE StatementList " +
                                       "R_BRACE -> IterationStatement"); 
     :}
   ;
@@ -797,13 +797,13 @@ ForInit::=
     ExpressionStatements:es
     {:
       RESULT = es;
-      CUP$Parser$actions.LOGGER.info("ExpressionStatements -> ForInit");
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatements -> ForInit");
     :}
   |
     DeclarationStatement:ds SEMICOL
     {:
       RESULT = ds;
-      CUP$Parser$actions.LOGGER.info("DeclarationStatement SEMICOL -> ForInit");
+      CUP$Parser$actions.LOGGER.fine("DeclarationStatement SEMICOL -> ForInit");
     :}
   ;
 
@@ -811,7 +811,7 @@ ForExpr::=
     ExpressionStatement:es
     {:
       RESULT = es;
-      CUP$Parser$actions.LOGGER.info("ExpressionStatement -> ForExpr");
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatement -> ForExpr");
     :}
   ;
 
@@ -819,7 +819,7 @@ ForIncr::=
     ExpressionStatements:es
     {:
       RESULT = es;
-      CUP$Parser$actions.LOGGER.info("ExpressionStatements -> ForIncr");
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatements -> ForIncr");
     :}
   ;
 
@@ -827,7 +827,7 @@ ExpressionStatements::=
     ExpressionStatement:es
     {:
       RESULT = es;
-      CUP$Parser$actions.LOGGER.info("ExpressionStatement -> ExpressionStatements");
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatement -> ExpressionStatements");
     :}
   |
     ExpressionStatements:e COMMA ExpressionStatement:es
@@ -836,7 +836,7 @@ ExpressionStatements::=
       children.add(e);
       children.add(es);
       RESULT = new StatementListNode(children);
-      CUP$Parser$actions.LOGGER.info("ExpressionStatements COMMA ExpressionStatement -> " +
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatements COMMA ExpressionStatement -> " +
                                     "ExpressionStatements");
     :}
   ;
@@ -844,12 +844,12 @@ ExpressionStatements::=
 LabeledStatement::=
     CASE LogicalExpression COL Statement:s
     {:
-      CUP$Parser$actions.LOGGER.info("CASE LogicalExpression COL Statement -> LabeledStatement");
+      CUP$Parser$actions.LOGGER.fine("CASE LogicalExpression COL Statement -> LabeledStatement");
     :}
   |
     DEFAULT:d COL Statement:s
     {:
-      CUP$Parser$actions.LOGGER.info("DEFAULT COL Statement");
+      CUP$Parser$actions.LOGGER.fine("DEFAULT COL Statement");
     :} 
   ;
 
@@ -857,43 +857,43 @@ Type::=
     VOID
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.VOID);
-      CUP$Parser$actions.LOGGER.info("VOID -> Type");
+      CUP$Parser$actions.LOGGER.fine("VOID -> Type");
     :}
   |
     TEXT
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.TEXT);
-      CUP$Parser$actions.LOGGER.info("TEXT -> Type");
+      CUP$Parser$actions.LOGGER.fine("TEXT -> Type");
     :}
   |
     BOOL
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.BOOL);
-      CUP$Parser$actions.LOGGER.info("BOOL -> Type");
+      CUP$Parser$actions.LOGGER.fine("BOOL -> Type");
     :}
   |
     INT:i
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.INT);
-      CUP$Parser$actions.LOGGER.info("INT -> Type");
+      CUP$Parser$actions.LOGGER.fine("INT -> Type");
     :}
   |
     REAL
     {:
       RESULT = new PrimitiveTypeNode(Types.Primitive.REAL);
-      CUP$Parser$actions.LOGGER.info("REAL -> Type");
+      CUP$Parser$actions.LOGGER.fine("REAL -> Type");
     :}
   |
     DerivedType:d LESS Type:t GRTR
     {:
       RESULT = new DerivedTypeNode(d, t);
-      CUP$Parser$actions.LOGGER.info("DerivedType LESS Type GRTR -> Type");
+      CUP$Parser$actions.LOGGER.fine("DerivedType LESS Type GRTR -> Type");
     :}
   |
     DictType:m
     {:
       RESULT = m;
-      CUP$Parser$actions.LOGGER.info("DictType -> Type");
+      CUP$Parser$actions.LOGGER.fine("DictType -> Type");
     :}
   ;
   
@@ -901,25 +901,25 @@ DictType::=
     DICT LESS INT COMMA Type:t GRTR
     {:
       RESULT = new DictTypeNode(Types.Primitive.INT, t);
-      CUP$Parser$actions.LOGGER.info("DICT LESS INT COMMA Type GRTR -> MapType");
+      CUP$Parser$actions.LOGGER.fine("DICT LESS INT COMMA Type GRTR -> MapType");
     :}
   |
     DICT LESS TEXT COMMA Type:t GRTR
     {:
       RESULT = new DictTypeNode(Types.Primitive.TEXT, t);
-      CUP$Parser$actions.LOGGER.info("DICT LESS TEXT COMMA Type GRTR -> MapType");
+      CUP$Parser$actions.LOGGER.fine("DICT LESS TEXT COMMA Type GRTR -> MapType");
     :}
   |
     DICT LESS BOOL COMMA Type:t GRTR
     {:
       RESULT = new DictTypeNode(Types.Primitive.BOOL, t);
-      CUP$Parser$actions.LOGGER.info("DICT LESS BOOL COMMA Type GRTR -> MapType");
+      CUP$Parser$actions.LOGGER.fine("DICT LESS BOOL COMMA Type GRTR -> MapType");
     :}
   |
     DICT LESS REAL COMMA Type:t GRTR
     {:
       RESULT = new DictTypeNode(Types.Primitive.REAL, t);
-      CUP$Parser$actions.LOGGER.info("DICT LESS REAL COMMA Type GRTR -> MapType");
+      CUP$Parser$actions.LOGGER.fine("DICT LESS REAL COMMA Type GRTR -> MapType");
     :}
   ;
   
@@ -928,24 +928,24 @@ DerivedType::=
     LIST
     {:
       RESULT = Types.Derived.LIST;
-      CUP$Parser$actions.LOGGER.info("LIST -> DerivedType");
+      CUP$Parser$actions.LOGGER.fine("LIST -> DerivedType");
     :}
   |
     ITER
     {:
       RESULT = Types.Derived.ITER;
-      CUP$Parser$actions.LOGGER.info("ITER -> DerivedType");
+      CUP$Parser$actions.LOGGER.fine("ITER -> DerivedType");
     :}
   |
     MULTISET
     {:
       RESULT = Types.Derived.MULTISET;
-      CUP$Parser$actions.LOGGER.info("MULTISET -> DerivedType");
+      CUP$Parser$actions.LOGGER.fine("MULTISET -> DerivedType");
     :}
   |
     SET
     {:
       RESULT = Types.Derived.SET;
-      CUP$Parser$actions.LOGGER.info("SET -> DerivedType");
+      CUP$Parser$actions.LOGGER.fine("SET -> DerivedType");
     :}
   ;

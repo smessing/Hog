@@ -250,14 +250,14 @@ public class TypeCheckingVisitor implements Visitor {
 		LOGGER.finer("Type Check visit(JumpStatementNode node) called on "
 				+ node.getName());
 		
-		System.out.println("type check jump statement node");
+		//System.out.println("type check jump statement node");
 		visitAllChildrenStandard(node);
 		
 		TypeNode expectedReturnType;
 		if(node.getJumpType() == JumpStatementNode.JumpType.RETURN){
-			System.out.println("cehcking return");
+			//System.out.println("cehcking return");
 			expectedReturnType = this.getExpectedReturnType(node);
-			System.out.println("EXPECTED: " + expectedReturnType + " ACTUAL:" + node.getExpressionNode().getType());
+			//System.out.println("EXPECTED: " + expectedReturnType + " ACTUAL:" + node.getExpressionNode().getType());
 			if(!Types.isSameType(node.getExpressionNode().getType(), expectedReturnType)){
 				throw new TypeMismatchError("Return statement " + node.getExpressionNode().getType() + "does not match the expected return type of "+
 						expectedReturnType);
