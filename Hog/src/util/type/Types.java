@@ -603,15 +603,15 @@ public class Types {
 
 		switch (type.getType()) {
 		case BOOL:
-			return "Boolean";
+			return "boolean";
 		case TEXT:
 			return "String";
 		case VOID:
 			return "void";
 		case INT:
-			return "Integer";
+			return "int";
 		case REAL:
-			return "Double";
+			return "double";
 		}
 
 		throw new UnsupportedOperationException("This should never happen.");

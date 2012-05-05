@@ -835,7 +835,12 @@ public class CodeGeneratingVisitor implements Visitor {
 		}
 
 		code.append("<");
-		code.append(Types.getHadoopType(node.getInputKeyIdNode().getType()));
+		if (node.getSectionParent().getSectionName() == SectionNode.SectionName.MAP) {
+			code.append("LongWritable");
+		} else
+			code
+					.append(Types.getHadoopType(node.getInputKeyIdNode()
+							.getType()));
 		code.append(", ");
 		code.append(Types.getHadoopType(node.getInputValueIdNode().getType()));
 		code.append(", ");
@@ -849,9 +854,12 @@ public class CodeGeneratingVisitor implements Visitor {
 			code
 					.append(Types.getHadoopType(node.getInputKeyIdNode()
 							.getType()));
-			code.append(" key, Iterator<");
+			code.append(node.getInputKeyIdNode().getIdentifier());
+			code.append(", Iterator<");
 			code.append(Types.getHadoopType(node.getInputValueIdNode()
 					.getType()));
+			code.append("> ");
+			code.append(node.getInputValueIdNode().getIdentifier());
 			code.append("> values,  OutputCollector<");
 			code.append(Types.getHadoopType(node.getReturnKey()));
 			code.append(", ");
@@ -859,10 +867,9 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append("> output, Reporter reporter) throws IOException {");
 		} else {
 			code.append("public void map(");
-			code
-					.append(Types.getHadoopType(node.getInputKeyIdNode()
-							.getType()));
-			code.append(" key, ");
+			code.append("LongWritable ");
+			code.append(node.getInputKeyIdNode().getIdentifier());
+			code.append(", ");
 			code.append(Types.getHadoopType(node.getInputValueIdNode()
 					.getType()));
 			code.append(" value,  OutputCollector<");
