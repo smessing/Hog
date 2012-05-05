@@ -150,7 +150,9 @@ public class ErrorCheckingVisitor implements Visitor {
     	*/
     	
 		if (node instanceof FunctionNode){
-			if nonVoidFunctionFlag = true;
+			if (node.getExpressionNode().getType()){
+				nonVoidFunctionFlag = true;
+			}
 		}
 	}
 	
