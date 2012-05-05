@@ -30,9 +30,9 @@
   
   text tooManyArgs(int x, list<int> y, set<list<int>> foo, real percentage, bool doNothing) {
     if (not doNothing) {
-      return "something";
+      return 1;
     }
-    return "nothing";
+    return 1;
   }
   
   list<int> reverseList(list<int> oldList) {

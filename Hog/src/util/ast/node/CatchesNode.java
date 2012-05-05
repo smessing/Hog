@@ -100,6 +100,14 @@ public class CatchesNode extends StatementListNode {
 		}
 		return next;
 	}
+	
+	/**
+	 * Ask if the block has any code in it
+	 * @return true if there is a block, false otherwise
+	 */
+	public boolean hasBlock() {
+		return this.block != null;
+	}
 
 	@Override
 	public String getName() {
