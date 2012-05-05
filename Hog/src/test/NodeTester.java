@@ -20,7 +20,8 @@ import util.type.Types;
  * 
  * Tests for the functionality provided by the AbstractSyntaxTree class.
  * 
- * @author sam
+ * @author Samuel Messing
+ * @author Kurry Tran
  * 
  */
 public class NodeTester {

@@ -6,6 +6,14 @@ import util.ast.node.*;
 import util.type.*;
 import java.util.logging.*;
 
+/**
+ * Parse a source program based on the Hog language syntax.
+ *
+ * @author Samuel Messing
+ * @author Benjamin Rapaport
+ * @author Paul Tylkin
+ */
+
 action code
   {:
     Hashtable table = new Hashtable();

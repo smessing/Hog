@@ -1,14 +1,11 @@
 package back_end;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
-import util.ast.node.PostfixExpressionNode.PostfixType;
-import util.error.FunctionNotDefinedError;
 import util.symbol_table.FunctionSymbol;
 import util.symbol_table.Symbol;
 import util.symbol_table.SymbolTable;
@@ -20,7 +17,8 @@ import util.type.VariableUndeclaredException;
 
 /**
  * 
- * @author ben, jason
+ * @author Benjamin Rapaport
+ * @author Jason Halpern
  *
  */
 
