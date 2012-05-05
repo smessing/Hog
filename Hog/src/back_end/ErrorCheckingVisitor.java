@@ -92,8 +92,17 @@ public class ErrorCheckingVisitor implements Visitor {
 	
 	
 	private void visitReturnChildren(Node node) {
-		/* This pass through the program will 
+		/* Constructs of the form
 		 * 
+		 * int doubleint (int x){
+		 *   return 2*x;a 
+		 *   x = 2*x;
+		 * }
+		 * 
+		 * will not compile into Java, and so if a Hog program 
+		 * 
+		 * This pass through the program will check that there is no code after return statements
+		 * (unreachable code) in a Hog program.
 		 * 
 		 */
 		if (node.isNewScope()) {
@@ -122,6 +131,8 @@ public class ErrorCheckingVisitor implements Visitor {
 		}
 	}
 
+	private boolean nonVoidFunctionFlag;
+	
     private void visitFunctionReturns (Node node){
     	/*Constructs of the form
     	 int max(int a, int b){
@@ -132,14 +143,14 @@ public class ErrorCheckingVisitor implements Visitor {
     	     return b;
     	   }
     	 }
-    	 will not compile in Java, saying that there is an error in the return type, even though the function
+    	 will not compile into Java, saying that there is an error in the return type, even though the function
     	 does return the correct value. This pass through the Hog program will throw Hog errors on this type of input.
     	*
     	*
     	*/
     	
 		if (node instanceof FunctionNode){
-			
+			if nonVoidFunctionFlag = true;
 		}
 	}
 	
