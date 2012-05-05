@@ -616,6 +616,25 @@ public class Types {
 
 		throw new UnsupportedOperationException("This should never happen.");
 	}
+	
+	public static String getJavaObjectType(PrimitiveTypeNode type) {
+	
+		switch (type.getType()) {
+		case BOOL:
+			return "Boolean";
+		case TEXT:
+			return "String";
+		case VOID:
+			return "void";
+		case INT:
+			return "Integer";
+		case REAL:
+			return "Double";
+		}
+
+		throw new UnsupportedOperationException("This should never happen.");
+		
+	}
 
 	/**
 	 * Ask for the Hadoop type corresponding to this TypeNode.

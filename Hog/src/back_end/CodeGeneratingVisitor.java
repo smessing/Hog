@@ -37,7 +37,7 @@ public class CodeGeneratingVisitor implements Visitor {
 	 * The format of the output files from the <code>reduce</code> class. See
 	 * {@link #inputFormatClass inputFormatClass} for more details.
 	 */
-	protected final String outputFormatClass = "TextInputFormat.class";
+	protected final String outputFormatClass = "TextOutputFormat.class";
 
 	protected AbstractSyntaxTree tree;
 	protected StringBuilder code;
@@ -436,7 +436,11 @@ public class CodeGeneratingVisitor implements Visitor {
 		boolean declaration = declarationStatement;
 		declarationStatement = false;
 
-		walk(node.getInnerTypeNode());
+		if (node.getInnerTypeNode() instanceof PrimitiveTypeNode) {
+			code.append(Types.getJavaObjectType((PrimitiveTypeNode) node
+					.getInnerTypeNode()));
+		} else
+			walk(node.getInnerTypeNode());
 
 		// close inner types
 		code.append(">");
