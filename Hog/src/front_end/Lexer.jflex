@@ -52,7 +52,7 @@ digit           = [0-9]
 alphanumeric    = {letter}|{digit}
 other_id_char   = [_]
 text_literal_old    = [a-zA-Z_ ]?\"(\\.|[^\\'])*\" 
-text_literal       = \".*\"
+text_literal       = \"[^\"]*\"
 identifier      = {letter}({alphanumeric}|{other_id_char})*
 integer         = {digit}*
 real            = {integer}\.{integer}
@@ -95,6 +95,7 @@ return          { return newSym(sym.RETURN); }
 iter            { return newSym(sym.ITER); }
 try             { return newSym(sym.TRY); }
 catch           { return newSym(sym.CATCH); }
+finally         { return newSym(sym.FINALLY); }
 @Functions      { return newSym(sym.FUNCTIONS); }
 @Map            { return newSym(sym.MAP); }
 @Reduce         { return newSym(sym.REDUCE); }
