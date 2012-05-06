@@ -90,7 +90,301 @@ Use your updated tutorial.
 \chapter{Language Reference Manual}
 \label{chap:LRM}
 
-Use your update LRM.
+\section{Introduction}
+\label{sec:introduction}
+
+As data sets have grown in size, so have the complexities of dealing with them.
+For instance, consider wanting to generate counts for all the words in \emph{War
+and Peace} by means of distributed computation. Writing in Java and using Hadoop
+MapReduce (TM), a simple solution takes over 50 lines of code, as the programmer
+is required to specify intermediate objects not directly related to the desired
+computation, but required simply to get Hadoop to function properly. Our language 
+can express the same computation in 15 lines.
+
+\subsection{The MapReduce Framework}
+\label{sub:mapreduce}
+
+With the explosion in the size of datasets that companies have had to manage in
+recent years, there are many new challenges that they face. Many companies and
+organizations have to handle the processing of datasets that are terabytes or even
+petabytes in size. The first challenge in this large-scale processing is how to
+make sense of all this data. More importantly, the question is how they can 
+process and manipulate the data in a time-efficient and reliable manner. 
+The second challenge is how they handle this across their distributed systems. Writing distributed, fault-tolerant programs requires a high level of expertise and knowledge of parallel systems.
+
+In response to this need, a group of engineers at Google developed the MapReduce
+framework in 2004. This high-level framework can be used for a variety of
+tasks, including handling search queries, indexing crawled documents, and
+processing logs. The software framework was developed to handle computations on
+massive datasets that are distributed across hundreds or even thousands of
+machines. The motivation behind MapReduce was to create a unified framework that
+abstracted away many of the low level details from programmers, so they would not
+have to be concerned with how the data is distributed, how the computation is
+parallelized and how all of this is done in a fault tolerant manner.
+
+The MapReduce framework partitions input data across different machines, so
+that the computations are initially performed on smaller sets of data
+distributed across the cluster. Each cluster has a master node that is
+responsible for coordinating the efforts among the slave nodes. Each slave node
+sends periodic heartbeats to the master node so it can be aware of progress and
+failure. In the case of failure, the master node can reassign tasks to other
+nodes in the cluster. In conjunction with the underlying MapReduce framework
+created at Google, the company also had to build the distributed Google File
+System (GFS). This file system ``allows programs to access files efficiently
+from any computer, so functions can be mapped
+everywhere.''\cite{patterson:2008} GFS was designed with the same goals as
+other distributed file systems, including ``performance, scalability,
+reliability and availability.''\cite{ghemawat:2003} Another key aspect of the
+GFS design is fault tolerance and this is achieved by treating failures as
+normal and optimizing for ``huge files that are mostly appended to and then
+read.''\cite{ghemawat:2003}
+
+Within the framework, a programmer is responsible for writing both map and
+reduce functions. The map function is applied to all of the input data ``in
+order to compute a set of intermediate key/value pairs.''\cite{dean:2004} In
+the map step, the master node partitions the input data into smaller problems
+and distributes them across the worker nodes in the cluster. This step is
+applied in parallel to all of the input that has been partitioned across the
+cluster. Then, the reduce step is responsible for collecting all the processed
+data from the slave nodes and formatting the output. The reduce function is
+carried out over all the values that have the same key such that each key has a
+single value. which is the answer to the problem MapReduce is trying to solve.
+The output is done to files in the distributed file system.
+
+The use of ``a functional model with user-specified map and reduce operations
+allows (Google) to parallelize large computations easily and to use
+re-execution as the primary mechanism for fault tolerance.''\cite{dean:2004} A
+programmer only has to specify the functions described above and the system
+handles the rest of the details. Figure \ref{fig:map_reduce_overview}
+illustrates the execution flow of a MapReduce program.
+
+\begin{center}
+\begin{figure}
+  \label{fig:map_reduce_overview}
+  \includegraphics[width=1.0\textwidth]{img/map_reduce_overview.pdf}
+  \caption{Overview of the MapReduce program, from \cite{ghemawat:2003}.}
+\end{figure}
+\end{center}
+
+\subsection{The Hog Language}
+\label{sub:hog_language}
+
+Hog is a \textbf{data-oriented}, \textbf{high-level}, scripting language for
+creating MapReduce programs. Used alongside Hadoop, Hog enables users to
+efficiently carry out \textbf{distributed} computation. Hadoop MapReduce is an
+open-source implementation of the MapReduce framework, which is especially useful
+for working with large data sets. While it is possible to write code to carry out
+computations with Hadoop directly, the framework requires users to specify
+low-level details that are often irrelevant to their desired goal.
+
+By building a scripting language on top of Hadoop, we aim to simplify the process.
+Built around a \textbf{simple} and highly \textbf{readable} syntax, Hog will let
+users focus on what computations they want done, and not how they want to do them.
+Hog takes care of all the low-level details required to run computations on
+Hadoop’s distributed network. All a user needs to do is tell Hog the location of
+their valid Hadoop instance, and Hog will do the rest.
+
+We intentionally have restricted the scope of Hog to deal with specific
+problems.  For example, Hog only supports reading and writing plaintext files.
+While these limitations sacrifice the generality of the language, they promote
+ease of use.
+
+\subsubsection{Guiding Principles} % (fold)
+\label{ssub:guiding_principles}
+
+The guiding principles of Hog are:
+
+\begin{itemize}
+  \item Anyone can MapReduce
+  \item Brevity over verbosity
+  \item Simplicity over complexity
+\end{itemize}
+
+
+% subsubsection guiding_princples (end)
+
+\subsection{The ``Ideal'' Hog User} % (fold)
+\label{sub:the_ideal_hog_user}
+
+Hog was designed with a particular user in mind: one that has already learned
+the basics of programming in a different programming language (such as Java or
+Python), but is inexperienced with distributed computation and can benefit from
+a highly structured framework for writing MapReduce programs. The language was
+designed with the goal of making learning how to write MapReduce programs as
+easy as possible. However, the user should be adept with programming concepts
+such as program structure, control flow (iteration and conditional operators),
+evaluation of boolean expressions, etc.
+
+% subsection the_ideal_hog_user (end)
+
+
+\section{Syntax Notation} % (fold)
+\label{sec:syntax_notation}
+
+In the syntax notation used throughout the Hog manual, different syntactic
+categories are noted by \emph{italic type}, and literal words and characters
+are in \tt typewriter style\rm. When specific terms are introduced,
+\textbf{\emph{emboldened, italicized font}} is used.
+
+% sec syntax_notation (end)
+
+\section{Program Structure} % (fold)
+\label{sec:program_structure}
+
+\subsection{Overall Structure} % (fold)
+\label{sub:overall_structure}
+
+Every Hog program consists of a single source file with a ‘.hog’ extension. This
+source file must contain three sections: \tt @Map\rm, and \tt @Reduce\rm, and
+\tt @Main \rm and can also include an optional \tt @Functions \rm section. These
+sections must be included in the following order:
+
+\begin{verbatim}
+   @Functions {
+      .
+      .
+      .
+    }
+    @Map <type signature> {
+      .
+      .
+      .
+    }
+    @Reduce <type signature> {
+      .
+      .
+      .
+    }
+    @Main {
+      .
+      .
+      .
+    }
+\end{verbatim}
+
+% section overall_structure (end)
+
+\subsection{\tt @Functions\rm} % (fold)
+\label{sub:tt_functionsrm}
+
+At the top of every Hog program, the programmer has the option to define functions
+in a section called \tt @Functions\rm. Any function defined in this section can be
+called from any other section of the program, including \tt @Map\rm, \tt
+@Reduce\rm, and \tt @Main \rm and can also be called from other functions defined
+in the \tt @Functions \rm section. The section containing the functions begins
+with the keyword \tt @Functions \rm on its own line, followed by the function
+definitions.
+
+Function definitions have the form:
+
+\begin{quotation}
+  \emph{type functionName} \tt ( \rm \emph{parameterList} \tt ) \{ \rm \\
+  \indent \indent \emph{expressionList}; \\
+  \indent \tt \}
+\end{quotation}
+
+where,
+
+\begin{quotation} \emph{parameterList} $\rightarrow$ \emph{parameter} \tt , \rm
+\emph{parameterList} $|$ \emph{parameter} \end{quotation}
+
+The return type can be any valid Hog type. The rules regarding legal function
+names are identical to those regarding legal variable identifiers. Each
+parameter in the parameter list consists of a valid Hog type followed by the
+name of the parameter, which must also follow the naming rules for identifiers.
+Parameters in the parameter list are separated by commas. The \tt @Functions
+\rm section ends when the next Hog section begins.
+
+A complete example of an \tt @Functions \rm section:
+
+\begin{verbatim}
+    @Functions {
+      int min(int a, int b) {
+        if (a < b) {
+          return a;
+        } else {
+          return b;
+        }
+      }
+
+      list<int> reverseList(list<int> oldList) {
+        list<int> newList;
+        for (int i = oldList.size() - 1; i >= 0; i--;) {
+          newList.add(oldList.get(i));
+        }
+        return newList;
+      }
+    }
+\end{verbatim}
+
+User-defined functions can make reference to other user-defined functions.
+However, function names cannot be overloaded (i.e. it is not possible to use
+the same function name with a parameter list that differs in the number of
+arguments or argument types). Disallowing function overloading is a design
+choice consistent with Hog's guiding principle of simplicity.
+
+% section tt_functionsrm (end)
+
+\subsection{\tt @Map \rm} % (fold)
+\label{sub:tt_map_rm}
+
+The map function in a MapReduce program takes as input key-value pairs, performs
+the appropriate calculations and procedures, and emits intermediate key-value
+pairs as output. Any given input pair may map to zero, one, or multiple output
+pairs. The \tt @Map \rm section defines the code for the map function.
+
+The \tt @Map \rm header must be followed by the signature of the map function, and
+then the body of the map function as follows:
+
+\begin{quotation} \tt @Map ( \rm \emph{type identifier, type identifier} \tt )
+-> ( \rm \emph{type, type} \tt ) \{ \\ \indent \indent . \\ \indent \indent .
+\\ \indent \indent . \\ \indent \tt \} \rm \end{quotation}
+
+The first \emph{type identifier} defines the \emph{\textbf{key}} and the second
+defines the \emph{\textbf{value}} of the input key-value pair to the \tt @Map
+\rm function. The identifiers specified for the key and value can be made
+reference to later within the \tt @Map \rm block. The \tt @Map \rm signature is
+followed by an arrow and another key-value pair, defining the types of the
+output of the map function. Notice that identifiers are not specified for the
+output key and value (said to be \emph{\textbf{unnamed}}), as these pairs are
+only produced at the end of the map function. 
+
+The map function can include any number of calls to \tt emit()\rm, which outputs
+the resulting intermediate key-value pairs for use by the function defined in the
+\tt @Reduce \rm section. The types of the values passed to the \tt emit() \rm
+function must agree with the signature of the output key-value pair as defined in
+the \tt @Map \rm type signature. All output pairs from the map function are
+subsequently grouped by key by the framework, and passed as input to the \tt
+@Reduce \rm function.
+
+\emph{Note}: In the current version of the language, the only configuration
+available is for a file to be passed into the map function one line at a time,
+with the line of text being the value, and the corresponding line number as the
+key. This requires that the input key/value pair to the map function is of type
+\tt (int key‐name, text value‐name)\rm. Extending this to allow for other input
+formats is a future goal of the Hog language.
+
+The following is an example of a complete \tt @Map \rm section for a program that
+counts the number of times each word appears in a set of files. The map function
+receives a single line of text, and for each word in the line (as delineated by
+whitespace), it emits the word as the key with a value of one. By emitting the word
+as the key, we can allow the framework to group by the word, thus calling the
+reduce function for every word.
+
+\begin{verbatim}
+
+  @Map (int lineNum, text line) -> (text, int) {
+      # for every word on this line, emit that word and the number 1
+      foreach text word in line.tokenize(" ") {
+          emit(word, 1);
+       }
+   }
+
+\end{verbatim}
+
+
+% section tt_map_rm (end)
+
 
 \chapter{Project Plan}
 \label{chap:plan}
