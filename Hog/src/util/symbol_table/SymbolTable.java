@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import util.ast.node.*;
+import util.error.VariableRedefinedError;
 import util.type.Types;
-import util.type.VariableRedefinedException;
 
 /**
  * 
@@ -117,15 +117,15 @@ public class SymbolTable {
      * @param name
      * @param type
      * @return true for successful puts
-     * @throws VariableRedefinedException 
+     * @throws VariableRedefinedError 
      */
-    public static boolean put(String name, Symbol symbol) throws VariableRedefinedException{
+    public static boolean put(String name, Symbol symbol) throws VariableRedefinedError{
     	// if not in reserve table
     	if(!top.isDefinedInScope(name)){
             	top.table.put(name, symbol);
             	return true;
     	}
-    	throw new VariableRedefinedException("The varliable " + name + " has already been defined");
+    	throw new VariableRedefinedError("The varliable " + name + " has already been defined");
     }
     
     public static void push() {

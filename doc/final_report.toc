@@ -2,93 +2,96 @@
 \contentsline {section}{\numberline {1.1}Taming the Elephant}{7}
 \contentsline {subsection}{\numberline {1.1.1}Data-Oriented}{7}
 \contentsline {subsection}{\numberline {1.1.2}Simple}{8}
-\contentsline {chapter}{\numberline {2}Tutorial}{9}
-\contentsline {chapter}{\numberline {3}Language Reference Manual}{11}
-\contentsline {section}{\numberline {3.1}Introduction}{11}
-\contentsline {subsection}{\numberline {3.1.1}The MapReduce Framework}{11}
-\contentsline {subsection}{\numberline {3.1.2}The Hog Language}{12}
-\contentsline {subsubsection}{Guiding Principles}{13}
-\contentsline {subsection}{\numberline {3.1.3}The ``Ideal'' Hog User}{13}
-\contentsline {section}{\numberline {3.2}Syntax Notation}{14}
-\contentsline {section}{\numberline {3.3}Program Structure}{14}
-\contentsline {subsection}{\numberline {3.3.1}Overall Structure}{14}
-\contentsline {subsection}{\numberline {3.3.2}\tt @Functions\rm }{14}
-\contentsline {subsection}{\numberline {3.3.3}\tt @Map \rm }{16}
-\contentsline {subsection}{\numberline {3.3.4}\tt @Reduce \rm }{17}
-\contentsline {subsection}{\numberline {3.3.5}\tt @Main \rm }{17}
-\contentsline {section}{\numberline {3.4}Lexical Conventions}{18}
-\contentsline {subsection}{\numberline {3.4.1}Tokens}{18}
-\contentsline {subsection}{\numberline {3.4.2}Comments}{18}
-\contentsline {subsection}{\numberline {3.4.3}Identifiers}{18}
-\contentsline {subsection}{\numberline {3.4.4}Keywords}{19}
-\contentsline {subsection}{\numberline {3.4.5}Constants}{19}
-\contentsline {subsection}{\numberline {3.4.6}Text Literals}{20}
-\contentsline {subsection}{\numberline {3.4.7}Variable Scope}{20}
-\contentsline {subsection}{\numberline {3.4.8}Argument Passing}{20}
-\contentsline {subsection}{\numberline {3.4.9}Evaluation Order}{20}
-\contentsline {section}{\numberline {3.5}Types}{20}
-\contentsline {subsection}{\numberline {3.5.1}Basic Types}{20}
-\contentsline {subsection}{\numberline {3.5.2}Derived Types (Collections)}{21}
-\contentsline {subsection}{\numberline {3.5.3}Type Conversions}{21}
-\contentsline {section}{\numberline {3.6}Expressions}{21}
-\contentsline {subsection}{\numberline {3.6.1}Operators}{21}
-\contentsline {subsubsection}{Arithmetic Operators}{21}
-\contentsline {subsubsection}{Logical Operators}{22}
-\contentsline {subsubsection}{Comparators}{23}
-\contentsline {subsubsection}{Assignment}{23}
-\contentsline {section}{\numberline {3.7}Declarations}{23}
-\contentsline {subsection}{\numberline {3.7.1}Type Specifiers}{23}
-\contentsline {subsection}{\numberline {3.7.2}Declarations}{24}
-\contentsline {subsubsection}{Null Declarations}{24}
-\contentsline {subsubsection}{Primitive-Type Variable Declarations}{24}
-\contentsline {subsubsection}{Derived-Type Variable Declarations}{24}
-\contentsline {subsubsection}{Function Declarations}{25}
-\contentsline {section}{\numberline {3.8}Statements}{25}
-\contentsline {subsection}{\numberline {3.8.1}Expression Statement}{25}
-\contentsline {subsection}{\numberline {3.8.2}Compound Statement (Blocks)}{25}
-\contentsline {subsection}{\numberline {3.8.3}Flow-Of-Control Statements}{25}
-\contentsline {subsection}{\numberline {3.8.4}Iteration Statements}{25}
-\contentsline {subsubsection}{Example of \tt while \rm }{26}
-\contentsline {subsubsection}{Example of \tt for \rm }{26}
-\contentsline {subsubsection}{Example of \tt foreach \rm }{26}
-\contentsline {section}{\numberline {3.9}Built-in Functions}{27}
-\contentsline {subsection}{\numberline {3.9.1}System-level Built-ins}{27}
-\contentsline {subsection}{\numberline {3.9.2}Object-level Built-ins}{27}
-\contentsline {subsubsection}{\tt iter \rm }{28}
-\contentsline {subsubsection}{\tt list \rm }{28}
-\contentsline {subsubsection}{\tt set \rm }{29}
-\contentsline {subsubsection}{text}{29}
-\contentsline {section}{\numberline {3.10}System Configuration}{30}
-\contentsline {section}{\numberline {3.11}Compilation Structure}{30}
-\contentsline {section}{\numberline {3.12}Linkage and I/O}{31}
-\contentsline {subsection}{\numberline {3.12.1}Usage}{31}
-\contentsline {subsection}{\numberline {3.12.2}Example}{31}
-\contentsline {section}{\numberline {3.13}Exception Handling}{32}
-\contentsline {subsection}{\numberline {3.13.1}Compile-time Errors}{32}
-\contentsline {subsection}{\numberline {3.13.2}Internal Run-time Exceptions}{33}
-\contentsline {section}{\numberline {3.14}Grammar}{34}
-\contentsline {chapter}{\numberline {4}Project Plan}{43}
-\contentsline {section}{\numberline {4.1}Development Process}{43}
-\contentsline {subsection}{\numberline {4.1.1}Simplicity of Build System}{43}
-\contentsline {subsection}{\numberline {4.1.2}Similarity of Modules}{44}
-\contentsline {subsection}{\numberline {4.1.3}Document Everything}{44}
-\contentsline {subsection}{\numberline {4.1.4}Distributed Version Control}{44}
-\contentsline {subsection}{\numberline {4.1.5}Verbose Logging}{45}
-\contentsline {section}{\numberline {4.2}Roles and Responsibilities}{45}
-\contentsline {section}{\numberline {4.3}Hog's Developer Style Sheet}{46}
-\contentsline {section}{\numberline {4.4}Project Timeline}{46}
-\contentsline {section}{\numberline {4.5}Project Log}{47}
-\contentsline {chapter}{\numberline {5}Language Evolution}{49}
-\contentsline {chapter}{\numberline {6}Translator Architecture}{51}
-\contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{53}
-\contentsline {chapter}{\numberline {8}Test Plan}{55}
-\contentsline {chapter}{\numberline {9}Conclusions}{59}
-\contentsline {section}{\numberline {9.1}Lessons Learned}{59}
-\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{59}
-\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{59}
-\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{59}
-\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{59}
-\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{60}
-\contentsline {section}{\numberline {9.2}Advice for Other Teams}{60}
-\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{60}
-\contentsline {chapter}{\numberline {A}Code Listing}{61}
+\contentsline {subsection}{\numberline {1.1.3}Distributed}{8}
+\contentsline {subsection}{\numberline {1.1.4}Readable}{9}
+\contentsline {subsection}{\numberline {1.1.5}A Sample Program}{9}
+\contentsline {chapter}{\numberline {2}Tutorial}{11}
+\contentsline {chapter}{\numberline {3}Language Reference Manual}{13}
+\contentsline {section}{\numberline {3.1}Introduction}{13}
+\contentsline {subsection}{\numberline {3.1.1}The MapReduce Framework}{13}
+\contentsline {subsection}{\numberline {3.1.2}The Hog Language}{14}
+\contentsline {subsubsection}{Guiding Principles}{15}
+\contentsline {subsection}{\numberline {3.1.3}The ``Ideal'' Hog User}{15}
+\contentsline {section}{\numberline {3.2}Syntax Notation}{16}
+\contentsline {section}{\numberline {3.3}Program Structure}{16}
+\contentsline {subsection}{\numberline {3.3.1}Overall Structure}{16}
+\contentsline {subsection}{\numberline {3.3.2}\tt @Functions\rm }{16}
+\contentsline {subsection}{\numberline {3.3.3}\tt @Map \rm }{18}
+\contentsline {subsection}{\numberline {3.3.4}\tt @Reduce \rm }{19}
+\contentsline {subsection}{\numberline {3.3.5}\tt @Main \rm }{19}
+\contentsline {section}{\numberline {3.4}Lexical Conventions}{20}
+\contentsline {subsection}{\numberline {3.4.1}Tokens}{20}
+\contentsline {subsection}{\numberline {3.4.2}Comments}{20}
+\contentsline {subsection}{\numberline {3.4.3}Identifiers}{20}
+\contentsline {subsection}{\numberline {3.4.4}Keywords}{21}
+\contentsline {subsection}{\numberline {3.4.5}Constants}{21}
+\contentsline {subsection}{\numberline {3.4.6}Text Literals}{22}
+\contentsline {subsection}{\numberline {3.4.7}Variable Scope}{22}
+\contentsline {subsection}{\numberline {3.4.8}Argument Passing}{22}
+\contentsline {subsection}{\numberline {3.4.9}Evaluation Order}{22}
+\contentsline {section}{\numberline {3.5}Types}{22}
+\contentsline {subsection}{\numberline {3.5.1}Basic Types}{22}
+\contentsline {subsection}{\numberline {3.5.2}Derived Types (Collections)}{23}
+\contentsline {subsection}{\numberline {3.5.3}Type Conversions}{23}
+\contentsline {section}{\numberline {3.6}Expressions}{23}
+\contentsline {subsection}{\numberline {3.6.1}Operators}{23}
+\contentsline {subsubsection}{Arithmetic Operators}{23}
+\contentsline {subsubsection}{Logical Operators}{24}
+\contentsline {subsubsection}{Comparators}{25}
+\contentsline {subsubsection}{Assignment}{25}
+\contentsline {section}{\numberline {3.7}Declarations}{25}
+\contentsline {subsection}{\numberline {3.7.1}Type Specifiers}{25}
+\contentsline {subsection}{\numberline {3.7.2}Declarations}{26}
+\contentsline {subsubsection}{Null Declarations}{26}
+\contentsline {subsubsection}{Primitive-Type Variable Declarations}{26}
+\contentsline {subsubsection}{Derived-Type Variable Declarations}{26}
+\contentsline {subsubsection}{Function Declarations}{27}
+\contentsline {section}{\numberline {3.8}Statements}{27}
+\contentsline {subsection}{\numberline {3.8.1}Expression Statement}{27}
+\contentsline {subsection}{\numberline {3.8.2}Compound Statement (Blocks)}{27}
+\contentsline {subsection}{\numberline {3.8.3}Flow-Of-Control Statements}{27}
+\contentsline {subsection}{\numberline {3.8.4}Iteration Statements}{27}
+\contentsline {subsubsection}{Example of \tt while \rm }{28}
+\contentsline {subsubsection}{Example of \tt for \rm }{28}
+\contentsline {subsubsection}{Example of \tt foreach \rm }{28}
+\contentsline {section}{\numberline {3.9}Built-in Functions}{29}
+\contentsline {subsection}{\numberline {3.9.1}System-level Built-ins}{29}
+\contentsline {subsection}{\numberline {3.9.2}Object-level Built-ins}{29}
+\contentsline {subsubsection}{\tt iter \rm }{30}
+\contentsline {subsubsection}{\tt list \rm }{30}
+\contentsline {subsubsection}{\tt set \rm }{31}
+\contentsline {subsubsection}{text}{31}
+\contentsline {section}{\numberline {3.10}System Configuration}{32}
+\contentsline {section}{\numberline {3.11}Compilation Structure}{32}
+\contentsline {section}{\numberline {3.12}Linkage and I/O}{33}
+\contentsline {subsection}{\numberline {3.12.1}Usage}{33}
+\contentsline {subsection}{\numberline {3.12.2}Example}{33}
+\contentsline {section}{\numberline {3.13}Exception Handling}{34}
+\contentsline {subsection}{\numberline {3.13.1}Compile-time Errors}{34}
+\contentsline {subsection}{\numberline {3.13.2}Internal Run-time Exceptions}{35}
+\contentsline {section}{\numberline {3.14}Grammar}{36}
+\contentsline {chapter}{\numberline {4}Project Plan}{45}
+\contentsline {section}{\numberline {4.1}Development Process}{45}
+\contentsline {subsection}{\numberline {4.1.1}Simplicity of Build System}{45}
+\contentsline {subsection}{\numberline {4.1.2}Similarity of Modules}{46}
+\contentsline {subsection}{\numberline {4.1.3}Document Everything}{46}
+\contentsline {subsection}{\numberline {4.1.4}Distributed Version Control}{46}
+\contentsline {subsection}{\numberline {4.1.5}Verbose Logging}{47}
+\contentsline {section}{\numberline {4.2}Roles and Responsibilities}{47}
+\contentsline {section}{\numberline {4.3}Hog's Developer Style Sheet}{48}
+\contentsline {section}{\numberline {4.4}Project Timeline}{48}
+\contentsline {section}{\numberline {4.5}Project Log}{49}
+\contentsline {chapter}{\numberline {5}Language Evolution}{51}
+\contentsline {chapter}{\numberline {6}Translator Architecture}{53}
+\contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{55}
+\contentsline {chapter}{\numberline {8}Test Plan}{57}
+\contentsline {chapter}{\numberline {9}Conclusions}{61}
+\contentsline {section}{\numberline {9.1}Lessons Learned}{61}
+\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{61}
+\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{61}
+\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{61}
+\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{61}
+\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{62}
+\contentsline {section}{\numberline {9.2}Advice for Other Teams}{62}
+\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{62}
+\contentsline {chapter}{\numberline {A}Code Listing}{63}

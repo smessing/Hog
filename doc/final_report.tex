@@ -2505,6 +2505,318 @@ Things we'd like to see more of:
 
 \chapter{Code Listing}
 
+\begin{itemize}
+\item \texttt{back\_end} package
+\begin{enumerate}
+\item \texttt{CodeGenerationVisitor.java}
+\begin{quotation}
+\noindent An AST-walker that translates Hog programs into Java programs. Written by Samuel Messing.
+\end{quotation}
+\item \texttt{ErrorCheckingVisitor.java}
+\begin{quotation}
+\noindent An AST-walker that performs semantic analysis. Written by Paul Tylkin.
+\end{quotation}
+\item \texttt{SymbolTableVisitor.java}
+\begin{quotation}
+\noindent An AST-walker that populates symbol tables. Written by Benjamin Rapaport and Jason Halpern.
+\end{quotation}
+\item \texttt{TypeCheckingVisitor.java}
+\begin{quotation}
+\noindent An AST-walker that performs basic type checking and type inference. Written by Jason Halpern and Benjamin Rapaport. 
+\end{quotation}
+\item \texttt{Visitor.java}
+\begin{quotation}
+\noindent The abstract class that all visitors inherit, specifies the behavior of the Visitor design pattern. Written by Jason Halpern.
+\end{quotation}
+\end{enumerate} % end back_end package
+\item \texttt{front\_end} package
+\begin{enumerate}
+\item \texttt{ConsoleLexer.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Hog.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Lexer.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Parser.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{sym.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Lexer.jflex}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Parser.cup} 
+\end{enumerate} % end front_end package
+\item \texttt{test} package
+\begin{enumerate}
+\item \texttt{AbstractSyntaxTreeTester.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{CodeGeneratingTester.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{LexerTester.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{NodeTester.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SymbolTableTester.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{TypeCheckingTester.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{TypesTester.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\end{enumerate} % end test package
+\item \texttt{util.ast} package
+\begin{enumerate}
+\item \texttt{AbstractSyntaxTree.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{TreeTraversalBuilder.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\end{enumerate} % end util.ast package
+\item \texttt{util.ast.node} package
+\begin{enumerate}
+\item \texttt{ArgumentsNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{BiOpNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{CatchesNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ConstantNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{DerivedTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ElseIfStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ElseStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ExceptionTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{FunctionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{GuardingStatmenetNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{IdNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{IfElseStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{IterationStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{JumpStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{MockExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{MockNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Node.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ParametersNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{PostfixExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{PrimaryExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{PrimitiveTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+
+\item \texttt{ProgramNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{RelationalExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ReservedWordTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SectionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SectionTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SelectionStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{StatementListNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{StatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SwitchStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{TypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{UnOpNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\end{enumerate} % end util.ast.node
+\item \texttt{util.error} package
+\begin{enumerate}
+\item \texttt{FunctionNotDefinedError.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{InvalidFunctionArgumentError.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{MissingReturnError.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{TypeMismatchError.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{UnreachableCodeError.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{VariableRedefinedError.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{VariableUndeclaredError.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\end{enumerate} % end util.error
+\item \texttt{util.logging} package
+\begin{enumerate}
+\item \texttt{BreifLogFormatter.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\end{enumerate} % end util.logging
+\item \texttt{util.symbol\_table} package
+\begin{enumerate}
+\item \texttt{FunctionSymbol.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Method.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ReservedSymTable.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ReservedWordSymbol.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Symbol.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SymbolTable.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{VariableSymbol.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Word.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\end{enumerate} % end util.symbol_table
+\item \texttt{util.type} package
+\begin{enumerate}
+\item \texttt{Types.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\end{enumerate}
+\end{itemize}  % end total
+
 Include a listing of the complete source code with identification of who wrote
 which module of the compiler. This listing does not have to be included in the
 paper copy of the final report.
