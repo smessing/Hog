@@ -188,7 +188,7 @@ Function definitions have the form:
 
 \begin{quotation}
   \emph{type functionName} \tt ( \rm \emph{parameterList} \tt ) \{ \rm \\
-  \indent \indent \emph{expressionList} \\
+  \indent \indent \emph{expressionList}; \\
   \indent \tt \}
 \end{quotation}
 
@@ -227,7 +227,7 @@ A complete example of an \tt @Functions \rm section:
     }
 \end{verbatim}
 
-User-defined functions can make reference to other user-defined functions. However, function names can not be overloaded (i.e. it is not possible to use the same function name with a parameter list that differs in the number of arguments or argument types). Disallowing function overloading is a design choice consistent with Hog's guiding principle of simplicity.
+User-defined functions can make reference to other user-defined functions. However, function names cannot be overloaded (i.e. it is not possible to use the same function name with a parameter list that differs in the number of arguments or argument types). Disallowing function overloading is a design choice consistent with Hog's guiding principle of simplicity.
 
 % section tt_functionsrm (end)
 
@@ -369,7 +369,7 @@ Below is a sample \tt @Main \rm section which prints to the standard output and 
 \label{sub:tokens}
 
 The classes of tokens include the following: identifiers, keywords,
-constants, string literals, operators, and separators. Blanks, tabs, newlines and
+constants, string literals, operators, and separators. Blanks, tabs, newlines, and
 comments are ignored. If the input is separated into tokens up to a given
 character, the next token is the longest string of characters that could represent
 a token.
@@ -388,6 +388,7 @@ enclosing characters is considered a comment, and is completely ignored by the c
         comments and are ignored
          by the compiler }#
     i++;
+
 \end{verbatim}
 
 In the above example, the text \tt these are block comments \textbackslash n comments and are ignored \textbackslash n by the
@@ -491,7 +492,7 @@ that is, once it is initialized cannot be changed, or can refer to an \textbf{\e
 a constant variable, use the following pattern,
 
 \begin{quotation}
-   \tt final \rm \emph{type variableName} = \emph{value}
+   \tt final \rm \emph{type variableName} = \emph{value};
 \end{quotation}
 
 The following are a list of examples of unnamed values and their corresponding types:
@@ -509,7 +510,7 @@ The following are a list of examples of unnamed values and their corresponding t
 A text literal consists of a sequence of zero of more contiguous characters enclosed in double quotes, such as \tt
 "hello"\rm. A text literal can also contain escape characters such as \tt "\textbackslash n" \rm for the new line character
 or \tt "\textbackslash t" \rm for the tab character. A text literal has many of the same built-in functions
-as the String class in Java. String literals are constant and their values can not be changed after they are created. String
+as the String class in Java. String literals are constant and their values cannot be changed after they are created. String
 literals can be concatenated with adjacent text literals by use of the \tt + \rm operator and are then converted into a
 single \tt text \rm variable. Hog implements concatenation by use of the Java \tt StringBuilder \rm (or \tt StringBuffer\rm) class and its
 append method. All text literals in Hog programs are implemented as instances of the \tt text \rm class, and then are mapped
@@ -700,15 +701,11 @@ The following are the comparators implemented in Hog (all are binary operations)
 \end{tabular}
 \end{center}
 
-\emph{Note}: All comparators do not work with non-numeric or non-boolean types,
-except for null. Comparisons require that the two operands be either both numeric
-or both boolean, and a numeric value cannot be compared to a boolean value. The
+\emph{Note}: All comparators do not work with non-numeric or non-boolean types.
+Comparisons require that the two operands be either both numeric
+or both boolean, and a numeric value cannot be compared to a boolean value. If the two operands are numeric but of different types, one of them must be cast so that they are of the same type. The
 only valid comparators that can be used with boolean expressions are \tt == \rm
-and \tt !=\rm. The use of a comparison operator in Hog between any two objects
-(non-numeric (including char), or non-boolean) will result in a compile-time
-exception (see \S \ref{sub:compile_time_exceptions}). In Hog, \tt null ==
-null \rm will evaluate to \tt false\rm. For any non-null reference value \tt
-foo\rm, \tt foo.equals(null) \rm will evaluate to \tt false\rm.
+and \tt !=\rm. The use of a comparison operator in Hog between any two derived types will result in a run-time error.
 
 % subsubsection comparators (end)
 
@@ -774,10 +771,7 @@ declares the variable \tt myText \rm to be of type \tt text\rm .
 \label{ssub:null_declarations}
 
 If a variable is declared but not initialized, the variable becomes a
-\textbf{\emph{null reference}}, which means it points to nothing, holds no data,
-and will fail any comparison (see \S \ref{sub:operators} for a discussion of how
-\tt null \rm affects comparisons and elementary arithmetic and boolean
-operations).
+\textbf{\emph{null reference}}, which means it points to nothing and holds no data (internally, this means that an entry has been added to Hog's symbol table with that variable name).
 
 % subsubsection null_declarations (end)
 
@@ -1035,23 +1029,20 @@ that are independent of the particular type of the \tt iter \rm object. The buil
 \item[] \tt bool hasNext() \rm
 
 This function returns \tt true \rm if the iterator object has a next object
-to return, and \tt false \rm otherwise. This function is equivalient to evaluating
-\tt if (iter\_object.peek() == null)\rm.
+to return, and \tt false \rm otherwise.
 
 \item[] \tt T next() \rm
 
 This function returns the next object (if one exists) for the owning \tt iter \rm
 object. A call to \tt next() \rm differs from a call to \tt peek() \rm in that the
-function call advances the cursor of the iterator. If \tt next() \rm is called on
-an iterator that has no more values, \tt null \rm is returned.
+function call advances the cursor of the iterator.
 
 \item[] \tt T peek() \rm
 
 This function returns the next object (if one exists) for the owning \tt iter \rm
 object. A call to \tt peek() \rm returns the object without advancing the iterator's
 cursor, thus multiple calls to \tt peek() \rm without any intermediate function calls
-will all return the same value. If \tt peek() \rm is called on an iterator that has
-no more values, \tt null \rm is returned. 
+will all return the same value.
 
 \end{itemize} 
 
@@ -1322,7 +1313,7 @@ following are Hog compile-­time exceptions:
   
   \item[] \tt FunctionNotDefinedError \rm
   
-   Thrown when a program attempts to carry out an operations of the sort \tt variable.builtInFunction() \rm where \tt variable \rm is some variable and \tt builtInFunction \rm is a built-in function, and either \tt builtInFunction \rm can not operate on variables of that type or \tt builtInFunction \rm  is not defined as a built-in function.
+   Thrown when a program attempts to carry out an operations of the sort \tt variable.builtInFunction() \rm where \tt variable \rm is some variable and \tt builtInFunction \rm is a built-in function, and either \tt builtInFunction \rm cannot operate on variables of that type or \tt builtInFunction \rm  is not defined as a built-in function.
   
   \item[] \tt InvalidFunctionArgumentsError \rm
    
