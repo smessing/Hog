@@ -3970,6 +3970,2686 @@ public class CodeGeneratingVisitor implements Visitor {
 }
 \end{verbatim}
 
+\subsection{\texttt{ErrorCheckingVisitor.java}}
+
+\begin{verbatim}
+/**
+ * 
+ */
+package back_end;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import util.type.Types;
+
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.ArgumentsNode;
+import util.ast.node.BiOpNode;
+import util.ast.node.CatchesNode;
+import util.ast.node.ConstantNode;
+import util.ast.node.DerivedTypeNode;
+import util.ast.node.ElseIfStatementNode;
+import util.ast.node.ElseStatementNode;
+import util.ast.node.ExceptionTypeNode;
+import util.ast.node.ExpressionNode;
+import util.ast.node.FunctionNode;
+import util.ast.node.GuardingStatementNode;
+import util.ast.node.IdNode;
+import util.ast.node.IfElseStatementNode;
+import util.ast.node.IterationStatementNode;
+import util.ast.node.JumpStatementNode;
+import util.ast.node.JumpStatementNode.JumpType;
+import util.ast.node.MockExpressionNode;
+import util.ast.node.MockNode;
+import util.ast.node.Node;
+import util.ast.node.ParametersNode;
+import util.ast.node.PostfixExpressionNode;
+import util.ast.node.PrimaryExpressionNode;
+import util.ast.node.PrimitiveTypeNode;
+import util.ast.node.ProgramNode;
+import util.ast.node.RelationalExpressionNode;
+import util.ast.node.ReservedWordTypeNode;
+import util.ast.node.SectionNode;
+import util.ast.node.SectionTypeNode;
+import util.ast.node.SelectionStatementNode;
+import util.ast.node.StatementListNode;
+import util.ast.node.StatementNode;
+import util.ast.node.SwitchStatementNode;
+import util.ast.node.TypeNode;
+import util.ast.node.UnOpNode;
+import util.error.MissingReturnError;
+
+/**
+ * Visitor class for error checking.
+ * 
+ * This is the second walk performed after construction of the AST from source.
+ * 
+ * Performs the following validations: - no dead code (statements after a return
+ * statement in the same basic block) - no break/continue statements outside of
+ * iteration loops - non-void functions have adequate number of return
+ * statements - no case/default statements outside of immediate switch statement
+ * - can't catch same exception type more than once
+ * 
+ * 
+ * @author Paul Tylkin
+ * 
+ */
+
+public class ErrorCheckingVisitor implements Visitor {
+
+	protected AbstractSyntaxTree tree;
+
+	protected final static Logger LOGGER = Logger
+			.getLogger(ErrorCheckingVisitor.class.getName());
+
+	private static List<Boolean> returnFlagStack = new ArrayList<Boolean>();
+
+	private static void pushReturnStack() {
+		returnFlagStack.add(returnFlagStack.get(returnFlagStack.size() - 1));
+	}
+
+	private static void popReturnStack() {
+		returnFlagStack.remove(returnFlagStack.size() - 1);
+	}
+
+	public ErrorCheckingVisitor(AbstractSyntaxTree tree) {
+		this.tree = tree;
+	}
+
+	public void walk() {
+		returnFlagStack.add(false);
+		ProgramNode treeRoot = (ProgramNode) this.tree.getRoot();
+		visitReturnChildren(treeRoot);
+		visitFunctionReturns(treeRoot);
+	}
+
+	private void visitReturnChildren(Node node) {
+		/*
+		 * Constructs of the form
+		 * 
+		 * int doubleint (int x){ return 2*x;a x = 2*x; }
+		 * 
+		 * will not compile into Java, and so if a Hog program has this
+		 * construct, Hog will throw an unreachable code exception. Similarly,
+		 * 
+		 * int max(int a, int b){ if (a > b){ return a; } else{ return b; }
+		 * return 0; }
+		 * 
+		 * will also throw an error in Java.
+		 * 
+		 * This pass through the program will check that there is no unreachable
+		 * code in a Hog program.
+		 */
+		if (node.isNewScope()) {
+			LOGGER.finer("We are in a new scope now in node " + node);
+			this.pushReturnStack();
+		}
+		if (returnFlagStack.get(returnFlagStack.size() - 1)) {
+			// throw new UnreachableCodeError(
+			// "The following statement is unreachable: "+ node.toSource());
+		}
+		if (node instanceof JumpStatementNode
+				&& ((JumpStatementNode) node).getJumpType() == JumpType.RETURN) { // TODO
+			// check
+			// that
+			// is
+			// a
+			// return
+			// node
+			if (returnFlagStack.get(returnFlagStack.size() - 1)) {
+				// throw new UnreachableCodeError(
+				// "The following statement is unreachable: "+ node.toSource());
+			} else {
+				returnFlagStack.set(returnFlagStack.size() - 1, true);
+			}
+		} else {
+			List<Node> children = node.getChildren();
+			for (Node n : children) {
+				visitReturnChildren(n);
+			}
+		}
+
+		if (node.isNewScope()) {
+			this.popReturnStack();
+		}
+	}
+
+	private boolean nonVoidFunctionFlag;
+
+	private void visitFunctionReturns(Node node) {
+		/*
+		 * Constructs of the form int max(int a, int b){ if (a > b){ return a; }
+		 * if (b >= a){ return b; } } will not compile into Java, saying that
+		 * there is an error in the return type, even though the function does
+		 * return the correct value. This pass through the Hog program will
+		 * throw Hog errors on this type of input.
+		 */
+		if (node instanceof FunctionNode) {
+			List<Node> children = node.getChildren();
+
+			// if return type is not void
+			if (!Types.isVoidType(((FunctionNode) node).getType())) {
+				this.nonVoidFunctionFlag = true;
+				for (Node n : children) {
+					if (n instanceof JumpStatementNode
+							&& ((JumpStatementNode) n).getJumpType() == JumpType.RETURN) {
+						this.nonVoidFunctionFlag = false;
+					}
+				}
+
+				/*if (this.nonVoidFunctionFlag) { // 
+					throw new MissingReturnError(
+							"The following function is missing a return statement: "
+									+ node.toSource());
+				}*/
+			}
+
+		}
+		// System.out.println(nonVoidFunctionFlag);
+		List<Node> children = node.getChildren();
+
+		for (Node n : children) {
+			visitFunctionReturns(n);
+		}
+	}
+
+	@Override
+	public void visit(ArgumentsNode node) {
+		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(BiOpNode node) {
+		LOGGER.finer("visit(BiOpNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(CatchesNode node) {
+		LOGGER.finer("visit(CatchesNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(ConstantNode node) {
+		LOGGER.finer("visit(ConstantNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(DerivedTypeNode node) {
+		LOGGER.finer("visit(DerivedTypeNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(ElseIfStatementNode node) {
+		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(ElseStatementNode node) {
+		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(ExceptionTypeNode node) {
+		LOGGER.finer("visit(ExceptionTypeNode node) called on " + node);
+	}
+
+	public void visit(ExpressionNode node) {
+		LOGGER.finer("visit(ExpressionNode node) called on " + node);
+	}
+
+	public void visit(FunctionNode node) {
+		LOGGER.finer("visit(FunctionNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(GuardingStatementNode node) {
+		LOGGER.finer("visit(GuardingStatementNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(IdNode node) {
+		LOGGER.finer("visit(IdNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(IfElseStatementNode node) {
+		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(IterationStatementNode node) {
+		LOGGER.finer("visit(IterationStatementNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(JumpStatementNode node) {
+		LOGGER.finer("visit(JumpStatementNode node) called on " + node);
+
+	}
+
+	@Override
+	public void visit(MockExpressionNode node) {
+		LOGGER.finer("visit(MockExpressionNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(MockNode node) {
+		LOGGER.finer("visit(MockNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(Node node) {
+		LOGGER.finer("visit(Node node) called on " + node);
+	}
+
+	@Override
+	public void visit(ParametersNode node) {
+		LOGGER.finer("visit(ParametersNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(PostfixExpressionNode node) {
+		LOGGER.finer("visit(PostfixExpressionNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(PrimaryExpressionNode node) {
+		LOGGER.finer("visit(PrimaryExpressionNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(PrimitiveTypeNode node) {
+		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(ProgramNode node) {
+		LOGGER.finer("visit(ProgramNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(RelationalExpressionNode node) {
+		LOGGER.finer("visit(RelationalExpressionNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(SectionNode node) {
+		LOGGER.finer("visit(SectionNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(SectionTypeNode node) {
+		LOGGER.finer("visit(SectionTypeNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(SelectionStatementNode node) {
+		LOGGER.finer("visit(SelectionStatementNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(StatementListNode node) {
+		LOGGER.finer("visit(StatementListNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(StatementNode node) {
+		LOGGER.finer("visit(StatementNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(SwitchStatementNode node) {
+		LOGGER.finer("visit(SwitchStatementNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(TypeNode node) {
+		LOGGER.finer("visit(TypeNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(UnOpNode node) {
+		LOGGER.finer("visit(UnOpNode node) called on " + node);
+	}
+
+	@Override
+	public void visit(ReservedWordTypeNode node) {
+		LOGGER.finer("visit(ReservedWordTypeNode node) called on " + node);
+	}
+}
+\end{verbatim}
+
+\subsection{\texttt{SymbolTableVisitor.java}}
+
+\begin{verbatim}
+package back_end;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.*;
+import util.error.VariableRedefinedError;
+import util.error.VariableUndeclaredError;
+import util.symbol_table.FunctionSymbol;
+import util.symbol_table.Symbol;
+import util.symbol_table.SymbolTable;
+import util.symbol_table.VariableSymbol;
+import util.type.Types;
+
+
+/**
+ * 
+ * @author Benjamin Rapaport
+ * @author Jason Halpern
+ *
+ */
+
+public class SymbolTableVisitor implements Visitor {
+	
+	protected AbstractSyntaxTree tree;
+	
+	public SymbolTableVisitor(AbstractSyntaxTree tree) {
+		this.tree = tree;
+	}
+	
+	protected final static Logger LOGGER = Logger
+			.getLogger(SymbolTableVisitor.class.getName());
+	
+	public void walk() {
+		
+		ProgramNode treeRoot = (ProgramNode) this.tree.getRoot();
+		treeRoot.accept(this);
+	}
+	
+	private void openScope(Node node) {
+		
+//		LOGGER.warning("Calling openScope for " + node.getName());
+		// push new scope
+		if(node.isNewScope()) {
+	//		LOGGER.warning("Scope opening for " + node.getName());
+			SymbolTable.push();
+			
+			// map this as representative node
+			try {
+				SymbolTable.mapNode(node);
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
+
+	}
+	
+	private void closeScope(Node node) {
+
+		
+		// pop if this was a new scope
+		if(node.isNewScope()) {
+			SymbolTable.pop();
+		}
+	
+	}
+	
+	private void visitAllChildrenStandard(Node node) {
+		// visit all children
+		List<Node> children = node.getChildren();
+		for (Node n : children) {
+			n.accept(this);
+		}
+	}
+
+	@Override
+	public void visit(ArgumentsNode node) {
+		LOGGER.finer("visit(ArgumentsNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(BiOpNode node) {
+		LOGGER.finer("visit(BiOpNode node) called on " + node.getName());
+		openScope(node);
+		LOGGER.finer("The children of this BiNoNode are: " + node.getChildrenString());
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(CatchesNode node) {
+		LOGGER.finer("visit(CatchesNode node) called on " + node.getName());
+		
+		openScope(node);
+	
+		node.getHeader().accept(this);
+		if (node.hasBlock())
+			node.getBlock().accept(this);
+		closeScope(node);
+		if (node.hasNext())
+			node.getNext().accept(this);
+
+	}
+
+	@Override
+	public void visit(ConstantNode node) {
+		LOGGER.finer("visit(Constant node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+
+	}
+
+	@Override
+	public void visit(DerivedTypeNode node) {
+		LOGGER.finer("visit(DerivedType node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+
+	}
+
+	@Override
+	public void visit(ElseIfStatementNode node) {
+		LOGGER.finer("visit(ElseIfStatementNodt node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(ElseStatementNode node) {
+		LOGGER.finer("visit(ElseStatementNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+
+	}
+
+	@Override
+	public void visit(ExceptionTypeNode node) {
+		LOGGER.finer("visit(ExceptionTypeNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(ExpressionNode node) {
+		LOGGER.finer("visit(ExpressionNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+
+	}
+
+	@Override
+	public void visit(FunctionNode node) {
+		LOGGER.finer("visit(FunctionNode node) called on " + node.getName());
+		
+		// add function to symbol table - these need to be visible to entire program
+		FunctionSymbol funSym = new FunctionSymbol(node.getType(), node.getParametersNode());
+		SymbolTable.putToRootSymbolTable(node.getIdentifier(), funSym);
+		
+		// open new scope - these are specific to within the function
+		openScope(node);
+		
+		// add variables and types in the params list to the symbol table
+		ParametersNode currParamNode = node.getParametersNode();
+		if( currParamNode != null) {
+			TypeNode paramType = currParamNode.getType();
+			String paramName = currParamNode.getIdentifier();
+			try {
+				SymbolTable.put(paramName, new VariableSymbol(paramType));
+			} catch (VariableRedefinedError e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			// recurse through children, adding variables to the symbol table
+			while(currParamNode.hasChildren()) {
+				currParamNode = (ParametersNode) currParamNode.getChildren().get(0);
+				paramType = currParamNode.getType();
+				paramName = currParamNode.getIdentifier();
+				try {
+					SymbolTable.put(paramName, new VariableSymbol(paramType));
+				} catch (VariableRedefinedError e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.exit(1);
+				}
+			}
+		}
+		
+		visitAllChildrenStandard(node);
+		
+		// close scope
+		closeScope(node);
+
+	}
+
+	@Override
+	public void visit(GuardingStatementNode node) {
+		LOGGER.finer("visit(GuardingStatementNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(IdNode node) {
+		LOGGER.finer("visit(IdNode node) called on " + node.getName());
+		openScope(node);
+		// if it has a type, it is a declaration. Put it in the symbol table
+		if(node.getType() != null) {
+			
+			LOGGER.finer("IdNode has a non null type which is: " + node.getTypeName());
+			
+			try {
+				SymbolTable.put(node.getIdentifier(), new VariableSymbol(node.getType()));
+			} catch (VariableRedefinedError e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(1);
+			}
+		} 
+		
+		//else, it does not have a type, so we ensure it is already declared
+		else {
+			Symbol nodeSymbol = SymbolTable.getSymbolForIdNode(node);
+			// if there is no nodeSymbol, this is being used before delcartion so throw an error
+			if( nodeSymbol == null ) {
+				LOGGER.finer("IdNode was used before it was declared. Throw an error.");
+				throw new VariableUndeclaredError("Use of " + node.getIdentifier() + " undefined.");
+			}
+			
+			LOGGER.finer("IdNode has a null type. Symbol is  " + nodeSymbol.toString());
+			// it has been declared. Now we decorate it with its type
+			node.setType(nodeSymbol.getType());
+			LOGGER.finer("We have set the IdNode type to" + nodeSymbol.getType().getName());
+		}
+		
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(IfElseStatementNode node) {
+		LOGGER.finer("visit(IfElseStatement node) called on " + node.getName());
+
+		// open scope
+		openScope(node);
+		
+		// first visit the condition
+		if(node.getCondition() != null)
+			node.getCondition().accept(this);
+
+		
+		if(node.getIfCondTrue() != null) {
+			LOGGER.finer("we are in the getIfCondTrue");
+			node.getIfCondTrue().accept(this);
+		}
+		
+		// then close scope, then visit any remaining children
+		closeScope(node);
+		
+		if(node.getCheckNext() != null) {
+			
+			node.getCheckNext().accept(this);
+		}
+		
+		if(node.getIfCondFalse() != null) {
+			node.getIfCondFalse().accept(this);
+		}
+	}
+
+	@Override
+	public void visit(IterationStatementNode node) {
+		LOGGER.finer("visit(IterationStatementNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(JumpStatementNode node) {
+		LOGGER.finer("visit(JumpStatementNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(MockExpressionNode node) {
+		LOGGER.finer("visit(MockExpressionNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(MockNode node) {
+		LOGGER.finer("visit(MockNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(Node node) {
+		LOGGER.finer("visit(Node node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(ParametersNode node) {
+		LOGGER.finer("visit(ParametersNode node) called on " + node.getName());
+		openScope(node);
+		// we have already recursed through each paramater when visiting the function node
+		//visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(PostfixExpressionNode node) {
+		LOGGER.finer("visit(PostfixExpressionNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(PrimaryExpressionNode node) {
+		LOGGER.finer("visit(PrimaryExpressionNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(PrimitiveTypeNode node) {
+		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(ProgramNode node) {
+		LOGGER.finer("visit(ProgramNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(RelationalExpressionNode node) {
+		LOGGER.finer("visit(RelationalExpressionNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(ReservedWordTypeNode node) {
+		LOGGER.finer("visit(ReservedWordTypeNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(SectionNode node) {
+		LOGGER.finer("visit(SectionNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		//if(node.getSectionName() != SectionNode.SectionName.FUNCTIONS){
+			closeScope(node);
+		//}
+	}
+
+	@Override
+	public void visit(SectionTypeNode node) {
+		LOGGER.finer("visit(SectionTypeNode node) called on " + node.getName());
+		
+		openScope(node);
+		
+		// add emit() with the parameters as specified by the SectionTypeNode
+		List<TypeNode> emitParams = new ArrayList<TypeNode>();
+		emitParams.add(node.getReturnKey());
+		emitParams.add(node.getReturnValue());
+		FunctionSymbol funSym = new FunctionSymbol(new PrimitiveTypeNode(Types.Primitive.VOID), emitParams);
+		
+		// add input key and value
+		VariableSymbol inputKeySym = new VariableSymbol(node.getInputKeyIdNode().getType());
+		String inputKeyStr = node.getInputKeyIdNode().getIdentifier();
+		
+		VariableSymbol inputValueSym = new VariableSymbol(node.getInputValueIdNode().getType());
+		String inputValStr = node.getInputValueIdNode().getIdentifier();
+		
+		
+		try {
+			SymbolTable.put(inputKeyStr, inputKeySym);
+			SymbolTable.put(inputValStr, inputValueSym);
+			SymbolTable.put("emit", funSym);
+		} catch (VariableRedefinedError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+
+		
+		
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(SelectionStatementNode node) {
+		LOGGER.finer("visit(SeletionStatementNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(StatementListNode node) {
+		LOGGER.finer("visit(StatementListNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(StatementNode node) {
+		LOGGER.finer("visit(StatementNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(SwitchStatementNode node) {
+		LOGGER.finer("visit(SwitchStatementNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(TypeNode node) {
+		LOGGER.finer("visit(TypeNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+
+	@Override
+	public void visit(UnOpNode node) {
+		LOGGER.finer("visit(UnOpNode node) called on " + node.getName());
+		openScope(node);
+		visitAllChildrenStandard(node);
+		closeScope(node);
+	}
+}
+\end{verbatim}
+
+\subsection{\texttt{TypeCheckingVisitor.java}}
+
+\begin{verbatim}
+
+package back_end;
+
+import java.util.List;
+import java.util.logging.Logger;
+
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.*;
+import util.error.TypeMismatchError;
+import util.symbol_table.FunctionSymbol;
+import util.symbol_table.SymbolTable;
+import util.type.Types;
+
+/**
+ * Visitor class for type checking. 
+ * 
+ * This is the first walk performed after construction of the AST from source.
+ * 
+ * Performs the following actions:
+ * - populates & propagate types through AST.
+ * 
+ * Performs the following validations:
+ * - all operands are of right type for given operator.
+ * - variables are declared before they are used.
+ * - return statements of functions have right type.
+ * - section types of map/reduce are appropriate.
+ * - actual parameters to a procedure match formal parameters.
+ * 
+ * @author Jason Halpern
+ * @author Benjamin Rapaport
+ * 
+ */
+public class TypeCheckingVisitor implements Visitor {
+
+	protected final static Logger LOGGER = Logger
+			.getLogger(TypeCheckingVisitor.class.getName());
+
+	protected AbstractSyntaxTree tree;
+
+	public TypeCheckingVisitor(AbstractSyntaxTree tree) {
+		this.tree = tree;
+	}
+
+	@Override
+	public void walk() {
+		// TODO Auto-generated method stub
+		ProgramNode treeRoot = (ProgramNode) this.tree.getRoot();
+		treeRoot.accept(this);
+	}
+	
+	public TypeNode getExpectedReturnType(Node node) {
+		// TODO Auto-generated method stub
+		
+		Node tempNode;
+		
+		while(node.hasParent()){
+			tempNode = node.getParent();
+			if(tempNode instanceof FunctionNode){
+				return ((FunctionNode) tempNode).getType();
+			}
+			node = tempNode;
+		}
+		
+		return null;
+	}
+
+	private void visitAllChildrenStandard(Node node) {
+		// visit all children
+		List<Node> children = node.getChildren();
+		for (Node n : children) {
+			n.accept(this);
+		}
+	}
+
+	@Override
+	public void visit(ArgumentsNode node) {
+		LOGGER.finer("Type Check visit(ArgumentsNode node) called on "
+				+ node.getName());
+		node.getExpressionNode().accept(this);
+		// set the type to the type of its child expressionNode
+		node.setType(node.getExpressionNode().getType());
+		if (node.getArgumentsNode() != null) {
+			node.getArgumentsNode().accept(this);
+		}
+
+	}
+
+	@Override
+	public void visit(BiOpNode node) {
+		LOGGER.finer("Type Check visit(BiOpNode node) called on "
+				+ node.getName());
+
+		// call on left and right node
+		ExpressionNode leftNode = node.getLeftNode();
+		ExpressionNode rightNode = node.getRightNode();
+		leftNode.accept(this);
+		rightNode.accept(this);
+
+		// check if they are compatible
+		Types.isCompatible(node.getOpType(), leftNode.getType(),
+				rightNode.getType());
+
+		// get return type
+		node.setType(Types.getResult(node.getOpType(), leftNode.getType(),
+				rightNode.getType()));
+
+	}
+
+	@Override
+	public void visit(CatchesNode node) {
+		LOGGER.finer("Type Check visit(CatchesNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(ConstantNode node) {
+		LOGGER.finer("Type Check visit(ConstantNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(DerivedTypeNode node) {
+		LOGGER.finer("Type Check visit(DerivedTypeNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+	
+	@Override
+	public void visit(ElseIfStatementNode node) {
+		LOGGER.finer("Type Check visit(ElseIfStatementNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(ElseStatementNode node) {
+		LOGGER.finer("Type Check visit(ElseStatementNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(ExceptionTypeNode node) {
+		LOGGER.finer("Type Check visit(ExceptionTypeNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(ExpressionNode node) {
+		LOGGER.finer("Type Check visit(ExpressionNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(FunctionNode node) {
+		LOGGER.finer("Type Check visit(FunctionNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(GuardingStatementNode node) {
+		LOGGER.finer("Type Check visit(GuardingStatementNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(IdNode node) {
+		LOGGER.finer("Type Check visit(IdNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(IfElseStatementNode node) {
+		LOGGER.finer("Type Check visit(IfElseStatementNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(IterationStatementNode node) {
+		LOGGER.finer("Type Check visit(IterationStatementNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(JumpStatementNode node) {
+		LOGGER.finer("Type Check visit(JumpStatementNode node) called on "
+				+ node.getName());
+		
+		//System.out.println("type check jump statement node");
+		visitAllChildrenStandard(node);
+		
+		TypeNode expectedReturnType;
+		if(node.getJumpType() == JumpStatementNode.JumpType.RETURN){
+			//System.out.println("cehcking return");
+			expectedReturnType = this.getExpectedReturnType(node);
+			//System.out.println("EXPECTED: " + expectedReturnType + " ACTUAL:" + node.getExpressionNode().getType());
+			if(!Types.isSameType(node.getExpressionNode().getType(), expectedReturnType)){
+				throw new TypeMismatchError("Return statement " + node.getExpressionNode().getType() + "does not match the expected return type of "+
+						expectedReturnType);
+			}
+		}
+	}
+
+	@Override
+	public void visit(MockExpressionNode node) {
+		LOGGER.finer("" +
+				" visit(MockExpressionNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(MockNode node) {
+		LOGGER.finer("Type Check visit(MockNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(Node node) {
+		LOGGER.finer("Type Check visit(Node node) called on " + node.getName());
+
+		visitAllChildrenStandard(node);
+	}
+
+	@Override
+	public void visit(ParametersNode node) {
+		LOGGER.finer("Type Check visit(ParametersNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(PostfixExpressionNode node) {
+		
+
+		LOGGER.finer("Type Check visit(PostfixExpressionNode node) called on "
+				+ node.getName());
+
+		
+		// visit all children
+		visitAllChildrenStandard(node);
+
+		// make all checks on function call
+		Types.checkValidFunctionCall(node);
+		
+		// get the symbol for this function
+		FunctionSymbol funSym = SymbolTable.getSymbolForPostFixExpressionNode(node);
+
+		// set type to return type given in symbol table
+		// if it is a reservedWordTypeNode
+		if( funSym.getType() instanceof ReservedWordTypeNode) {
+			
+			// if it is check inner type, set type accordingly
+			if(((ReservedWordTypeNode) funSym.getType()).getType() == Types.Flags.CHECK_INNER_TYPE) {
+				TypeNode innerType = (((DerivedTypeNode) node.getObjectOfMethod().getType()).getInnerTypeNode());
+				node.setType(innerType);
+			}
+			
+			// if it is a check entire type, the return type is the typenode of the object the method is called on
+			else if(((ReservedWordTypeNode) funSym.getType()).getType() == Types.Flags.CHECK_ENTIRE_TYPE) {
+				node.setType(node.getObjectOfMethod().getType());
+			}
+			
+			else {
+				node.setType(funSym.getType());
+			}
+		}
+		
+		// otherwise, set the type to what is indicated in the symbol table
+		else {
+			node.setType(funSym.getType());
+		}
+	}
+
+	@Override
+	public void visit(PrimaryExpressionNode node) {
+		LOGGER.finer("Type Check visit(PrimaryExpressionNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(PrimitiveTypeNode node) {
+		LOGGER.finer("Type Check visit(PrimitiveTypeNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(ProgramNode node) {
+		LOGGER.finer("Type Check visit(ProgramNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(RelationalExpressionNode node) {
+		LOGGER.finer("Type Check visit(RelationalExpressionNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+		node.setType(Types.getResult(node.getOpType(), node.getLeftNode().getType(), node.getRightNode().getType()));
+		
+
+	}
+
+	@Override
+	public void visit(ReservedWordTypeNode node) {
+		LOGGER.finer("Type Check visit(ReservedWordTypeNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(SectionNode node) {
+		LOGGER.finer("Type Check visit(SectionNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(SectionTypeNode node) {
+		LOGGER.finer("Type Check visit(SectionTypeNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(SelectionStatementNode node) {
+		LOGGER.finer("Type Check visit(SelectionStatementNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(StatementListNode node) {
+		LOGGER.finer("Type Check visit(StatementListNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(StatementNode node) {
+		LOGGER.finer("Type Check visit(StatementNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(SwitchStatementNode node) {
+		LOGGER.finer("Type Check visit(SwitchStatementNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	public void visit(TypeNode node) {
+		LOGGER.finer("Type Check visit(TypeNode node) called on "
+				+ node.getName());
+		visitAllChildrenStandard(node);
+
+	}
+
+	@Override
+	/**
+	 * This will visit the UnOpNode's child first, and then set the type of this node
+	 * based on the opType and the type of the child
+	 */
+	public void visit(UnOpNode node) {
+		LOGGER.finer("Type Check visit(UnOpNode node) called on "
+				+ node.getName());
+
+		// call on children - only one child
+		visitAllChildrenStandard(node);
+
+		// check if they are compatible
+		Types.isCompatible(node.getOpType(), node.getChild().getType());
+
+		// set type of this UnOpNode
+		node.setType(Types.getResult(node.getOpType(), node.getChild()
+				.getType()));
+
+	}
+
+}
+\end{verbatim}
+
+\subsection{\texttt{Visitor.java}}
+
+\begin{verbatim}
+package back_end;
+
+import util.ast.node.*;
+
+/**
+ * Visitor interface.
+ * 
+ * All visitors implement this interface.
+ * 
+ * Structured to follow the Visitor Pattern found in Design Patterns:
+ * Elements of Reusable Object-Oriented Code, by Erich Gamma, Richard Helm,
+ * Ralph Johnson, and John Vlissides.
+ * 
+ * @author Jason Halpern
+ *
+ */
+public interface Visitor {
+	
+	public abstract void walk();
+	public abstract void visit(ArgumentsNode node);
+	public abstract void visit(BiOpNode node);
+	public abstract void visit(CatchesNode node);
+	public abstract void visit(ConstantNode node);
+	public abstract void visit(DerivedTypeNode node);
+	public abstract void visit(ElseIfStatementNode node);
+	public abstract void visit(ElseStatementNode node);
+	public abstract void visit(ExceptionTypeNode node);
+	public abstract void visit(ExpressionNode node);
+	public abstract void visit(FunctionNode node);
+	public abstract void visit(GuardingStatementNode node);
+	public abstract void visit(IdNode node);
+	public abstract void visit(IfElseStatementNode node);
+	public abstract void visit(IterationStatementNode node);
+	public abstract void visit(JumpStatementNode node);
+	public abstract void visit(MockExpressionNode node);
+	public abstract void visit(MockNode node);
+	public abstract void visit(Node node);
+	public abstract void visit(ParametersNode node);
+	public abstract void visit(PostfixExpressionNode node);
+	public abstract void visit(PrimaryExpressionNode node);
+	public abstract void visit(PrimitiveTypeNode node);
+	public abstract void visit(ProgramNode node);
+	public abstract void visit(RelationalExpressionNode node);
+	public abstract void visit(ReservedWordTypeNode node);
+	public abstract void visit(SectionNode node);
+	public abstract void visit(SectionTypeNode node);
+	public abstract void visit(SelectionStatementNode node);
+	public abstract void visit(StatementListNode node);
+	public abstract void visit(StatementNode node);
+	public abstract void visit(SwitchStatementNode node);
+	public abstract void visit(TypeNode node);
+	public abstract void visit(UnOpNode node);
+
+}
+\end{verbatim}
+
+\section{\texttt{front\_end} package}
+
+\subsection{\texttt{ConsoleLexer.java}} 
+
+\begin{verbatim}
+package front_end;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.BiOpNode;
+import util.ast.node.ExpressionNode;
+import util.ast.node.IdNode;
+import util.ast.node.MockExpressionNode;
+import util.ast.node.MockNode;
+import util.ast.node.Node;
+import util.ast.node.ProgramNode;
+import util.symbol_table.SymbolTable;
+import util.type.Types;
+
+import java_cup.parser;
+import java_cup.runtime.Scanner;
+import java_cup.runtime.Symbol;
+import front_end.*;
+
+import java.util.Iterator;
+import java.util.logging.*;
+
+import back_end.SymbolTableVisitor;
+import back_end.TypeCheckingVisitor;
+
+/**
+ * A console front-end to the Lexer class for dynamically testing the Lexer,
+ * and development. Not intended to be used/accessible by/to users.
+ * 
+ * @author Samuel Messing
+ *
+ */
+@SuppressWarnings("unused")
+public class ConsoleLexer {
+	
+	private final static Logger LOGGER = Logger.getLogger(ConsoleLexer.class.getName());
+
+	/**
+	 * @param args
+	 * */
+	public static void main(String[] args) throws IOException {
+		
+		
+		LOGGER.info("Entering ConsoleLexer main()");
+		String filename = "WordCount.hog";
+		ProgramNode root = null;
+		FileReader fileReader = new FileReader(new File(filename));
+	    try {
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    SymbolTable.printSymbolTable();
+	    System.out.println("\n\n\n");
+	    SymbolTable.print();
+	    
+	    root.print();
+	    
+	    TypeCheckingVisitor typeCheckVisitor = new TypeCheckingVisitor(ast);
+	    typeCheckVisitor.walk();
+	    
+	    root.print();
+	    
+	}
+}
+
+\end{verbatim}
+
+\subsection{\texttt{Hog.java}}
+
+\begin{verbatim}
+/**
+ * 
+ */
+package front_end;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Logger;
+
+import back_end.CodeGeneratingVisitor;
+import back_end.SymbolTableVisitor;
+import back_end.TypeCheckingVisitor;
+
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.ProgramNode;
+
+/**
+ * The Hog compiler.
+ * 
+ * Usage:<br/>
+ * <br/>
+ * 
+ * <code>hog [--hdfs|--local] source [arg1, arg2, ...]<br/><br/></code>
+ * 
+ * For example,<br/>
+ * <br/>
+ * 
+ * <code>hog --local WordCount.hog --input war_and_peace.txt --output
+ * war_and_peace_counts.txt</code><br/>
+ * <br/>
+ * 
+ * Compiles the program <code>WordCount.hog</code>, and runs the program on a
+ * local Hadoop cluster on the file <code>war_and_peace.txt</code>. This class
+ * handles copying <code>war_and_peace.txt</code> to HDFS (Hadoop's Distributed
+ * File System). The class also handles downloading the output to the file
+ * <code>war_and_peace_counts.txt</code>.
+ * 
+ * @author Samuel Messing
+ * @author Kurry Tran
+ * 
+ */
+public class Hog {
+
+	// logger used for all nodes
+	protected final static Logger LOGGER = Logger
+			.getLogger(Hog.class.getName());
+	protected static boolean local = true;
+	protected static boolean hasInput;
+	protected static boolean hasOutput;
+	protected static FileReader source;
+	protected static String sourceName;
+	protected static String input;
+	protected static String output;
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		usage(args);
+
+		System.out.println("Loading source file " + sourceName);
+		System.out.println("Parsing file...");
+		Parser parser = new Parser(new Lexer(source));
+		ProgramNode root = null;
+
+		try {
+			root = (ProgramNode) parser.parse().value;
+		} catch (FileNotFoundException e) {
+			LOGGER.severe("Hog program " + source + " not found!");
+			System.exit(1);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+
+		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
+		System.out.println("Generating symbol tables...");
+		// generate/populate symbol tables
+		SymbolTableVisitor symbolVisitor = new SymbolTableVisitor(tree);
+		symbolVisitor.walk();
+		System.out.println("Populating types...");
+		// populate/propagate/check types
+		TypeCheckingVisitor typeVisitor = new TypeCheckingVisitor(tree);
+		typeVisitor.walk();
+		System.out.println("Generating Java source...");
+		// generate source code:
+		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
+		codeGenerator.walk();
+		System.out.println("Hog.java written...");
+
+		FileWriter fstream = null;
+		try {
+			fstream = new FileWriter("Hog.java");
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(codeGenerator.getCode());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Processes the input to this classes main function.
+	 * 
+	 * @param args
+	 *            the passed in command-line arguments.
+	 */
+	private static void usage(String[] args) {
+
+		if (args.length < 2) {
+			die();
+		}
+
+		if (args[0].equals("--help")) {
+			printUsage();
+		}
+
+		if (args.length % 2 != 0) {
+			LOGGER.severe("Invalid arguments");
+			die();
+		}
+
+		local = args[0].equals("--hdfs") ? false : true;
+
+		try {
+			source = new FileReader(args[1]);
+			sourceName = args[1];
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (!args[1].endsWith(".java") && (!args[1].endsWith(".hog"))) {
+			die();
+		}
+
+		if (args.length == 6) {
+
+			input = args[2].equals("--input") ? args[3] : args[5];
+			output = args[2].equals("--output") ? args[3] : args[5];
+			hasInput = hasOutput = true;
+
+		} else if (args.length == 4) {
+
+			input = args[2].equals("--input") ? args[3] : "";
+			output = args[2].equals("--output") ? args[3] : "";
+			hasInput = input.equals("") ? false : true;
+			hasOutput = output.equals("") ? false : true;
+		}
+
+	}
+
+	/**
+	 * Prints usage information and exits.
+	 */
+	private static void die() {
+		printUsage();
+		System.exit(1);
+	}
+
+	/**
+	 * Prints the usage information for the main method in this class to
+	 * standard out.
+	 */
+	private static void printUsage() {
+		System.out.println("Hog --- a scripting MapReduce language");
+		System.out
+				.println("Usage: Hog [--hdfs|--local] source [--input file] [--output file]");
+	}
+
+}
+\end{verbatim}
+
+\subsection{\texttt{Lexer.jflex}}
+
+\begin{verbatim}
+package front_end;
+
+import java_cup.runtime.*;
+import util.ast.node.ExceptionTypeNode;
+import util.type.Types;
+
+/**
+ * The lexer used by Parser.java to generate a token stream for a particular input file.
+ *
+ * @author Samuel Messing
+ */
+
+%%
+/**
+ * LEXICAL FUNCTIONS:
+ */
+
+%cup
+%line
+%column
+%unicode
+%class Lexer
+%public
+
+%{
+
+/**
+ * Return a new Symbol with the given token id, and with the current line and
+ * column numbers.
+ */
+Symbol newSym(int tokenId) {
+    return new Symbol(tokenId, yyline, yycolumn);
+}
+
+/**
+ * Return a new Symbol with the given token id, the current line and column
+ * numbers, and the given token value.  The value is used for tokens such as
+ * identifiers and numbers.
+ */
+Symbol newSym(int tokenId, Object value) {
+    return new Symbol(tokenId, yyline, yycolumn, value);
+}
+
+%}
+
+
+/**
+ * PATTERN DEFINITIONS:
+ */
+letter          = [A-Za-z]
+digit           = [0-9]
+alphanumeric    = {letter}|{digit}
+other_id_char   = [_]
+text_literal_old    = [a-zA-Z_ ]?\"(\\.|[^\\'])*\" 
+text_literal       = \"[^\"]*\"
+identifier      = {letter}({alphanumeric}|{other_id_char})*
+integer         = {digit}*
+real            = {integer}\.{integer}
+commentlbrace   = \#\{
+commentrbrace   = \}\#
+nonrightbrace   = [^}]
+comment_body    = {nonrightbrace}*
+comment         = ({commentlbrace}{comment_body}{commentrbrace}|\#.*\n)
+newline         = [\n]+
+whitespace      = [ \t]
+
+
+%%
+/**
+ * LEXICAL RULES:
+ */
+and             { return newSym(sym.AND); }
+else            { return newSym(sym.ELSE); }
+elseif          { return newSym(sym.ELSEIF); }
+if              { return newSym(sym.IF); }
+or              { return newSym(sym.OR); }
+foreach         { return newSym(sym.FOREACH); }
+for             { return newSym(sym.FOR); }
+while           { return newSym(sym.WHILE); }
+in              { return newSym(sym.IN); }
+text            { return newSym(sym.TEXT); }
+bool            { return newSym(sym.BOOL); }
+int             { return newSym(sym.INT); }
+real            { return newSym(sym.REAL); }
+list            { return newSym(sym.LIST); }
+set             { return newSym(sym.SET); }
+iter            { return newSym(sym.ITER); }
+void            { return newSym(sym.VOID); }
+not             { return newSym(sym.NOT); }
+switch          { return newSym(sym.SWITCH); }
+case            { return newSym(sym.CASE); }
+default         { return newSym(sym.DEFAULT); }
+continue        { return newSym(sym.CONTINUE); }
+return          { return newSym(sym.RETURN); }
+iter            { return newSym(sym.ITER); }
+try             { return newSym(sym.TRY); }
+catch           { return newSym(sym.CATCH); }
+finally         { return newSym(sym.FINALLY); }
+@Functions      { return newSym(sym.FUNCTIONS); }
+@Map            { return newSym(sym.MAP); }
+@Reduce         { return newSym(sym.REDUCE); }
+@Main           { return newSym(sym.MAIN); }
+"*"             { return newSym(sym.TIMES); }
+"+"             { return newSym(sym.PLUS); }
+"-"             { return newSym(sym.MINUS); }
+"/"             { return newSym(sym.DIVIDE); }
+"%"             { return newSym(sym.MOD); }
+";"             { return newSym(sym.SEMICOL); }
+","             { return newSym(sym.COMMA); }
+"("             { return newSym(sym.L_PAREN); }
+")"             { return newSym(sym.R_PAREN); }
+"{"             { return newSym(sym.L_BRACE); }
+"}"             { return newSym(sym.R_BRACE); }
+"["             { return newSym(sym.L_BRKT); }
+"]"             { return newSym(sym.R_BRKT); }
+"->"            { return newSym(sym.ARROW); }
+"--"            { return newSym(sym.DECR); }
+"++"            { return newSym(sym.INCR); }
+"="             { return newSym(sym.ASSIGN); }
+"<"             { return newSym(sym.LESS); }
+">"             { return newSym(sym.GRTR); }
+"<="            { return newSym(sym.LESS_EQL); }
+">="            { return newSym(sym.GRTR_EQL); }
+"!="            { return newSym(sym.NOT_EQLS); }
+":"             { return newSym(sym.COL); }
+"=="            { return newSym(sym.DBL_EQLS); }
+"."             { return newSym(sym.DOT); }
+{text_literal}  { return newSym(sym.TEXT_LITERAL, new String(yytext())); }
+true            { return newSym(sym.BOOL_CONST, new String("true")); }
+false           { return newSym(sym.BOOL_CONST, new String("false")); }
+return          { return newSym(sym.RETURN); }
+FileNotFoundException      { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.FILE_NOT_FOUND)); }
+FileLoadException          { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.FILE_LOAD)); }
+ArrayOutOfBoundsException  { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.ARRAY_OUT_OF_BOUNDS)); } 
+IncorrectArgumentException { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.INCORRECT_ARGUMENT)); }
+TypeMismatchException      { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.TYPE_MISMATCH)); }
+NullReferenceException     { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.NULL_REFERENCE)); }
+ArithmeticException        { return newSym(sym.EXCEPTION, new ExceptionTypeNode(Types.Exception.ARITHMETIC)); }
+{integer}       { return newSym(sym.INT_CONST, new String(yytext())); }
+{real}          { return newSym(sym.REAL_CONST, new String(yytext())); }
+{comment}       { /* For this stand-alone lexer, print out comments. */
+                  System.out.println("Recognized comment: " + yytext()); }
+{newline}       { /* Ignore newlines. */ }
+{whitespace}    { /* Ignore whitespace. */ }
+{identifier}    { return newSym(sym.ID, new String(yytext())); }
+.               { System.out.println("Illegal char, '" + yytext() +
+                    "' line: " + yyline + ", column: " + yychar); }
+\end{verbatim}
+
+\subsection{\texttt{Parser.cup}}
+
+\begin{verbatim}
+package front_end;
+import java.util.*;
+import java.io.*;
+import java_cup.runtime.*;
+import util.ast.node.*;
+import util.type.*;
+import java.util.logging.*;
+
+/**
+ * Parse a source program based on the Hog language syntax.
+ *
+ * @author Samuel Messing
+ * @author Benjamin Rapaport
+ * @author Paul Tylkin
+ */
+
+action code
+  {:
+    Hashtable table = new Hashtable();
+    protected final static Logger LOGGER = Logger.getLogger(Parser.class
+            .getName());
+  :};
+
+parser code
+  {:
+    Lexer lexer;
+    private File file;
+    public Parser( File file ) {
+      this();
+      this.file = file;
+      try {
+        lexer = new Lexer( new FileReader( file ) );
+      }
+      catch ( IOException exception ) {
+        throw new Error( "Unable to open file \"" + file + "\"" );
+      }
+    }
+    
+    public Parser(Lexer l) {
+      super(l);
+      lexer=l;
+    }
+  :};
+
+scan with
+  {:
+    return lexer.next_token();
+  :};
+
+terminal DECR, INCR, RETURN, CONTINUE;
+terminal TIMES, DIVIDE, MOD;
+terminal LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, ASSIGN;
+terminal TEXT, BOOL, INT, REAL, VOID;
+terminal MINUS, UMINUS, PLUS;
+terminal ARROW, DOT;
+terminal String TEXT_LITERAL;
+terminal String ID;
+terminal String INT_CONST;
+terminal String REAL_CONST;
+terminal String BOOL_CONST;
+terminal String CASE;
+terminal BREAK, DEFAULT;
+terminal AND, OR, NOT;
+terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
+terminal FUNCTIONS, MAIN, MAP, REDUCE;
+terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA;
+terminal LIST, ITER, SET;
+terminal TRY, CATCH, FINALLY;
+terminal ExceptionTypeNode EXCEPTION;
+
+nonterminal GuardingStatementNode GuardingStatement;
+nonterminal CatchesNode Catches;
+nonterminal IdNode CatchHeader;
+nonterminal StatementListNode Finally;
+nonterminal StatementListNode Block;
+nonterminal StatementListNode ExpressionStatements;
+nonterminal ExpressionNode ForExpr;
+nonterminal StatementListNode ForInit;
+nonterminal StatementListNode ForIncr;
+nonterminal DerivedTypeNode DictType;
+
+nonterminal ProgramNode Program;
+nonterminal SectionNode Functions;
+nonterminal SectionNode Main;
+nonterminal SectionNode Map;
+nonterminal SectionNode Reduce;
+nonterminal SectionTypeNode SectionType;
+nonterminal StatementNode Statement;
+nonterminal ExpressionNode ExpressionStatement;
+nonterminal StatementNode FunctionList;
+nonterminal StatementNode IterationStatement;
+nonterminal StatementNode LabeledStatement;
+nonterminal SelectionStatementNode SelectionStatement;
+nonterminal StatementNode DeclarationStatement;
+nonterminal StatementListNode StatementList;
+nonterminal ElseIfStatementNode ElseIfStatement;
+nonterminal ElseStatementNode ElseStatement;
+nonterminal JumpStatementNode JumpStatement;
+nonterminal ExpressionNode EqualityExpression;
+nonterminal ExpressionNode LogicalExpression;
+nonterminal ExpressionNode LogicalTerm;
+nonterminal ExpressionNode RelationalExpression;
+nonterminal ExpressionNode Expression;
+nonterminal ExpressionNode AdditiveExpression;
+nonterminal ExpressionNode MultiplicativeExpression;
+nonterminal ExpressionNode CastExpression;
+nonterminal ExpressionNode UnaryExpression;
+nonterminal ExpressionNode PostfixExpression;
+nonterminal ExpressionNode PrimaryExpression;
+nonterminal ExpressionNode Constant;
+nonterminal ExpressionNode ArgumentExpressionList;
+nonterminal FunctionNode Function;
+nonterminal ParametersNode ParameterList;
+nonterminal TypeNode Type;
+nonterminal UnOpNode.OpType UnaryOperator;
+nonterminal Types.Derived DerivedType;
+
+precedence left MINUS, PLUS;
+precedence right UMINUS;
+precedence right ELSE;
+precedence right ELSEIF;
+precedence right L_PAREN;
+
+start with Program;
+
+Program::=
+    Functions:f Map:m Reduce:r Main:n
+    {:
+      RESULT = new ProgramNode(f, m, r, n);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("Functions Map Reduce Main -> Program");
+    :}
+  ;
+
+Functions::=
+    FUNCTIONS L_BRACE FunctionList:fl R_BRACE
+    {:
+      RESULT = new SectionNode(fl, SectionNode.SectionName.FUNCTIONS);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("FUNCTIONS L_BRACE FunctionList R_BRACE -> Functions");
+    :}
+  |
+    /* epsilon */
+    {:
+      CUP$Parser$actions.LOGGER.fine("epsilon -> Functions");
+    :}
+  ; 
+ 
+FunctionList::=
+    Function:f
+    {:
+      RESULT = f;
+      CUP$Parser$actions.LOGGER.fine("Function -> FunctionList");
+    :}
+  |
+    FunctionList:fl Function:f
+    {:
+      RESULT = new StatementNode(fl, f);
+      CUP$Parser$actions.LOGGER.fine("FunctionList Function -> FunctionList");
+    :}
+  ;
+
+Function::=
+    Type:t ID:i L_PAREN ParameterList:pl R_PAREN L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new FunctionNode(t, i, pl, sl); 
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE -> Function");
+    :}
+  ;
+
+ParameterList::=
+    ParameterList:pl COMMA Type:t ID:i
+    {:
+      RESULT = new ParametersNode(t, i, pl);
+      CUP$Parser$actions.LOGGER.fine("ParameterList COMMA Type ID: " + i + " -> ParameterList");
+    :}
+  |
+    Type:t ID:i
+    {:
+      RESULT = new ParametersNode(t, i);
+      CUP$Parser$actions.LOGGER.fine("Type ID: " + i + " -> ParameterList");
+    :}
+  |
+    /* epsilon */
+  ;
+
+Map::=
+    MAP SectionType:st L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new SectionNode(st, sl, SectionNode.SectionName.MAP);
+      RESULT.setNewScope();      
+      CUP$Parser$actions.LOGGER.fine("MAP SectionType L_BRACE StatementList R_BRACE -> Map");
+    :}
+  ;
+
+Reduce::=
+    REDUCE SectionType:st L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new SectionNode(st, sl, SectionNode.SectionName.REDUCE);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("REDUCE SectionType L_BRACE StatementList R_BRACE -> Reduce");
+    :}
+  ;
+
+SectionType::=
+    L_PAREN Type:t1 ID:i1 COMMA Type:t2 ID:i2 R_PAREN ARROW L_PAREN Type:t3 COMMA Type:t4 R_PAREN
+    {:
+     RESULT = new SectionTypeNode(new IdNode(t1, i1), new IdNode(t2, i2), t3, t4);
+     CUP$Parser$actions.LOGGER.fine("L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN -> SectionType");
+    :}
+  ;
+
+Main::=
+    MAIN L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = new SectionNode(sl, SectionNode.SectionName.MAIN);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("MAIN L_BRACE StatementList R_BRACE -> Main");
+    :}
+  ;
+
+StatementList::=
+    Statement:s
+    {:
+      RESULT = s;
+      CUP$Parser$actions.LOGGER.fine("Statement -> StatementList");
+    :}
+  |
+    StatementList:sl Statement:s
+    {:
+      RESULT = new StatementListNode(sl, s);
+      CUP$Parser$actions.LOGGER.fine("StatementList Statement -> StatementList");
+    :}
+  ;
+
+Statement::=
+    ExpressionStatement:es
+    {:
+      if (es != null) {
+        es.setEndOfLine();
+      }
+      RESULT = es;
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatement -> Statement");
+    :}
+  |
+   SelectionStatement:ss
+    {:
+      ss.setEndOfLine();
+      RESULT = ss;
+      CUP$Parser$actions.LOGGER.fine("SelectionStatement -> Statement");
+    :}
+  |
+    IterationStatement:is
+    {:
+      is.setEndOfLine();
+      RESULT = is;
+      CUP$Parser$actions.LOGGER.fine("IterationStatement -> Statement");
+    :}
+  |
+    LabeledStatement:ls
+    {:
+     ls.setEndOfLine();
+     RESULT = ls;
+     CUP$Parser$actions.LOGGER.fine("LabeledStatement -> Statement");
+    :}
+  |
+    JumpStatement:js
+    {:
+      js.setEndOfLine();
+      RESULT = js;
+      CUP$Parser$actions.LOGGER.fine("JumpStatement -> Statement");
+    :}
+  | DeclarationStatement:ds
+    {:
+      ds.setEndOfLine();
+      RESULT = ds;
+      CUP$Parser$actions.LOGGER.fine("DeclarationStatement -> Statement");
+    :}
+  | GuardingStatement:gs
+    {:
+      gs.setEndOfLine();
+      RESULT = gs;
+      CUP$Parser$actions.LOGGER.fine("GuardingStatement -> Statement");
+    :}
+  | Block:b
+    {:
+      //RESULT = b;
+      CUP$Parser$actions.LOGGER.fine("Block -> Statement");
+    :}
+  ;
+
+GuardingStatement::=
+    TRY Block:b Finally:f
+    {:
+      RESULT = new GuardingStatementNode(b, f);
+      CUP$Parser$actions.LOGGER.fine("TRY Block Finally -> GuardingStatment");
+    :}
+   |
+    TRY Block:b Catches:c
+    {:
+      RESULT = new GuardingStatementNode(b, c);
+      CUP$Parser$actions.LOGGER.fine("TRY Block Catches -> GuardingStatment");
+    :}
+   | 
+    TRY Block:b Catches:c Finally:f
+    {:
+      RESULT = new GuardingStatementNode(b, c, f);
+      CUP$Parser$actions.LOGGER.fine("TRY Block Catches Finally -> GuardingStatment");
+    :}
+;
+
+Block::=
+    L_BRACE StatementList:sl R_BRACE
+    {:
+      RESULT = sl;
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("L_BRACE StatementList R_BRACE -> Block");
+    :}
+  | 
+    L_BRACE R_BRACE
+    {:
+      CUP$Parser$actions.LOGGER.fine("L_BRACE R_BRACE -> Block");
+    :}
+;
+
+Finally::=
+    FINALLY Block:b
+    {:
+      RESULT = b;
+      CUP$Parser$actions.LOGGER.fine("FINALLY Block -> Finally");
+    :}
+;
+
+Catches::=
+    CatchHeader:c Block:b
+    {:
+      RESULT = new CatchesNode(c, b);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("CatchHeader Block -> Catch");
+    :}
+   | 
+    Catches:cs CatchHeader:c Block:b
+    {:
+      RESULT = new CatchesNode(c, b, cs);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("Catches CatchHeader Block -> Catches");
+    :}
+    ;
+
+CatchHeader::=
+   CATCH L_PAREN EXCEPTION:ex ID:i R_PAREN
+   {:
+      IdNode catchNode = new IdNode(ex, i);
+      catchNode.setDeclaration();
+      RESULT = catchNode;
+      CUP$Parser$actions.LOGGER.fine("CATCH L_PAREN Type ID R_PAREN -> CatchHeader");
+   :}
+   ;
+ 
+DeclarationStatement::=
+    Type:t ID:i
+    {:
+      IdNode declaration = new IdNode(t, i);
+      declaration.setDeclaration();
+      RESULT = declaration;
+      CUP$Parser$actions.LOGGER.fine("Type ID -> DeclarationStatement");
+    :}
+  |
+    Type:t ID:i ASSIGN Expression:e
+    {:
+      IdNode declaration = new IdNode(t, i);
+      declaration.setDeclaration();
+      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, declaration, e);
+      CUP$Parser$actions.LOGGER.fine("Type ID ASSIGN Expression -> DeclarationStatement");
+    :}
+  ;
+ 
+JumpStatement::=
+    CONTINUE
+    {:
+      RESULT = new JumpStatementNode(JumpStatementNode.JumpType.CONTINUE);
+      CUP$Parser$actions.LOGGER.fine("CONTINUE -> JumpStatement");
+    :}
+  |
+    BREAK
+    {:
+      RESULT = new JumpStatementNode(JumpStatementNode.JumpType.BREAK);
+      CUP$Parser$actions.LOGGER.fine("BREAK -> JumpStatement");
+    :}
+  |
+    RETURN ExpressionStatement:es
+    {:
+      RESULT = new JumpStatementNode(JumpStatementNode.JumpType.RETURN, es);
+      CUP$Parser$actions.LOGGER.fine("RETURN Expression -> JumpStatement");
+    :}
+  ;
+ 
+ExpressionStatement::=
+    SEMICOL
+    {:
+      CUP$Parser$actions.LOGGER.fine("SEMICOL -> ExpressionStatement: NO RESULT STATEMENT");
+    :}
+  |
+    Expression:e SEMICOL
+    {:
+      RESULT = e;
+      CUP$Parser$actions.LOGGER.fine("Expression SEMICOL -> ExpressionStatement");
+    :}
+  ;
+
+Expression::=
+    LogicalExpression:le
+    {:
+     RESULT = le;
+     CUP$Parser$actions.LOGGER.fine("LogicalExpression -> Expression");
+    :}
+  |
+    UnaryExpression:ue ASSIGN Expression:e
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.ASSIGN, ue, e);
+      CUP$Parser$actions.LOGGER.fine("UnaryExpression ASSIGN Expression -> Expression");
+    :}
+  ;
+
+LogicalExpression::=
+    LogicalExpression:le OR LogicalTerm:lt
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.OR, le, lt);
+      CUP$Parser$actions.LOGGER.fine("LogicalExpression OR LogicalTerm -> LogicalExpression");
+    :}
+  |
+    LogicalTerm:l
+    {:
+      RESULT = l;
+      CUP$Parser$actions.LOGGER.fine("LogicalTerm -> LogicalExpression");
+    :}
+  ;
+
+LogicalTerm::=
+    LogicalTerm:l AND EqualityExpression:e
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.AND, l, e);
+      CUP$Parser$actions.LOGGER.fine("LogicalTerm AND EqualityExpression -> LogicalTerm");
+    :}
+  |
+    EqualityExpression:e
+    {:
+      RESULT = e;
+      CUP$Parser$actions.LOGGER.fine("EqualityExpression -> LogicalTerm");
+    :}
+  ;
+
+EqualityExpression::=
+    RelationalExpression:r
+    {: 
+      RESULT = r; 
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression -> EqualityExpression");
+    :}
+  |
+    EqualityExpression:e DBL_EQLS RelationalExpression:r
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.DBL_EQLS, e, r);
+      CUP$Parser$actions.LOGGER.fine("EqualityExpression DBL_EQLS RelationalExpression -> EqualityExpression");
+    :}
+  |
+    EqualityExpression:e NOT_EQLS RelationalExpression:r
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.NOT_EQLS, e, r);
+      CUP$Parser$actions.LOGGER.fine("EqualityExpression NOT_EQLS RelationalExpression -> EqualityExpression");
+    :}
+  ;
+
+RelationalExpression::=
+    AdditiveExpression:a
+    {:
+      RESULT = a;
+      CUP$Parser$actions.LOGGER.fine("AdditiveExpression -> RelationalExpression");
+    :}
+  |
+    RelationalExpression:r LESS AdditiveExpression:a
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.LESS, r, a);
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression LESS AdditiveExpression -> RelationalExpression");
+    :}
+  |
+    RelationalExpression:r GRTR AdditiveExpression:a
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.GRTR, r, a);
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression GRTR AdditiveExpression -> RelationalExpression");
+    :}
+  |
+    RelationalExpression:r LESS_EQL AdditiveExpression:a
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.LESS_EQL, r, a);
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression LESS_EQL AdditiveExpression -> RelationalExpression");
+    :}
+  |
+    RelationalExpression:r GRTR_EQL AdditiveExpression:a
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.GRTR_EQL, r, a);
+      CUP$Parser$actions.LOGGER.fine("RelationalExpression GRTR_EQL AdditiveExpression -> RelationalExpression");
+    :}
+  ;
+
+AdditiveExpression::=
+    MultiplicativeExpression:m
+    {:
+      RESULT = m;
+      CUP$Parser$actions.LOGGER.fine("MultiplicativeExpreesion -> AdditiveExpression");
+    :}
+  |
+    AdditiveExpression:a PLUS MultiplicativeExpression:m
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.PLUS, a, m);
+      CUP$Parser$actions.LOGGER.fine("AdditiveExpression PLUS MultiplicativeExpression -> AdditiveExpression");
+    :}
+  |
+    AdditiveExpression:a MINUS MultiplicativeExpression:m
+    {: 
+      RESULT = new BiOpNode(BiOpNode.OpType.MINUS, a, m);
+      CUP$Parser$actions.LOGGER.fine("AdditiveExpression MINUS MultiplicativeExpression -> AdditiveExpression");
+    :}
+  ;
+
+MultiplicativeExpression::=
+    CastExpression:c
+    {:
+      RESULT = c;
+      CUP$Parser$actions.LOGGER.fine("CastExpression -> MultiplicativeExpression");
+    :}
+  |
+    MultiplicativeExpression:m TIMES CastExpression:c
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.TIMES, m, c);
+      CUP$Parser$actions.LOGGER.fine("MultipliativeExpression TIMES CastExpression -> MultiplicativeExpression");
+    :}
+  |
+    MultiplicativeExpression:m DIVIDE CastExpression:c
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.DIVIDE, m, c);
+      CUP$Parser$actions.LOGGER.fine("MultipliativeExpression DIVIDE CastExpression -> MultiplicativeExpression");
+    :}
+  |
+    MultiplicativeExpression:m MOD CastExpression:c
+    {:
+      RESULT = new BiOpNode(BiOpNode.OpType.MOD, m, c);
+      CUP$Parser$actions.LOGGER.fine("MultipliativeExpression MOD CastExpression -> MultiplicativeExpression");
+    :}
+  ;
+
+CastExpression::=
+    UnaryExpression:u
+    {:
+      RESULT = u;
+      CUP$Parser$actions.LOGGER.fine("UnaryExpression -> CastExpression");
+    :}
+  |
+    L_PAREN Type:t R_PAREN CastExpression:c
+    {:
+      RESULT = new UnOpNode(t, UnOpNode.OpType.CAST, c);
+      CUP$Parser$actions.LOGGER.fine("L_PAREN Type R_PAREN CastExpression -> CastExpression");
+    :}
+  ;
+
+UnaryExpression::=
+    UnaryOperator:u CastExpression:c
+    {:
+      RESULT = new UnOpNode(u, c);
+      CUP$Parser$actions.LOGGER.fine("UnaryOperator CastExpression -> UnaryExpression");
+    :}
+  |
+    PostfixExpression:p
+    {:
+      RESULT = p;
+      CUP$Parser$actions.LOGGER.fine("PostfixExpression -> UnaryExpression");
+    :}
+  ;
+  
+UnaryOperator::=
+    MINUS 
+    {:
+      RESULT = UnOpNode.OpType.UMINUS;
+      CUP$Parser$actions.LOGGER.fine("UMINUS -> UnaryOperator");
+    :}
+    %prec UMINUS
+  |
+    NOT
+    {:
+      RESULT = UnOpNode.OpType.NOT;
+      CUP$Parser$actions.LOGGER.fine("NOT -> UnaryOperator");
+    :}
+  ;
+
+PostfixExpression::=
+    PrimaryExpression:p
+    {:
+      RESULT = p;
+      CUP$Parser$actions.LOGGER.fine("PrimaryExpression -> PostFixExpression");
+    :}
+  |
+    ID:objectName DOT ID:methodName
+    {:
+      // object method call no params
+      IdNode obj = new IdNode(objectName);
+      IdNode method = new IdNode(methodName);
+      RESULT = new PostfixExpressionNode(obj, method);
+      CUP$Parser$actions.LOGGER.fine("ID: " + objectName + " DOT ID: " + methodName + " -> PostFixExpression");
+    :}
+  |
+    ID:objectName DOT ID:methodName L_PAREN ArgumentExpressionList:a R_PAREN
+    {:
+      // object method call with params
+      IdNode object = new IdNode(objectName);
+      IdNode method = new IdNode(methodName);
+      // if argument list is empty, this is a method with no params
+      if( a == null ) {
+        RESULT = new PostfixExpressionNode(object, method);
+      } else {
+        RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.METHOD_WITH_PARAMS, object, method, a);
+      }
+      CUP$Parser$actions.LOGGER.fine("ID " + objectName + " DOT ID: " + methodName + "L_PAREN ArgumentList R_PAREN -> PostFixExpression");
+    :}
+  |
+  
+    ID:i L_PAREN ArgumentExpressionList:a R_PAREN
+    {:
+      //function call
+      IdNode functionName = new IdNode(i);
+      RESULT = new PostfixExpressionNode(PostfixExpressionNode.PostfixType.FUNCTION_CALL, functionName, a);
+      CUP$Parser$actions.LOGGER.fine("PostfixExpression L_PAREN ArgumentExpressionList R_PAREN -> PostFixExpression");
+    :}
+  |
+    PostfixExpression:p INCR
+    {:
+      RESULT = new UnOpNode(UnOpNode.OpType.INCR, p);
+      CUP$Parser$actions.LOGGER.fine("PostfixExpression INCR -> PostFixExpression");
+    :}
+  |
+    PostfixExpression:p DECR
+    {:
+      RESULT = new UnOpNode(UnOpNode.OpType.DECR, p);
+      CUP$Parser$actions.LOGGER.fine("PostfixExpression DECR -> PostFixExpression");
+    :}
+  ;
+
+ArgumentExpressionList::=
+    Expression:e
+    {:
+      RESULT = new ArgumentsNode(null,e);
+      CUP$Parser$actions.LOGGER.fine("Expression -> ArgumentExpressionList");
+    :}
+  |
+    ArgumentExpressionList:a COMMA Expression:e
+    {:
+      RESULT = new ArgumentsNode(a,e);
+      CUP$Parser$actions.LOGGER.fine("ArgumentExpressionList COMMA Expression -> ArgumentExpressionList");
+    :}
+  |
+    /* epsilon */
+    {:
+      CUP$Parser$actions.LOGGER.fine("epsilon -> ArgumentExpressionList");
+    :}
+ 
+ ;
+
+PrimaryExpression::=
+    ID:i
+    {:
+      RESULT = new IdNode(i);
+      CUP$Parser$actions.LOGGER.fine("ID: " + i + " -> PrimaryExpression");
+    :}
+  |
+    Constant:c
+    {:
+      RESULT = c;
+      CUP$Parser$actions.LOGGER.fine("Constant -> PrimaryExpression");
+    :}
+  |
+    L_PAREN Expression:e R_PAREN
+    {:
+      RESULT = e;
+      CUP$Parser$actions.LOGGER.fine("L_PAREN Expression R_PAREN -> PrimaryExpression");
+    :}
+  ;
+
+Constant::=
+    INT_CONST:i
+    {:
+      RESULT = new ConstantNode(Types.Primitive.INT, i);
+      CUP$Parser$actions.LOGGER.fine("INT_CONST: " + i + " -> Constant");
+    :}
+  |
+    REAL_CONST:d
+    {:
+      RESULT = new ConstantNode(Types.Primitive.REAL, d);
+      CUP$Parser$actions.LOGGER.fine("REAL_CONST: " + d + " -> Constant");
+    :}
+  |
+    BOOL_CONST:b
+    {:
+      RESULT = new ConstantNode(Types.Primitive.BOOL, b);
+      CUP$Parser$actions.LOGGER.fine("BOOL_CONST: " + b + " -> Constant");
+    :}
+  |
+    TEXT_LITERAL:t
+    {:
+      RESULT = new ConstantNode(Types.Primitive.TEXT, t);
+      CUP$Parser$actions.LOGGER.fine("TEXT_LITERAL: " + t + " -> Constant");
+    :}
+  ;
+
+SelectionStatement::=
+    IF Expression:e Block:b ElseIfStatement:elif ElseStatement:el
+    {:
+      RESULT = new IfElseStatementNode(e, b, elif, el);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("IF Expression Block " +
+                                      "ElseIfStatement ElseStatment -> SelectionStatement");
+    :}
+  |
+    SWITCH Expression:e L_BRACE StatementList:s R_BRACE
+    {:
+    // NOT THINKING ABOUT SCOPE. TOO TIRED.
+      RESULT = new SwitchStatementNode(e, s);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("SWITCH Expression L_BRACE " +
+                                      "StatementList R_BRACE -> SelectionStatement");
+    :}
+  ;
+
+ElseIfStatement::=
+    ELSEIF Expression:e Block:b ElseIfStatement:elif
+    {:
+      RESULT = new ElseIfStatementNode(e, b, elif);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("ELSEIF L_PAREN Expression R_PAREN ElseIfStatement -> " +
+                                      "ElseIfStatement");
+    :}
+  |
+    /* epsilon */
+    {:
+      CUP$Parser$actions.LOGGER.fine("epsilon -> ElseIfStatement");
+    :}
+  ;
+
+ElseStatement::=
+    ELSE Block:b
+    {:
+      RESULT = new ElseStatementNode(b);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("Block -> ElseStatement");
+    :}
+  |
+    /* epsilon */
+    {:
+      CUP$Parser$actions.LOGGER.fine("epsilon -> ElseStatement");
+    :}
+  ;
+
+IterationStatement::=
+    WHILE L_PAREN Expression:e R_PAREN Block:b
+    {:
+      RESULT = new IterationStatementNode(e,b);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("WHILE L_PAREN Expression R_PAREN L_BRACE " +
+                                      "StatementList R_BRACE -> IterationStatement");
+    :}
+  |
+    FOR L_PAREN ForInit:init ForExpr:test ForIncr:incr R_PAREN Block:b
+    {:
+      RESULT = new IterationStatementNode(init, test, incr, b);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("FOR ForInit ForExpr ForInc L_BRACE StatementList " +
+                                      "R_BRACE -> IterationStatement");
+    :}
+  |
+    FOR L_PAREN ForInit ForExpr R_PAREN Block:b
+    {:
+      //RESULT = new IterationStatementNode(e1,e2,e3,b);
+      //RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("FOR L_BRACEN ForInit ForExpr R_PAREN L_BRACE " +
+                                      "StatementList R_BRACE -> IterationStatement");
+    :}
+  |
+    FOREACH Type:t ID:i IN Expression:e2 Block:b
+    {:
+      IdNode idNode = new IdNode(t, i);
+      RESULT = new IterationStatementNode(idNode,e2,b);
+      RESULT.setNewScope();
+      CUP$Parser$actions.LOGGER.fine("FOREACH Expression IN Expression L_BRACE StatementList " +
+                                      "R_BRACE -> IterationStatement"); 
+    :}
+  ;
+
+ForInit::=
+    ExpressionStatements:es
+    {:
+      RESULT = es;
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatements -> ForInit");
+    :}
+  |
+    DeclarationStatement:ds SEMICOL
+    {:
+      RESULT = ds;
+      CUP$Parser$actions.LOGGER.fine("DeclarationStatement SEMICOL -> ForInit");
+    :}
+  ;
+
+ForExpr::=
+    ExpressionStatement:es
+    {:
+      RESULT = es;
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatement -> ForExpr");
+    :}
+  ;
+
+ForIncr::=
+    ExpressionStatements:es
+    {:
+      RESULT = es;
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatements -> ForIncr");
+    :}
+  ;
+
+ExpressionStatements::=
+    ExpressionStatement:es
+    {:
+      RESULT = es;
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatement -> ExpressionStatements");
+    :}
+  |
+    ExpressionStatements:e COMMA ExpressionStatement:es
+    {:
+      List<Node> children = new ArrayList<Node>();
+      children.add(e);
+      children.add(es);
+      RESULT = new StatementListNode(children);
+      CUP$Parser$actions.LOGGER.fine("ExpressionStatements COMMA ExpressionStatement -> " +
+                                    "ExpressionStatements");
+    :}
+  ;
+ 
+LabeledStatement::=
+    CASE LogicalExpression COL Statement:s
+    {:
+      CUP$Parser$actions.LOGGER.fine("CASE LogicalExpression COL Statement -> LabeledStatement");
+    :}
+  |
+    DEFAULT:d COL Statement:s
+    {:
+      CUP$Parser$actions.LOGGER.fine("DEFAULT COL Statement");
+    :} 
+  ;
+
+Type::=
+    VOID
+    {:
+      RESULT = new PrimitiveTypeNode(Types.Primitive.VOID);
+      CUP$Parser$actions.LOGGER.fine("VOID -> Type");
+    :}
+  |
+    TEXT
+    {:
+      RESULT = new PrimitiveTypeNode(Types.Primitive.TEXT);
+      CUP$Parser$actions.LOGGER.fine("TEXT -> Type");
+    :}
+  |
+    BOOL
+    {:
+      RESULT = new PrimitiveTypeNode(Types.Primitive.BOOL);
+      CUP$Parser$actions.LOGGER.fine("BOOL -> Type");
+    :}
+  |
+    INT:i
+    {:
+      RESULT = new PrimitiveTypeNode(Types.Primitive.INT);
+      CUP$Parser$actions.LOGGER.fine("INT -> Type");
+    :}
+  |
+    REAL
+    {:
+      RESULT = new PrimitiveTypeNode(Types.Primitive.REAL);
+      CUP$Parser$actions.LOGGER.fine("REAL -> Type");
+    :}
+  |
+    DerivedType:d LESS Type:t GRTR
+    {:
+      RESULT = new DerivedTypeNode(d, t);
+      CUP$Parser$actions.LOGGER.fine("DerivedType LESS Type GRTR -> Type");
+    :}
+  ;
+
+DerivedType::=
+    LIST
+    {:
+      RESULT = Types.Derived.LIST;
+      CUP$Parser$actions.LOGGER.fine("LIST -> DerivedType");
+    :}
+  |
+    ITER
+    {:
+      RESULT = Types.Derived.ITER;
+      CUP$Parser$actions.LOGGER.fine("ITER -> DerivedType");
+    :}
+  |
+    SET
+    {:
+      RESULT = Types.Derived.SET;
+      CUP$Parser$actions.LOGGER.fine("SET -> DerivedType");
+    :}
+  ;
+\end{verbatim}
+
+\section{\texttt{test} package}
+
+\subsection{\texttt{AbstractSyntaxTreeTester.java}}
+
+
+
+\subsection{\texttt{CodeGeneratingTester.java}}
+
+\subsection{\texttt{LexerTester.java}}
+
+\subsection{\texttt{NodeTester.java}}
+
+\subsection{\texttt{ParserTester.java}}
+
+\subsection{\texttt{SymbolTableTexter.java}}
+
+\subsection{\texttt{TypesCheckingTester.java}}
+
+\subsection{\texttt{TypesTester.java}}
+
+
+
 \nocite{*}
 \bibliographystyle{acm}
 \bibliography{references}
