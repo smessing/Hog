@@ -1321,20 +1321,17 @@ in any of the \tt text \rm objects in the returned list.
 \section{System Configuration} % (fold)
 \label{sec:system_configuration}
 
-The user must set configuration variables in the \tt hog.rb \rm build script to
-allow the Hog compiler to link the Hog program with the necessary jar files to run
-the MapReduce job. The user must also specify the job name within the Hog source
-file.
+The user must set configuration variables in the \tt makefile \rm build script to
+allow the Hog compiler to use the java compiler on the user's computer. The Hog
+compiler only requires the user to have a working installation of Java on their computer,
+which generates the job jar, which can be run on the Amazon ElasticMapReduce cloud.
+
 
 \begin{itemize}
 
-\item[] \textbf{HADOOP\_HOME} absolute path of hadoop folder
-\item[] \textbf{HADOOP\_VERSION} hadoop version number
 \item[] \textbf{JAVA\_HOME} absolute path of java executable
 \item[] \textbf{JAVAC\_HOME} absolute path of javac executable
-\item[] \textbf{HOST} where to job is rsynced to and run
-\item[] \textbf{LOCALMEM} how much memory for java to use when running in local mode 
-\item[] \textbf{REDUCERS} the number of reduce tasks to run, set to zero for map only jobs
+
 
 \end{itemize}
 
@@ -2267,7 +2264,6 @@ does not have a working Hadoop configuration on there computer, they can run the
 command "make compile" which will compile the Hog source program, which will 
 create a Hog.java file, which will then be compiled with the Java compiler with the appropriate
 Hadoop libraries being packaged with the job jar which is generated at the end compilation.
-
 
 
 ################################################################
