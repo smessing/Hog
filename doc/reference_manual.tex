@@ -959,7 +959,8 @@ statements, the statement will be executed that follows the first expression
 evaluating to \tt true\rm. If none of these expressions evaluate to \tt
 true\rm, then the \tt else \rm statement is executed.
 
-To increase the expressive power of Hog, flow-of-control statements can also be nested within each other.
+To increase the expressive power of Hog, flow-of-control statements can also be
+nested within each other.
 
 % subsection flow_of_control_statements (end)
 
@@ -977,7 +978,11 @@ forms:
 
 In the \tt while \rm pattern, the associated \emph{statements} will be executed
 repeatedly until the \emph{expression} evaluates to \tt false\rm. The
-\emph{expression} is evaluated before every iteration. Please note that in a slight syntactical departure from Java, Hog requires a semicolon after the third expression (the increment step) in the \tt for\rm loop construct. Thus, an example of correct Hog syntax would be \begin{verbatim} for (int i = 0; i < 10; i++;){...}\end{verbatim}
+\emph{expression} is evaluated before every iteration. Please note that in a
+slight syntactical departure from Java, Hog requires a semicolon after the
+third expression (the increment step) in the \tt for\rm loop construct. Thus,
+an example of correct Hog syntax would be \begin{verbatim} for (int i = 0; i <
+10; i++;){...}\end{verbatim}
 
 In the \tt for \rm pattern, \emph{expression}$_1$ is the initialization step,
 \emph{expression}$_2$ is the test or condition and \emph{expression}$_3$ is the
@@ -1082,24 +1087,30 @@ standard output. The argument must be a primitive type.
 \subsection{Object-level Built-ins} % (fold)
 \label{sub:object_level_built_ins}
 
-The derived type objects have several built-in functions that provide additional functionality. All of these functions
-are invoked using the following pattern:
+The derived type objects have several built-in functions that provide
+additional functionality. All of these functions are invoked using the
+following pattern:
 
 \begin{quotation}
 \emph{identifier.functionName(parameterList)}
 \end{quotation}
 
-\noindent Where \emph{identifier} is the identifier for the object in question, \emph{functionName} is the name of the
-function, and \emph{parameterList} is a (possibly empty) list of parameters used to specify the behavior of the invocation.
+\noindent Where \emph{identifier} is the identifier for the object in question,
+\emph{functionName} is the name of the function, and \emph{parameterList} is a
+(possibly empty) list of parameters used to specify the behavior of the
+invocation.
 
-\emph{Note}: In what follows, if a function has return type T, it means that the return type of this function matches the
-parameterized type of this object (i.e. for an \tt iter<int> \rm object, these functions have return type \tt int\rm).
+\emph{Note}: In what follows, if a function has return type T, it means that
+the return type of this function matches the parameterized type of this object
+(i.e. for an \tt iter<int> \rm object, these functions have return type \tt
+int\rm).
 
 \subsubsection{\tt iter \rm} % (fold)
 \label{ssub:iter}
 
 \tt iter \rm is Hog's iteration object, and supports several built-in functions
-that are independent of the particular type of the \tt iter \rm object. The built-in functions are as follows:
+that are independent of the particular type of the \tt iter \rm object. The
+built-in functions are as follows:
 
 \begin{itemize}
 
@@ -1116,10 +1127,10 @@ function call advances the cursor of the iterator.
 
 \item[] \tt T peek() \rm
 
-This function returns the next object (if one exists) for the owning \tt iter \rm
-object. A call to \tt peek() \rm returns the object without advancing the iterator's
-cursor, thus multiple calls to \tt peek() \rm without any intermediate function calls
-will all return the same value.
+This function returns the next object (if one exists) for the owning \tt iter
+\rm object. A call to \tt peek() \rm returns the object without advancing the
+iterator's cursor, thus multiple calls to \tt peek() \rm without any
+intermediate function calls will all return the same value.
 
 \end{itemize} 
 
@@ -1265,11 +1276,12 @@ Currently, the Hog compiler is implemented as a translator into the Java
 programming language. The first phase of Hog compilation uses the JFlex as its
 lexical analyzer, which is designed to work with the Look-Ahead Left-to-Right
 (LALR) parser generator CUP. The lexical analyzer creates lexemes, which are
-logically meaningful sequences, and for each lexeme the lexical analyzer sends to
-the LALR parser a token of the form \tt $<$token-name, attribute-value$>$\rm. The second
-phase of Hog compilation uses Java CUP to create a syntax tree, which is a
-tree-like intermediate representation of the source program, which depicts the
-grammatical structure of the Hog source program.
+logically meaningful sequences, and for each lexeme the lexical analyzer sends
+to the LALR parser a token of the form \tt $<$token-name,
+attribute-value$>$\rm. The second phase of Hog compilation uses Java CUP to
+create a syntax tree, which is a tree-like intermediate representation of the
+source program, which depicts the grammatical structure of the Hog source
+program.
 
 In the last phase of compilation, the Hog semantic analyzer generates Java source
 code, which is then compiled into byte code by the Java compiler. Then with the
@@ -1328,16 +1340,16 @@ cluster).
 \section{Exception Handling} % (fold)
 \label{sec:exception_handling}
 
-Similar to some other programming languages (such as Java and C++), Hog uses an exception model in
-which an exception is thrown and can be caught by a catch block. Code should be
-surrounded by a try block and then any exceptions occurring within the try block
-will subsequently be caught by the catch block. Each try block should be
-associated with at least one catch block. However, there can be multiple catch
-blocks to handle specific types of exceptions. In addition, an optional finally
-block can be added. The finally block will execute in all circumstances, whether
-or not an exception is thrown. The structure of exception handling should be
-similar to this, although there can be multiple catch blocks and the finally block
-is optional:
+Similar to some other programming languages (such as Java and C++), Hog uses an
+exception model in which an exception is thrown and can be caught by a catch
+block. Code should be surrounded by a try block and then any exceptions
+occurring within the try block will subsequently be caught by the catch block.
+Each try block should be associated with at least one catch block. However,
+there can be multiple catch blocks to handle specific types of exceptions. In
+addition, an optional finally block can be added. The finally block will
+execute in all circumstances, whether or not an exception is thrown. The
+structure of exception handling should be similar to this, although there can
+be multiple catch blocks and the finally block is optional:
 
 \begin{quotation}
 \tt try \{ \rm \\
@@ -1349,7 +1361,8 @@ is optional:
 \tt \indent \}
 \end{quotation}
 
-The current version of the language does not support the programmer throwing exceptions, only catching them.
+The current version of the language does not support the programmer throwing
+exceptions, only catching them.
 
 Because the proper behavior of a Hog program is dependent on resources outside of
 the language (i.e. the proper behavior of the user’s Hadoop software), there are
@@ -1374,20 +1387,28 @@ following are Hog compile-­time exceptions:
   
   \item[] \tt FunctionNotDefinedError \rm
   
-   Thrown when a program attempts to carry out an operations of the sort \tt variable.builtInFunction() \rm where \tt variable \rm is some variable and \tt builtInFunction \rm is a built-in function, and either \tt builtInFunction \rm cannot operate on variables of that type or \tt builtInFunction \rm  is not defined as a built-in function.
+   Thrown when a program attempts to carry out an operations of the sort \tt
+variable.builtInFunction() \rm where \tt variable \rm is some variable and \tt
+builtInFunction \rm is a built-in function, and either \tt builtInFunction \rm
+cannot operate on variables of that type or \tt builtInFunction \rm  is not
+defined as a built-in function.
   
   \item[] \tt InvalidFunctionArgumentsError \rm
    
-    Thrown when a program calls a function with the wrong number or type of parameters. For example, if we define the function \tt max(int a, int b) \rm, this error will be thrown if the program contains a construct like \tt max(2,3,4) \rm or \tt max("hello", 3) \rm.
+    Thrown when a program calls a function with the wrong number or type of
+parameters. For example, if we define the function \tt max(int a, int b) \rm,
+this error will be thrown if the program contains a construct like \tt
+max(2,3,4) \rm or \tt max("hello", 3) \rm.
 
    \item[] \tt TypeMismatchError \rm  
 
-   Thrown when a program attempts to carry out an operation on a variable of the wrong type (like adding a \tt text \rm and an
-   \tt int \rm together).
+   Thrown when a program attempts to carry out an operation on a variable of
+the wrong type (like adding a \tt text \rm and an \tt int \rm together).
   
    \item[] \tt UnreachableCodeError \rm
 
-   Thrown when code is included in a part of a program that will never be executed (e.g. code after a return statement that can never be reached).
+   Thrown when code is included in a part of a program that will never be
+executed (e.g. code after a return statement that can never be reached).
 
 \end{itemize}
 
@@ -1396,9 +1417,11 @@ following are Hog compile-­time exceptions:
 \subsection{Internal Run-time Exceptions} % (fold)
 \label{sub:internal_run_time_exceptions}
 
-Internal run­time exceptions include such problems as I/O exceptions (i.e. a specified file is not found on either the user’s
-local file system or the associated Hadoop file system), type mismatch exceptions (i.e. a program attempts to place two
-elements of different types into the same list) and parsing exceptions. The following are Hog internal run-­time exceptions:
+Internal run­time exceptions include such problems as I/O exceptions (i.e. a
+specified file is not found on either the user’s local file system or the
+associated Hadoop file system), type mismatch exceptions (i.e. a program
+attempts to place two elements of different types into the same list) and
+parsing exceptions. The following are Hog internal run-­time exceptions:
 
 
 \begin{itemize}
@@ -1408,7 +1431,8 @@ elements of different types into the same list) and parsing exceptions. The foll
   
   \item[] \tt FileLoadException \rm
   
-  Thrown when an error occurs while Hog is attempting to read a file (e.g. the file is deleted while reading).
+  Thrown when an error occurs while Hog is attempting to read a file (e.g. the
+file is deleted while reading).
   
   \item[] \tt ArrayOutOfBoundsException \rm
   
@@ -1416,17 +1440,19 @@ elements of different types into the same list) and parsing exceptions. The foll
   
   \item[] \tt IncorrectArgumentException \rm
   
-  Thrown when a derived-type object is instantiated with invalid parameters, or a function is called with invalid parameters.
+  Thrown when a derived-type object is instantiated with invalid parameters, or
+a function is called with invalid parameters.
   
   \item[] \tt TypeMismatchException \rm
   
-  Thrown when a program attempts to carry out an operation on a variable of the wrong type (like adding a \tt text \rm and an
-  \tt int \rm together).
+  Thrown when a program attempts to carry out an operation on a variable of the
+wrong type (like adding a \tt text \rm and an \tt int \rm together).
     
   \item[] \tt NullReferenceException \rm
   
-  Thrown whenever the value of a variable cannot be \tt null \rm (e.g. in \tt myList.get(i)\rm, if \tt i \rm is \tt null\rm,
-  the operation with throw a \tt NullPointerException\rm).
+  Thrown whenever the value of a variable cannot be \tt null \rm (e.g. in \tt
+myList.get(i)\rm, if \tt i \rm is \tt null\rm, the operation with throw a \tt
+NullPointerException\rm).
   
   \item[] \tt ArithmeticException \rm
   

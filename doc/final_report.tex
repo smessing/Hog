@@ -20,23 +20,23 @@
 \label{sec:elephant}
 
 As data sets have grown in size, so have the complexities of dealing with them.
-For instance, consider wanting to generate counts for all the words in
-\emph{War and Peace} by means of distributed computation. Writing in Java and
-using Hadoop MapReduce (TM),\footnote{\texttt{http://hadoop.apache.org/}} a
-simple solution takes over 50 lines of code, as the programmer is required to
-specify intermediate objects not directly related to the desired computation,
-but required simply to get Hadoop to function properly. Our goal is to produce
-a language that can express the same computation in about 10 lines.
+For instance, consider wanting to generate counts for all the words in War and
+Peace by means of distributed computation. Writing in Java and using Hadoop
+MapReduce (TM),\footnote{\texttt{http://hadoop.apache.org/}} a simple solution
+takes over 50 lines of code, as the programmer is required to specify
+intermediate objects not directly related to the desired computation, but
+required simply to get Hadoop to function properly. Our goal is to produce a
+language that can express the same computation in about 10 lines.
 
+Hog is a \textbf{data-oriented}, high-level, scripting language for creating
+MapReduce\cite{dean:2004} programs. Used alongside Hadoop, Hog enables users to
+efficiently carry out \textbf{distributed} computation. Hadoop MapReduce is an
+open-source framework for carrying out distributed computation, which is
+especially useful for working with large data sets. While it is possible to
+write code to carry out computations with Hadoop directly, the framework
+requires users to specify low-level details that are often irrelevant to their
+desired goal. 
 
-Hog is a \textbf{data-oriented}, \textbf{high-level}, scripting language for
-creating MapReduce\cite{dean:2004} programs. Used alongside Hadoop, Hog enables
-users to efficiently carry out \textbf{distributed} computation. Hadoop
-MapReduce is an open-source framework for carrying out distributed computation,
-which is especially useful for working with large data sets. While it is
-possible to write code to carry out computations with Hadoop directly, the
-framework requires users to specify low-level details that are often irrelevant
-to their desired goal.
 
 By building a scripting language on top of Hadoop, we aim to simplify the
 process. Built around a \textbf{simple} and highly \textbf{readable} syntax,
@@ -44,7 +44,7 @@ Hog will let users focus on \emph{what} computations they want done, and not
 \emph{how} they want to do them.  Hog takes care of all the low-level details
 required to run computations on Hadoop’s distributed network. All a user needs
 to do is tell Hog the location of their valid Hadoop instance, and Hog will do
-the rest. 
+the rest.
 
 \subsection{Data-Oriented}
 \label{sub:data-oriented}
@@ -68,6 +68,7 @@ distributes data to machines and tries to collocate chunks of data with the
 nodes that need it, therefore maximizing data locality and giving good
 performance.
 
+
 \subsection{Simple}
 \label{sub:simple}
 
@@ -81,6 +82,123 @@ to enhance the expressive potential of their programs, without sacrificing
 power. All that Hog requires a user to do is specify the location of their
 valid Hadoop instance, write a map function to process a segment of data, write
 a reduce function to combine the results, and Hog takes care of the rest.
+
+
+\subsection{Distributed}
+\label{sub:distributed}
+
+As datasets have exploded in size, programmers have had to deal with the
+challenge of writing programs for distributed systems that process data in a
+time-efficient manner. One of the benefits of using Hadoop is that it allows
+programmers to write parallel programs without needing to understand the
+intricacies of how the distributed computations are implemented. This benefit
+is one of the key reasons for the widespread adoption of Hadoop. Since Hog
+operates as a layer on top of Hadoop, and abstracts away even more of the
+implementation details of the distributed system, we remain committed to the
+ideal of a fully distributed language that is easy for programmers to use. Once
+again, this is paramount to Hog’s focus on what computations are being done and
+not how they are being done.
+
+\subsection{Readable}
+\label{sub:readable}
+
+The syntax of Hog is designed to make programs as readable as possible. Hog is
+specifically developed to make simple calculations easy to carry out. While Hog
+may not be the best solution for highly sophisticated analysis, an individual
+desiring to learn more about Hadoop and the MapReduce technique will find Hog
+an inviting environment to get started. Hog’s syntax is simple enough that
+someone with only a small amount of programming experience should have no
+trouble understanding the basics of what is happening in a sample Hog program.
+Our goal is to let users think about their data first and foremost, and not on
+using or learning an esoteric syntax. Where possible, our syntax decisions
+prefer simplicity over complexity.
+
+\subsection{A Sample Program}
+\label{sub:sample}
+
+\begin{verbatim}
+1  @Map (int lineNum, text line) -> (text, int) {
+2    # for every word on this line, emit that word and the number 1
+3    foreach text word in line.tokenize(" ") {
+4       emit(word, 1); } 
+5  }
+
+6  @Reduce (text word, iter<int> values) -> (text, int) {
+7    # initialize count to zero
+8    int count = 0;
+9    while( values.hasNext() ) {
+10     # for every instance of '1' for this word, add to count.
+11     count = count + values.next(); }
+12   # emit the count for this particular word
+13   emit(word, count);
+14 }
+
+15 @Main {
+16   # call map reduce
+17   mapReduce();
+18 }
+\end{verbatim}
+
+This program generates a count of the number of instances of every word in a
+file. Here is the first 50 lines of output generated by \tt WordCount.hog \rm
+called on the full text of \emph{War and
+Peace}\footnote{\texttt{http://www.gutenberg.org/ebooks/2600/} was used as the
+input text}:
+
+\begin{verbatim}
+31784	the
+21049	and
+16389	to
+14895	of
+10056	a
+8314	in
+7847	he
+7645	his
+7425	that
+7255	was
+5540	with
+5316	had
+4492	not
+4209	at
+4162	her
+4009	I
+3757	it
+3744	as
+3495	on
+3488	him
+3308	for
+3134	is
+2888	but
+2762	The
+2718	you
+2636	said
+2620	she
+2526	from
+2390	all
+2387	were
+2354	be
+2333	by
+2031	who
+2006	which
+1910	have
+1812	He
+1777	one
+1727	they
+1693	this
+1645	what
+1566	or
+1561	an
+1554	Prince
+1550	so
+1541	Pierre
+1466	been
+1439	did
+1424	up
+1409	their
+1342	woul
+\end{verbatim}
+
+
 
 \chapter{Tutorial}
 \label{chap:tutor}
@@ -99,7 +217,7 @@ and Peace} by means of distributed computation. Writing in Java and using Hadoop
 MapReduce (TM), a simple solution takes over 50 lines of code, as the programmer
 is required to specify intermediate objects not directly related to the desired
 computation, but required simply to get Hadoop to function properly. Our language 
-can express the same computation in 15 lines.
+can express the same computation in about 15 lines.
 
 \subsection{The MapReduce Framework}
 \label{sub:mapreduce}
@@ -523,7 +641,6 @@ by the programmer:
 \begin{multicols}{4}
 \tt
 \begin{itemize}
-git 
   \item[] add
   \item[] and
   \item[] bool
@@ -1321,17 +1438,20 @@ in any of the \tt text \rm objects in the returned list.
 \section{System Configuration} % (fold)
 \label{sec:system_configuration}
 
-The user must set configuration variables in the \tt makefile \rm build script to
-allow the Hog compiler to use the java compiler on the user's computer. The Hog
-compiler only requires the user to have a working installation of Java on their computer,
-which generates the job jar, which can be run on the Amazon ElasticMapReduce cloud.
-
+The user must set configuration variables in the \tt hog.rb \rm build script to
+allow the Hog compiler to link the Hog program with the necessary jar files to run
+the MapReduce job. The user must also specify the job name within the Hog source
+file.
 
 \begin{itemize}
 
+\item[] \textbf{HADOOP\_HOME} absolute path of hadoop folder
+\item[] \textbf{HADOOP\_VERSION} hadoop version number
 \item[] \textbf{JAVA\_HOME} absolute path of java executable
 \item[] \textbf{JAVAC\_HOME} absolute path of javac executable
-
+\item[] \textbf{HOST} where to job is rsynced to and run
+\item[] \textbf{LOCALMEM} how much memory for java to use when running in local mode 
+\item[] \textbf{REDUCERS} the number of reduce tasks to run, set to zero for map only jobs
 
 \end{itemize}
 
@@ -2265,6 +2385,7 @@ command "make compile" which will compile the Hog source program, which will
 create a Hog.java file, which will then be compiled with the Java compiler with the appropriate
 Hadoop libraries being packaged with the job jar which is generated at the end compilation.
 
+\begin{verbatim}
 
 ################################################################
 ################################################################
@@ -2296,7 +2417,7 @@ JAVAC =javac
 HADOOP_HOME=/Users/ktran/hadoop-1.0.1/
 HADOOP_VERSION=1.0.1
 JOBNAME=Hog
-CLASSPATH = -classpath compiler/hadoop-core-$(HADOOP_VERSION).jar
+CLASSPATH = -classpath $(HADOOP_HOME)hadoop-core-$(HADOOP_VERSION).jar
 JAR=jar
 JARFLAGS=-cf
 HADOOP=$(HADOOP_HOME)bin/hadoop
@@ -2338,7 +2459,7 @@ clean:
 	$(HADOOP) $(FS) $(RMR) $(DFSOUTPUTDIRECTORY)
 
 
-
+\end{verbatim}
 
 
 \item Describe the run-time environment for the compiler.
@@ -2489,6 +2610,328 @@ Things we'd like to see more of:
 \appendix
 
 \chapter{Code Listing}
+
+\begin{itemize}
+\item \texttt{back\_end} package
+\begin{enumerate}
+\item \texttt{CodeGenerationVisitor.java}
+\begin{quotation}
+\noindent An AST-walker that translates Hog programs into Java programs. Written by Samuel Messing.
+\end{quotation}
+\item \texttt{ErrorCheckingVisitor.java}
+\begin{quotation}
+\noindent An AST-walker that performs semantic analysis. Written by Paul Tylkin.
+\end{quotation}
+\item \texttt{SymbolTableVisitor.java}
+\begin{quotation}
+\noindent An AST-walker that populates symbol tables. Written by Benjamin Rapaport and Jason Halpern.
+\end{quotation}
+\item \texttt{TypeCheckingVisitor.java}
+\begin{quotation}
+\noindent An AST-walker that performs basic type checking and type inference. Written by Jason Halpern and Benjamin Rapaport. 
+\end{quotation}
+\item \texttt{Visitor.java}
+\begin{quotation}
+\noindent The abstract class that all visitors inherit, specifies the behavior of the Visitor design pattern. Written by Jason Halpern.
+\end{quotation}
+\end{enumerate} % end back_end package
+\item \texttt{front\_end} package
+\begin{enumerate}
+\item \texttt{ConsoleLexer.java}
+\begin{quotation}
+\noindent A console front-end to the Lexer class for dynamically testing the Lexer,
+ and development. Not intended to be used/accessible by/to users. Written by Samuel Messing
+\end{quotation}
+\item \texttt{Hog.java}
+\begin{quotation}
+\noindent Driver program for the compiler, handles generating the parser, paring the input file, and performing the tree walks. Written by Samuel Messing and Kurry Tran. 
+\end{quotation}
+\item \texttt{Lexer.java}
+\begin{quotation}
+\noindent Auto-generated file.
+\end{quotation}
+\item \texttt{Parser.java}
+\begin{quotation}
+\noindent Auto-generated file. 
+\end{quotation}
+\item \texttt{sym.java}
+\begin{quotation}
+\noindent Auto-generated file. 
+\end{quotation}
+\item \texttt{Lexer.jflex}
+\begin{quotation}
+\noindent Lexer specification, written by Samuel Messing. 
+\end{quotation}
+\item \texttt{Parser.cup} 
+\begin{quotation}
+\noindent Parser specification, written by Samuel Messing, Benjamin Rapaport and Paul Tylkin. 
+\end{quotation}
+\end{enumerate} % end front_end package
+\item \texttt{test} package
+\begin{enumerate}
+\item \texttt{AbstractSyntaxTreeTester.java}
+\begin{quotation}
+\noindent Tests for the functionality provided by the AbstractSyntaxTree class. Written by Samuel Messing and Jason Halpern. 
+\end{quotation}
+\item \texttt{CodeGeneratingTester.java}
+\begin{quotation}
+\noindent Tests functionality of the CodeGeneratingVisitor. Written by Jason Halpern. 
+\end{quotation}
+\item \texttt{LexerTester.java}
+\begin{quotation}
+\noindent Tests Lexer's performance on decomposing different inputs into the correct
+ sequence of tokens. Written by Jason Halpern and Samuel Messing. 
+\end{quotation}
+\item \texttt{NodeTester.java}
+\begin{quotation}
+\noindent Tests for the functionality provided by the Node class. Written by Samuel Messing and Kurry Tran. 
+\end{quotation}
+\item \texttt{Parser.java}
+\begin{quotation}
+\noindent Tests basic functionality of Parser.java. Written by Samuel Messing.
+\end{quotation}
+\item \texttt{SymbolTableTester.java}
+\begin{quotation}
+\noindent Tests functionality of the Symbol Table classes. Written by Jason Halpern. 
+\end{quotation}
+\item \texttt{TypeCheckingTester.java}
+\begin{quotation}
+\noindent Tests the TypeCheckingVisitor. Written by Jason Halpern. 
+\end{quotation}
+\item \texttt{TypesTester.java}
+\begin{quotation}
+\noindent A method to test the convenience class for the Types convenience class. Written by Samuel Messing and Jason Halpern. 
+\end{quotation}
+\end{enumerate} % end test package
+\item \texttt{util.ast} package
+\begin{enumerate}
+\item \texttt{AbstractSyntaxTree.java}
+\begin{quotation}
+\noindent Class for specifying common behavior for ASTs. Written by Samuel Messing. 
+\end{quotation}
+\item \texttt{TreeTraversalBuilder.java}
+\begin{quotation}
+\noindent Constructs an Iterator<{@link Node}> over a given AST for pre-order and post-order traversal. Written by Samuel Messing. 
+\end{quotation}
+\end{enumerate} % end util.ast package
+\item \texttt{util.ast.node} package
+\begin{enumerate}
+\item \texttt{ArgumentsNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{BiOpNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{CatchesNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ConstantNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{DerivedTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ElseIfStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ElseStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ExceptionTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{FunctionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{GuardingStatmenetNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{IdNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{IfElseStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{IterationStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{JumpStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{MockExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{MockNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{Node.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ParametersNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{PostfixExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{PrimaryExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{PrimitiveTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+
+\item \texttt{ProgramNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{RelationalExpressionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{ReservedWordTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SectionNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SectionTypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SelectionStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{StatementListNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{StatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{SwitchStatementNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{TypeNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item \texttt{UnOpNode.java}
+\begin{quotation}
+\noindent 
+\end{quotation}
+\end{enumerate} % end util.ast.node
+\item \texttt{util.error} package
+\begin{enumerate}
+\item \texttt{FunctionNotDefinedError.java}
+\begin{quotation}
+\noindent Written by Benjamin Rapaport and Jason Halpern. 
+\end{quotation}
+\item \texttt{InvalidFunctionArgumentError.java}
+\begin{quotation}
+\noindent Written by Benjamin Rapaport and Jason Halpern. 
+\end{quotation}
+\item \texttt{MissingReturnError.java}
+\begin{quotation}
+\noindent Written by Paul Tylkin. 
+\end{quotation}
+\item \texttt{TypeMismatchError.java}
+\begin{quotation}
+\noindent Written by Samuel Messing. 
+\end{quotation}
+\item \texttt{UnreachableCodeError.java}
+\begin{quotation}
+\noindent Written by Paul Tylkin. 
+\end{quotation}
+\item \texttt{VariableRedefinedError.java}
+\begin{quotation}
+\noindent Written by Benjamin Rapaport and Jason Halpern. 
+\end{quotation}
+\item \texttt{VariableUndeclaredError.java}
+\begin{quotation}
+\noindent Written by Benjamin Rapaport and Jason Halpern. 
+\end{quotation}
+\end{enumerate} % end util.error
+\item \texttt{util.logging} package
+\begin{enumerate}
+\item \texttt{BreifLogFormatter.java}
+\begin{quotation}
+\noindent Specifies default behavior of the logger. Written by Benjamin Rapaport. 
+\end{quotation}
+\end{enumerate} % end util.logging
+\item \texttt{util.symbol\_table} package
+\begin{enumerate}
+\item \texttt{FunctionSymbol.java}
+\begin{quotation}
+\noindent Used by the Symbol Table class, represents a Function. Written by Jason Halpern and Benjamin Rapaport. 
+\end{quotation}
+\item \texttt{Method.java}
+\begin{quotation}
+\noindent \emph{Deprecated}. Old class used by Symbol Table. Written by Jason Halpern and Kurry Tran.
+\end{quotation}
+\item \texttt{ReservedSymTable.java}
+\begin{quotation}
+\noindent \emph{Deprecated}. Old class used by Symbol Table. Written by Jason Halpern.
+\end{quotation}
+\item \texttt{ReservedWordSymbol.java}
+\begin{quotation}
+\noindent Represents reserved words in the Symbol Table. Written by Jason Halpern and Benjamin Rapaport. 
+\end{quotation}
+\item \texttt{Symbol.java}
+\begin{quotation}
+\noindent Represents a symbol in the Symbol Table. Written by Jason Halpern and Benjamin Rapaport. 
+\end{quotation}
+\item \texttt{SymbolTable.java}
+\begin{quotation}
+\noindent The symbol table class, used to create the Symbol Table. Written by Jason Halpern, Benjamin Rapaport, Kurry Tran and Paul Tylkin. 
+\end{quotation}
+\item \texttt{VariableSymbol.java}
+\begin{quotation}
+\noindent Represents a variable in the Symbol Table. Written by Jason Halpern and Benjamin Rapaport. 
+\end{quotation}
+\item \texttt{Word.java}
+\begin{quotation}
+\noindent \emph{Deprecated} Old class used by Symbol Table. Written by Jason Halpern. 
+\end{quotation}
+\end{enumerate} % end util.symbol_table
+\item \texttt{util.type} package
+\begin{enumerate}
+\item \texttt{Types.java}
+\begin{quotation}
+\noindent A convenience class for defining and manipulating internal type
+representations. Written by Samuel Messing, Benjamin Rapaport, and Jason Halpern.
+\end{quotation}
+\end{enumerate}
+\end{itemize}  % end total
 
 Include a listing of the complete source code with identification of who wrote
 which module of the compiler. This listing does not have to be included in the
