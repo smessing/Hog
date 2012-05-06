@@ -15,7 +15,7 @@
 \normalsize
 \newpage
 
-\section*{Introduction}
+\section{Introduction}
 \label{sec:introduction}
 
 Hog gives users with some programming experience a gentle introduction to
@@ -27,7 +27,7 @@ pairs by key, and outputs a final set of key-value pairs. This model of computat
 has been widely adopted for distributing large computations that might be
 considered ``embarassingly parallelizable.''
 
-\subsection*{Thinking in MapReduce}
+\subsection{Thinking in MapReduce}
 \label{sec:mapreduce_intro}
 For a programmer new to the idea of distributed computation, MapReduce may appear to offer almost limitless possibilities. Part of the challenge of learning to use a MapReduce framework is to clearly understand its limitations. Intuitively, MapReduce can solve a problem only if there is an explicit parallelizable component. For example, finding the maximum value in a large unsorted list of numbers, computing a Fast Fourier Transform, and counting the occurrence of words in a large amount of text are problems with an easy-to-see parallelizable component. Here are the basic steps that can guide the programmer in identifying problems that are candidates for solution via MapReduce:
 \begin{enumerate}
@@ -39,7 +39,7 @@ For a programmer new to the idea of distributed computation, MapReduce may appea
 
 Once the map (breaking up the problem into chunks) and the reduce (recombining the solutions of the subproblems) phases have been clearly understood, one is ready to write a Hog program.
 
-\subsection*{Program Structure} % (fold)
+\subsection{Program Structure} % (fold)
 \label{sub:program_structure}
 Every Hog program has four sections, defined in the following order:
 \begin{description}
@@ -49,7 +49,7 @@ Every Hog program has four sections, defined in the following order:
 \item [\tt @Main\rm:] The entry point for the program which initiates the MapReduce routine and can perform other local (non-distributed) computations.
 \end{description}
 
-\section*{Word Count} 
+\section{Word Count} 
 \label{word_count} 
 
 Let's assume we have thousands of large text files, and we would like to get a
@@ -58,7 +58,7 @@ a cluster of computers to help us complete this task. The following short Hog
 program will produce a single output file with each word and its associated count
 on a separate line.
 
-\subsection*{Word Count Code}
+\subsection{Word Count Code}
 \begin{verbatim}
 
   @Map (int lineNum, text line) -> (text, int) {
@@ -86,7 +86,7 @@ on a separate line.
       
 \end{verbatim}
 
-\subsection*{Running the Word Count Code} % (fold)
+\subsection{Running the Word Count Code} % (fold)
 \label{sub:running_the_word_count_code}
 
 To run the program \tt WordCount.hog\rm, the user enters the input file (or input folder if there are several input files) and output folder in the Makefile and types the following into the
@@ -96,7 +96,7 @@ terminal: \\
 
 % subsection running_the_word_count_code (end)
 
-\subsection*{Word Count Explanation}
+\subsection{Word Count Explanation}
 
 The general idea of this program is that we want to read every line of text from
 every file, and then, grouping by word, output the total number of times we
@@ -104,13 +104,13 @@ encountered each word. Since we want to group by word, we will use the words
 themselves as the intermediate key output by the \tt @Map \rm function. This will
 allow us to group each word with its values and to send the key, value pairs with that word as the key to the \tt @Reduce \rm function.
 
-\subsubsection*{\tt @Functions \rm}
+\subsubsection{\tt @Functions \rm}
 
 The first thing we notice is that this program does not contain an \tt @Functions
 \rm section. This section is optional, and only needs to be included if the user
 wants to write his or her own subroutines to be used elsewhere in the program.
 
-\subsubsection*{\tt @Map \rm}
+\subsubsection{\tt @Map \rm}
 
 This section's job is to read in a line of text from a file, and simply output each
 word as the key with a value that indicates we have just encountered it. We will
@@ -146,7 +146,7 @@ to the \tt @Reduce \rm section. In this case, since we want to group by the word
 itself, we emit the word and the value \tt 1\rm, which we will later use to
 calculate the totals in the \tt @Reduce \rm section.
 
-\subsubsection*{\tt @Reduce \rm}
+\subsubsection{\tt @Reduce \rm}
 
 
 In this section, for each word (the key) emitted by the \tt @Map \rm section, we
@@ -185,13 +185,13 @@ as our final output. The framework then takes care of writing these emitted
 key-value pairs to an output file, the name of which is specified by the user when
 the program is run (see the section above, \textbf{Running the Word Count Code}). In this example, we are emitting the word count as the key so that the final result is sorted by the count. If the word was used as the key, the final output would be in alphabetical order. It is also worth noting that even if two words have the same count (and thus the same key), this does not raise any problems, since duplicate keys are only combined in between the \tt @Map \rm and \tt @Reduce \rm phases. Any individual key-value pair emitted in the \tt @Reduce \rm phase will be in the final output.
 
-\subsubsection*{@Main}
+\subsubsection{@Main}
 
 In this section, we simply call the built-in function \tt mapReduce()\rm, which
 initiates the MapReduce program as specified by the previous sections and the
 command line arguments.
 
-\subsubsection*{Sample Output}
+\subsubsection{Sample Output}
 
 Below are the first fifty lines of output generated by \tt WordCount.hog \rm when run
 on a single file containing the English text of \emph{War and Peace}:
@@ -218,7 +218,7 @@ on a single file containing the English text of \emph{War and Peace}:
   ....
 \end{verbatim}
 
-\subsection*{Comparison with Java Hadoop Program}
+\subsection{Comparison with Java Hadoop Program}
 
 One of the main goals of Hog is to abstract away the lower-level details of Hadoop. How useful this is to a programmer just learning how to MapReduce will become readily apparent when one considers an equivalent Hog and a Java/Hadoop program side-by-side.
 
@@ -296,7 +296,7 @@ public class Hog {
 
 In addition to the length, the Java program contains many constructs that are intimidating to the novice MapReducer, and requires a substantial learning curve to understand and remember (missing even one of the statements in the above program or putting them in the wrong order may make the program not executable). In stark constrast to this, we expect that users will be able to quickly learn and use Hog to write programs, enjoying its substantially more intuitive grammar and structure.
 
-\section*{MergeSort and User-Defined Functions} \label{merge_sort} 
+\section{MergeSort and User-Defined Functions} \label{merge_sort} 
 
 In this example, we will sort numbers in text files using a distributed version of
 the algorithm MergeSort. We will assume that our text files
@@ -304,7 +304,7 @@ contain lines of integers, delimited by spaces. The idea is for each call to map
 sort a small list of numbers on a single line of text, and for reduce to merge all
 of the sorted lists it receives. The amazing thing about the Hadoop framework (paired with the simplicity and power of Hog), is how simple this program is. Although not necessary for sorting, we also introduce a user-defined function, \tt factorial\rm, and show how Hog can be used to perform simple non-MapReduce tasks.
 
-\subsection*{MergeSort Code}
+\subsection{MergeSort Code}
 \begin{verbatim}
   @Functions {
       int factorial (int n){
@@ -332,25 +332,25 @@ of the sorted lists it receives. The amazing thing about the Hadoop framework (p
 
 \end{verbatim}
 
-\subsubsection*{\tt @Functions \rm}
+\subsubsection{\tt @Functions \rm}
 
 This is not a necessary part of the MergeSort program, but has been added to demonstrate how the programmer may add user-defined function.
 In this section, we define a function called \tt factorial\rm, which takes a (positive) \tt int\rm, 
 and returns an \tt int \rm representing the factorial of that value. The way to define a function should be familiar to programmers
 comfortable with C or Java. In addition, this example shows that Hog allows for recursive function definition.
 
-\subsubsection*{\tt @Map \rm} 
+\subsubsection{\tt @Map \rm} 
 
 The map function reads in a line of space-delimited integers as \tt text\rm, and
 outputs ordered pairs of the integer paired with itself (required because \tt emit\rm must have two arguments). This is a common trick employed in Hog
 when we only care about one value instead of two (i.e. a key-value pair).
 
-\subsubsection*{\tt @Reduce \rm}
+\subsubsection{\tt @Reduce \rm}
 
 The reduce function receives an iterator over \emph{all} of the key-value pairs from
 the map function, and merges them together, and emits them in sorted order. This nice side effect of the Hadoop reducer allows MergeSort to be almost completely trivial to write and execute in Hog.
 
-\subsubsection*{\tt @Main \rm}
+\subsubsection{\tt @Main \rm}
 
 In this section, we demonstrate that arbitrary code can be executed locally (i.e.
 not on the cluster) in the \tt @Main \rm block. While the \tt @Main \rm must always
@@ -358,7 +358,7 @@ call the \tt mapReduce() \rm function to begin the map reduce program, it can al
 perform locally any code that could be written in a function. In this example, we
 use the built-in function \tt print() \rm to compute and print \tt factorial(10).\rm
 
-\subsubsection*{Sample Input and Output}
+\subsubsection{Sample Input and Output}
 
 Sample input file:
 
