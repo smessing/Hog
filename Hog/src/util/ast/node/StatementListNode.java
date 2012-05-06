@@ -7,7 +7,7 @@ import back_end.Visitor;
 /**
  * Represents the production for StatementList
  * 
- * @author ben
+ * @author Benjamin Rapaport
  *
  */
 public class StatementListNode extends Node {

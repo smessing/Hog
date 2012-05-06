@@ -11,7 +11,7 @@ import util.type.Types;
  * This class is only used as the TypeNode for reserved words with no types
  * in the symbol table. It's localType is Types.Flags.RESERVED_WORD
  * 
- * @author ben
+ * @author Benjamin Rapaport
  *
  */
 public class ReservedWordTypeNode extends TypeNode {

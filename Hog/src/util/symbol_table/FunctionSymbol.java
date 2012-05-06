@@ -7,6 +7,12 @@ import java.util.List;
 import util.ast.node.ParametersNode;
 import util.ast.node.TypeNode;
 
+/**
+ * 
+ * @author Jason Halpern
+ * @author Benjamin Rapaport
+ *
+ */
 public class FunctionSymbol extends Symbol {
 	
 	ParametersNode parametersNode;

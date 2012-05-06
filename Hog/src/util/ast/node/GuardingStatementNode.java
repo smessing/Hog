@@ -12,7 +12,7 @@ import back_end.Visitor;
  * TRY Block:b Catches:c
  * TRY Block:b Catches:c Finally:f
  * 
- * @author sam
+ * @author Samuel Messing
  *
  */
 public class GuardingStatementNode extends StatementNode {

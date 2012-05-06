@@ -20,7 +20,8 @@ import util.type.Types;
 /**
  * A method to test the convenience class for the Types convenience class.
  * 
- * @author sam, jason
+ * @author Samuel Messing
+ * @author Jason Halpern
  * 
  */
 public class TypesTester {

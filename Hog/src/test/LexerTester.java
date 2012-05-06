@@ -24,7 +24,7 @@ import java_cup.runtime.Symbol;
  * sequence of tokens.
  * 
  * @author Jason Halpern
- * @author Samuel MEssing
+ * @author Samuel Messing
  * 
  */
 public class LexerTester {

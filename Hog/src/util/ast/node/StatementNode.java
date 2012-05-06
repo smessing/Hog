@@ -8,7 +8,7 @@ import back_end.Visitor;
 /**
  * This node is used for the StatementList productions
  * 
- * @author ben
+ * @author Benjamin Rapaport
  *
  */
 public class StatementNode extends StatementListNode {

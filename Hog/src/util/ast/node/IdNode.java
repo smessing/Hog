@@ -9,8 +9,8 @@ import util.type.Types.Primitive;
 /**
  * A node representing the ID terminal in a parse tree.
  * 
- * @author sam
- * 
+ * @author Samuel Messing
+ * @author Benjamin Rapaport
  */
 public class IdNode extends ExpressionNode {
 

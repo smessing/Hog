@@ -31,6 +31,8 @@ import util.symbol_table.SymbolTable;
  * Primitive, Derived and Exception defined by this class.
  * 
  * @author Samuel Messing
+ * @author Benjamin Rapaport
+ * @author Jason Halpern
  * 
  */
 public class Types {
