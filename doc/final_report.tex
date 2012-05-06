@@ -414,12 +414,61 @@ To be written by Kurry.
 \chapter{Test Plan}
 \label{chap:test}
 
-To be written by Jason.
+As the tester and validator for Team Hog, I set out to create a systematic, automated set of tests at each step in the process of building a compiler. In order to make sure that each part of the design worked according to our specification, I tried to include tests that touched as many aspects of the language as possible. 
 
-\begin{itemize}
-\item Describe the test methodology used during development.
-\item Show programs used to test your translator.
-\end{itemize}
+I considered each of the testing phases to be a two-step process. First, create a basic set of tests with the assumption that the compiler worked as expected. These tests would touch a variety of areas of the language. These were our black box tests because they were built without the need to know what was going on under the hood. Then, the second step of the process was to attempt to break the language in as many ways as possible. These tests required an intimate knowledge of the nuances of the language and were therefore our white box tests. I tried to incorporate as many boundary cases as possible into these tests. At each phase of the testing, we uncovered various bugs and unimplemented aspects of the language that we fixed on subsequent iterations. I will briefly touch upon each phase of testing and the challenges and outcomes faced throughout the process. All of these tests are in the ‘test’ package in our source code. The tests were developed using Java’s JUnit development framework.
+
+Lexer Testing (\tt LexerTester.java\rm) – In order to test the lexical analysis of Hog programs, I created a large variety of short code snippets, passed them to the lexer and made sure that the correct tokens were being returned. For example, when the string ``a++`` was passed to the lexer, I created tests with \tt assertEquals()\rm to make sure that the first token returned was ID and the second token returned was INCR. I started with small tests that only touched two to five token streams and built towards strings that were thirty tokens long. This phase helped us discover certain tokens that were not being returned correctly and needed to be added/modified in the lexer, such as \tt TEXT\rm, \tt TEXT\_LITERAL\rm, and \tt UMINUS\rm. A sample lexer test can be seen at the end of this section.
+
+Parser Testing (\tt ParserTester.java\rm) – This was the most challenging aspect of the testing process. Due to the limitation of built-in parsing methods, it was difficult to create an automated set of tests for the parser that tested each part of the grammar. This phase relied more heavily on manual testing than I would have preferred. We were able to run a variety of programs through the parser and focused on breaking the parser and touching as many edge cases as possible. This allowed us to uncover the bugs and produce code that was not correctly parsed. We had to modify and expand the grammar from the results of this testing. The tests that we created for the parser were the motivation for creating such specific node subclasses that captured the different details associated with each production. In addition, information that we gathered in testing the parser also allowed us to create a clean design for the symbol table, which is constructed during parsing and the first walk of our AST.
+
+Abstract Syntax Tree Testing (\tt AbstractSyntaxTreeTester.java\rm)  – In order to test the AST, we created an automated set of tests that was based on the pre and post order traversals of the AST. First, we created an AST during the set up phase of the testing and made sure that we included a variety of node structures on the tree. Then, we did both a preorder walk of the tree and a postorder walk of the tree and made sure the traversals were occurring in the correct order.  
+
+Symbol Table Testing (\tt SymbolTableTester.java\rm) – I found when I reached this phase of creating tests that there were certain details of the node classes that I needed to gain a better understanding of in order to write tests. For this reason, I worked closely with Ben in designing and implementing the Symbol Table, Symbol Table Visitor and Type Checking Visitor. In order to test the construction of the Symbol Table, we created several sample programs, created the Symbol Table from these programs and analyzed the symbol table to make sure the information was being correctly captured. In addition, we also made sure reserved words and functions were in the reserved symbol table at the root of the Symbol Table structure. There were two key issues related to creating nested scopes that were uncovered during testing and an important issue related to adding function parameters and argument lists to the symbol table. This phase also focused on making sure the correct exceptions were being thrown – i.e. VariableRedefinedException, VariableUndeclaredException, etc.
+
+Type Checking Testing (\tt TypesTester.java\rm and \tt TypeCheckingTester.java\rm) – During this walk of the AST, we did type checking and decorated the tree with the correct types. I created many of the tests for this part of the design as Ben and I implemented functionality in the type check walk. The first part of type checking testing was to make sure the functions that we wrote around type compatibility were operating correctly. For example, we had to make sure if we visit a BiOpNode with the plus operator that the operands are both text (concatenation) or numbers (addition). Once the tests proved that these functions were all valid, we moved to implementing tests on the walk of an actual AST to make sure type decorating was occurring according to our rules. This part of the testing uncovered the fact that our IdNodes were not being decorated at all during our initial walk, so we added the functionality to the TypeCheckingVisitor to handle this.  
+
+Code Generation Testing (\tt CodeGeneratingTester.java\rm) – The goal for the code generation tests was to determine whether or not our programs were being correctly mapped to Hadoop programs written in Java. These tests focused on using the code generating visitor walk of the tree to make sure that the structure, meaning and types of our Hog programs were being captured during the transformation to Java. Besides writing tests, this step of the testing involved actually running the Hadoop programs on our local machines and on Amazon Elastic MapReduce to see if the programs would run without errors and if the results in the output files were in line with what we expected.
+
+In order to prepare us for testing, I set us up on Amazon Web Services to run our programs on Amazon’s Elastic MapReduce platform. We upload the jar of our compiled program and the input files to Amazon’s S3 storage platform, then we launch the Elastic MapReduce job on a small cluster with 2 instances. The output files are stored in S3 after the processing has successfully completed. The instructions for running a Hog program on AWS are detailed in the report.
+
+For several aspects of our implementation, we focused on a pair approach to programming and to testing. Since Sam handled a lot of the implementation regarding lexical analysis and parsing, he also worked with me to create additional tests for these phases to make sure we captured everything. In addition, he also added type tests for some additional type functions that he wrote. Kurry created some tests for the node structure since he also worked on creating ASTs. In addition, since I wanted to really understand the node structure, symbol table and visitor pattern, I worked together with Ben in designing and implementing the symbol table, designing the visitor pattern for Hog and implementing the Type Checking walk. Working on these aspects of the project enabled me to write better tests since I had a deeper understanding of these classes. I also think that writing tests helped Kurry and Sam better understand the aspects of the project that they were working on. 
+
+One of the main challenges during testing was capturing the breadth and depth of the Hog language in all of the tests. Testing, in conjunction with development, was an iterative process that required us to add and modify the testing suites as functionality was added to and removed from the language specification. As the tester and validator for this project, I believe I have developed the skills to more rigorously test software. More importantly, I learned a lot about the principles related to strong software design and software engineering during the entire process. 
+
+Sample Test From LexerTester.java: 
+
+\begin{verbatim}
+/**
+* Tests for correct parsing of the postfix increment operator
+* 
+* Specifically, ensures that Lexer produces a token stream of ID * INCR 
+*     for strings like "a++"
+* 
+* @throws IOException
+*/
+	@Test
+	public void incrementSymbolTest() throws IOException {
+
+		String text = "a++";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+"It should produce 2 tokens for the string '" + text + "'", 2, tokenList.size());
+assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+assertEquals("The second token should be a INCR", 
+               sym.INCR, tokenList.get(1).intValue());
+	}
+\end{verbatim}
 
 \chapter{Conclusions}
 \label{chap:concl}
