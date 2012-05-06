@@ -20,23 +20,23 @@
 \label{sec:elephant}
 
 As data sets have grown in size, so have the complexities of dealing with them.
-For instance, consider wanting to generate counts for all the words in
-\emph{War and Peace} by means of distributed computation. Writing in Java and
-using Hadoop MapReduce (TM),\footnote{\texttt{http://hadoop.apache.org/}} a
-simple solution takes over 50 lines of code, as the programmer is required to
-specify intermediate objects not directly related to the desired computation,
-but required simply to get Hadoop to function properly. Our goal is to produce
-a language that can express the same computation in about 10 lines.
+For instance, consider wanting to generate counts for all the words in War and
+Peace by means of distributed computation. Writing in Java and using Hadoop
+MapReduce (TM),\footnote{\texttt{http://hadoop.apache.org/}} a simple solution
+takes over 50 lines of code, as the programmer is required to specify
+intermediate objects not directly related to the desired computation, but
+required simply to get Hadoop to function properly. Our goal is to produce a
+language that can express the same computation in about 10 lines.
 
+Hog is a \textbf{data-oriented}, high-level, scripting language for creating
+MapReduce\cite{dean:2004} programs. Used alongside Hadoop, Hog enables users to
+efficiently carry out \textbf{distributed} computation. Hadoop MapReduce is an
+open-source framework for carrying out distributed computation, which is
+especially useful for working with large data sets. While it is possible to
+write code to carry out computations with Hadoop directly, the framework
+requires users to specify low-level details that are often irrelevant to their
+desired goal. 
 
-Hog is a \textbf{data-oriented}, \textbf{high-level}, scripting language for
-creating MapReduce\cite{dean:2004} programs. Used alongside Hadoop, Hog enables
-users to efficiently carry out \textbf{distributed} computation. Hadoop
-MapReduce is an open-source framework for carrying out distributed computation,
-which is especially useful for working with large data sets. While it is
-possible to write code to carry out computations with Hadoop directly, the
-framework requires users to specify low-level details that are often irrelevant
-to their desired goal.
 
 By building a scripting language on top of Hadoop, we aim to simplify the
 process. Built around a \textbf{simple} and highly \textbf{readable} syntax,
@@ -44,7 +44,7 @@ Hog will let users focus on \emph{what} computations they want done, and not
 \emph{how} they want to do them.  Hog takes care of all the low-level details
 required to run computations on Hadoop’s distributed network. All a user needs
 to do is tell Hog the location of their valid Hadoop instance, and Hog will do
-the rest. 
+the rest.
 
 \subsection{Data-Oriented}
 \label{sub:data-oriented}
@@ -68,6 +68,7 @@ distributes data to machines and tries to collocate chunks of data with the
 nodes that need it, therefore maximizing data locality and giving good
 performance.
 
+
 \subsection{Simple}
 \label{sub:simple}
 
@@ -81,6 +82,123 @@ to enhance the expressive potential of their programs, without sacrificing
 power. All that Hog requires a user to do is specify the location of their
 valid Hadoop instance, write a map function to process a segment of data, write
 a reduce function to combine the results, and Hog takes care of the rest.
+
+
+\subsection{Distributed}
+\label{sub:distributed}
+
+As datasets have exploded in size, programmers have had to deal with the
+challenge of writing programs for distributed systems that process data in a
+time-efficient manner. One of the benefits of using Hadoop is that it allows
+programmers to write parallel programs without needing to understand the
+intricacies of how the distributed computations are implemented. This benefit
+is one of the key reasons for the widespread adoption of Hadoop. Since Hog
+operates as a layer on top of Hadoop, and abstracts away even more of the
+implementation details of the distributed system, we remain committed to the
+ideal of a fully distributed language that is easy for programmers to use. Once
+again, this is paramount to Hog’s focus on what computations are being done and
+not how they are being done.
+
+\subsection{Readable}
+\label{sub:readable}
+
+The syntax of Hog is designed to make programs as readable as possible. Hog is
+specifically developed to make simple calculations easy to carry out. While Hog
+may not be the best solution for highly sophisticated analysis, an individual
+desiring to learn more about Hadoop and the MapReduce technique will find Hog
+an inviting environment to get started. Hog’s syntax is simple enough that
+someone with only a small amount of programming experience should have no
+trouble understanding the basics of what is happening in a sample Hog program.
+Our goal is to let users think about their data first and foremost, and not on
+using or learning an esoteric syntax. Where possible, our syntax decisions
+prefer simplicity over complexity.
+
+\subsection{A Sample Program}
+\label{sub:sample}
+
+\begin{verbatim}
+1  @Map (int lineNum, text line) -> (text, int) {
+2    # for every word on this line, emit that word and the number 1
+3    foreach text word in line.tokenize(" ") {
+4       emit(word, 1); } 
+5  }
+
+6  @Reduce (text word, iter<int> values) -> (text, int) {
+7    # initialize count to zero
+8    int count = 0;
+9    while( values.hasNext() ) {
+10     # for every instance of '1' for this word, add to count.
+11     count = count + values.next(); }
+12   # emit the count for this particular word
+13   emit(word, count);
+14 }
+
+15 @Main {
+16   # call map reduce
+17   mapReduce();
+18 }
+\end{verbatim}
+
+This program generates a count of the number of instances of every word in a
+file. Here is the first 50 lines of output generated by \tt WordCount.hog \rm
+called on the full text of \emph{War and
+Peace}\footnote{\texttt{http://www.gutenberg.org/ebooks/2600/} was used as the
+input text}:
+
+\begin{verbatim}
+31784	the
+21049	and
+16389	to
+14895	of
+10056	a
+8314	in
+7847	he
+7645	his
+7425	that
+7255	was
+5540	with
+5316	had
+4492	not
+4209	at
+4162	her
+4009	I
+3757	it
+3744	as
+3495	on
+3488	him
+3308	for
+3134	is
+2888	but
+2762	The
+2718	you
+2636	said
+2620	she
+2526	from
+2390	all
+2387	were
+2354	be
+2333	by
+2031	who
+2006	which
+1910	have
+1812	He
+1777	one
+1727	they
+1693	this
+1645	what
+1566	or
+1561	an
+1554	Prince
+1550	so
+1541	Pierre
+1466	been
+1439	did
+1424	up
+1409	their
+1342	woul
+\end{verbatim}
+
+
 
 \chapter{Tutorial}
 \label{chap:tutor}
@@ -99,7 +217,7 @@ and Peace} by means of distributed computation. Writing in Java and using Hadoop
 MapReduce (TM), a simple solution takes over 50 lines of code, as the programmer
 is required to specify intermediate objects not directly related to the desired
 computation, but required simply to get Hadoop to function properly. Our language 
-can express the same computation in 15 lines.
+can express the same computation in about 15 lines.
 
 \subsection{The MapReduce Framework}
 \label{sub:mapreduce}
