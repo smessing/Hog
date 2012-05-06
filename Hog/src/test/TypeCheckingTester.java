@@ -32,7 +32,7 @@ public class TypeCheckingTester {
 
 	@Test
 	public void typeCheckingTest() {
-		String filename = "TypeDecoratorTest.hog";
+		String filename = "src/test/TypeDecoratorTest.hog";
 		ProgramNode root = null;
 		FileReader fileReader;
 	    try {
@@ -86,7 +86,7 @@ public class TypeCheckingTester {
 	
 	@Test
 	public void typeCheckingTestTwo() {
-		String filename = "TypeDecoratorTestTwo.hog";
+		String filename = "src/test/TypeDecoratorTestTwo.hog";
 		ProgramNode root = null;
 		FileReader fileReader;
 	    try {

@@ -1,0 +1,30 @@
+@Functions {
+  int fib(int n) {
+  	text face = 'hi';
+  	return 1;
+  }
+}
+
+
+
+@Map (int lineNum, text line) -> (text, int) {
+ bool face = false;
+ foreach text myTest in line.tokenize(' ') {
+    emit(myTest, 1);
+  }
+  
+  
+}
+
+@Reduce (text word, iter<int> values) -> (text, int) {
+  int count = 0;
+  while ( values.hasNext() ) {
+    count = count + values.next();
+  }
+  emit(word, count);
+}
+
+@Main {
+  real face = 1.0;
+  mapReduce();
+}

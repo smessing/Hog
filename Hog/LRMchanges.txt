@@ -1,2 +1,0 @@
-FOREACH statements must now declare type
-@MAP @REDUCE can only emit primitive types

@@ -30,7 +30,7 @@ public class CodeGeneratingTester {
 	
 	@Test
 	public void codeGeneratingTest() {
-		String filename = "WordCount.hog";
+		String filename = "src/test/WordCount.hog";
 		ProgramNode root = null;
 		FileReader fileReader;
 	    try {
@@ -69,7 +69,7 @@ public class CodeGeneratingTester {
 	
 	@Test
 	public void codeGeneratingTestTwo() {
-		String filename = "Factorial.hog";
+		String filename = "src/test/Factorial.hog";
 		ProgramNode root = null;
 		FileReader fileReader;
 	    try {
@@ -108,7 +108,7 @@ public class CodeGeneratingTester {
 	
 	@Test
 	public void codeGeneratingTestThree() {
-		String filename = "mergesort.hog";
+		String filename = "src/test/MergeSort.hog";
 		ProgramNode root = null;
 		FileReader fileReader;
 	    try {

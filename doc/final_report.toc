@@ -4,28 +4,50 @@
 \contentsline {subsection}{\numberline {1.1.2}Simple}{6}
 \contentsline {chapter}{\numberline {2}Tutorial}{7}
 \contentsline {chapter}{\numberline {3}Language Reference Manual}{9}
-\contentsline {chapter}{\numberline {4}Project Plan}{11}
-\contentsline {section}{\numberline {4.1}Development Process}{11}
-\contentsline {subsection}{\numberline {4.1.1}Simplicity of Build System}{11}
-\contentsline {subsection}{\numberline {4.1.2}Similarity of Modules}{12}
-\contentsline {subsection}{\numberline {4.1.3}Document Everything}{12}
-\contentsline {subsection}{\numberline {4.1.4}Distributed Version Control}{12}
-\contentsline {subsection}{\numberline {4.1.5}Verbose Logging}{13}
-\contentsline {section}{\numberline {4.2}Roles and Responsibilities}{13}
-\contentsline {section}{\numberline {4.3}Hog's Developer Style Sheet}{14}
-\contentsline {section}{\numberline {4.4}Project Timeline}{14}
-\contentsline {section}{\numberline {4.5}Project Log}{15}
-\contentsline {chapter}{\numberline {5}Language Evolution}{17}
-\contentsline {chapter}{\numberline {6}Translator Architecture}{19}
-\contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{21}
-\contentsline {chapter}{\numberline {8}Test Plan}{23}
-\contentsline {chapter}{\numberline {9}Conclusions}{25}
-\contentsline {section}{\numberline {9.1}Lessons Learned}{25}
-\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{25}
-\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{25}
-\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{25}
-\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{25}
-\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{25}
-\contentsline {section}{\numberline {9.2}Advice for Other Teams}{25}
-\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{25}
-\contentsline {chapter}{\numberline {A}Code Listing}{27}
+\contentsline {section}{\numberline {3.1}Introduction}{9}
+\contentsline {subsection}{\numberline {3.1.1}The MapReduce Framework}{9}
+\contentsline {subsection}{\numberline {3.1.2}The Hog Language}{10}
+\contentsline {subsubsection}{Guiding Principles}{11}
+\contentsline {subsection}{\numberline {3.1.3}The ``Ideal'' Hog User}{11}
+\contentsline {section}{\numberline {3.2}Syntax Notation}{12}
+\contentsline {section}{\numberline {3.3}Program Structure}{12}
+\contentsline {subsection}{\numberline {3.3.1}Overall Structure}{12}
+\contentsline {subsection}{\numberline {3.3.2}\tt @Functions\rm }{12}
+\contentsline {subsection}{\numberline {3.3.3}\tt @Map \rm }{14}
+\contentsline {subsection}{\numberline {3.3.4}\tt @Reduce \rm }{15}
+\contentsline {subsection}{\numberline {3.3.5}\tt @Main \rm }{15}
+\contentsline {section}{\numberline {3.4}Lexical Conventions}{16}
+\contentsline {subsection}{\numberline {3.4.1}Tokens}{16}
+\contentsline {subsection}{\numberline {3.4.2}Comments}{16}
+\contentsline {subsection}{\numberline {3.4.3}Identifiers}{16}
+\contentsline {subsection}{\numberline {3.4.4}Keywords}{17}
+\contentsline {subsection}{\numberline {3.4.5}Constants}{17}
+\contentsline {subsection}{\numberline {3.4.6}Text Literals}{18}
+\contentsline {subsection}{\numberline {3.4.7}Variable Scope}{18}
+\contentsline {subsection}{\numberline {3.4.8}Argument Passing}{18}
+\contentsline {subsection}{\numberline {3.4.9}Evaluation Order}{18}
+\contentsline {chapter}{\numberline {4}Project Plan}{19}
+\contentsline {section}{\numberline {4.1}Development Process}{19}
+\contentsline {subsection}{\numberline {4.1.1}Simplicity of Build System}{19}
+\contentsline {subsection}{\numberline {4.1.2}Similarity of Modules}{20}
+\contentsline {subsection}{\numberline {4.1.3}Document Everything}{20}
+\contentsline {subsection}{\numberline {4.1.4}Distributed Version Control}{20}
+\contentsline {subsection}{\numberline {4.1.5}Verbose Logging}{21}
+\contentsline {section}{\numberline {4.2}Roles and Responsibilities}{21}
+\contentsline {section}{\numberline {4.3}Hog's Developer Style Sheet}{22}
+\contentsline {section}{\numberline {4.4}Project Timeline}{22}
+\contentsline {section}{\numberline {4.5}Project Log}{23}
+\contentsline {chapter}{\numberline {5}Language Evolution}{25}
+\contentsline {chapter}{\numberline {6}Translator Architecture}{27}
+\contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{29}
+\contentsline {chapter}{\numberline {8}Test Plan}{31}
+\contentsline {chapter}{\numberline {9}Conclusions}{35}
+\contentsline {section}{\numberline {9.1}Lessons Learned}{35}
+\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{35}
+\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{35}
+\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{35}
+\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{35}
+\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{35}
+\contentsline {section}{\numberline {9.2}Advice for Other Teams}{35}
+\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{35}
+\contentsline {chapter}{\numberline {A}Code Listing}{37}

@@ -49,7 +49,7 @@ public class SymbolTableTester {
 		 * create a new symbol table, this should be root 
 		 * and should be populated with all reserved words and functions
 		 */
-		String filename = "Factorial.hog";
+		String filename = "src/test/Factorial.hog";
 		ProgramNode root = null;
 		FileReader fileReader;
 	    try {
@@ -84,7 +84,7 @@ public class SymbolTableTester {
 		 * create a new symbol table, this should be root 
 		 * and should be populated with all reserved words and functions
 		 */
-		String filename = "WordCount.hog";
+		String filename = "src/test/WordCount.hog";
 		ProgramNode root = null;
 		FileReader fileReader;
 	    try {

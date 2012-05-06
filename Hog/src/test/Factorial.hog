@@ -1,0 +1,27 @@
+@Functions {
+  
+  int factorial(int n) {
+    if n==0 or n==1 {
+      return 1;
+    }
+    else {
+    return n * factorial(n-1);
+    }
+  }
+}
+
+
+
+@Map (int one, int two) -> (int, int){
+  one = 10;
+  two = factorial(10);
+  emit(one, two);
+}
+
+@Reduce (int one, int two) -> (int, int) {
+  emit(one, two);
+}
+
+@Main {
+  mapReduce();
+}
