@@ -6,13 +6,13 @@ import java.util.logging.Logger;
 
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.*;
+import util.error.VariableRedefinedError;
+import util.error.VariableUndeclaredError;
 import util.symbol_table.FunctionSymbol;
 import util.symbol_table.Symbol;
 import util.symbol_table.SymbolTable;
 import util.symbol_table.VariableSymbol;
 import util.type.Types;
-import util.type.VariableRedefinedException;
-import util.type.VariableUndeclaredException;
 
 
 /**
@@ -178,7 +178,7 @@ public class SymbolTableVisitor implements Visitor {
 			String paramName = currParamNode.getIdentifier();
 			try {
 				SymbolTable.put(paramName, new VariableSymbol(paramType));
-			} catch (VariableRedefinedException e) {
+			} catch (VariableRedefinedError e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -190,7 +190,7 @@ public class SymbolTableVisitor implements Visitor {
 				paramName = currParamNode.getIdentifier();
 				try {
 					SymbolTable.put(paramName, new VariableSymbol(paramType));
-				} catch (VariableRedefinedException e) {
+				} catch (VariableRedefinedError e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					System.exit(1);
@@ -224,7 +224,7 @@ public class SymbolTableVisitor implements Visitor {
 			
 			try {
 				SymbolTable.put(node.getIdentifier(), new VariableSymbol(node.getType()));
-			} catch (VariableRedefinedException e) {
+			} catch (VariableRedefinedError e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.exit(1);
@@ -237,7 +237,7 @@ public class SymbolTableVisitor implements Visitor {
 			// if there is no nodeSymbol, this is being used before delcartion so throw an error
 			if( nodeSymbol == null ) {
 				LOGGER.finer("IdNode was used before it was declared. Throw an error.");
-				throw new VariableUndeclaredException("Use of " + node.getIdentifier() + " undefined.");
+				throw new VariableUndeclaredError("Use of " + node.getIdentifier() + " undefined.");
 			}
 			
 			LOGGER.finer("IdNode has a null type. Symbol is  " + nodeSymbol.toString());
@@ -410,7 +410,7 @@ public class SymbolTableVisitor implements Visitor {
 			SymbolTable.put(inputKeyStr, inputKeySym);
 			SymbolTable.put(inputValStr, inputValueSym);
 			SymbolTable.put("emit", funSym);
-		} catch (VariableRedefinedException e) {
+		} catch (VariableRedefinedError e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.exit(1);
