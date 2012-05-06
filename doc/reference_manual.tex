@@ -27,24 +27,23 @@ For instance, consider wanting to generate counts for all the words in \emph{War
 and Peace} by means of distributed computation. Writing in Java and using Hadoop
 MapReduce (TM), a simple solution takes over 50 lines of code, as the programmer
 is required to specify intermediate objects not directly related to the desired
-computation, but required simply to get Hadoop to function properly. Our goal is
-to produce a language that can express the same computation in about 10 lines.
+computation, but required simply to get Hadoop to function properly. Our language 
+can express the same computation in about 10 lines.
 
 \subsection{The MapReduce Framework}
 \label{sub:mapreduce}
 
 With the explosion in the size of datasets that companies have had to manage in
-recent years there are many new challenges that they face. Many companies and
+recent years, there are many new challenges that they face. Many companies and
 organizations have to handle the processing of datasets that are terabytes or even
 petabytes in size. The first challenge in this large-scale processing is how to
-make sense of all this data. More importantly, how can they process and manipulate
-the data in a time efficient and reliable manner. The second challenge is how they
-handle this across their distributed systems. Writing distributed, fault-tolerant
-programs requires a high level of expertise and knowledge of parallel systems.
+make sense of all this data. More importantly, the question is how they can 
+process and manipulate the data in a time-efficient and reliable manner. 
+The second challenge is how they handle this across their distributed systems. Writing distributed, fault-tolerant programs requires a high level of expertise and knowledge of parallel systems.
 
 In response to this need, a group of engineers at Google developed the MapReduce
 framework in 2004. This high-level framework can be used for a variety of
-tasks, including handling search queries, indexing crawled documents and
+tasks, including handling search queries, indexing crawled documents, and
 processing logs. The software framework was developed to handle computations on
 massive datasets that are distributed across hundreds or even thousands of
 machines. The motivation behind MapReduce was to create a unified framework that
@@ -80,7 +79,7 @@ the execution flow of a MapReduce program.
 \begin{figure}
   \label{fig:map_reduce_overview}
   \includegraphics[width=1.0\textwidth]{img/map_reduce_overview.pdf}
-  \caption{Overview of the MapReduce program. Taken from \cite{ghemawat:2003}.}
+  \caption{Overview of the MapReduce program, from \cite{ghemawat:2003}.}
 \end{figure}
 \end{center}
 
@@ -103,10 +102,8 @@ Hadoop’s distributed network. All a user needs to do is tell Hog the location 
 their valid Hadoop instance, and Hog will do the rest.
 
 We intentionally have restricted the scope of Hog to deal with specific problems.
-For example, Hog's collection objects can only contain primitive types (preventing
-such data structures as lists of lists). Also, Hog only supports reading and
-writing plaintext files. While these limitations sacrifice the generality of the
-language, they promote ease of use.
+For example, Hog only supports reading and writing plaintext files. While these limitations
+sacrifice the generality of the language, they promote ease of use.
 
 \subsubsection{Guiding Principles} % (fold)
 \label{ssub:guiding_principles}
@@ -126,7 +123,7 @@ The guiding principles of Hog are:
 \label{sub:the_ideal_hog_user}
 
 Hog was designed with a particular user in mind: one that has already learned the basics of programming in a different
-programming language (such as Python or Java), but is inexperienced with distributed computation and can benefit from a highly structured framework for writing MapReduce programs. The language was designed with the goal of making learning how to write MapReduce programs as easy as possible. However, the user should be adept with programming concepts such as program structure, control flow (iteration and conditional operators), evaluation of boolean expressions, etc.
+programming language (such as Java or Python), but is inexperienced with distributed computation and can benefit from a highly structured framework for writing MapReduce programs. The language was designed with the goal of making learning how to write MapReduce programs as easy as possible. However, the user should be adept with programming concepts such as program structure, control flow (iteration and conditional operators), evaluation of boolean expressions, etc.
 
 % subsection the_ideal_hog_user (end)
 
@@ -201,11 +198,11 @@ where,
 \emph{parameterList} $\rightarrow$ \emph{parameter} \tt , \rm \emph{parameterList} $|$ \emph{parameter}
 \end{quotation}
 
-The return-type can be any valid Hog type. The rules regarding legal function-names
+The return type can be any valid Hog type. The rules regarding legal function names
 are identical to those regarding legal variable identifiers. Each parameter in the
-parameter-list consists of a valid Hog type followed by the name of the parameter,
+parameter list consists of a valid Hog type followed by the name of the parameter,
 which must also follow the naming rules for identifiers. Parameters in the
-parameter-list are separated by commas. The \tt @Functions \rm section ends when the next
+parameter list are separated by commas. The \tt @Functions \rm section ends when the next
 Hog section begins.
 
 A complete example of an \tt @Functions \rm section:
@@ -214,25 +211,23 @@ A complete example of an \tt @Functions \rm section:
     @Functions {
       int min(int a, int b) {
         if (a < b) {
-          return a
+          return a;
         } else {
-          return b
+          return b;
         }
       }
 
       list<int> reverseList(list<int> oldList) {
-        list<int> newList()
-        for (int i = oldList.size() - 1; i >= 0; i--) {
-          newList.add(oldList.get(i))
+        list<int> newList();
+        for (int i = oldList.size() - 1; i >= 0; i--;) {
+          newList.add(oldList.get(i));
         }
-        return newList
+        return newList;
       }
     }
 \end{verbatim}
 
-Function names can be overloaded as long as the function definitions have different
-signatures (i.e. parameter lists different in types and/or length). Additionally,
-user-defined functions can make reference to other user-defined functions.
+User-defined functions can make reference to other user-defined functions. However, function names can not be overloaded (i.e. it is not possible to use the same function name with a parameter list that differs in the number of arguments or argument types). Disallowing function overloading is a design choice consistent with Hog's guiding principle of simplicity.
 
 % section tt_functionsrm (end)
 
