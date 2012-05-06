@@ -2428,8 +2428,8 @@ All communication between these modules occurred through the Symbol Table and th
 \label{chap:environ}
 
 
-\begin{itemize}
-\item Describe the software development environment used to create the compiler.
+
+\section{Development Environment}
 	The Hog team used the Eclipse integrated development environment (IDE) that consisted of a
 source code editor, build automation tool, debugger, and a  JUnit automated testing suite. The source
 code editor provided syntax highlighting in Java, as well as automatically formatted source code, and automatically generated HTML Java documentation, which made language reference very easy. The 
@@ -2437,12 +2437,11 @@ build automation tool that was used was Apache Ant. Apache Ant is a Java library
 that has built-in tasks allowing a number of routine tasks such as compiling, assembling, testing, and running Java applications, to be conifigured by an XML file that is standardized across the team. With the build standardized across the team, we were able to track what parts of the source code failed after merging,
 which allowed for quick debugging and resolutation. The Java Development Tools (JDT) project in Eclipse featured a built-in Java debugger that provided us the ability to perform step execution, to set breakpoints and values, and to inspect variables and values, and allowed the ability to suspend and resume threads. The debugger allowed us to track and eliminate the bugs in our source code early on, which made for a smoother
 development process. The JUnit testing framework is the standard unit testing Application Programming Interface (API) for Java development. Our Ant build configuration was integrated with JUnit to allow executing 
-out test suites as part of the build process, and printed the results to the console, which prompted us if there
+our test suites as part of the build process, and printed the results to the console, which prompted us if there
 were any test failures. 
 
-
-\item Show the makefile used to create and test the compiler during development.
-
+\pagebreak
+\section{Makefile}
 	The Hog compiler contains both a makefile and a shell script for compilation. 
 The shell script provides a simple interface for working with the makefile. If the user
 does not have a working Hadoop configuration on there computer, they can run the
@@ -2523,16 +2522,48 @@ clean:
 
 
 \end{verbatim}
+\pagebreak
+\section{Hog.sh Shell Script}
 
+\begin{verbatim}
+#!/bin/bash
 
-\item Describe the run-time environment for the compiler.
+# Usage
+# ./Hog.sh source.hog
+
+if java -jar compiler/Hog.jar --local "$@";
+then
+    echo "Hog Compiler Was a Sucess!"
+else
+    echo "Hog Compiler Failed With Errors"
+    exit 1
+fi
+
+if javac -classpath compiler/hadoop-core-1.0.1.jar "Hog.java";
+then
+    echo "Java Compiler Successfully Compiled Hog Source"
+else
+    echo "Java Compiler Failed When Linking Hadoop Jar"
+    exit 1
+fi
+
+if jar -cf Hog.jar *.class;
+then
+    echo "All Compilation Steps Successful"
+    echo "Upload Hog.jar to Amazon EC2"
+else
+    echo "Java Archive Counld Not Be Made Check For Errors in Java Source"
+    exit 1
+fi
+\end{verbatim}
+\pagebreak
+\section{Compiler Runtime}
 	The Hog compiler runs on the Java Virtual Machine (JVM) which requires programs to be in a standardized portable binary format which are typically .class files. For distribution of large programs,
 multiple class files may be packaged together in a .jar file (short for Java archive), which is how the Hog
 compiler is transported, as a single java archive.  The JVM executes the Hog compiler, Hog.jar, and emulates
 the JVM instruction set by interpretting it, and linking the appropriate libraries from Java and Hadoop, and running the parser and lexer that were generated on Java Cup, and prints any errors to the console. Once the 
 Hog source program is compiled, the resulting jar can be uploaded to the Amazon ElasticMapReduce cloud to be run. 
 
-\end{itemize}
 
 \chapter{Test Plan}
 \label{chap:test}
