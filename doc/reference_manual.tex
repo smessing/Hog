@@ -282,7 +282,7 @@ reduce function for every word.
   @Map (int lineNum, text line) -> (text, int) {
       # for every word on this line, emit that word and the number 1
       foreach text word in line.tokenize(" ") {
-	  emit(word, 1);
+          emit(word, 1);
        }
    }
 
@@ -603,9 +603,9 @@ numeric type (\tt int\rm, \tt real\rm) with the exception that the \tt + \rm ope
 text \rm variables. In such instances, \tt + \rm is defined as concatenation. Thus, in the following,
 
 \begin{verbatim}
-    text face = "face"
-    text book = "book"
-    text facebook = face + book
+    text face = "face";
+    text book = "book";
+    text facebook = face + book;
 \end{verbatim}
 
 After execution, the variable \tt facebook \rm will have the value ``facebook''. No other arithmetic operators are defined for
@@ -615,16 +615,25 @@ will result in a compile-time \tt TypeMismatchException\rm.
 When an arithmetic operator is used between two numeric variables of different type, as in,
 
 \begin{verbatim}
-    int a = 1
-    real b = 2.0
-    a + b
+    int a = 1;
+    real b = 2.0;
 \end{verbatim}
 
-\noindent the non-\tt real \rm variable will be \textbf{\emph{coerced}} into a \tt
-real \rm before the evaluation of the statement, so that both operands have the
-same type. Therefore, the resulting type of the value of an expression involving
-an arithmetic operator and one or two operand of type \tt real \rm is always \tt
-real\rm.
+\noindent the non-\tt real \rm variable would first need to be cast into a \tt
+real \rm before operating on them, so that both operands have the
+same type. So thus
+
+\begin{verbatim}
+   print(a + b);
+\end{verbatim}
+
+would throw an error, while
+
+\begin{verbatim}
+   print(int2real(a) + b);
+\end{verbatim}
+
+would print 3.0.
 
 If one of the operands happens to have a \tt null \rm value (for instance, if a variable is \textbf{\emph{uninitialized}}),
 then the resulting operation will cause a run-time \tt NullValueException\rm, and the program will crash.
@@ -638,8 +647,8 @@ then the resulting operation will cause a run-time \tt NullValueException\rm, an
 \tt - \rm & binary & left & 0 & minus \\ \hline
 \tt * \rm & binary & left & 1 & multiplication \\ \hline
 \tt / \rm & binary & left & 1 & division \\ \hline
-\tt \% \rm & binary & left & 2 & mod\footnote{Follows Java's 
-\tt \% \rm behavior: a modulus of a negative number is a negative number.} \\ 
+\tt \% \rm & binary & left & 2 & mod$\dagger$
+\\ 
 \hline
 \tt ++ \rm & unary & left & 3 & increment \\ \hline
 \tt -- \rm & unary & left & 3 & decrement \\ \hline
@@ -647,6 +656,7 @@ then the resulting operation will cause a run-time \tt NullValueException\rm, an
 \end{tabular}
 \end{center}
 
+$\dagger$Follows Java's behavior: a modulus of a negative number is a negative number.
 % subsubsection arithmetic_operators (end)
 
 \subsubsection{Logical Operators} % (fold)
@@ -797,34 +807,22 @@ variable, or a single unnamed raw primitive.
 \subsubsection{Derived-Type Variable Declarations} % (fold)
 \label{ssub:derived_type_variable_declarations}
 
-Derived-type variables are declared using the following patterns:
+Derived-type variables are declared using the following pattern:
 
 \begin{enumerate}
-  \item \emph{type identifier}
-  \item \emph{type identifier = expression }
-  \item \emph{type idenfitier(parameterList)}  where, \\
-  \indent \emph{parameterList} $\rightarrow$ \emph{parameter}, \emph{parameterList} $|$ \emph{parameter}
+  \item \emph{type identifier;}
 \end{enumerate}
 
-The first two patterns operate in essentially the same way as for primitive­type
-variables. When the first pattern is used, we say that the variable is
+When the derived type is first declared, we say that the variable is
 \textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user attempts
-to use any type­specific operations (for instance, \tt myList.size() \rm on an
+to use any type-­specific operations that are not meaningful (for instance, \tt myList.size() \rm on an
 uninitialized variable, the program will throw a run­time exception (see \S
-\ref{sec:exception_handling} for a discussion of exceptions)). When the second
-pattern is used, the variable is \textbf{\emph{initialized}} to the result of the
-\emph{expression}.
-
-Because derived-type variables often have additional structure that needs to be
-defined at initialization, a third pattern is provided. In this pattern, the user
-can specify a list of \textbf{\emph{parameters}} to initialize the object. For
-instance,
+\ref{sec:exception_handling} for a discussion of exceptions)). The example code below initializes a \tt list\rm of integers and adds one element to it.
 
 \begin{verbatim}
-    list<int> myList(5)
+    list<int> myList;
+    myList.add(5);
 \end{verbatim}
-
-Specifies that \tt myList \rm should be initialized with five \tt null \rm values.
 
 % subsubsection derived_type_variable_declarations (end)
 
@@ -890,39 +888,7 @@ elseif \rm and \tt else \rm statements, the statement will be executed that
 follows the first expression evaluating to \tt true\rm. If none of these
 expressions evaluate to \tt true\rm, then the \tt else \rm statement is executed.
 
-The \tt switch \rm statement causes control to transfer to a statement depending
-on the matching \tt case \rm label. There can be an unlimited number of \tt case
-\rm labels within the \tt switch \rm statement, so that the \tt switch \rm will
-operate as such:
-
-\begin{quotation}
-  \tt switch ( \rm \emph{expression}$_0$ \tt ) \{\\
-  \indent \indent \tt case \rm \emph{expression}$_1$ \tt : \rm\emph{statement}$_1$ \\
-  \indent \indent \tt case \rm \emph{expression}$_2$ \tt : \rm\emph{statement}$_2$ \\
-  \indent \indent \tt default : \rm \emph{statement}$_3$ \\
-  \indent \tt \}
-\end{quotation}
-
-An \emph{expression} is passed in to the \tt switch \rm statement and then the
-flow of control will fall through the \tt switch \rm and the \emph{expression}
-will then be compared to the constant \emph{expression} next to each \tt case \rm
-label. When the \tt switch \rm \emph{expression} matches the \emph{expression}
-next to a specific \tt case\rm, the \emph{statement} for that \tt case \rm is
-executed. If the flow of control falls to the bottom of the \tt switch \rm without
-finding an equality, then the \tt default \rm \emph{statement} will be executed.
-The \tt case \rm constants are converted to the \tt switch \rm \emph{expression}
-type. There cannot be two \tt case \rm \emph{expressions} with the same value
-after conversion. In addition, there can only be one \tt default \rm label within
-each \tt switch\rm.
-
-\emph{Note}: \tt switch \rm statements in Hog follow the normal conventions of
-\textbf{\emph{fall-through}}. When a particular \tt case \rm is matched,
-\emph{all} of the statements are executed until the keyword \tt break \rm is
-encountered. So statements from other \tt case\rm's are executed so long as they
-are below the matched \tt case\rm, and there is no \tt break \rm statement between
-them.
-
-The above control statements can all be nested within each other.
+To increase the expressive power of Hog, flow-of-control statements can also be nested within each other.
 
 % subsection flow_of_control_statements (end)
 
@@ -934,13 +900,13 @@ forms:
 
 \begin{itemize}
   \item[] \tt while ( \rm \emph{expression} \tt ) \rm \emph{statement}
-  \item[] \tt for ( \rm \emph{expression}$_1$ \tt ; \rm \emph{expression}$_2$ \tt ; \rm \emph{expression}$_3$ \tt ) \rm \emph{statement}
+  \item[] \tt for ( \rm \emph{expression}$_1$ \tt ; \rm \emph{expression}$_2$ \tt ; \rm \emph{expression}$_3$ \tt ;) \rm \emph{statement}
   \item[] \tt foreach \rm \emph{expression} \tt in \rm \emph{iterable-object statement}
 \end{itemize}
 
 In the \tt while \rm pattern, the associated \emph{statements} will be executed
 repeatedly until the \emph{expression} evaluates to \tt false\rm. The
-\emph{expression} is evaluated before every iteration.
+\emph{expression} is evaluated before every iteration. Please note that in a slight syntactical departure from Java, Hog requires a semicolon after the third expression (the increment step) in the \tt for\rm loop construct. Thus, an example of correct Hog syntax would be \begin{verbatim} for (int i = 0; i < 10; i++;){...}\end{verbatim}
 
 In the \tt for \rm pattern, \emph{expression}$_1$ is the initialization step,
 \emph{expression}$_2$ is the test or condition and \emph{expression}$_3$ is the
@@ -973,7 +939,7 @@ through.
 \label{ssub:example_2}
 
 \begin{verbatim}
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++;) {
       print(i)
     }
 \end{verbatim}
@@ -986,11 +952,11 @@ through.
 \begin{verbatim}
     # we first initialize and populate the list as follows: 
     list<int> iList;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++;) {
        iList.add(i);
     }
 
-    # This is an example of using foreach/
+    # This is an example of using foreach
     # Note that the type of the iterable must be declared.    
 
     foreach int i in iList {
