@@ -528,6 +528,17 @@ any block nested within its enclosing block.
 
 % subsection variable_scope (end)
 
+
+\subsection{Argument Passing}
+\label{sub:argument_passing}
+
+Since Hog is compiled into Java, it passes arguments using call-by-value. However, similarly to Java, it is possible to imitate call-by-reference behavior. 
+
+\subsection{Evaluation Order}
+\label{sub:evaluation_order}
+
+Hog uses applicative order (eager) evaluation, similarly to Java.
+
 % section lexical_conventions (end)
 
 \section{Types} % (fold)
@@ -872,10 +883,7 @@ The following are the \textbf{\emph{flow-of-control}} statements included in Hog
 
 In the above statements, the  $\dots$ signifies an unlimited number of \tt elseif \rm
 statements, since there is no limit on the number of \tt elseif \rm statements
-that can appear before the final \tt else \rm statement. In all forms of the \tt
-if \rm statement, the expression will be evaluated as a \tt bool\rm. If the
-expression is a number, then any non­zero number will be considered \tt true \rm
-and zero will be treated as \tt false\rm. In the second statement above, when the
+that can appear before the final \tt else \rm statement. In the second statement above, when the
 expression in the \tt if \rm statement evaluates to \tt false\rm, then the \tt
 else \rm statement will execute. In the third statement above with \tt if\rm, \tt
 elseif \rm and \tt else \rm statements, the statement will be executed that
