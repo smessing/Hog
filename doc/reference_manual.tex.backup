@@ -28,7 +28,7 @@ and Peace} by means of distributed computation. Writing in Java and using Hadoop
 MapReduce (TM), a simple solution takes over 50 lines of code, as the programmer
 is required to specify intermediate objects not directly related to the desired
 computation, but required simply to get Hadoop to function properly. Our language 
-can express the same computation in 15 lines.
+can express the same computation in about 10 lines.
 
 \subsection{The MapReduce Framework}
 \label{sub:mapreduce}
@@ -188,7 +188,7 @@ Function definitions have the form:
 
 \begin{quotation}
   \emph{type functionName} \tt ( \rm \emph{parameterList} \tt ) \{ \rm \\
-  \indent \indent \emph{expressionList}; \\
+  \indent \indent \emph{expressionList} \\
   \indent \tt \}
 \end{quotation}
 
@@ -218,7 +218,7 @@ A complete example of an \tt @Functions \rm section:
       }
 
       list<int> reverseList(list<int> oldList) {
-        list<int> newList;
+        list<int> newList();
         for (int i = oldList.size() - 1; i >= 0; i--;) {
           newList.add(oldList.get(i));
         }
@@ -227,7 +227,7 @@ A complete example of an \tt @Functions \rm section:
     }
 \end{verbatim}
 
-User-defined functions can make reference to other user-defined functions. However, function names cannot be overloaded (i.e. it is not possible to use the same function name with a parameter list that differs in the number of arguments or argument types). Disallowing function overloading is a design choice consistent with Hog's guiding principle of simplicity.
+User-defined functions can make reference to other user-defined functions. However, function names can not be overloaded (i.e. it is not possible to use the same function name with a parameter list that differs in the number of arguments or argument types). Disallowing function overloading is a design choice consistent with Hog's guiding principle of simplicity.
 
 % section tt_functionsrm (end)
 
@@ -264,7 +264,7 @@ the \tt @Map \rm type signature. All output pairs from the map function are
 subsequently grouped by key by the framework, and passed as input to the \tt
 @Reduce \rm function.
 
-\emph{Note}: In the current version of the language, the only configuration available is for a file to be passed into the map
+\emph{Note}: Currently, the only configuration available is for a file to be passed into the map
 function one line at a time, with the line of text being the value, and the
 corresponding line number as the key. This requires that the input key/value pair
 to the map function is of type \tt (int key‐name, text value‐name)\rm. Extending
@@ -279,12 +279,11 @@ reduce function for every word.
 
 \begin{verbatim}
 
-  @Map (int lineNum, text line) -> (text, int) {
-      # for every word on this line, emit that word and the number 1
-      foreach text word in line.tokenize(" ") {
-          emit(word, 1);
-       }
-   }
+  @Map (int lineNum, text line)  ->  (text, int) {
+    foreach word in line.tokenize(" ") {
+      emit(word, 1)
+    }
+  }
 
 \end{verbatim}
 
@@ -323,14 +322,11 @@ and follows the \tt @Map \rm sample introduced in the previous section.
 \begin{verbatim} 
 
     @Reduce (text word, iter<int> values) -> (text, int) {
-      # initialize count to zero
-      int count = 0;
+      int count = 0
       while (values.hasNext()) {
-        # for every instance of '1' for this word, add to count
-        count = count + values.next();
+        count = count + values.next()
       }
-      # emit the count for this particular word
-      emit(word, count);
+      emit(word, count)
     }
 
 \end{verbatim} 
@@ -340,20 +336,20 @@ and follows the \tt @Map \rm sample introduced in the previous section.
 \subsection{\tt @Main \rm} % (fold)
 \label{sec:tt_main_rm}
 
-The \tt @Main \rm section defines the code that is the entry point to a Hog program. In order to run the MapReduce program
+The \tt @Main \rm section defines the code that is the entry point to a Hog program. In order to run the map reduce program
 defined by the user in the previous sections, \tt @Main \rm must contain a call to the system-level built-in function \tt
-mapReduce() \rm, which calls the \tt @Map \rm and \tt @Reduce \rm functions. Other arbitrary code can be run from
-the \tt @Main \rm section as well. In the current version of the language, \tt @Main \rm does not have access to the results of the 
-MapReduce program resulting from a call to \tt mapReduce()\rm. Therefore, it is quite common for the \tt @Main \rm section to contain the call to
+mapReduce() \rm in order for the \tt @Map \rm and \tt @Reduce \rm functions to be used. Other arbitrary code can be run from
+the \tt @Main \rm section as well. Currently, \tt @Main \rm does not have access to the results of the MapReduce program
+resulting from a call to \tt mapReduce()\rm. Therefore, it is quite common for the \tt @Main \rm section to contain the call to
 \tt mapReduce() \rm and nothing else.
 
 Below is a sample \tt @Main \rm section which prints to the standard output and runs a map reduce job.
 
 \begin{verbatim}
     @Main {
-          print("Starting mapReduce job.\n");
-          mapReduce();
-          print("mapReduce complete.\n");
+          print("Starting mapReduce job.\n")
+          mapReduce()
+          print("mapReduce complete.\n")
     }
 \end{verbatim}
 
@@ -369,7 +365,7 @@ Below is a sample \tt @Main \rm section which prints to the standard output and 
 \label{sub:tokens}
 
 The classes of tokens include the following: identifiers, keywords,
-constants, string literals, operators, and separators. Blanks, tabs, newlines, and
+constants, string literals, operators and separators. Blanks, tabs, newlines and
 comments are ignored. If the input is separated into tokens up to a given
 character, the next token is the longest string of characters that could represent
 a token.
@@ -383,17 +379,16 @@ Multi-line comments are identified by the enclosing character sequences \tt \#\{
 enclosing characters is considered a comment, and is completely ignored by the compiler. For example,
 
 \begin{verbatim}
-    int i = 0;
+    int i = 0
     #{ these are block
         comments and are ignored
          by the compiler }#
-    i++;
-
+    i++
 \end{verbatim}
 
 In the above example, the text \tt these are block comments \textbackslash n comments and are ignored \textbackslash n by the
-complier \rm is completely ignored during compilation. Compilation goes directly from the line \tt int i = 0; \rm to the line
-\tt i++;\rm.
+complier \rm is completely ignored during compilation. Compilation goes directly from the line \tt int i = 0 \rm to the line
+\tt i++\rm.
 
 Single-line comments are defined to be strings of text included between a '\tt
 \#\rm' symbol on the left-hand side and a newline character ('\tt\textbackslash
@@ -409,7 +404,7 @@ underscores, which are used to distinguish declared entities, such as
 methods, parameters, or variables from one another. A valid identifier also
 provide a means of determining scope of an entity, and helps to determine whether
 the same valid identifier in another scope refers to the same entity. The first
-character of an identifier must not be a digit. Valid identifiers are case sensitive,
+character of an identifier must not be a digit. Valid identifiers are case sensitive
 so \tt foo \rm is not the same identifier as \tt Foo\rm.
 
 % section identifiers (end)
@@ -417,67 +412,45 @@ so \tt foo \rm is not the same identifier as \tt Foo\rm.
 \subsection{Keywords} % (fold)
 \label{sub:keywords}
 
-The following words are reserved for use as keywords, and may not be redefined by the programmer:
+The following words are reserved for use as keywords, and may not be redefined by a programmer:
 
 \begin{multicols}{4}
 \tt
 \begin{itemize}
- 
-  \item[] add
+  \item[] @Functions
+  \item[] @Map
+  \item[] @Reduce
   \item[] and
   \item[] bool
   \item[] break
+  \item[] case
   \item[] catch
-  \item[] clear
-  \item[] contains
-  \item[] containsAll
-  \item[] continue
   \item[] default
+  \item[] dict
   \item[] else
   \item[] elseif
   \item[] emit
   \item[] final
   \item[] for
   \item[] foreach
-  \item[] Functions
-  \item[] get
   \item[] hadoop
-  \item[] hasNext
   \item[] if
   \item[] in
   \item[] instanceof
   \item[] int
-  \item[] int2real
-  \item[] int2text
-  \item[] isEmpty
   \item[] iter
   \item[] list
-  \item[] Map
-  \item[] mapReduce
-  \item[] next
+  \item[] map
   \item[] not
   \item[] or
-  \item[] peek
-  \item[] print
   \item[] real
-  \item[] real2int
-  \item[] real2text
-  \item[] Reduce
-  \item[] remove
-  \item[] removeAll
   \item[] return
-  \item[] size
-  \item[] sort
+  \item[] switch
   \item[] text
-  \item[] text2int
-  \item[] text2real
   \item[] throw
-  \item[] tokenize
   \item[] try
   \item[] void
   \item[] while
-  
-  
 \end{itemize}
 \rm
 \end{multicols}
@@ -491,8 +464,9 @@ The word \textbf{\emph{constant}} has two different meanings in Hog. It can refe
 that is, once it is initialized cannot be changed, or can refer to an \textbf{\emph{unnamed value}}, such as "1.0". To declare
 a constant variable, use the following pattern,
 
+
 \begin{quotation}
-   \tt final \rm \emph{type variableName} = \emph{value};
+   \tt final \rm \emph{type variableName} = \emph{value}
 \end{quotation}
 
 The following are a list of examples of unnamed values and their corresponding types:
@@ -507,12 +481,12 @@ The following are a list of examples of unnamed values and their corresponding t
 
 \subsection{Text Literals} % (fold) \label{sub:string_literals} 
 
-A text literal consists of a sequence of zero of more contiguous characters enclosed in double quotes, such as \tt
-"hello"\rm. A text literal can also contain escape characters such as \tt "\textbackslash n" \rm for the new line character
-or \tt "\textbackslash t" \rm for the tab character. A text literal has many of the same built-in functions
+A string literal consists of a sequence of zero of more contiguous characters enclosed in double quotes, such as \tt
+"hello"\rm. A string literal can also contain escape characters such as \tt "\textbackslash n" \rm for the new line character
+or \tt "\textbackslash t" \rm for the tab character. A string literal has a String type has many of the same built-in functions
 as the String class in Java. String literals are constant and their values cannot be changed after they are created. String
-literals can be concatenated with adjacent text literals by use of the \tt + \rm operator and are then converted into a
-single \tt text \rm variable. Hog implements concatenation by use of the Java \tt StringBuilder \rm (or \tt StringBuffer\rm) class and its
+literals can be concatenated with adjacent string literals by use of the \tt + \rm operator and are then converted into a
+single string. Hog implements concatenation by use of the Java \tt StringBuilder \rm (or \tt StringBuffer\rm) class and its
 append method. All text literals in Hog programs are implemented as instances of the \tt text \rm class, and then are mapped
 directly to the equivalent \tt String \rm class in Java.\footnote{Technically, \tt text \rm objects are implemented as
 instances of Hadoop's \tt Text \rm class, which is closely related to the Java \tt String \rm class.}
@@ -523,7 +497,7 @@ instances of Hadoop's \tt Text \rm class, which is closely related to the Java \
 \label{sub:variable_scope}
 
 Hog implements what is generally referred to as lexical scoping or block scope. An
-identifier is valid within its enclosing block. The identifier is also valid for
+identifier is valid within its enclosing block. The identifier is also value for
 any block nested within its enclosing block.
 
 % subsection variable_scope (end)
@@ -538,8 +512,8 @@ any block nested within its enclosing block.
 
 The basic types of Hog include \tt int \rm (integer numbers in base 10, 64 bytes
 in size), \tt real \rm (floating point numbers, 64 bytes in size), \tt bool
-\rm(boolean values, \tt true \rm or \tt false \rm) and \tt text \rm (Strings, variable in size).
-Unlike some languages, Hog includes no basic character type. Instead, a programmer
+\rm(boolean values, true or false) and \tt text \rm (Strings, variable in size).
+Unlike most languages, Hog includes no basic character type. Instead, a programmer
 makes use of \tt text\rm s of size 1.
 
 \emph{Implementation details}: Hog’s primitive types are not so primitive. They are
@@ -564,27 +538,45 @@ of:
 \subsection{Derived Types (Collections)} % (fold)
 \label{sub:derived_types_collections_}
 
-There are two derived types that can be created by the programmer: \tt list<T>\rm and \tt set<T>\rm. 
-Future versions of Hog are expected to implement other derived types, including dictionaries/hash maps, user-defined iterators, 
-and multisets. The \tt list<T> \rm type is an ordered
+Derived types include \tt dict<K, V>\rm, \tt list<T>\rm, \tt set<T>\rm, \tt
+multiset<T>\rm, and \tt iter<T>\rm. The \tt list<T> \rm type is an ordered
 collection of objects of the same type. The \tt set<T> \rm is an unordered
-collection of unique objects of the same type. Hog supports arbitrarily nested derived types, so it is possible, for example, to have a \tt list\rm  of \tt list\rm s of \tt list\rm s of \tt int\rm s.
+collection of unique objects of the same type. The \tt multiset<T> \rm is an
+unordered collection of objects of the same type, with duplicates allowed. The \tt
+dict<K,V> \rm is a collection of key­value pairs, where keys are all of the same
+type, and values are all of the same type (keys and values can be of different
+types from one another). The only types currently allowed within collections are
+primitive types, preventing such constructs as a list of lists. All collections
+allow for null entries.\footnote{Note that for \tt set<T>\rm, only one \tt null
+\rm entry is allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is
+allowed.}
 
-A special derived type is \tt iter<T>\rm, which is Hog's iterator object. An \tt
-iter \rm object is associated with a list, and allows one traversal of the elements in the list; this is used by Hog in the \tt @Reduce \rm section of a Hog program.
+The last derived type is \tt iter<T>\rm, which is Hog's iterator object. An \tt
+iter \rm object is associated with a collection object (of one of the types
+mentioned above), and allows the user to traverse the elements in the collection
+once.
 
 % subsection derived_types_collections_ (end)
 
-\subsection{Type Conversions} % (fold)
+\subsection{Conversions} % (fold)
 \label{sub:conversions}
 
 \textbf In order to cast a variable to be of a different type, use the following notation:
 
 \begin{quotation}
-      \tt \emph{primitiveType}2\emph{otherPrimitiveType}(  )\rm \emph{variableName}
+      \tt ( \rm \emph{type} \tt ) \rm \emph{variableName}
 \end{quotation}
 
-Hog supports casting between the primitive types \tt int\rm, \tt real\rm, and \tt text\rm, via the built-in functions \tt int2real\rm, \tt int2text\rm, \tt real2int\rm, \tt real2text\rm, \tt text2int\rm, and \tt text2real\rm. If casting a text to an int or real results in an invalid number (e.g. \tt text2int("1a4") \rm), a run-time exception will be thrown.
+
+Not all basic types can be cast to a different basic type. Any variable of type
+\tt int \rm or \tt real \rm can be cast to any of the other basic types (\tt
+int\rm, \tt real\rm, \tt bool\rm, \tt text\rm). Note, when casting from a \tt real
+\rm to an \tt int\rm, the fractional part of the \tt real \rm value will be
+\textbf{\emph{truncated}}. However, a variable of type bool can only be cast to
+\tt text \rm and a variable of type \tt text \rm can be cast to an \tt int \rm or
+\tt real\rm. If casting a \tt text \rm to an \tt int \rm or \tt real \rm results
+in an invalid number (e.g. \tt (int) "1a4"\rm), then a \tt TypeCaseException \rm
+will be thrown.
 
 % subsection conversions (end)
 
@@ -604,9 +596,9 @@ numeric type (\tt int\rm, \tt real\rm) with the exception that the \tt + \rm ope
 text \rm variables. In such instances, \tt + \rm is defined as concatenation. Thus, in the following,
 
 \begin{verbatim}
-    text face = "face";
-    text book = "book";
-    text facebook = face + book;
+    text face = "face"
+    text book = "book"
+    text facebook = face + book
 \end{verbatim}
 
 After execution, the variable \tt facebook \rm will have the value ``facebook''. No other arithmetic operators are defined for
@@ -616,25 +608,16 @@ will result in a compile-time \tt TypeMismatchException\rm.
 When an arithmetic operator is used between two numeric variables of different type, as in,
 
 \begin{verbatim}
-    int a = 1;
-    real b = 2.0;
+    int a = 1
+    real b = 2.0
+    a + b
 \end{verbatim}
 
-\noindent the non-\tt real \rm variable would first need to be cast into a \tt
-real \rm before operating on them, so that both operands have the
-same type. So thus
-
-\begin{verbatim}
-   print(a + b);
-\end{verbatim}
-
-would throw an error, while
-
-\begin{verbatim}
-   print(int2real(a) + b);
-\end{verbatim}
-
-would print 3.0.
+\noindent the non-\tt real \rm variable will be \textbf{\emph{coerced}} into a \tt
+real \rm before the evaluation of the statement, so that both operands have the
+same type. Therefore, the resulting type of the value of an expression involving
+an arithmetic operator and one or two operand of type \tt real \rm is always \tt
+real\rm.
 
 If one of the operands happens to have a \tt null \rm value (for instance, if a variable is \textbf{\emph{uninitialized}}),
 then the resulting operation will cause a run-time \tt NullValueException\rm, and the program will crash.
@@ -648,8 +631,8 @@ then the resulting operation will cause a run-time \tt NullValueException\rm, an
 \tt - \rm & binary & left & 0 & minus \\ \hline
 \tt * \rm & binary & left & 1 & multiplication \\ \hline
 \tt / \rm & binary & left & 1 & division \\ \hline
-\tt \% \rm & binary & left & 2 & mod$\dagger$
-\\ 
+\tt \% \rm & binary & left & 2 & mod\footnote{Follows Java's 
+\tt \% \rm behavior: a modulus of a negative number is a negative number.} \\ 
 \hline
 \tt ++ \rm & unary & left & 3 & increment \\ \hline
 \tt -- \rm & unary & left & 3 & decrement \\ \hline
@@ -657,7 +640,6 @@ then the resulting operation will cause a run-time \tt NullValueException\rm, an
 \end{tabular}
 \end{center}
 
-$\dagger$Follows Java's behavior: a modulus of a negative number is a negative number.
 % subsubsection arithmetic_operators (end)
 
 \subsubsection{Logical Operators} % (fold)
@@ -701,25 +683,29 @@ The following are the comparators implemented in Hog (all are binary operations)
 \end{tabular}
 \end{center}
 
-\emph{Note}: All comparators do not work with non-numeric or non-boolean types.
-Comparisons require that the two operands be either both numeric
-or both boolean, and a numeric value cannot be compared to a boolean value. If the two operands are numeric but of different types, one of them must be cast so that they are of the same type. The
+\emph{Note}: All comparators do not work with non-numeric or non-boolean types,
+except for null. Comparisons require that the two operands be either both numeric
+or both boolean, and a numeric value cannot be compared to a boolean value. The
 only valid comparators that can be used with boolean expressions are \tt == \rm
-and \tt !=\rm. The use of a comparison operator in Hog between any two derived types will result in a run-time error.
+and \tt !=\rm. The use of a comparison operator in Hog between any two objects
+(non-numeric (including char), or non-boolean) will result in a compile-time
+exception (see \S \ref{sub:compile_time_exceptions}). In Hog, \tt null ==
+null \rm will evaluate to \tt false\rm. For any non-null reference value \tt
+foo\rm, \tt foo.equals(null) \rm will evaluate to \tt false\rm.
 
 % subsubsection comparators (end)
 
 \subsubsection{Assignment} % (fold)
 \label{ssub:assignment}
 
-There is one assignment operator, '\tt =\rm'. Expressions involving the
+There is one single assignment operator, '\tt =\rm'. Expressions involving the
 assignment operator have the following form:
 
 \begin{quotation}
 \emph{identifier}$_1$ \tt = \rm \emph{expression} $|$ \emph{identifier}$_2$
 \end{quotation}
 
-At compile time, the compiler checks that both the result of the \emph{expression}
+At compile-time, the compiler checks that both the result of the \emph{expression}
 (or \emph{identifier}$_2$) and \emph{identifier}$_1$ have the same type. If not, a
 compile-time \tt TypeMismatchException \rm will be thrown.
 
@@ -732,7 +718,8 @@ compile-time \tt TypeMismatchException \rm will be thrown.
 \section{Declarations} % (fold)
 \label{sec:declarations}
 
-A user is only allowed to use variables/functions after they have been
+While it is not specified in the grammar of Hog, like many other programming
+languages, a user is only allowed to use variables/functions after they have been
 declared. When declaring a variable, a user must include both a type and an
 identifier for that variable. Otherwise, an exception will be thrown at compile
 time.
@@ -746,21 +733,13 @@ Every variable, whether its type is primitive or derived, must be assigned a typ
     list<int> myList;
 \end{verbatim}
 
-declares the variable \tt myList \rm to be a \tt list \rm of \tt int\rm s,
-
-\begin{verbatim}
-    list<list<int>> myOtherList;
-\end{verbatim}
-
-declares the variable \tt myOtherList \rm to be a \tt list \rm of \tt list\rm s of \tt int \rm s,
-
-and
+Declares the variable \tt myList \rm to be a \tt list \rm of \tt int\rm s. And,
 
 \begin{verbatim}
     text myText;
 \end{verbatim}
 
-declares the variable \tt myText \rm to be of type \tt text\rm .
+Declares the variable \tt myText \rm to be of type \tt text\rm .
 
 % subsection type_specifiers (end)
 
@@ -771,7 +750,10 @@ declares the variable \tt myText \rm to be of type \tt text\rm .
 \label{ssub:null_declarations}
 
 If a variable is declared but not initialized, the variable becomes a
-\textbf{\emph{null reference}}, which means it points to nothing and holds no data (internally, this means that an entry has been added to Hog's symbol table with that variable name).
+\textbf{\emph{null reference}}, which means it points to nothing, holds no data,
+and will fail any comparison (see \S \ref{sub:operators} for a discussion of how
+\tt null \rm affects comparisons and elementary arithmetic and boolean
+operations).
 
 % subsubsection null_declarations (end)
 
@@ -801,22 +783,34 @@ variable, or a single unnamed raw primitive.
 \subsubsection{Derived-Type Variable Declarations} % (fold)
 \label{ssub:derived_type_variable_declarations}
 
-Derived-type variables are declared using the following pattern:
+Derived-type variables are declared using the following patterns:
 
 \begin{enumerate}
-  \item \emph{type identifier;}
+  \item \emph{type identifier}
+  \item \emph{type identifier = expression }
+  \item \emph{type idenfitier(parameterList)}  where, \\
+  \indent \emph{parameterList} $\rightarrow$ \emph{parameter}, \emph{parameterList} $|$ \emph{parameter}
 \end{enumerate}
 
-When the derived type is first declared, we say that the variable is
+The first two patterns operate in essentially the same way as for primitive­type
+variables. When the first pattern is used, we say that the variable is
 \textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user attempts
-to use any type-­specific operations that are not meaningful (for instance, \tt myList.size() \rm on an
-uninitialized variable, the program will throw a run­time exception (see \S
-\ref{sec:exception_handling} for a discussion of exceptions)). The example code below initializes a \tt list\rm of integers and adds one element to it.
+to use any type­specific operations (for instance, \tt myList.size() \rm on an
+uninitialized variable, the program will through a run­time exception (see \S
+\ref{sec:exception_handling} for a discussion of exceptions)). When the second
+pattern is used, the variable is \textbf{\emph{initialized}} to the result of the
+\emph{expression}.
+
+Because derived-type variables often have additional structure that needs to be
+defined at initialization, a third pattern is provided. In this pattern, the user
+can specify a list of \textbf{\emph{parameters}} to initialize the object. For
+instance,
 
 \begin{verbatim}
-    list<int> myList;
-    myList.add(5);
+    list<int> myList(5)
 \end{verbatim}
+
+Specifies that \tt myList \rm should be initialized with five \tt null \rm values.
 
 % subsubsection derived_type_variable_declarations (end)
 
@@ -868,6 +862,7 @@ The following are the \textbf{\emph{flow-of-control}} statements included in Hog
   \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt else \rm \emph{statement}
   \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt elseif ( \rm \emph{statement} \tt ) $\dots$ else 
   \rm \emph{statement}
+  \item[] \tt switch ( \rm \emph{expression} \tt ) \rm \emph{statement} \rm
 \end{itemize}
 
 In the above statements, the  $\dots$ signifies an unlimited number of \tt elseif \rm
@@ -882,7 +877,39 @@ elseif \rm and \tt else \rm statements, the statement will be executed that
 follows the first expression evaluating to \tt true\rm. If none of these
 expressions evaluate to \tt true\rm, then the \tt else \rm statement is executed.
 
-To increase the expressive power of Hog, flow-of-control statements can also be nested within each other.
+The \tt switch \rm statement causes control to transfer to a statement depending
+on the matching \tt case \rm label. There can be an unlimited number of \tt case
+\rm labels within the \tt switch \rm statement, so that the \tt switch \rm will
+operate as such:
+
+\begin{quotation}
+  \tt switch ( \rm \emph{expression}$_0$ \tt ) \{\\
+  \indent \indent \tt case \rm \emph{expression}$_1$ \tt : \rm\emph{statement}$_1$ \\
+  \indent \indent \tt case \rm \emph{expression}$_2$ \tt : \rm\emph{statement}$_2$ \\
+  \indent \indent \tt default : \rm \emph{statement}$_3$ \\
+  \indent \tt \}
+\end{quotation}
+
+An \emph{expression} is passed in to the \tt switch \rm statement and then the
+flow of control will fall through the \tt switch \rm and the \emph{expression}
+will then be compared to the constant \emph{expression} next to each \tt case \rm
+label. When the \tt switch \rm \emph{expression} matches the \emph{expression}
+next to a specific \tt case\rm, the \emph{statement} for that \tt case \rm is
+executed. If the flow of control falls to the bottom of the \tt switch \rm without
+finding an equality, then the \tt default \rm \emph{statement} will be executed.
+The \tt case \rm constants are converted to the \tt switch \rm \emph{expression}
+type. There cannot be two \tt case \rm \emph{expressions} with the same value
+after conversion. In addition, there can only be one \tt default \rm label within
+each \tt switch\rm.
+
+\emph{Note}: \tt switch \rm statements in Hog follow the normal conventions of
+\textbf{\emph{fall-through}}. When a particular \tt case \rm is matched,
+\emph{all} of the statements are executed until the keyword \tt break \rm is
+encountered. So statements from other \tt case\rm's are executed so long as they
+are below the matched \tt case\rm, and there is no \tt break \rm statement between
+them.
+
+The above control statements can all be nested within each other.
 
 % subsection flow_of_control_statements (end)
 
@@ -894,13 +921,13 @@ forms:
 
 \begin{itemize}
   \item[] \tt while ( \rm \emph{expression} \tt ) \rm \emph{statement}
-  \item[] \tt for ( \rm \emph{expression}$_1$ \tt ; \rm \emph{expression}$_2$ \tt ; \rm \emph{expression}$_3$ \tt ;) \rm \emph{statement}
+  \item[] \tt for ( \rm \emph{expression}$_1$ \tt ; \rm \emph{expression}$_2$ \tt ; \rm \emph{expression}$_3$ \tt ) \rm \emph{statement}
   \item[] \tt foreach \rm \emph{expression} \tt in \rm \emph{iterable-object statement}
 \end{itemize}
 
 In the \tt while \rm pattern, the associated \emph{statements} will be executed
 repeatedly until the \emph{expression} evaluates to \tt false\rm. The
-\emph{expression} is evaluated before every iteration. Please note that in a slight syntactical departure from Java, Hog requires a semicolon after the third expression (the increment step) in the \tt for\rm loop construct. Thus, an example of correct Hog syntax would be \begin{verbatim} for (int i = 0; i < 10; i++;){...}\end{verbatim}
+\emph{expression} is evaluated before every iteration.
 
 In the \tt for \rm pattern, \emph{expression}$_1$ is the initialization step,
 \emph{expression}$_2$ is the test or condition and \emph{expression}$_3$ is the
@@ -919,12 +946,11 @@ through.
 \label{ssub:example_1}
 
 \begin{verbatim}
-    int i = 0;
+    int i = 0
     while (i < 10) {
-      print(i);
-      i++;
+      print(i)
+      i++
     }
-
 \end{verbatim}
 
 % subsubsection example_1 (end)
@@ -933,7 +959,7 @@ through.
 \label{ssub:example_2}
 
 \begin{verbatim}
-    for (int i = 0; i < 10; i++;) {
+    for (int i = 0; i < 10; i++) {
       print(i)
     }
 \end{verbatim}
@@ -944,17 +970,10 @@ through.
 \label{ssub:example_3}
 
 \begin{verbatim}
-    # we first initialize and populate the list as follows: 
-    list<int> iList;
-    for (int i = 0; i < 10; i++;) {
-       iList.add(i);
-    }
-
-    # This is an example of using foreach
-    # Note that the type of the iterable must be declared.    
-
-    foreach int i in iList {
-      print(i);
+    list<int> iList()
+    iList = [0,1,2,3,4,5,6,7,8,9]
+    foreach i in iList {
+      print(i)
     }
 \end{verbatim}
 
@@ -1018,6 +1037,48 @@ function, and \emph{parameterList} is a (possibly empty) list of parameters used
 \emph{Note}: In what follows, if a function has return type T, it means that the return type of this function matches the
 parameterized type of this object (i.e. for an \tt iter<int> \rm object, these functions have return type \tt int\rm).
 
+\subsubsection{\tt dict \rm} % (fold)
+\label{ssub:tt_dict_rm}
+
+\begin{itemize}
+
+\item[] \tt void clear() \rm
+
+Removes all key-value pairs in this \tt dict\rm.
+
+\item[] \tt bool containsKey(K key) \rm
+
+Returns \tt true \rm if \tt key \rm is a key in this \tt dict\rm, \tt false \rm otherwise.
+
+\item[] \tt V get(K key) \rm
+
+Returns the value associated the \tt key \rm in this \tt dict\rm, or \tt null \rm if this \tt dict \rm doesn't contain \tt
+key\rm.
+
+\item[] \tt set<T> keySet() \rm
+
+Returns a set of all the keys in this \tt dict\rm.
+
+\item[] \tt void put(K key, V value) \rm
+
+Places a new key-value pair in this \tt dict\rm.
+
+\item[] \tt dict<V, K> reverseDict() \rm
+
+Returns as new \tt dict \rm object with the key-value pairs of this \tt dict \rm reverse (i.e. keys become values and values
+become keys). \emph{Note}: If there are duplicate values, they are collapsed, and an arbitrary key out of all of the associated
+keys is chosen as the new value.
+
+\item[] \tt bool size() \rm
+
+Returns the number of key-value pairs in this \tt dict\rm.
+
+
+
+\end{itemize}
+
+% subsubsection tt_dict_rm (end)
+
 \subsubsection{\tt iter \rm} % (fold)
 \label{ssub:iter}
 
@@ -1029,20 +1090,23 @@ that are independent of the particular type of the \tt iter \rm object. The buil
 \item[] \tt bool hasNext() \rm
 
 This function returns \tt true \rm if the iterator object has a next object
-to return, and \tt false \rm otherwise.
+to return, and \tt false \rm otherwise. This function is equivalient to evaluating
+\tt if (iter\_object.peek() == null)\rm.
 
 \item[] \tt T next() \rm
 
 This function returns the next object (if one exists) for the owning \tt iter \rm
 object. A call to \tt next() \rm differs from a call to \tt peek() \rm in that the
-function call advances the cursor of the iterator.
+function call advances the cursor of the iterator. If \tt next() \rm is called on
+an iterator that has no more values, \tt null \rm is returned.
 
 \item[] \tt T peek() \rm
 
 This function returns the next object (if one exists) for the owning \tt iter \rm
 object. A call to \tt peek() \rm returns the object without advancing the iterator's
 cursor, thus multiple calls to \tt peek() \rm without any intermediate function calls
-will all return the same value.
+will all return the same value. If \tt peek() \rm is called on an iterator that has
+no more values, \tt null \rm is returned. 
 
 \end{itemize} 
 
@@ -1085,6 +1149,72 @@ Returns an int with the number of elements in the list.
 
 
 % subsubsection list (end)
+
+\subsubsection{\tt multiset \rm} % (fold)
+\label{ssub:multiset}
+
+The \tt multiset \rm object is similar in kind to the \tt set \rm object in that
+it is an unordered collection of objects of the same type. The key difference
+between \tt set \rm and \tt multiset \rm is that \tt multiset \rm allows for
+duplicates. The built-in functions on \tt multiset \rm are as follows:
+
+\begin{itemize}
+
+\item[] \tt void add(T object) \rm
+
+Adds \tt object \rm to the \tt multiset\rm.
+
+\item[] \tt void clear() \rm
+
+Removes all elements in this \tt multiset\rm.
+
+\item[] \tt bool contains(T object) \rm
+
+Returns \tt true \rm if this \tt multiset \rm contains at least one instance of
+\tt object\rm, \tt false \rm otherwise.
+
+\item[] \tt int count(T object) \rm
+
+The \tt count(T object) \rm method returns the number of instances of \tt object \rm
+in the given \tt multiset\rm. If the \tt multiset \rm does not contain the given
+object, then \tt 0 \rm is returned. 
+
+\item[] \tt list<T> entrySet() \rm
+
+This function returns a list of all entries in the multiset, with duplicates removed.
+Please note: objects are added to the list in an arbitrary order, since \tt multiset
+\rm objects are inherently unordered. Do not ever rely on \tt entrySet() \rm 
+providing a consistent ordering of objects.
+
+\item[] \tt bool isEmpty() \rm
+
+This function returns \tt true \rm if the \tt multiset \rm contains no objects, and
+\tt false \rm otherwise.
+
+\item[] \tt iter<T> iterator() \rm
+
+This function returns an iterator for the entries of the objects in this list,
+with duplicates removed. Again, the order of the objects is arbitrary. 
+
+\item[] \tt bool removeAll(T object) \rm
+
+Removes all instances of \tt object \rm from the given \tt multiset\rm. Returns
+\tt true \rm if removal was successful, \tt false \rm otherwise (i.e. \tt object \rm
+was not contained in the \tt mutliset\rm).
+
+\item[] \tt bool removeOne(T object) \rm
+
+Removes one instance of \tt object \rm from the given \tt multiset\rm. Returns
+\tt true \rm if the removal was successful, \tt false \rm otherwise (i.e.,
+\tt object \rm was not in the \tt multiset\rm).
+
+\item[] \tt int size() \rm
+
+Returns the total number of objects in this \tt multiset\rm.
+
+\end{itemize}
+
+% subsubsection multiset (end)
 
 \subsubsection{\tt set \rm} % (fold)
 \label{ssub:tt_set_rm}
@@ -1255,7 +1385,7 @@ cluster).
 \section{Exception Handling} % (fold)
 \label{sec:exception_handling}
 
-Similar to some other programming languages (such as Java and C++), Hog uses an exception model in
+Similar to other programming languages (Java, C++), Hog uses an exception model in
 which an exception is thrown and can be caught by a catch block. Code should be
 surrounded by a try block and then any exceptions occurring within the try block
 will subsequently be caught by the catch block. Each try block should be
@@ -1268,21 +1398,33 @@ is optional:
 
 \begin{quotation}
 \tt try \{ \rm \\
-\indent \indent \emph{expression;} \\
+\indent \indent \emph{expression} \\
 \tt \indent \} catch ( \rm \emph{exception} \tt ) \rm \{ \\
-\indent \indent \emph{expression;} \\
+\indent \indent \emph{expression} \\
 \tt \indent \} finally \rm \{ \\
-\indent \indent \emph{expression;} \\
+\indent \indent \emph{expression} \\
 \tt \indent \}
 \end{quotation}
-
-The current version of the language does not support the programmer throwing exceptions, only catching them.
 
 Because the proper behavior of a Hog program is dependent on resources outside of
 the language (i.e. the proper behavior of the user’s Hadoop software), there are
 more sources exceptions in Hog than most general purpose languages. These sources
 can be divided into two categories: \textbf{\emph{compile­-time exceptions}} and
 \textbf{\emph{internal run­-time exceptions}}.
+
+To throw an exception, a programmer uses the following pattern, 
+
+\begin{quotation}
+\tt throw \rm \emph{exceptionType} \emph{exceptionMessage}
+\end{quotation}
+
+\noindent For example,
+
+\begin{verbatim}
+    if (a instanceof text and b instanceof int) {
+      throw TypeMismatchException "Cannot add a text and an int!"
+    }
+\end{verbatim}
 
 \subsection{Compile-time Errors} % (fold)
 \label{sub:compile_time_exceptions}
@@ -1301,7 +1443,7 @@ following are Hog compile-­time exceptions:
   
   \item[] \tt FunctionNotDefinedError \rm
   
-   Thrown when a program attempts to carry out an operations of the sort \tt variable.builtInFunction() \rm where \tt variable \rm is some variable and \tt builtInFunction \rm is a built-in function, and either \tt builtInFunction \rm cannot operate on variables of that type or \tt builtInFunction \rm  is not defined as a built-in function.
+   Thrown when a program attempts to carry out an operations of the sort \tt variable.builtInFunction() \rm where \tt variable \rm is some variable and \tt builtInFunction \rm is a built-in function, and either \tt builtInFunction \rm can not operate on variables of that type or \tt builtInFunction \rm  is not defined as a built-in function.
   
   \item[] \tt InvalidFunctionArgumentsError \rm
    
@@ -1370,283 +1512,209 @@ elements of different types into the same list) and parsing exceptions. The foll
 
 \emph{Note}: The presented grammar has one minor ambiguity relating to the
 \textbf{\emph{dangling-else}} problem. If the grammar is run through the parser
-generator \tt yacc\rm, \tt yacc \rm will identify 7 shift/reduce parsing-action
+generator \tt yacc\rm, \tt yacc \rm will identify 3 shift/reduce parsing-action
 conflicts. However, the ambiguity is handled by the default behavior of \tt
 yacc\rm, which preferences shift to reduce, associating \tt else \rm and \tt
 elseif \rm clauses with the closest \tt if \rm clause.
 
 \begin{verbatim}
-%token DECR INCR RETURN CONTINUE
-%token TIMES  DIVIDE  MOD
-%token LESS  GRTR  LESS_EQL  GRTR_EQL  DBL_EQLS  NOT_EQLS  ASSIGN
-%token TEXT  BOOL  INT  REAL  VOID
-%token MINUS  UMINUS  PLUS
-%token ARROW  DOT
-%token TEXT_LITERAL
-%token ID
-%token INT_CONST
-%token REAL_CONST
-%token BOOL_CONST
-%token CASE
-%token BREAK DEFAULT
-%token AND OR NOT
-%token WHILE FOR FOREACH IN IF ELSE ELSEIF SWITCH
-%token FUNCTIONS MAIN MAP REDUCE
-%token L_BRACE R_BRACE L_BRKT R_BRKT L_PAREN R_PAREN SEMICOL COL COMMA
-%token LIST ITER SET
-%token TRY CATCH FINALLY
-%token EXCEPTION
+  %token UMINUS DECR INCR
+  %token MINUS PLUS TIMES DIVIDE MOD
+  %token LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS ASSIGN
+  %token TEXT BOOL INT REAL LIST VOID
+  %token ARROW DOT
+  %token TEXT_LITERAL ID INT_CONST REAL_CONST BOOL_CONST
+  %token BREAK CASE DEFAULT
+  %token IN AND OR NOT
+  %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
+  %token FUNCTION MAIN MAP REDUCE
 
-%left MINUS PLUS
-%right UMINUS
-%right ELSE
-%right ELSEIF
-%right L_PAREN
+  %left OR
+  %left AND
+  %right NOT
 
-%start Program
+  %left MINUS PLUS
+  %left TIMES DIVIDE
+  %left MOD
+  %right UMINUS
+  %left DECR INCR
 
-%%
+  %nonassoc LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS
+  %right ASSIGN
 
-Program
-  : Functions Map Reduce Main
-  ;
+  %start program
+  %%
 
-Functions
-  : FUNCTIONS L_BRACE FunctionList R_BRACE
-  | /* epsilon */
-  ;
- 
-FunctionList
-  : Function
-  | FunctionList Function
-  ;
 
-Function
-  : Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE
-  ;
+  program
+      : functions map reduce main
+      ;
 
-ParameterList
-  : ParameterList COMMA Type ID
-  | Type ID
-  | /* epsilon */
-  ;
+  functions
+      : FUNCTION '{' function_list '}'
+      | /* epsilon */
+      ;
 
-Map
-  : MAP SectionType L_BRACE StatementList R_BRACE
-  ;
+  function_list
+      : function
+      | function_list function
+      ;
 
-Reduce
-  : REDUCE SectionType L_BRACE StatementList R_BRACE
-  ;
+  function
+      : type ID '(' parameter_list ')' '{' statement_list '}'
+      ;
 
-SectionType
-  : L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN
-  ;
+  parameter_list
+      : type ID ',' parameter_list
+      | type ID
+      | /* epsilon */
+      ;
 
-Main
-  : MAIN L_BRACE StatementList R_BRACE
-  ;
+  map
+      : MAP section_type '{' statement_list '}'
+      ;
 
-StatementList
- : Statement
- | StatementList Statement
- ;
+  reduce
+      : REDUCE section_type '{' statement_list '}'
+      ;
 
-Statement
-  : ExpressionStatement
-  | SelectionStatement
-  | IterationStatement
-  | LabeledStatement
-  | JumpStatement
-  | DeclarationStatement
-  | GuardingStatement
-  | Block
-  ;
+  section_type
+      : '(' type ID ',' type ID ')' ARROW '(' type ',' type ')'
+      ;
 
-GuardingStatement
-   : TRY Block Finally
-   | TRY Block Catches
-   | TRY Block Catches Finally
-   ;
+  main
+      : MAIN '{' statement_list '}'
+      ;
 
-Block
-  : L_BRACE StatementList R_BRACE
-  | L_BRACE R_BRACE
-  ;
+  statement_list
+      : statement
+      | statement_list statement
+      ;
 
-Finally
- : FINALLY Block
- ;
+  statement
+      : expression_statement
+      | selection_statement
+      | iteration_statement
+      | labeled_statement
+      | BREAK
+      ;
 
-Catches
-  : CatchHeader Block
-  | Catches CatchHeader Block
-  ;
+  expression_statement
+      : '\n'
+      | expression '\n'
+      ;
 
-CatchHeader
-  : CATCH L_PAREN EXCEPTION ID R_PAREN
-  ;
- 
-DeclarationStatement
-  : Type ID
-  | Type ID ASSIGN Expression
-  ;
- 
-JumpStatement
-  : CONTINUE
-  | BREAK
-  | RETURN ExpressionStatement
-  ;
- 
-ExpressionStatement
-  : SEMICOL
-  | Expression SEMICOL
-  ;
+  expression
+      : logical_expression
+      | unary_expression ASSIGN expression
+      ;
 
-Expression
-  : LogicalExpression
-  | UnaryExpression ASSIGN Expression
-  ;
+  logical_expression
+      : logical_expression OR logical_term
+      | logical_term
+      ;
 
-LogicalExpression
-  : LogicalExpression OR LogicalTerm
-  | LogicalTerm
-  ;
+  logical_term
+      : logical_term AND equality_expression
+      | equality_expression
+      ;
 
-LogicalTerm
-  : LogicalTerm AND EqualityExpression
-  | EqualityExpression
-  ;
+  equality_expression
+      : relational_expression
+      | equality_expression DBL_EQLS relational_expression
+      | equality_expression NOT_EQLS relational_expression
+      ;
 
-EqualityExpression
-  : RelationalExpression
-  | EqualityExpression DBL_EQLS RelationalExpression
-  | EqualityExpression NOT_EQLS RelationalExpression
-  ;
+  relational_expression
+      : additive_expression
+      | relational_expression LESS additive_expression
+      | relational_expression GRTR additive_expression
+      | relational_expression LESS_EQL additive_expression
+      | relational_expression GRTR_EQL additive_expression
+      ;
 
-RelationalExpression
-  : AdditiveExpression
-  | RelationalExpression LESS AdditiveExpression
-  | RelationalExpression GRTR AdditiveExpression
-  | RelationalExpression LESS_EQL AdditiveExpression
-  | RelationalExpression GRTR_EQL AdditiveExpression
-  ;
+  additive_expression
+      : multiplicative_expression
+      | additive_expression PLUS multiplicative_expression
+      | additive_expression MINUS multiplicative_expression
+      ;
 
-AdditiveExpression
-  : MultiplicativeExpression 
-  | AdditiveExpression PLUS MultiplicativeExpression
-  | AdditiveExpression MINUS MultiplicativeExpression
-  ;
+  multiplicative_expression
+      : cast_expression
+      | multiplicative_expression TIMES cast_expression
+      | multiplicative_expression DIVIDE cast_expression
+      | multiplicative_expression MOD cast_expression
+      ;
 
-MultiplicativeExpression
-  : CastExpression
-  | MultiplicativeExpression TIMES CastExpression
-  | MultiplicativeExpression DIVIDE CastExpression
-  | MultiplicativeExpression MOD CastExpression
-  ;
+  cast_expression
+      : unary_expression
+      | '(' type ')' cast_expression
+      ;
 
-CastExpression
-  : UnaryExpression
-  | L_PAREN Type R_PAREN CastExpression   
-  ;
+  unary_expression
+      : UMINUS cast_expression
+      | NOT cast_expression
+      | postfix_expression
+      ;
 
-UnaryExpression
-  : UnaryOperator CastExpression
-  | PostfixExpression
-  ;
-  
-UnaryOperator
-  : MINUS %prec UMINUS
-  | NOT
-  ;
+  postfix_expression
+      : primary_expression
+      | postfix_expression INCR
+      | postfix_expression DECR
+      ;
 
-PostfixExpression
-  : PrimaryExpression
-  | ID DOT ID
-  | ID DOT ID L_PAREN ArgumentExpressionList R_PAREN
-  | ID L_PAREN ArgumentExpressionList R_PAREN
-  | PostfixExpression INCR
-  | PostfixExpression DECR
-  ;
+  primary_expression
+      : ID
+      | ID DOT ID '(' parameters ')'
+      | constant
+      | TEXT_LITERAL
+      | '(' expression ')'
+      ;
 
-ArgumentExpressionList
-  : Expression
-  | ArgumentExpressionList COMMA Expression
-  | /* epsilon */
-  ;
+  parameters
+      : ID
+      | ID ',' parameters
+      ;
 
-PrimaryExpression
-  : ID
-  | Constant
-  | L_PAREN Expression R_PAREN
-  ;
+  constant
+     : INT_CONST
+     | REAL_CONST
+     | BOOL_CONST
+     ;
 
-Constant
-  : INT_CONST
-  | REAL_CONST
-  | BOOL_CONST
-  | TEXT_LITERAL
-  ;
+  selection_statement
+      : IF '(' expression ')' statement elseif_statement else_statement
+      | SWITCH '(' expression ')' statement
+      ; 
 
-SelectionStatement
-  : IF Expression Block ElseIfStatement ElseStatement
-  | SWITCH Expression L_BRACE StatementList R_BRACE
-  ;
+  elseif_statement
+      : ELSEIF '(' expression ')' elseif_statement
+      | /* epsilon */
+      ;
 
-ElseIfStatement
-  : ELSEIF Expression Block ElseIfStatement
-  | /* epsilon */
-  ;
+  else_statement
+      : ELSE statement
+      | /* epsilon */
+      ;
 
-ElseStatement
-  : ELSE Block
-  | /* epsilon */
-  ;
+  iteration_statement 
+      : WHILE '(' expression ')' statement
+      | FOR '(' expression ';' expression ';' expression ')' statement
+      | FOREACH '(' expression IN expression ')' statement
+      ;
 
-IterationStatement
-  : WHILE L_PAREN Expression R_PAREN Block
-  | FOR L_PAREN ForInit ForExpr ForIncr R_PAREN Block
-  | FOR L_PAREN ForInit ForExpr R_PAREN Block
-  | FOREACH Type ID IN Expression Block
-  ;
+  labeled_statement
+      : CASE ':' statement
+      | DEFAULT ':' statement
+      ;
 
-ForInit
-  : ExpressionStatements
-  | DeclarationStatement SEMICOL
-  ;
-
-ForExpr
-  : ExpressionStatement
-  ;
-
-ForIncr
-  : ExpressionStatements
-  ;
-
-ExpressionStatements
-  : ExpressionStatement
-  | ExpressionStatements COMMA ExpressionStatement
-  ;
- 
-LabeledStatement
-  : CASE LogicalExpression COL Statement
-  | DEFAULT COL Statement
-  ;
-
-Type
-  : VOID
-  | TEXT
-  | BOOL
-  | INT
-  | REAL
-  | DerivedType LESS Type GRTR
-  ;
-
-DerivedType
-  : LIST
-  | ITER
-  | SET
-  ;
+  type
+      : VOID
+      | TEXT
+      | BOOL
+      | INT
+      | REAL
+      ; 
 
 \end{verbatim}
 

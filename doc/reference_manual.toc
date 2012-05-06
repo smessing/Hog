@@ -10,55 +10,52 @@
 \contentsline {subsection}{\numberline {3.3}\tt @Map \rm }{8}
 \contentsline {subsection}{\numberline {3.4}\tt @Reduce \rm }{9}
 \contentsline {subsection}{\numberline {3.5}\tt @Main \rm }{10}
-\contentsline {section}{\numberline {4}Lexical Conventions}{10}
-\contentsline {subsection}{\numberline {4.1}Tokens}{10}
+\contentsline {section}{\numberline {4}Lexical Conventions}{11}
+\contentsline {subsection}{\numberline {4.1}Tokens}{11}
 \contentsline {subsection}{\numberline {4.2}Comments}{11}
 \contentsline {subsection}{\numberline {4.3}Identifiers}{11}
 \contentsline {subsection}{\numberline {4.4}Keywords}{11}
 \contentsline {subsection}{\numberline {4.5}Constants}{12}
 \contentsline {subsection}{\numberline {4.6}Text Literals}{12}
-\contentsline {subsection}{\numberline {4.7}Variable Scope}{12}
-\contentsline {section}{\numberline {5}Types}{12}
-\contentsline {subsection}{\numberline {5.1}Basic Types}{12}
+\contentsline {subsection}{\numberline {4.7}Variable Scope}{13}
+\contentsline {section}{\numberline {5}Types}{13}
+\contentsline {subsection}{\numberline {5.1}Basic Types}{13}
 \contentsline {subsection}{\numberline {5.2}Derived Types (Collections)}{13}
-\contentsline {subsection}{\numberline {5.3}Conversions}{13}
+\contentsline {subsection}{\numberline {5.3}Type Conversions}{14}
 \contentsline {section}{\numberline {6}Expressions}{14}
 \contentsline {subsection}{\numberline {6.1}Operators}{14}
 \contentsline {subsubsection}{\numberline {6.1.1}Arithmetic Operators}{14}
 \contentsline {subsubsection}{\numberline {6.1.2}Logical Operators}{15}
 \contentsline {subsubsection}{\numberline {6.1.3}Comparators}{15}
-\contentsline {subsubsection}{\numberline {6.1.4}Assignment}{15}
+\contentsline {subsubsection}{\numberline {6.1.4}Assignment}{16}
 \contentsline {section}{\numberline {7}Declarations}{16}
 \contentsline {subsection}{\numberline {7.1}Type Specifiers}{16}
 \contentsline {subsection}{\numberline {7.2}Declarations}{16}
 \contentsline {subsubsection}{\numberline {7.2.1}Null Declarations}{16}
-\contentsline {subsubsection}{\numberline {7.2.2}Primitive-Type Variable Declarations}{16}
+\contentsline {subsubsection}{\numberline {7.2.2}Primitive-Type Variable Declarations}{17}
 \contentsline {subsubsection}{\numberline {7.2.3}Derived-Type Variable Declarations}{17}
 \contentsline {subsubsection}{\numberline {7.2.4}Function Declarations}{17}
 \contentsline {section}{\numberline {8}Statements}{17}
 \contentsline {subsection}{\numberline {8.1}Expression Statement}{17}
-\contentsline {subsection}{\numberline {8.2}Compound Statement (Blocks)}{17}
+\contentsline {subsection}{\numberline {8.2}Compound Statement (Blocks)}{18}
 \contentsline {subsection}{\numberline {8.3}Flow-Of-Control Statements}{18}
-\contentsline {subsection}{\numberline {8.4}Iteration Statements}{19}
+\contentsline {subsection}{\numberline {8.4}Iteration Statements}{18}
 \contentsline {subsubsection}{\numberline {8.4.1}Example of \tt while \rm }{19}
 \contentsline {subsubsection}{\numberline {8.4.2}Example of \tt for \rm }{19}
 \contentsline {subsubsection}{\numberline {8.4.3}Example of \tt foreach \rm }{19}
-\contentsline {section}{\numberline {9}Built-in Functions}{20}
+\contentsline {section}{\numberline {9}Built-in Functions}{19}
 \contentsline {subsection}{\numberline {9.1}System-level Built-ins}{20}
 \contentsline {subsection}{\numberline {9.2}Object-level Built-ins}{20}
-\contentsline {subsubsection}{\numberline {9.2.1}\tt dict \rm }{21}
-\contentsline {subsubsection}{\numberline {9.2.2}\tt iter \rm }{21}
-\contentsline {subsubsection}{\numberline {9.2.3}\tt list \rm }{22}
-\contentsline {subsubsection}{\numberline {9.2.4}\tt multiset \rm }{22}
-\contentsline {subsubsection}{\numberline {9.2.5}\tt set \rm }{23}
-\contentsline {subsubsection}{\numberline {9.2.6}text}{24}
-\contentsline {section}{\numberline {10}System Configuration}{24}
-\contentsline {section}{\numberline {11}Compilation Structure}{25}
-\contentsline {section}{\numberline {12}Linkage and I/O}{25}
-\contentsline {subsection}{\numberline {12.1}Usage}{26}
-\contentsline {subsection}{\numberline {12.2}Example}{26}
-\contentsline {section}{\numberline {13}Exception Handling}{26}
-\contentsline {subsection}{\numberline {13.1}Compile-time Errors}{27}
-\contentsline {subsection}{\numberline {13.2}Internal Run-time Exceptions}{28}
-\contentsline {subsection}{\numberline {13.3}External Run-time Exceptions}{29}
-\contentsline {section}{\numberline {14}Grammar}{29}
+\contentsline {subsubsection}{\numberline {9.2.1}\tt iter \rm }{20}
+\contentsline {subsubsection}{\numberline {9.2.2}\tt list \rm }{21}
+\contentsline {subsubsection}{\numberline {9.2.3}\tt set \rm }{21}
+\contentsline {subsubsection}{\numberline {9.2.4}text}{22}
+\contentsline {section}{\numberline {10}System Configuration}{22}
+\contentsline {section}{\numberline {11}Compilation Structure}{23}
+\contentsline {section}{\numberline {12}Linkage and I/O}{23}
+\contentsline {subsection}{\numberline {12.1}Usage}{24}
+\contentsline {subsection}{\numberline {12.2}Example}{24}
+\contentsline {section}{\numberline {13}Exception Handling}{24}
+\contentsline {subsection}{\numberline {13.1}Compile-time Errors}{25}
+\contentsline {subsection}{\numberline {13.2}Internal Run-time Exceptions}{26}
+\contentsline {section}{\numberline {14}Grammar}{26}
