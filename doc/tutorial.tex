@@ -89,19 +89,10 @@ on a separate line.
 \subsection*{Running the Word Count Code} % (fold)
 \label{sub:running_the_word_count_code}
 
-To run the program \tt WordCount.hog\rm, the user types the following into the
+To run the program \tt WordCount.hog\rm, the user enters the input file (or input folder if there are several input files) and output folder in the Makefile and types the following into the
 terminal: \\
 
-\noindent \tt hog --hdfs WordCount.hog --input inputFile.txt
---output wordCounts.csv \rm \\
-
-Here, \tt --hdfs \rm indicates that we want to run the job on the user's Hadoop
-cluster (specified in a configuration file; see the Hog reference manual for
-details on how to properly orient Hog to your Hadoop cluster). If, alternatively,
-we wanted to run the job locally, we can type \tt --local\rm. The second parameter
-is the name of the program, here \tt WordCount.hog\rm. The last two parameters
-indicate the input file (or directory, in which case every file in the directory
-will be used as input in turn) and the desired name of the output file.
+\noindent \tt ./Hog.sh WordCount.hog  \rm \\
 
 % subsection running_the_word_count_code (end)
 
@@ -111,8 +102,7 @@ The general idea of this program is that we want to read every line of text from
 every file, and then, grouping by word, output the total number of times we
 encountered each word. Since we want to group by word, we will use the words
 themselves as the intermediate key output by the \tt @Map \rm function. This will
-allow us to group each word's value and send them all together in one key-value
-pair to the \tt @Reduce \rm function.
+allow us to group each word with its values and to send the key, value pairs with that word as the key to the \tt @Reduce \rm function.
 
 \subsubsection*{\tt @Functions \rm}
 
@@ -127,9 +117,7 @@ word as the key with a value that indicates we have just encountered it. We will
 use this value later to perform the summation.
 
 The first line of this section is the \tt @Map \rm header, which defines the
-\textbf{\emph{signature}} of the \tt @Map \rm function. In the current release, all
-Hog programs read input files one line at a time, where the file offset of the line
-is the key, and the text of the line is the value. \emph{This means that for all
+\textbf{\emph{signature}} of the \tt @Map \rm function. \emph{For all
 Hog programs, the only allowable types for the input key-value pair is \tt (int\rm,
 \tt text)\rm}. The inputs are also \textbf{\emph{named}} in the signature in order
 to reference them in the body of the function.
@@ -146,16 +134,11 @@ Hog's string type, and represents a sequence of characters. To create a \tt text
 \rm object, simply include a string of characters between two double quotes (e.g.
 \tt "hello world 123"\rm).
 
-In the body of the function, we split the line of text passed in as the value into
-words delineated by whitespace by using the built-in function \tt tokenize()\rm. We
+In the body of the function, we split the line of text passed in using whitespace as the delimiter 
+in the built-in function  \tt tokenize()\rm. We
 then iterate through the \tt list \rm of words (of type \tt list<text>\rm) that \tt
 tokenize() \rm returns using a \tt foreach \rm loop. Notice that you call \tt
-tokenize() \rm ``on'' a \tt text \rm object. \tt text \rm objects are the only type
-of objects that support this function. Attempting to call the function on an object
-of a different type (e.g. \tt count.tokenize() \rm for the variable \tt count \rm
-in this example) would lead to an error, called an \textbf{\emph{exception}}.
-Exception handling is outside of the scope of this tutorial. Please see the
-language reference manual for guidance on how to anticipate and handle exceptions.
+tokenize() \rm on a \tt list \rm object.
 
 In the body of the \tt foreach \rm loop, we use the built-in function \tt emit()
 \rm to output a key-value pair, which the framework then groups by key when passing
@@ -183,21 +166,21 @@ of \tt int\rm s as the value. The key type of the input to the reduce function
 values type of the reduce function is \emph{always} an iterator over the type of
 the value output by the map function.
 
-Since we want to output a count and its associated word, \tt @Reduce \rm will
-output \tt int \rm and \tt text \rm for each word.
+Since we want to output a word and its associated count, \tt @Reduce \rm will
+output \tt text \rm and \tt int \rm for each word.
 
 In the body, we initialize the \textbf{\emph{variable}} \tt count \rm to \tt 0\rm,
-and then iterate through the list of values using a familiar \tt while \rm loop,
-adding each value of \tt 1 \rm to a running total (recall that \tt count \rm has
+and then iterate through the list of values associated with that word using a familiar \tt while \rm loop,
+adding each value to a running total (recall that \tt count \rm has
 type \tt int\rm, which means it can represent an integer value). To do this, we use
 the built-in functions on iterators \tt hasNext()\rm---which returns \tt true \rm
 if the iterator contains more values and \tt false \rm otherwise---and \tt
 next()\rm---which returns the next value in the \tt list \rm and moves the
 iterator position forward. The statements inside the \tt while \rm loop continue to
 execute until we have seen every variable in the \tt iter \rm object (when \tt
-values.hasNext() \rm evalutes to \tt false\rm).
+values.hasNext() \rm evaluates to \tt false\rm).
 
-After we have a full count for the input word, we emit the total count and the word
+After we have a full count for the input word, we emit the word and the total count
 as our final output. The framework then takes care of writing these emitted
 key-value pairs to an output file, the name of which is specified by the user when
 the program is run (see the section above, \textbf{Running the Word Count Code}). In this example, we are emitting the word count as the key so that the final result is sorted by the count. If the word was used as the key, the final output would be in alphabetical order. It is also worth noting that even if two words have the same count (and thus the same key), this does not raise any problems, since duplicate keys are only combined in between the \tt @Map \rm and \tt @Reduce \rm phases. Any individual key-value pair emitted in the \tt @Reduce \rm phase will be in the final output.
@@ -214,56 +197,25 @@ Below are the first fifty lines of output generated by \tt WordCount.hog \rm whe
 on a single file containing the English text of \emph{War and Peace}:
 
 \begin{verbatim}
-  31784, the
-  21049, and
-  16389, to
-  14895, of
-  10056, a
-  8314, in
-  7847, he
-  7645, his
-  7425, that
-  7255, was
-  5540, with
-  5316, had
-  4492, not
-  4209, at
-  4162, her
-  4009, I
-  3757, it
-  3744, as
-  3495, on
-  3488, him
-  3308, for
-  3134, is
-  2888, but
-  2762, The
-  2718, you
-  2636, said
-  2620, she
-  2526, from
-  2390, all
-  2387, were
-  2354, be
-  2333, by
-  2031, who
-  2006, which
-  1910, have
-  1812, He
-  1777, one
-  1727, they
-  1693, this
-  1645, what
-  1566, or
-  1561, an
-  1554, Prince
-  1550, so
-  1541, Pierre
-  1466, been
-  1439, did
-  1424, up
-  1409, their
-  1342, would
+  the, 31784
+  and, 21049
+  to, 16389
+  a, 10056
+  in, 8314
+  he, 7847
+  his, 7645
+  that, 7425
+  was, 7255
+  with, 5540
+  had, 5316
+  not, 4492
+  at, 4209
+  her, 4162
+  I, 4009
+  it, 3757
+  on, 3495
+  hi, 348
+  ....
 \end{verbatim}
 
 \subsection*{Comparison with Java Hadoop Program}
