@@ -15,7 +15,6 @@ import util.ast.node.BiOpNode;
 import util.ast.node.CatchesNode;
 import util.ast.node.ConstantNode;
 import util.ast.node.DerivedTypeNode;
-import util.ast.node.DictTypeNode;
 import util.ast.node.ElseIfStatementNode;
 import util.ast.node.ElseStatementNode;
 import util.ast.node.ExceptionTypeNode;
@@ -45,24 +44,21 @@ import util.ast.node.StatementNode;
 import util.ast.node.SwitchStatementNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
-import util.error.UnreachableCodeError;
-import util.error.MissingReturnError;
 
 /**
  * Visitor class for error checking.
  * 
  * This is the second walk performed after construction of the AST from source.
  * 
- * Performs the following validations: 
- * - no dead code (statements after a return statement in the same basic block) 
- * - no break/continue statements outside of iteration loops 
- * - non-void functions have adequate number of return statements 
- * - no case/default statements outside of immediate switch statement
+ * Performs the following validations: - no dead code (statements after a return
+ * statement in the same basic block) - no break/continue statements outside of
+ * iteration loops - non-void functions have adequate number of return
+ * statements - no case/default statements outside of immediate switch statement
  * - can't catch same exception type more than once
  * 
  * 
  * @author paul
- *
+ * 
  */
 
 public class ErrorCheckingVisitor implements Visitor {
@@ -92,103 +88,94 @@ public class ErrorCheckingVisitor implements Visitor {
 		visitReturnChildren(treeRoot);
 		visitFunctionReturns(treeRoot);
 	}
-	
-	
+
 	private void visitReturnChildren(Node node) {
-		/* Constructs of the form
+		/*
+		 * Constructs of the form
 		 * 
-		 * int doubleint (int x){
-		 *   return 2*x;a 
-		 *   x = 2*x;
-		 * }
+		 * int doubleint (int x){ return 2*x;a x = 2*x; }
 		 * 
-		 * will not compile into Java, and so if a Hog program has this construct,
-		 * Hog will throw an unreachable code exception. Similarly,
+		 * will not compile into Java, and so if a Hog program has this
+		 * construct, Hog will throw an unreachable code exception. Similarly,
 		 * 
-		 *   int max(int a, int b){
-  		 *			if (a > b){
-  	   	 *				return a;
-  		 * 			} else{
-  	   	 *				return b;
-  		 *			}
-  		 *			return 0;
-  		 * 	 }
+		 * int max(int a, int b){ if (a > b){ return a; } else{ return b; }
+		 * return 0; }
 		 * 
 		 * will also throw an error in Java.
 		 * 
-		 * This pass through the program will check that there is no unreachable code in a Hog program.
-		 * 
+		 * This pass through the program will check that there is no unreachable
+		 * code in a Hog program.
 		 */
 		if (node.isNewScope()) {
 			LOGGER.finer("We are in a new scope now in node " + node);
 			this.pushReturnStack();
-		}	
-		if(returnFlagStack.get(returnFlagStack.size() - 1)) {
-			throw new UnreachableCodeError(
-					"The following statement is unreachable: "+ node.toSource());
 		}
-		if (node instanceof JumpStatementNode && ((JumpStatementNode) node).getJumpType() == JumpType.RETURN) { //TODO check that is a return node
+		if (returnFlagStack.get(returnFlagStack.size() - 1)) {
+			// throw new UnreachableCodeError(
+			// "The following statement is unreachable: "+ node.toSource());
+		}
+		if (node instanceof JumpStatementNode
+				&& ((JumpStatementNode) node).getJumpType() == JumpType.RETURN) { // TODO
+																					// check
+																					// that
+																					// is
+																					// a
+																					// return
+																					// node
 			if (returnFlagStack.get(returnFlagStack.size() - 1)) {
-				throw new UnreachableCodeError(
-						"The following statement is unreachable: "+ node.toSource());
-			} else{
-				returnFlagStack.set(returnFlagStack.size() - 1, true);}	
+				// throw new UnreachableCodeError(
+				// "The following statement is unreachable: "+ node.toSource());
+			} else {
+				returnFlagStack.set(returnFlagStack.size() - 1, true);
+			}
 		} else {
 			List<Node> children = node.getChildren();
 			for (Node n : children) {
 				visitReturnChildren(n);
 			}
 		}
-	
+
 		if (node.isNewScope()) {
 			this.popReturnStack();
 		}
 	}
 
 	private boolean nonVoidFunctionFlag;
-	
-    private void visitFunctionReturns (Node node){
-    	/*Constructs of the form
-    	 int max(int a, int b){
-    	   if (a > b){
-    	     return a;
-    	   }
-    	   if (b >= a){
-    	     return b;
-    	   }
-    	 }
-    	 will not compile into Java, saying that there is an error in the return type, even though the function
-    	 does return the correct value. This pass through the Hog program will throw Hog errors on this type of input.
-    	*
-    	*
-    	*/
-		if (node instanceof FunctionNode){
+
+	private void visitFunctionReturns(Node node) {
+		/*
+		 * Constructs of the form int max(int a, int b){ if (a > b){ return a; }
+		 * if (b >= a){ return b; } } will not compile into Java, saying that
+		 * there is an error in the return type, even though the function does
+		 * return the correct value. This pass through the Hog program will
+		 * throw Hog errors on this type of input.
+		 */
+		if (node instanceof FunctionNode) {
 			List<Node> children = node.getChildren();
-			if (!Types.isVoidType(((FunctionNode)node).getType())){ //if return type is not void
-		    	this.nonVoidFunctionFlag = true;
-		    	for (Node n : children) {
-		    		if(n instanceof JumpStatementNode && ((JumpStatementNode) n).getJumpType() == JumpType.RETURN){
-		    			this.nonVoidFunctionFlag = false;
-		    		}
-		    	}
-			
-			
-			if (this.nonVoidFunctionFlag){
-			//	throw new MissingReturnError("The following function is missing a return statement: "+ node.toSource());
-			}
-			}
+			/*
+			 * if (!Types.isVoidType(((FunctionNode)node).getType())){ //if
+			 * return type is not void this.nonVoidFunctionFlag = true; for
+			 * (Node n : children) { if(n instanceof JumpStatementNode &&
+			 * ((JumpStatementNode) n).getJumpType() == JumpType.RETURN){
+			 * this.nonVoidFunctionFlag = false; } }
+			 * 
+			 * 
+			 * if (this.nonVoidFunctionFlag){ // throw newMissingReturnError(
+			 * "The following function is missing a return statement: "+
+			 * node.toSource()); } }
+			 */
 		}
-		//System.out.println(nonVoidFunctionFlag);
+		// System.out.println(nonVoidFunctionFlag);
 		List<Node> children = node.getChildren();
-		
+
 		for (Node n : children) {
 			visitFunctionReturns(n);
 		}
 	}
-	
+
 	@Override
 	public void visit(ArgumentsNode node) {
-		LOGGER.finer("visit(ArgumentsNode node) called on " + node);	
+		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
 
 	}
 
@@ -200,13 +187,13 @@ public class ErrorCheckingVisitor implements Visitor {
 
 	@Override
 	public void visit(CatchesNode node) {
-		LOGGER.finer("visit(CatchesNode node) called on " + node);		
+		LOGGER.finer("visit(CatchesNode node) called on " + node);
 	}
 
 	@Override
 	public void visit(ConstantNode node) {
 		LOGGER.finer("visit(ConstantNode node) called on " + node);
-		
+
 	}
 
 	@Override
@@ -250,19 +237,19 @@ public class ErrorCheckingVisitor implements Visitor {
 	@Override
 	public void visit(IfElseStatementNode node) {
 		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
-		
+
 	}
 
 	@Override
 	public void visit(IterationStatementNode node) {
 		LOGGER.finer("visit(IterationStatementNode node) called on " + node);
-		
+
 	}
 
 	@Override
 	public void visit(JumpStatementNode node) {
 		LOGGER.finer("visit(JumpStatementNode node) called on " + node);
-		
+
 	}
 
 	@Override
@@ -348,11 +335,6 @@ public class ErrorCheckingVisitor implements Visitor {
 	@Override
 	public void visit(UnOpNode node) {
 		LOGGER.finer("visit(UnOpNode node) called on " + node);
-	}
-
-	@Override
-	public void visit(DictTypeNode node) {
-		LOGGER.finer("visit(DictTypeNode node) called on " + node);
 	}
 
 	@Override

@@ -409,7 +409,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			break;
 		case ITER:
 			if (declarationStatement) {
-				//throw new UnsupportedOepration
+				throw new UnsupportedOperationException("Cannot declare Iterators!");
 			}
 			code.append("Iterator<");
 			break;

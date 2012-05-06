@@ -449,7 +449,8 @@ public class Types {
 	 */
 	public static boolean checkValidFunctionCall(
 			PostfixExpressionNode postFixExpressionNode) {
-		LOGGER.severe("check valid function call" + postFixExpressionNode.getNameOfFunctionOrMethod());
+		LOGGER.severe("check valid function call"
+				+ postFixExpressionNode.getNameOfFunctionOrMethod());
 
 		// get the postfix type
 		PostfixType postFixType = postFixExpressionNode.getPostfixType();
@@ -476,15 +477,15 @@ public class Types {
 		if (postFixExpressionNode.hasArguments()) {
 			ArgumentsNode argsNode = (ArgumentsNode) postFixExpressionNode
 					.getArgsList();
-			
-		/*	LOGGER.severe("PRINTTT Function Name: "
-					+ postFixExpressionNode.getNameOfFunctionOrMethod()
-					+ " Number of params: "
-					+ funSym.getParametersNode().getNumParams()
-					+ ", number of arguments: " + argsNode
-					.getNumArguments());*/
 
-			
+			/*
+			 * LOGGER.severe("PRINTTT Function Name: " +
+			 * postFixExpressionNode.getNameOfFunctionOrMethod() +
+			 * " Number of params: " + funSym.getParametersNode().getNumParams()
+			 * + ", number of arguments: " + argsNode .getNumArguments());
+			 */
+
+			//LOGGER.severe(Integer.toargsNode.getNumArguments());
 			// throw error if not same amount of arguments
 			if (funSym.getParametersNode().getNumParams() != argsNode
 					.getNumArguments()) {
@@ -495,9 +496,11 @@ public class Types {
 
 			TypeNode innerTypeOfMethodCall = null;
 			if (postFixExpressionNode.isMethod()) {
-				TypeNode typeOfObject = postFixExpressionNode.getObjectOfMethod().getType();
-				if( typeOfObject instanceof DerivedTypeNode ) {
-					innerTypeOfMethodCall = ((DerivedTypeNode) typeOfObject).getInnerTypeNode();
+				TypeNode typeOfObject = postFixExpressionNode
+						.getObjectOfMethod().getType();
+				if (typeOfObject instanceof DerivedTypeNode) {
+					innerTypeOfMethodCall = ((DerivedTypeNode) typeOfObject)
+							.getInnerTypeNode();
 				} else {
 					innerTypeOfMethodCall = typeOfObject;
 				}
@@ -507,11 +510,13 @@ public class Types {
 			// types of the formal params
 			if (!argsMatchParams(argsNode, funSym.getParametersNode(),
 					innerTypeOfMethodCall))
-				throw new InvalidFunctionArgumentsError(postFixExpressionNode
-						.getNameOfFunctionOrMethod().getIdentifier()
-						+ " was called with an invalid argument list. \n Node: " 
-						+ postFixExpressionNode.getName()
-						+ " \nArgs Node = " + postFixExpressionNode.getArgsList().getName());
+				throw new InvalidFunctionArgumentsError(
+						postFixExpressionNode.getNameOfFunctionOrMethod()
+								.getIdentifier()
+								+ " was called with an invalid argument list. \n Node: "
+								+ postFixExpressionNode.getName()
+								+ " \nArgs Node = "
+								+ postFixExpressionNode.getArgsList().getName());
 		}
 
 		// if it doesn't have arguments, ensure that the formal parameters don't
@@ -541,13 +546,16 @@ public class Types {
 		// if they have no sublists, and the type of the param
 		// is CHECK INNER TYPE. we check the type of the argument
 		// and the innertype are the same
-		if (args.getArgumentsNode() == null && params.getParamChild() == null
+		if (args.getArgumentsNode() == null
+				&& params.getParamChild() == null
 				&& params.getType() instanceof ReservedWordTypeNode
 				&& ((ReservedWordTypeNode) params.getType()).getType() == Types.Flags.CHECK_INNER_TYPE)
-			return isSameType(args.getExpressionNode().getType(), innerTypeOfMethodCall);
-		
+			return isSameType(args.getExpressionNode().getType(),
+					innerTypeOfMethodCall);
+
 		// else if they have no sublists, return if they are the same type
-		else if (args.getArgumentsNode() == null && params.getParamChild() == null)
+		else if (args.getArgumentsNode() == null
+				&& params.getParamChild() == null)
 			return isSameType(args.getExpressionNode().getType(), params
 					.getType());
 
@@ -609,9 +617,9 @@ public class Types {
 
 		throw new UnsupportedOperationException("This should never happen.");
 	}
-	
+
 	public static String getJavaObjectType(PrimitiveTypeNode type) {
-	
+
 		switch (type.getType()) {
 		case BOOL:
 			return "Boolean";
@@ -626,7 +634,7 @@ public class Types {
 		}
 
 		throw new UnsupportedOperationException("This should never happen.");
-		
+
 	}
 
 	/**
@@ -637,7 +645,7 @@ public class Types {
 	 * @return the string corresponding to the Hadoop type.
 	 */
 	public static String getHadoopType(TypeNode type) {
-		
+
 		if (type instanceof PrimitiveTypeNode) {
 			return getHadoopType((PrimitiveTypeNode) type);
 		} else if (type instanceof DerivedTypeNode) {
