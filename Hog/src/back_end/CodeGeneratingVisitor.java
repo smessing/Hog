@@ -469,7 +469,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append("ArithmeticException");
 			break;
 		case ARRAY_OUT_OF_BOUNDS:
-			code.append("ArrayIndexOutOfBoundsException");
+			code.append("IndexOutOfBoundsException");
 			break;
 		case FILE_LOAD:
 		case FILE_NOT_FOUND:
