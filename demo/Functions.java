@@ -28,7 +28,7 @@ public class Hog {
          }
         public static List<Integer> reverseList(List<Integer> oldList) {
             List<Integer> newList = new ArrayList<Integer>();
-            for (int i = oldList.size(); i >= 0; i--) {
+            for (int i = oldList.size() - 1; i >= 0; i--) {
                 newList.add(oldList.get(i));
              }
             return newList;
@@ -53,8 +53,13 @@ public class Hog {
             myList.add(i);
          }
         myList = Functions.reverseList(myList);
-        for (int i = 0; i < 10; i++) {
-            System.out.println(Integer.toString(myList.get(i)));
+        try {
+            for (int i = 0; i < 11; i++) {
+                System.out.println(Integer.toString(myList.get(i)));
+             }
+         }
+        catch (ArrayIndexOutOfBoundsException exception) {
+            System.out.println("we caught an exception");
          }
     }
 }
