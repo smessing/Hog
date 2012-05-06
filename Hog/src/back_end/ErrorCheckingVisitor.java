@@ -44,6 +44,7 @@ import util.ast.node.StatementNode;
 import util.ast.node.SwitchStatementNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
+import util.error.MissingReturnError;
 
 /**
  * Visitor class for error checking.
@@ -58,7 +59,7 @@ import util.ast.node.UnOpNode;
  * 
  * 
  * @author Paul Tylkin
- *
+ * 
  */
 
 public class ErrorCheckingVisitor implements Visitor {
@@ -116,12 +117,12 @@ public class ErrorCheckingVisitor implements Visitor {
 		}
 		if (node instanceof JumpStatementNode
 				&& ((JumpStatementNode) node).getJumpType() == JumpType.RETURN) { // TODO
-																					// check
-																					// that
-																					// is
-																					// a
-																					// return
-																					// node
+			// check
+			// that
+			// is
+			// a
+			// return
+			// node
 			if (returnFlagStack.get(returnFlagStack.size() - 1)) {
 				// throw new UnreachableCodeError(
 				// "The following statement is unreachable: "+ node.toSource());
@@ -152,18 +153,24 @@ public class ErrorCheckingVisitor implements Visitor {
 		 */
 		if (node instanceof FunctionNode) {
 			List<Node> children = node.getChildren();
-			/*
-			 * if (!Types.isVoidType(((FunctionNode)node).getType())){ //if
-			 * return type is not void this.nonVoidFunctionFlag = true; for
-			 * (Node n : children) { if(n instanceof JumpStatementNode &&
-			 * ((JumpStatementNode) n).getJumpType() == JumpType.RETURN){
-			 * this.nonVoidFunctionFlag = false; } }
-			 * 
-			 * 
-			 * if (this.nonVoidFunctionFlag){ // throw newMissingReturnError(
-			 * "The following function is missing a return statement: "+
-			 * node.toSource()); } }
-			 */
+
+			// if return type is not void
+			if (!Types.isVoidType(((FunctionNode) node).getType())) {
+				this.nonVoidFunctionFlag = true;
+				for (Node n : children) {
+					if (n instanceof JumpStatementNode
+							&& ((JumpStatementNode) n).getJumpType() == JumpType.RETURN) {
+						this.nonVoidFunctionFlag = false;
+					}
+				}
+
+				if (this.nonVoidFunctionFlag) { // 
+					throw new MissingReturnError(
+							"The following function is missing a return statement: "
+									+ node.toSource());
+				}
+			}
+
 		}
 		// System.out.println(nonVoidFunctionFlag);
 		List<Node> children = node.getChildren();

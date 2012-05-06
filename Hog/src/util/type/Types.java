@@ -487,7 +487,7 @@ public class Types {
 			 * + ", number of arguments: " + argsNode .getNumArguments());
 			 */
 
-			//LOGGER.severe(Integer.toargsNode.getNumArguments());
+			// LOGGER.severe(Integer.toargsNode.getNumArguments());
 			// throw error if not same amount of arguments
 			if (funSym.getParametersNode().getNumParams() != argsNode
 					.getNumArguments()) {
@@ -705,6 +705,20 @@ public class Types {
 		}
 		throw new UnsupportedOperationException(type
 				+ " is not allowed for @Map and @Reduce headers.");
+	}
+
+	/*
+	 * @author paul
+	 */
+
+	public static boolean isVoidType(TypeNode node) {
+		if (node.isPrimitive()) {
+			if (((PrimitiveTypeNode) node).getType() == Types.Primitive.VOID) {
+				return true;
+			}
+
+		}
+		return false;
 	}
 
 }
