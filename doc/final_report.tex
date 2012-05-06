@@ -385,6 +385,274 @@ reduce function for every word.
 
 % section tt_map_rm (end)
 
+\subsection{\tt @Reduce \rm} % (fold)
+\label{sub:tt_reduce_rm}
+
+The reduce function in a MapReduce program takes a list of values that share the
+same key, as emitted by the map function, and outputs a smaller set of values to
+be associated with another key. The input and output keys do not have to match,
+though they often do.
+
+The setup for the reduce section is similar to the map section. However, the input
+value for any reduce function is always an iterator over the list of values
+associated with its key. The type of the key must be the same as the type of the
+key emitted by the map function. The iterator must be an iterator over the type of
+the values emitted by the map function.
+
+\begin{quotation}
+  \tt @Reduce ( \rm \emph{type identifier, type identifier} \tt ) -> ( \rm \emph{type, type} \tt ) \{ \\
+  \indent \indent . \\
+  \indent \indent . \\
+  \indent \indent . \\
+  \indent \tt \} \rm
+\end{quotation}
+
+As with the map function, the reduce function can emit as many key/value pairs as
+the user would like. Any key/value pair emitted by the reduce function is recorded
+in the output file.
+
+Below is a sample \tt @Reduce \rm section, which continues the word count example,
+and follows the \tt @Map \rm sample introduced in the previous section.
+
+\begin{verbatim} 
+
+    @Reduce (text word, iter<int> values) -> (text, int) {
+      # initialize count to zero
+      int count = 0;
+      while (values.hasNext()) {
+        # for every instance of '1' for this word, add to count
+        count = count + values.next();
+      }
+      # emit the count for this particular word
+      emit(word, count);
+    }
+
+\end{verbatim} 
+
+% subsection tt_reduce_rm (end)
+
+\subsection{\tt @Main \rm} % (fold)
+\label{sec:tt_main_rm}
+
+The \tt @Main \rm section defines the code that is the entry point to a Hog
+program. In order to run the MapReduce program defined by the user in the
+previous sections, \tt @Main \rm must contain a call to the system-level
+built-in function \tt mapReduce() \rm, which calls the \tt @Map \rm and \tt
+@Reduce \rm functions. Other arbitrary code can be run from the \tt @Main \rm
+section as well. In the current version of the language, \tt @Main \rm does not
+have access to the results of the MapReduce program resulting from a call to
+\tt mapReduce()\rm. Therefore, it is quite common for the \tt @Main \rm section
+to contain the call to \tt mapReduce() \rm and nothing else.
+
+Below is a sample \tt @Main \rm section which prints to the standard output and
+runs a map reduce job.
+
+\begin{verbatim}
+    @Main {
+          print("Starting mapReduce job.\n");
+          mapReduce();
+          print("mapReduce complete.\n");
+    }
+\end{verbatim}
+
+
+% subsection tt_main_rm (end)
+
+% section program_structure (end)
+
+\section{Lexical Conventions} % (fold)
+\label{sec:lexical_conventions}
+
+\subsection{Tokens} % (fold)
+\label{sub:tokens}
+
+The classes of tokens include the following: identifiers, keywords,
+constants, string literals, operators, and separators. Blanks, tabs, newlines, and
+comments are ignored. If the input is separated into tokens up to a given
+character, the next token is the longest string of characters that could represent
+a token.
+
+% subsection tokens (end)
+
+\subsection{Comments} % (fold)
+\label{sub:comments}
+
+Multi-line comments are identified by the enclosing character sequences \tt
+\#\{ \rm and \tt \}\#\rm. Anything within these enclosing characters is
+considered a comment, and is completely ignored by the compiler. For example,
+
+\begin{verbatim}
+    int i = 0;
+    #{ these are block
+        comments and are ignored
+         by the compiler }#
+    i++;
+
+\end{verbatim}
+
+In the above example, the text \tt these are block comments \textbackslash n
+comments and are ignored \textbackslash n by the complier \rm is completely
+ignored during compilation. Compilation goes directly from the line \tt int i =
+0; \rm to the line \tt i++;\rm.
+
+Single-line comments are defined to be strings of text included between a '\tt
+\#\rm' symbol on the left-hand side and a newline character ('\tt\textbackslash
+n\rm') on the right-hand side.
+
+% subsection comments (end)
+
+\subsection{Identifiers} % (fold)
+\label{sub:identifiers}
+
+A valid identifier in Hog is a sequence of contiguous letters, digits, or
+underscores, which are used to distinguish declared entities, such as methods,
+parameters, or variables from one another. A valid identifier also provide a
+means of determining scope of an entity, and helps to determine whether the
+same valid identifier in another scope refers to the same entity. The first
+character of an identifier must not be a digit. Valid identifiers are case
+sensitive, so \tt foo \rm is not the same identifier as \tt Foo\rm.
+
+% section identifiers (end)
+
+\subsection{Keywords} % (fold)
+\label{sub:keywords}
+
+The following words are reserved for use as keywords, and may not be redefined
+by the programmer:
+
+\begin{multicols}{4}
+\tt
+\begin{itemize}
+ 
+  \item[] add
+  \item[] and
+  \item[] bool
+  \item[] break
+  \item[] catch
+  \item[] clear
+  \item[] contains
+  \item[] containsAll
+  \item[] continue
+  \item[] default
+  \item[] else
+  \item[] elseif
+  \item[] emit
+  \item[] final
+  \item[] for
+  \item[] foreach
+  \item[] Functions
+  \item[] get
+  \item[] hadoop
+  \item[] hasNext
+  \item[] if
+  \item[] in
+  \item[] instanceof
+  \item[] int
+  \item[] int2real
+  \item[] int2text
+  \item[] isEmpty
+  \item[] iter
+  \item[] list
+  \item[] Map
+  \item[] mapReduce
+  \item[] next
+  \item[] not
+  \item[] or
+  \item[] peek
+  \item[] print
+  \item[] real
+  \item[] real2int
+  \item[] real2text
+  \item[] Reduce
+  \item[] remove
+  \item[] removeAll
+  \item[] return
+  \item[] size
+  \item[] sort
+  \item[] text
+  \item[] text2int
+  \item[] text2real
+  \item[] throw
+  \item[] tokenize
+  \item[] try
+  \item[] void
+  \item[] while
+  
+  
+\end{itemize}
+\rm
+\end{multicols}
+
+% subsection keywords (end)
+
+\subsection{Constants} % (fold)
+\label{sub:constants}
+
+The word \textbf{\emph{constant}} has two different meanings in Hog. It can
+refer to either a variable that is \emph{fixed}, that is, once it is
+initialized cannot be changed, or can refer to an \textbf{\emph{unnamed
+value}}, such as "1.0". To declare a constant variable, use the following
+pattern,
+
+\begin{quotation}
+   \tt final \rm \emph{type variableName} = \emph{value};
+\end{quotation}
+
+The following are a list of examples of unnamed values and their corresponding
+types:
+
+\begin{itemize}
+  \item[] \tt -1\rm, \tt 0\rm, \tt 1\rm, \tt 2\rm $\hfill$ (all of type \tt int\rm)
+  \item[] \tt -0.12\rm, \tt3.14159\rm, \tt 2.7182\rm, \tt 1.41421 \rm $\hfill$ (all of type \tt real\rm)
+  \item[] \tt true\rm, \tt false \rm $\hfill$ (all of type \tt bool\rm)
+\end{itemize}
+
+% subsection constants (end)
+
+\subsection{Text Literals} % (fold) \label{sub:string_literals} 
+
+A text literal consists of a sequence of zero of more contiguous characters
+enclosed in double quotes, such as \tt "hello"\rm. A text literal can also
+contain escape characters such as \tt "\textbackslash n" \rm for the new line
+character or \tt "\textbackslash t" \rm for the tab character. A text literal
+has many of the same built-in functions as the String class in Java. String
+literals are constant and their values cannot be changed after they are
+created. String literals can be concatenated with adjacent text literals by use
+of the \tt + \rm operator and are then converted into a single \tt text \rm
+variable. Hog implements concatenation by use of the Java \tt StringBuilder \rm
+(or \tt StringBuffer\rm) class and its append method. All text literals in Hog
+programs are implemented as instances of the \tt text \rm class, and then are
+mapped directly to the equivalent \tt String \rm class in
+Java.\footnote{Technically, \tt text \rm objects are implemented as instances
+of Hadoop's \tt Text \rm class, which is closely related to the Java \tt String
+\rm class.}
+
+% subsection string_literals (end)
+
+\subsection{Variable Scope} % (fold)
+\label{sub:variable_scope}
+
+Hog implements what is generally referred to as lexical scoping or block scope. An
+identifier is valid within its enclosing block. The identifier is also valid for
+any block nested within its enclosing block.
+
+% subsection variable_scope (end)
+
+
+\subsection{Argument Passing}
+\label{sub:argument_passing}
+
+Since Hog is compiled into Java, it passes arguments using call-by-value.
+However, similarly to Java, it is possible to imitate call-by-reference
+behavior. 
+
+\subsection{Evaluation Order}
+\label{sub:evaluation_order}
+
+Hog uses applicative order (eager) evaluation, similarly to Java.
+
+% section lexical_conventions (end)
+
 
 \chapter{Project Plan}
 \label{chap:plan}
