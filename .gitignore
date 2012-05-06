@@ -44,3 +44,6 @@ WordCount.Hog
 
 # Logging
 logging.properties
+
+# Java
+*.class
