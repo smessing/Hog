@@ -2,6 +2,11 @@ package util.ast.node;
 
 import back_end.Visitor;
 
+/**
+ * 
+ * @author Samuel Messing
+ *
+ */
 public class MockExpressionNode extends ExpressionNode {
 
 	/*

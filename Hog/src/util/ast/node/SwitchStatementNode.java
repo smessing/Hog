@@ -4,7 +4,7 @@ import back_end.Visitor;
 
 /**
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public class SwitchStatementNode extends SelectionStatementNode {

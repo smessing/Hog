@@ -61,7 +61,7 @@ import util.error.MissingReturnError;
  * - can't catch same exception type more than once
  * 
  * 
- * @author paul
+ * @author Paul Tylkin
  *
  */
 

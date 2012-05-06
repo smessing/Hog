@@ -10,7 +10,7 @@ import back_end.Visitor;
  * An abstract class inherited by all expression classes, specifying type
  * information.
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public abstract class ExpressionNode extends StatementNode {

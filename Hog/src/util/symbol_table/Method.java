@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import front_end.sym;
 
+/**
+ * [deprecated]
+ * @author Jason Halpern
+ * @author Kurry Tran
+ *
+ */
 
 public class Method{
 	public String lexeme = "";

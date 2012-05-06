@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="bin" path="src"/>
+	<classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
+	<classpathentry kind="con" path="/home/ben/Documents/1_Development/2_PLT/Hog/Hog/Hog/lib"/>
+	<classpathentry kind="lib" path="/home/ben/Documents/1_Development/2_PLT/Hog/Hog/Hog/lib/java-cup-11a.jar"/>
+	<classpathentry kind="lib" path="/home/ben/Documents/1_Development/2_PLT/Hog/Hog/Hog/lib/JFlex.jar"/>
+	<classpathentry kind="lib" path="/home/ben/Documents/1_Development/2_PLT/Hog/Hog/Hog/lib/junit.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

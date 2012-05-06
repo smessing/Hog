@@ -5,9 +5,10 @@ import java.util.Set;
 import back_end.Visitor;
 
 /**
+ * [deprecated]
  * A node representing a RelationalExpression nonterminal
  *  
- * @author ben
+ * @author Benjamin Rapaport 
  *
  */
 public class RelationalExpressionNode extends BiOpNode {

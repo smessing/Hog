@@ -20,6 +20,11 @@ import back_end.TypeCheckingVisitor;
 import front_end.Lexer;
 import front_end.Parser;
 
+/**
+ * 
+ * @author Jason Halpern
+ *
+ */
 public class CodeGeneratingTester {
 
 	

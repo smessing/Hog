@@ -22,6 +22,11 @@ import util.ast.AbstractSyntaxTree;
 import util.ast.node.ProgramNode;
 import util.symbol_table.SymbolTable;
 
+/**
+ * 
+ * @author Jason Helpern
+ *
+ */
 public class SymbolTableTester {
 
 	@Test

@@ -7,7 +7,7 @@ import back_end.Visitor;
  * An ElseStatementNode represents an else statement and
  * takes a StatementListNode in it's constructor. 
  * 
- * @author sam
+ * @author Samuel Messing
  *
  */
 public class ElseStatementNode extends StatementNode {
