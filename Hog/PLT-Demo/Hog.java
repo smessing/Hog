@@ -52,6 +52,7 @@ public class Hog {
     public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
         public void map(LongWritable lineNum, Text value,  OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
             String line = value.toString();
+            int a = 5;
             for (String word : line.split(" ")) {
                 output.collect(new Text(word), new IntWritable(1));
              }
