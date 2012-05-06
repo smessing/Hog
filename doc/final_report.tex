@@ -1,5 +1,5 @@
 \documentclass{report}
-\usepackage{fancyhdr, graphicx, multicol, subfig}
+\usepackage{fancyhdr, graphicx, multicol, subfigure}
 
 \title{\huge \textbf{The Hog Programming Language}}
 \author{Jason Halpern \\ jrh2170 \\ Testing/Validation
@@ -2746,13 +2746,12 @@ I wrote a number of test Hog programs at the same time as the LRM, and frequentl
 \chapter{Translator Architecture}
 \label{chap:trans}
 
-To be written by Ben.
-
-\begin{itemize}
-\item Show the architectural block diagram of translator.
-\item Describe the interfaces between the modules.
-\item State which modules were written by which team members.
-\end{itemize}
+\chapter{Translator Architecture}\label{chap:trans}
+\section{Architecture}At the highest level, the Hog architecture has three main phases (Figure ~\ref{fig:architecture}a). It begins with the Hog compilation phase, which puts a Hog source program through the Hog compiler, and translates it into an equivalent valid Java Hadoop source program. This Java program is then compiled into a jar file by the Java compiler. Finally, the jar file is sent to a valid Hadoop instance (the cluster), along with the input to the program, to perform the a distributed computation and output the results.
+The Hog compilation phase is further broken down into several key stages (Figure ~\ref{fig:compiler}b). We begin by using the lexer JFlex to provide our parser Cup with a stream of tokens. Cup parses these tokens to output an abstract syntax tree. The Symbol Table Visitor uses this abstract syntax tree to populate the symbol table with any functions and variables defined in the program. It also ensures that all variables are declared before they are used and partially decorates the tree with some type information. The Type Checking Visitor checks for any type conflicts, and fully decorates the tree with type information for every expression. The Semantic Analyzer uses the decorated AST to check for semantic errors, such as dead code blocks, or non-void functions that do contain return statements. Finally, the Java Generating Visitor walks the AST, and generates the Java Hadoop source program.
+All communication between these modules occurred through the Symbol Table and the Abstract Syntax Tree. The interfaces used to pass information between the phases were defined entirely by the Node classes making up the tree, and the SymbolTable and its contained Symbol classes. In this way, once the node and symbol classes were completed, the separate phases of the compiler could be written without explicitly integrating each phase.
+\pagebreak\begin{figure}\hfill\subfigure[Hog Platform]{\includegraphics[width=.28\linewidth]{diagram/hog_architecture.pdf}}\label{fig:platform}\hfill\subfigure[Hog Compiler]{\includegraphics[width=.5\linewidth]{diagram/compiler_architecture.pdf}}\label{fig:compiler}\hfill\caption{Hog Architecture}\label{fig:architecture}\end{figure}
+\section{Module Authors}\begin{itemize}  \item Lexer    \begin{itemize}      \item Samuel Messing    \end{itemize}        \item Parser    \begin{itemize}      \item Samuel Messing      \item Benjamin Rapaport      \item Paul Tylkin    \end{itemize}         \item Abstract Syntax Tree    \begin{itemize}      \item Samuel Messing      \item Benjamin Rapaport    \end{itemize}         \item Symbol Table    \begin{itemize}      \item Jason Halpern      \item Benjamin Rapaport      \item Kurry Tran    \end{itemize}         \item Symbol Table Visitor    \begin{itemize}      \item Benjamin Rapaport      \item Jason Halpern    \end{itemize}        \item Type Checking Visitor    \begin{itemize}      \item Benjamin Rapaport      \item Jason Halpern      \item Samuel Messing    \end{itemize}        \item Semantic Analyzer    \begin{itemize}      \item Paul Tylkin    \end{itemize}        \item Java Generating Visitor    \begin{itemize}      \item Paul Tylkin    \end{itemize}        \end{itemize}
 
 \chapter{Development and Run-Time Environment}
 \label{chap:environ}
@@ -3116,11 +3115,11 @@ in the project, it make creating the other parts of the compiler very difficult.
 
 One of the main lessons that I learned was about the complexities of a software project with many moving parts - not only did we need to learn to work together as a team, but our code needed to work together. Going from a concept sketched out on a blackboard (as many of our design ideas started) to a concrete implementation involves subtleties that are not apparent until you are deep into the implementation phase. Thus, a takeaway is to think as much as possible through to the completion of a concept, not being content with an abstract and vague notion of how it will work. You must really dig deep and not be satisfied until you have a thorough understanding of how everything works and is connected.
 
-I also learned that in building a ''little language``, one should immediately discard the notion of multiple ways to do the same thing, unless they really are useful for different tasks. For example, we had originally intended to have \tt switch \rm and \tt case \rm statements, but then decided that the entire construct could work equally well with \tt if...elseif...else \rm statements, so there was no need to introduce unnecessary complexity into the language. 
+I also learned that in building a ``little language'', one should immediately discard the notion of multiple ways to do the same thing, unless they really are useful for different tasks. For example, we had originally intended to have \tt switch \rm and \tt case \rm statements, but then decided that the entire construct could work equally well with \tt if...elseif...else \rm statements, so there was no need to introduce unnecessary complexity into the language. 
 
 \section{Advice for Other Teams}
 
-Don't take this class.
+This project can be really frustrating. However, if you like your teammates, it can also be incredibly fun. Try to enjoy it.
 
 \section{Suggestions for Instructor}
 
@@ -3244,136 +3243,136 @@ Things we'd like to see more of:
 \begin{enumerate}
 \item \texttt{ArgumentsNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing the ArgumentExpressionList production. Written by Benjamin Rapaport.
 \end{quotation}
 \item \texttt{BiOpNode.java}
 \begin{quotation}
-\noindent 
+\noindent  A node representing the Binary Operator. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{CatchesNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a catches statement for exception handling. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{ConstantNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a primitive constant. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{DerivedTypeNode.java}
 \begin{quotation}
-\noindent 
+\noindent  A node representing a derived type. Written by Benjamin Rapaport and Samuel Messing.
 \end{quotation}
 \item \texttt{ElseIfStatementNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing an elseif statement. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{ElseStatementNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing an else statement. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{ExceptionTypeNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing an exception type. Written by Benjamin Rapaport and Samuel Messing.
 \end{quotation}
 \item \texttt{ExpressionNode.java}
 \begin{quotation}
-\noindent 
+\noindent An abstract class inherited by all expression classes, which must all have a type. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{FunctionNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a function definition. Written by Benjamin Rapaport and Samuel Messing.
 \end{quotation}
 \item \texttt{GuardingStatmenetNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a Guarding Statement, such as Try-Catch, Try-Catch-Finally, etc. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{IdNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing an ID terminal. Written by Benjamin Rapaport and Samuel Messing.
 \end{quotation}
 \item \texttt{IfElseStatementNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing an If Else statement. Written by Benjamin Rapaport and Samuel Messing.
 \end{quotation}
 \item \texttt{IterationStatementNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a while, for, or for each statement. Written by Benjamin Rapaport.
 \end{quotation}
 \item \texttt{JumpStatementNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a Jumping statement, such as return, break, or continue. Written by Benjamin Rapaport.
 \end{quotation}
 \item \texttt{MockExpressionNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node used for testing. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{MockNode.java}
 \begin{quotation}
-\noindent 
+\noindent  A node used for testing. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{Node.java}
 \begin{quotation}
-\noindent 
+\noindent An abstract class that is the super class of every other node class. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{ParametersNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a formal parameters list in a function definition. Written by Benjamin Rapaport and Samuel Messing.
 \end{quotation}
 \item \texttt{PostfixExpressionNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a postfix expression, such as function and method calls. Written by Benjamin Rapaport.
 \end{quotation}
 \item \texttt{PrimaryExpressionNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a primary expression. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{PrimitiveTypeNode.java}
 \begin{quotation}
-\noindent 
+\noindent A type node for primitive types. Written by Benjamin Rapaport, Samuel Messing, and Paul Tylkin.
 \end{quotation}
 
 \item \texttt{ProgramNode.java}
 \begin{quotation}
-\noindent 
+\noindent The starting node of the tree, representing the entire hog source program. Written by Benjamin Rapaport and Samuel Messing.
 \end{quotation}
 \item \texttt{RelationalExpressionNode.java}
 \begin{quotation}
-\noindent 
+\noindent  \emph{Deprecated}. A node representing a RelationalExpression nonterminal. This is not used. Written by Benjamin Rapaport.
 \end{quotation}
 \item \texttt{ReservedWordTypeNode.java}
 \begin{quotation}
-\noindent 
+\noindent A class used as the type node for reserved words in the symbol table. Written by Benjamin Rapaport.
 \end{quotation}
 \item \texttt{SectionNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node for each main section of a Hog program, such as @Functions, @Map, @Reduce, and @Main. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{SectionTypeNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing the section header of the @Map and @Reduce sections, defining the key value pairs. Written by Samuel Messing and Benjamin Rapaport.
 \end{quotation}
 \item \texttt{SelectionStatementNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a selection statement. Written by Paul Tylkin and Samuel Messing.
 \end{quotation}
 \item \texttt{StatementListNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node representing a statement list. Written by Benjamin Rapaport.
 \end{quotation}
 \item \texttt{StatementNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node for statements. Written by Benjamin Rapaport.
 \end{quotation}
 \item \texttt{SwitchStatementNode.java}
 \begin{quotation}
-\noindent 
+\noindent A node for switch statements. Written by Samuel Messing.
 \end{quotation}
 \item \texttt{TypeNode.java}
 \begin{quotation}
-\noindent 
+\noindent An abstract node representing types. Written by Benjamin Rapaport, Paul Tylkin, and Samuel Messing.
 \end{quotation}
 \item \texttt{UnOpNode.java}
 \begin{quotation}
-\noindent 
+\noindent An abstract node representing types. Written by Benjamin Rapaport, Paul Tylkin, and Samuel Messing.
 \end{quotation}
 \end{enumerate} % end util.ast.node
 \item \texttt{util.error} package
