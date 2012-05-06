@@ -1259,8 +1259,8 @@ types in the header of each section.
 \item[] \tt void mapReduce() \rm \\
 
 This function can be called from the \tt @Main \rm section in order to initiate
-the mapreduce job, as definied in the \tt @Map \rm and \tt @Reduce \rm sections.
-Any Hog program that implements mapreduce will need to call this function in \tt
+the MapReduce job, as defined in the \tt @Map \rm and \tt @Reduce \rm sections.
+Any Hog program that implements MapReduce will need to call this function in \tt
 @Main\rm.
 
 \item[] \tt void print(toPrint) \rm \\
@@ -1474,7 +1474,7 @@ program.
 In the last phase of compilation, the Hog semantic analyzer generates Java source
 code, which is then compiled into byte code by the Java compiler. Then with the
 Hadoop Java Archives (JARs) the bytecode is executed on the Java Virtual Machine
-(JVM). With the syntax tree and the information from the symbol table, the Hog
+(JVM). With the syntax tree and the information from the sh the syntax tree and the information from the symbol table, the Hog
 compiler then checks the Hog source program to ensure semantic consistency with
 the language specification. The syntax tree is initially untyped, but after
 semantic analysis Hog types are added to the syntax tree. Hog types are
@@ -2387,13 +2387,11 @@ Hadoop libraries being packaged with the job jar which is generated at the end c
 
 ################################################################
 ################################################################
-## Makefile for Hog Compilation										##
-## Programming Languages and Translator								##
-## Version 1.0														##
-##  Kurry Tran														##
-## 04 May 2012													##
-##																##
-##																##
+Makefile for Hog Compilation									
+Programming Languages and Translator								
+Version 1.0														
+Kurry Tran														
+04 May 2012													
 ################################################################
 ################################################################
 
