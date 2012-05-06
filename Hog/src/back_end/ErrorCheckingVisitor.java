@@ -164,11 +164,11 @@ public class ErrorCheckingVisitor implements Visitor {
 					}
 				}
 
-				if (this.nonVoidFunctionFlag) { // 
+				/*if (this.nonVoidFunctionFlag) { // 
 					throw new MissingReturnError(
 							"The following function is missing a return statement: "
 									+ node.toSource());
-				}
+				}*/
 			}
 
 		}
