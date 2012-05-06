@@ -2549,7 +2549,34 @@ assertEquals("The second token should be a INCR",
 \section{Lessons Learned}
 \label{sec:lessons}
 
+The following lessons were learned by the group:
 
+\begin{enumerate}
+\item Spend more time assessing the viability of different tools.
+\begin{quotation}
+\noindent We very quickly decided to use JFLex and CUP to generate our lexer and parser, respectively. While the two tools proved useful, the interface between the two was not trivial to
+figure out, and required a lot of development time. In addition, the documentation for the two
+frameworks is rather sparse, and at times we had to resort to trial-and-error to figure out
+exactly how to get the frameworks to do what we want (a great example of this was determining
+how to properly specify  
+\end{quotation}
+\item Design the AST with a focus on the output (i.e. the program you're generating), rather than a focus on the input (i.e. the grammar of your source language).
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item Spend more time in general on design before implementation.
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item Go out of your way to make things modular.
+\begin{quotation}
+\noindent 
+\end{quotation}
+\item Be skeptical about what you can accomplish.
+\begin{quotation}
+\noindent
+\end{quotation}
+\end{enumerate}
 
 \subsection{Jason's Lessons}
 \label{sub:jasons-lessons}
