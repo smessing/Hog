@@ -1,0 +1,77 @@
+@Functions {
+  int fib(int n) {
+  #list<list<int>> myList;
+    if (n == 0) {
+      int x = 5;
+      return x;
+    } elseif (n == 1) {
+      return 1;
+    } else {
+      return fib(n-1) + fib(n-2);  
+    }
+  }
+  
+  int factorial(int n) {
+    if ((n==0) or (n==1)) {
+      return 1;
+    }
+    else {
+    return n * factorial(n-1);
+    }
+  }
+  
+  int max(int x, int y) {
+    if (x >= y) {
+      return x;
+    } else {
+      return y;
+    }
+  }
+  
+  int tooManyArgs(int x, list<int> y, set<list<int>> foo, real percentage, bool doNothing) {
+    if (not doNothing) {
+      return 1;
+    }
+    return 1;
+  }
+  
+  list<int> reverseList(list<int> oldList) {
+    list<int> newList;
+    for (int i = oldList.size() - 1; i >= 0; i--;) {
+      try {
+        newList.add(oldList.get(i));
+      } catch (ArrayOutOfBoundsException exception) {
+        print("this might print");
+      } finally {
+        print("this definitely prints");
+      }
+    }
+    return newList;
+  }
+}
+
+
+
+@Map (int lineNum, text line) -> (text, int) {
+  #print();
+  text b = "5";
+  int a = text2int(b);
+  #foo.hasNext();
+  foreach text word in line.tokenize(" ") {
+    emit(word, 1);
+  }
+
+
+}
+
+@Reduce (text word, iter<int> values) -> (text, int) {
+  int count = 0;
+  while ( values.hasNext() ) {
+    count = count + values.next();
+  }
+  emit(word, count);
+}
+
+@Main {
+  mapReduce();
+}
