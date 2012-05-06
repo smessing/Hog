@@ -6,7 +6,7 @@ import back_end.Visitor;
 /**
  * A node representing the Unary Operator terminals in a parse tree.
  * 
- * @author sam
+ * @author Samuel Messing
  *
  */
 public class UnOpNode extends ExpressionNode {

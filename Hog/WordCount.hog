@@ -54,10 +54,9 @@
 
 @Map (int lineNum, text line) -> (text, int) {
   #print();
-  iter<int> foo;
-  iter<list<int>> bar;
-  int a = 5;
-  foo.hasNext();
+  text b = "5";
+  int a = text2int(b);
+  #foo.hasNext();
   foreach text word in line.tokenize(" ") {
     emit(word, 1);
   }

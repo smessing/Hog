@@ -5,7 +5,7 @@ import back_end.Visitor;
 /**
  * A node representing the PrimaryExpression nonterminal in a parse tree.
  * 
- * @author sam
+ * @author Samuel Messing
  *
  */
 public class PrimaryExpressionNode extends ExpressionNode {

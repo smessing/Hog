@@ -1,5 +1,10 @@
 package util.error;
 
+/**
+ * 
+ * @author Samuel Messing
+ *
+ */
 @SuppressWarnings("serial")
 public class TypeMismatchError extends RuntimeException {
 	

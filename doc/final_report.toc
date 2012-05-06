@@ -6,21 +6,26 @@
 \contentsline {chapter}{\numberline {3}Language Reference Manual}{9}
 \contentsline {chapter}{\numberline {4}Project Plan}{11}
 \contentsline {section}{\numberline {4.1}Development Process}{11}
-\contentsline {section}{\numberline {4.2}Roles and Responsibilities}{11}
-\contentsline {section}{\numberline {4.3}Hog's Developer Style Sheet}{11}
-\contentsline {section}{\numberline {4.4}Project Timeline}{11}
-\contentsline {section}{\numberline {4.5}Project Log}{11}
-\contentsline {chapter}{\numberline {5}Language Evolution}{13}
-\contentsline {chapter}{\numberline {6}Translator Architecture}{15}
-\contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{17}
-\contentsline {chapter}{\numberline {8}Test Plan}{19}
-\contentsline {chapter}{\numberline {9}Conclusions}{21}
-\contentsline {section}{\numberline {9.1}Lessons Learned}{21}
-\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{21}
-\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{21}
-\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{21}
-\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{21}
-\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{21}
-\contentsline {section}{\numberline {9.2}Advice for Other Teams}{21}
-\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{21}
-\contentsline {chapter}{\numberline {A}Code Listing}{23}
+\contentsline {subsection}{\numberline {4.1.1}Simplicity of Build System}{11}
+\contentsline {subsection}{\numberline {4.1.2}Similarity of Modules}{12}
+\contentsline {subsection}{\numberline {4.1.3}Document Everything}{12}
+\contentsline {subsection}{\numberline {4.1.4}Distributed Version Control}{12}
+\contentsline {subsection}{\numberline {4.1.5}Verbose Logging}{13}
+\contentsline {section}{\numberline {4.2}Roles and Responsibilities}{13}
+\contentsline {section}{\numberline {4.3}Hog's Developer Style Sheet}{14}
+\contentsline {section}{\numberline {4.4}Project Timeline}{14}
+\contentsline {section}{\numberline {4.5}Project Log}{15}
+\contentsline {chapter}{\numberline {5}Language Evolution}{17}
+\contentsline {chapter}{\numberline {6}Translator Architecture}{19}
+\contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{21}
+\contentsline {chapter}{\numberline {8}Test Plan}{23}
+\contentsline {chapter}{\numberline {9}Conclusions}{25}
+\contentsline {section}{\numberline {9.1}Lessons Learned}{25}
+\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{25}
+\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{25}
+\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{25}
+\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{25}
+\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{25}
+\contentsline {section}{\numberline {9.2}Advice for Other Teams}{25}
+\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{25}
+\contentsline {chapter}{\numberline {A}Code Listing}{27}

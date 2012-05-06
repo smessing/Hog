@@ -16,7 +16,10 @@ import util.type.VariableRedefinedException;
 
 /**
  * 
- * @author ben, jason, paul
+ * @author Jason Halpern
+ * @author Benjamin Rapaport
+ * @author Kurry Tran
+ * @author Paul Tylkin
  *
  */
 

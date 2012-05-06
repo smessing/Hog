@@ -408,6 +408,9 @@ public class CodeGeneratingVisitor implements Visitor {
 				code.append("List<");
 			break;
 		case ITER:
+			if (declarationStatement) {
+				throw new UnsupportedOperationException("Cannot declare Iterators!");
+			}
 			code.append("Iterator<");
 			break;
 		case SET:
@@ -466,7 +469,7 @@ public class CodeGeneratingVisitor implements Visitor {
 			code.append("ArithmeticException");
 			break;
 		case ARRAY_OUT_OF_BOUNDS:
-			code.append("ArrayIndexOutOfBoundsException");
+			code.append("IndexOutOfBoundsException");
 			break;
 		case FILE_LOAD:
 		case FILE_NOT_FOUND:

@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -20,6 +21,12 @@ import back_end.SymbolTableVisitor;
 import back_end.TypeCheckingVisitor;
 import front_end.Lexer;
 import front_end.Parser;
+
+/**
+ * 
+ * @author Jason Halpern
+ *
+ */
 
 public class TypeCheckingTester {
 
