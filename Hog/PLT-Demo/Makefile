@@ -32,7 +32,7 @@ JAVAC =javac
 HADOOP_HOME=/Users/ktran/hadoop-1.0.1/
 HADOOP_VERSION=1.0.1
 JOBNAME=Hog
-CLASSPATH = -classpath $(HADOOP_HOME)hadoop-core-$(HADOOP_VERSION).jar
+CLASSPATH = -classpath compiler/hadoop-core-$(HADOOP_VERSION).jar
 JAR=jar
 JARFLAGS=-cf
 HADOOP=$(HADOOP_HOME)bin/hadoop
@@ -67,7 +67,7 @@ buildandrun:
 
 compile:
 	java -jar $(HOGCOMPILER) --local $(INPUT_HOG_SOURCE)
-
+	$(JAVAC) $(CLASSPATH) $(INPUT_JAVA_SOURCE)
 clean:
 	$(RM) *~  *#
 	$(HADOOP) $(FS) $(RMR) $(DFSINPUTDIRECTORY)
