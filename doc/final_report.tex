@@ -124,7 +124,21 @@ easily extensible. After trying a few different options, we decided on Ant,
 a build system similar to Make, specialized for the Java programming language.
 Another advantage of going with Ant is that both JFlex and Cup, the frameworks
 we used to construct the lexer and parser, respectively, have native Ant support.
-Identifying and implementing our build system early on  
+Identifying and implementing our build system early on enabled us to move quickly
+and write code that we were sure worked across all of our machines. 
+
+\subsection{Similarity of Modules}
+
+Throughout the project, I worked very closely with the System Architect (Ben) to
+develop and build common data structures that could be used across all of our
+code. The abstract syntax tree was made in a generic enough way so that all
+of our different tree walks could use the exact same tree class, without having
+to support and debug different implementations of the same interface or abstract
+parent class.  
+
+Personally, I also developed our Types class, which was a static class that
+contained several convenience methods for handling types across the entirety
+of the compiler.
 
 \section{Roles and Responsibilities}
 
