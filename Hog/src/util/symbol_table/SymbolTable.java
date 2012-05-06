@@ -391,27 +391,27 @@ public class SymbolTable {
 		// type casting functions
 		ArrayList<TypeNode> text2intArguments = new ArrayList<TypeNode>();
 		text2intArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
-		reserveFunction("text2int", new PrimitiveTypeNode(Types.Primitive.INT));
+		reserveFunction("text2int", new PrimitiveTypeNode(Types.Primitive.INT), text2intArguments);
 		
 		ArrayList<TypeNode> text2realArguments = new ArrayList<TypeNode>();
 		text2realArguments.add(new PrimitiveTypeNode(Types.Primitive.TEXT));
-		reserveFunction("text2real", new PrimitiveTypeNode(Types.Primitive.REAL));
+		reserveFunction("text2real", new PrimitiveTypeNode(Types.Primitive.REAL), text2realArguments);
 		
 		ArrayList<TypeNode> int2textArguments = new ArrayList<TypeNode>();
 		int2textArguments.add(new PrimitiveTypeNode(Types.Primitive.INT));
-		reserveFunction("int2text", new PrimitiveTypeNode(Types.Primitive.TEXT));
+		reserveFunction("int2text", new PrimitiveTypeNode(Types.Primitive.TEXT), int2textArguments);
 		
 		ArrayList<TypeNode> real2textArguments = new ArrayList<TypeNode>();
 		real2textArguments.add(new PrimitiveTypeNode(Types.Primitive.REAL));
-		reserveFunction("real2text", new PrimitiveTypeNode(Types.Primitive.TEXT));
+		reserveFunction("real2text", new PrimitiveTypeNode(Types.Primitive.TEXT), real2textArguments);
 		
 		ArrayList<TypeNode> real2intArguments = new ArrayList<TypeNode>();
 		real2intArguments.add(new PrimitiveTypeNode(Types.Primitive.REAL));
-		reserveFunction("real2int", new PrimitiveTypeNode(Types.Primitive.INT));
+		reserveFunction("real2int", new PrimitiveTypeNode(Types.Primitive.INT), real2intArguments);
 
 		ArrayList<TypeNode> int2realArguments = new ArrayList<TypeNode>();
 		int2realArguments.add(new PrimitiveTypeNode(Types.Primitive.INT));
-		reserveFunction("int2real", new PrimitiveTypeNode(Types.Primitive.REAL));
+		reserveFunction("int2real", new PrimitiveTypeNode(Types.Primitive.REAL), int2realArguments);
 
 		// get()
 		ArrayList<TypeNode> listGetArguments = new ArrayList<TypeNode>();
