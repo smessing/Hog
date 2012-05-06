@@ -28,7 +28,7 @@ and Peace} by means of distributed computation. Writing in Java and using Hadoop
 MapReduce (TM), a simple solution takes over 50 lines of code, as the programmer
 is required to specify intermediate objects not directly related to the desired
 computation, but required simply to get Hadoop to function properly. Our language 
-can express the same computation in about 10 lines.
+can express the same computation in 15 lines.
 
 \subsection{The MapReduce Framework}
 \label{sub:mapreduce}
@@ -264,7 +264,7 @@ the \tt @Map \rm type signature. All output pairs from the map function are
 subsequently grouped by key by the framework, and passed as input to the \tt
 @Reduce \rm function.
 
-\emph{Note}: Currently, the only configuration available is for a file to be passed into the map
+\emph{Note}: In the current version of the language, the only configuration available is for a file to be passed into the map
 function one line at a time, with the line of text being the value, and the
 corresponding line number as the key. This requires that the input key/value pair
 to the map function is of type \tt (int key‐name, text value‐name)\rm. Extending
@@ -279,11 +279,12 @@ reduce function for every word.
 
 \begin{verbatim}
 
-  @Map (int lineNum, text line)  ->  (text, int) {
-    foreach word in line.tokenize(" ") {
-      emit(word, 1);
-    }
-  }
+  @Map (int lineNum, text line) -> (text, int) {
+      # for every word on this line, emit that word and the number 1
+      foreach text word in line.tokenize(" ") {
+	  emit(word, 1);
+       }
+   }
 
 \end{verbatim}
 
@@ -322,10 +323,13 @@ and follows the \tt @Map \rm sample introduced in the previous section.
 \begin{verbatim} 
 
     @Reduce (text word, iter<int> values) -> (text, int) {
+      # initialize count to zero
       int count = 0;
       while (values.hasNext()) {
+        # for every instance of '1' for this word, add to count
         count = count + values.next();
       }
+      # emit the count for this particular word
       emit(word, count);
     }
 
@@ -404,7 +408,7 @@ underscores, which are used to distinguish declared entities, such as
 methods, parameters, or variables from one another. A valid identifier also
 provide a means of determining scope of an entity, and helps to determine whether
 the same valid identifier in another scope refers to the same entity. The first
-character of an identifier must not be a digit. Valid identifiers are case sensitive
+character of an identifier must not be a digit. Valid identifiers are case sensitive,
 so \tt foo \rm is not the same identifier as \tt Foo\rm.
 
 % section identifiers (end)
@@ -412,18 +416,21 @@ so \tt foo \rm is not the same identifier as \tt Foo\rm.
 \subsection{Keywords} % (fold)
 \label{sub:keywords}
 
-The following words are reserved for use as keywords, and may not be redefined by a programmer:
+The following words are reserved for use as keywords, and may not be redefined by the programmer:
 
 \begin{multicols}{4}
 \tt
 \begin{itemize}
-  \item[] @Functions
-  \item[] @Map
-  \item[] @Reduce
+ 
+  \item[] add
   \item[] and
   \item[] bool
   \item[] break
   \item[] catch
+  \item[] clear
+  \item[] contains
+  \item[] containsAll
+  \item[] continue
   \item[] default
   \item[] else
   \item[] elseif
@@ -431,23 +438,45 @@ The following words are reserved for use as keywords, and may not be redefined b
   \item[] final
   \item[] for
   \item[] foreach
+  \item[] Functions
+  \item[] get
   \item[] hadoop
+  \item[] hasNext
   \item[] if
   \item[] in
   \item[] instanceof
   \item[] int
+  \item[] int2real
+  \item[] int2text
+  \item[] isEmpty
   \item[] iter
   \item[] list
-  \item[] map
+  \item[] Map
+  \item[] mapReduce
+  \item[] next
   \item[] not
   \item[] or
+  \item[] peek
+  \item[] print
   \item[] real
+  \item[] real2int
+  \item[] real2text
+  \item[] Reduce
+  \item[] remove
+  \item[] removeAll
   \item[] return
+  \item[] size
+  \item[] sort
   \item[] text
+  \item[] text2int
+  \item[] text2real
   \item[] throw
+  \item[] tokenize
   \item[] try
   \item[] void
   \item[] while
+  
+  
 \end{itemize}
 \rm
 \end{multicols}
@@ -477,12 +506,12 @@ The following are a list of examples of unnamed values and their corresponding t
 
 \subsection{Text Literals} % (fold) \label{sub:string_literals} 
 
-A string literal consists of a sequence of zero of more contiguous characters enclosed in double quotes, such as \tt
-"hello"\rm. A string literal can also contain escape characters such as \tt "\textbackslash n" \rm for the new line character
-or \tt "\textbackslash t" \rm for the tab character. A string literal has a String type has many of the same built-in functions
-as the String class in Java. String literals are constant and their values cannot be changed after they are created. String
-literals can be concatenated with adjacent string literals by use of the \tt + \rm operator and are then converted into a
-single string. Hog implements concatenation by use of the Java \tt StringBuilder \rm (or \tt StringBuffer\rm) class and its
+A text literal consists of a sequence of zero of more contiguous characters enclosed in double quotes, such as \tt
+"hello"\rm. A text literal can also contain escape characters such as \tt "\textbackslash n" \rm for the new line character
+or \tt "\textbackslash t" \rm for the tab character. A text literal has many of the same built-in functions
+as the String class in Java. String literals are constant and their values can not be changed after they are created. String
+literals can be concatenated with adjacent text literals by use of the \tt + \rm operator and are then converted into a
+single \tt text \rm variable. Hog implements concatenation by use of the Java \tt StringBuilder \rm (or \tt StringBuffer\rm) class and its
 append method. All text literals in Hog programs are implemented as instances of the \tt text \rm class, and then are mapped
 directly to the equivalent \tt String \rm class in Java.\footnote{Technically, \tt text \rm objects are implemented as
 instances of Hadoop's \tt Text \rm class, which is closely related to the Java \tt String \rm class.}
@@ -508,8 +537,8 @@ any block nested within its enclosing block.
 
 The basic types of Hog include \tt int \rm (integer numbers in base 10, 64 bytes
 in size), \tt real \rm (floating point numbers, 64 bytes in size), \tt bool
-\rm(boolean values, true or false) and \tt text \rm (Strings, variable in size).
-Unlike most languages, Hog includes no basic character type. Instead, a programmer
+\rm(boolean values, \tt true \rm or \tt false \rm) and \tt text \rm (Strings, variable in size).
+Unlike some languages, Hog includes no basic character type. Instead, a programmer
 makes use of \tt text\rm s of size 1.
 
 \emph{Implementation details}: Hog’s primitive types are not so primitive. They are
@@ -534,45 +563,27 @@ of:
 \subsection{Derived Types (Collections)} % (fold)
 \label{sub:derived_types_collections_}
 
-Derived types include \tt dict<K, V>\rm, \tt list<T>\rm, \tt set<T>\rm, \tt
-multiset<T>\rm, and \tt iter<T>\rm. The \tt list<T> \rm type is an ordered
+There are two derived types that can be created by the programmer: \tt list<T>\rm and \tt set<T>\rm. 
+Future versions of Hog are expected to implement other derived types, including dictionaries/hash maps, user-defined iterators, 
+and multisets. The \tt list<T> \rm type is an ordered
 collection of objects of the same type. The \tt set<T> \rm is an unordered
-collection of unique objects of the same type. The \tt multiset<T> \rm is an
-unordered collection of objects of the same type, with duplicates allowed. The \tt
-dict<K,V> \rm is a collection of key­value pairs, where keys are all of the same
-type, and values are all of the same type (keys and values can be of different
-types from one another). The only types currently allowed within collections are
-primitive types, preventing such constructs as a list of lists. All collections
-allow for null entries.\footnote{Note that for \tt set<T>\rm, only one \tt null
-\rm entry is allowed, and for \tt map<K,V>\rm, only one \tt null \rm key is
-allowed.}
+collection of unique objects of the same type.
 
-The last derived type is \tt iter<T>\rm, which is Hog's iterator object. An \tt
-iter \rm object is associated with a collection object (of one of the types
-mentioned above), and allows the user to traverse the elements in the collection
-once.
+A special derived type is \tt iter<T>\rm, which is Hog's iterator object. An \tt
+iter \rm object is associated with a list, and allows one traversal of the elements in the list; this is used by Hog in the \tt @Reduce \rm section of a Hog program.
 
 % subsection derived_types_collections_ (end)
 
-\subsection{Conversions} % (fold)
+\subsection{Type Conversions} % (fold)
 \label{sub:conversions}
 
 \textbf In order to cast a variable to be of a different type, use the following notation:
 
 \begin{quotation}
-      \tt ( \rm \emph{type} \tt ) \rm \emph{variableName}
+      \tt \emph{primitiveType}2\emph{otherPrimitiveType}(  )\rm \emph{variableName}
 \end{quotation}
 
-
-Not all basic types can be cast to a different basic type. Any variable of type
-\tt int \rm or \tt real \rm can be cast to any of the other basic types (\tt
-int\rm, \tt real\rm, \tt bool\rm, \tt text\rm). Note, when casting from a \tt real
-\rm to an \tt int\rm, the fractional part of the \tt real \rm value will be
-\textbf{\emph{truncated}}. However, a variable of type bool can only be cast to
-\tt text \rm and a variable of type \tt text \rm can be cast to an \tt int \rm or
-\tt real\rm. If casting a \tt text \rm to an \tt int \rm or \tt real \rm results
-in an invalid number (e.g. \tt (int) "1a4"\rm), then a \tt TypeCaseException \rm
-will be thrown.
+Hog supports casting between the primitive types \tt int\rm, \tt real\rm, and \tt text\rm, via the built-in functions \tt int2real\rm, \tt int2text\rm, \tt real2int\rm, \tt real2text\rm, \tt text2int\rm, and \tt text2real\rm. If casting a text to an int or real results in an invalid number (e.g. \tt text2int("1a4") \rm), a run-time exception will be thrown.
 
 % subsection conversions (end)
 
@@ -694,14 +705,14 @@ foo\rm, \tt foo.equals(null) \rm will evaluate to \tt false\rm.
 \subsubsection{Assignment} % (fold)
 \label{ssub:assignment}
 
-There is one single assignment operator, '\tt =\rm'. Expressions involving the
+There is one assignment operator, '\tt =\rm'. Expressions involving the
 assignment operator have the following form:
 
 \begin{quotation}
 \emph{identifier}$_1$ \tt = \rm \emph{expression} $|$ \emph{identifier}$_2$
 \end{quotation}
 
-At compile-time, the compiler checks that both the result of the \emph{expression}
+At compile time, the compiler checks that both the result of the \emph{expression}
 (or \emph{identifier}$_2$) and \emph{identifier}$_1$ have the same type. If not, a
 compile-time \tt TypeMismatchException \rm will be thrown.
 
@@ -714,8 +725,7 @@ compile-time \tt TypeMismatchException \rm will be thrown.
 \section{Declarations} % (fold)
 \label{sec:declarations}
 
-While it is not specified in the grammar of Hog, like many other programming
-languages, a user is only allowed to use variables/functions after they have been
+A user is only allowed to use variables/functions after they have been
 declared. When declaring a variable, a user must include both a type and an
 identifier for that variable. Otherwise, an exception will be thrown at compile
 time.
@@ -729,13 +739,21 @@ Every variable, whether its type is primitive or derived, must be assigned a typ
     list<int> myList;
 \end{verbatim}
 
-Declares the variable \tt myList \rm to be a \tt list \rm of \tt int\rm s. And,
+declares the variable \tt myList \rm to be a \tt list \rm of \tt int\rm s,
+
+\begin{verbatim}
+    list<list<int>> myOtherList;
+\end{verbatim}
+
+declares the variable \tt myOtherList \rm to be a \tt list \rm of \tt list\rm s of \tt int \rm s,
+
+and
 
 \begin{verbatim}
     text myText;
 \end{verbatim}
 
-Declares the variable \tt myText \rm to be of type \tt text\rm .
+declares the variable \tt myText \rm to be of type \tt text\rm .
 
 % subsection type_specifiers (end)
 
@@ -792,7 +810,7 @@ The first two patterns operate in essentially the same way as for primitive­typ
 variables. When the first pattern is used, we say that the variable is
 \textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user attempts
 to use any type­specific operations (for instance, \tt myList.size() \rm on an
-uninitialized variable, the program will through a run­time exception (see \S
+uninitialized variable, the program will throw a run­time exception (see \S
 \ref{sec:exception_handling} for a discussion of exceptions)). When the second
 pattern is used, the variable is \textbf{\emph{initialized}} to the result of the
 \emph{expression}.
@@ -858,7 +876,6 @@ The following are the \textbf{\emph{flow-of-control}} statements included in Hog
   \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt else \rm \emph{statement}
   \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt elseif ( \rm \emph{statement} \tt ) $\dots$ else 
   \rm \emph{statement}
-  \item[] \tt switch ( \rm \emph{expression} \tt ) \rm \emph{statement} \rm
 \end{itemize}
 
 In the above statements, the  $\dots$ signifies an unlimited number of \tt elseif \rm
@@ -967,10 +984,17 @@ through.
 \label{ssub:example_3}
 
 \begin{verbatim}
-    list<int> iList()
-    iList = [0,1,2,3,4,5,6,7,8,9]
-    foreach i in iList {
-      print(i)
+    # we first initialize and populate the list as follows: 
+    list<int> iList;
+    for (int i = 0; i < 10; i++) {
+       iList.add(i);
+    }
+
+    # This is an example of using foreach/
+    # Note that the type of the iterable must be declared.    
+
+    foreach int i in iList {
+      print(i);
     }
 \end{verbatim}
 
@@ -1033,48 +1057,6 @@ function, and \emph{parameterList} is a (possibly empty) list of parameters used
 
 \emph{Note}: In what follows, if a function has return type T, it means that the return type of this function matches the
 parameterized type of this object (i.e. for an \tt iter<int> \rm object, these functions have return type \tt int\rm).
-
-\subsubsection{\tt dict \rm} % (fold)
-\label{ssub:tt_dict_rm}
-
-\begin{itemize}
-
-\item[] \tt void clear() \rm
-
-Removes all key-value pairs in this \tt dict\rm.
-
-\item[] \tt bool containsKey(K key) \rm
-
-Returns \tt true \rm if \tt key \rm is a key in this \tt dict\rm, \tt false \rm otherwise.
-
-\item[] \tt V get(K key) \rm
-
-Returns the value associated the \tt key \rm in this \tt dict\rm, or \tt null \rm if this \tt dict \rm doesn't contain \tt
-key\rm.
-
-\item[] \tt set<T> keySet() \rm
-
-Returns a set of all the keys in this \tt dict\rm.
-
-\item[] \tt void put(K key, V value) \rm
-
-Places a new key-value pair in this \tt dict\rm.
-
-\item[] \tt dict<V, K> reverseDict() \rm
-
-Returns as new \tt dict \rm object with the key-value pairs of this \tt dict \rm reverse (i.e. keys become values and values
-become keys). \emph{Note}: If there are duplicate values, they are collapsed, and an arbitrary key out of all of the associated
-keys is chosen as the new value.
-
-\item[] \tt bool size() \rm
-
-Returns the number of key-value pairs in this \tt dict\rm.
-
-
-
-\end{itemize}
-
-% subsubsection tt_dict_rm (end)
 
 \subsubsection{\tt iter \rm} % (fold)
 \label{ssub:iter}
@@ -1146,72 +1128,6 @@ Returns an int with the number of elements in the list.
 
 
 % subsubsection list (end)
-
-\subsubsection{\tt multiset \rm} % (fold)
-\label{ssub:multiset}
-
-The \tt multiset \rm object is similar in kind to the \tt set \rm object in that
-it is an unordered collection of objects of the same type. The key difference
-between \tt set \rm and \tt multiset \rm is that \tt multiset \rm allows for
-duplicates. The built-in functions on \tt multiset \rm are as follows:
-
-\begin{itemize}
-
-\item[] \tt void add(T object) \rm
-
-Adds \tt object \rm to the \tt multiset\rm.
-
-\item[] \tt void clear() \rm
-
-Removes all elements in this \tt multiset\rm.
-
-\item[] \tt bool contains(T object) \rm
-
-Returns \tt true \rm if this \tt multiset \rm contains at least one instance of
-\tt object\rm, \tt false \rm otherwise.
-
-\item[] \tt int count(T object) \rm
-
-The \tt count(T object) \rm method returns the number of instances of \tt object \rm
-in the given \tt multiset\rm. If the \tt multiset \rm does not contain the given
-object, then \tt 0 \rm is returned. 
-
-\item[] \tt list<T> entrySet() \rm
-
-This function returns a list of all entries in the multiset, with duplicates removed.
-Please note: objects are added to the list in an arbitrary order, since \tt multiset
-\rm objects are inherently unordered. Do not ever rely on \tt entrySet() \rm 
-providing a consistent ordering of objects.
-
-\item[] \tt bool isEmpty() \rm
-
-This function returns \tt true \rm if the \tt multiset \rm contains no objects, and
-\tt false \rm otherwise.
-
-\item[] \tt iter<T> iterator() \rm
-
-This function returns an iterator for the entries of the objects in this list,
-with duplicates removed. Again, the order of the objects is arbitrary. 
-
-\item[] \tt bool removeAll(T object) \rm
-
-Removes all instances of \tt object \rm from the given \tt multiset\rm. Returns
-\tt true \rm if removal was successful, \tt false \rm otherwise (i.e. \tt object \rm
-was not contained in the \tt mutliset\rm).
-
-\item[] \tt bool removeOne(T object) \rm
-
-Removes one instance of \tt object \rm from the given \tt multiset\rm. Returns
-\tt true \rm if the removal was successful, \tt false \rm otherwise (i.e.,
-\tt object \rm was not in the \tt multiset\rm).
-
-\item[] \tt int size() \rm
-
-Returns the total number of objects in this \tt multiset\rm.
-
-\end{itemize}
-
-% subsubsection multiset (end)
 
 \subsubsection{\tt set \rm} % (fold)
 \label{ssub:tt_set_rm}
