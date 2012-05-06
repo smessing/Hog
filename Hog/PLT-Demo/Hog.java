@@ -6,49 +6,6 @@ import org.apache.hadoop.util.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 public class Hog {
-    public static class Functions {
-        public static int fib(int n) {
-            if (n == 0) {
-                int x = 5;
-                return x;
-            }
-             else if (n == 1) {
-                return 1;
-            }
-             else {
-                return Functions.fib(n - 1) + Functions.fib(n - 2);
-            }
-         }
-        public static int factorial(int n) {
-            if (n == 0 || n == 1) {
-                return 1;
-            }
-             else {
-                return n * Functions.factorial(n - 1);
-            }
-         }
-        public static int max(int x, int y) {
-            if (x >= y) {
-                return x;
-            }
-             else {
-                return y;
-            }
-         }
-        public static int tooManyArgs(int x, List<Integer> y, Set<List<Integer>> foo, double percentage, boolean doNothing) {
-            if (!doNothing) {
-                return 1;
-            }
-            return 1;
-         }
-        public static List<Integer> reverseList(List<Integer> oldList) {
-            List<Integer> newList = new ArrayList<Integer>();
-            for (int i = oldList.size() - 1; i >= 0; i--) {
-                newList.add(oldList.get(i));
-             }
-            return newList;
-         }
-    }
     public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
         public void map(LongWritable lineNum, Text value,  OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
             String line = value.toString();

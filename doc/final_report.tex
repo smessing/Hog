@@ -654,6 +654,1284 @@ Hog uses applicative order (eager) evaluation, similarly to Java.
 % section lexical_conventions (end)
 
 
+\section{Types} % (fold)
+\label{sec:types}
+
+\subsection{Basic Types} % (fold)
+\label{sub:basic_types}
+
+The basic types of Hog include \tt int \rm (integer numbers in base 10, 64
+bytes in size), \tt real \rm (floating point numbers, 64 bytes in size), \tt
+bool \rm(boolean values, \tt true \rm or \tt false \rm) and \tt text \rm
+(Strings, variable in size).  Unlike some languages, Hog includes no basic
+character type. Instead, a programmer makes use of \tt text\rm s of size 1.
+
+\emph{Implementation details}: Hog’s primitive types are not so primitive. They are
+in fact wrappers around Hadoop classes. For instance, Hog’s \tt int \rm type is a
+wrapper around Hadoop's \tt IntWritableclass\rm. The following lists for every
+primitive type in Hog the corresponding Hadoop class that the type is built on top
+of:
+
+\begin{center}
+\begin{tabular}{|c|c|}
+    \hline
+\textbf{Hog Type} & \textbf{Enclosed Hadoop Class} \\ \hline
+\tt int & \tt IntWritable \\ \hline
+\tt real & \tt DoubleWritable \\ \hline
+\t bool & \tt BooleanWrtiable \\ \hline
+\tt text & \tt Text \rm \\ \hline
+\end{tabular}
+\end{center}
+
+% subsection basic_types (end)
+
+\subsection{Derived Types (Collections)} % (fold)
+\label{sub:derived_types_collections_}
+
+There are two derived types that can be created by the programmer: \tt
+list<T>\rm and \tt set<T>\rm.  Future versions of Hog are expected to implement
+other derived types, including dictionaries/hash maps, user-defined iterators,
+and multisets. The \tt list<T> \rm type is an ordered collection of objects of
+the same type. The \tt set<T> \rm is an unordered collection of unique objects
+of the same type. Hog supports arbitrarily nested derived types, so it is
+possible, for example, to have a \tt list\rm  of \tt list\rm s of \tt list\rm s
+of \tt int\rm s.
+
+A special derived type is \tt iter<T>\rm, which is Hog's iterator object. An
+\tt iter \rm object is associated with a list, and allows one traversal of the
+elements in the list; this is used by Hog in the \tt @Reduce \rm section of a
+Hog program.
+
+% subsection derived_types_collections_ (end)
+
+\subsection{Type Conversions} % (fold)
+\label{sub:conversions}
+
+\textbf In order to cast a variable to be of a different type, use the
+following notation:
+
+\begin{quotation}
+      \tt \emph{primitiveType}(2\emph{otherPrimitiveType})\rm \emph{variableName}
+\end{quotation}
+
+Hog supports casting between the primitive types \tt int\rm, \tt real\rm, and
+\tt text\rm, via the built-in functions \tt int2real\rm, \tt int2text\rm, \tt
+real2int\rm, \tt real2text\rm, \tt text2int\rm, and \tt text2real\rm. If
+casting a text to an int or real results in an invalid number (e.g. \tt
+text2int("1a4") \rm), a run-time exception will be thrown.
+
+% subsection conversions (end)
+
+% section types (end)
+
+\section{Expressions} % (fold)
+\label{sec:expressions}
+
+\subsection{Operators} % (fold)
+\label{sub:operators}
+
+\subsubsection{Arithmetic Operators} % (fold)
+\label{ssub:arithmetic_operators}
+
+Hog implements all of the standard arithmetic operators. All arithmetic
+operators are only defined for use between variables of numeric type (\tt
+int\rm, \tt real\rm) with the exception that the \tt + \rm operator is also
+defined for use between two \tt text \rm variables. In such instances, \tt +
+\rm is defined as concatenation. Thus, in the following,
+
+\begin{verbatim}
+    text face = "face";
+    text book = "book";
+    text facebook = face + book;
+\end{verbatim}
+
+After execution, the variable \tt facebook \rm will have the value
+``facebook''. No other arithmetic operators are defined for use with \tt text
+\rm variables, and \tt + \rm is only valid if both variables are of type \tt
+text \rm. Otherwise, the program will result in a compile-time \tt
+TypeMismatchException\rm. 
+
+When an arithmetic operator is used between two numeric variables of different
+type, as in,
+
+\begin{verbatim}
+    int a = 1;
+    real b = 2.0;
+\end{verbatim}
+
+\noindent the non-\tt real \rm variable would first need to be cast into a \tt
+real \rm before operating on them, so that both operands have the
+same type. So thus
+
+\begin{verbatim}
+   print(a + b);
+\end{verbatim}
+
+would throw an error, while
+
+\begin{verbatim}
+   print(int2real(a) + b);
+\end{verbatim}
+
+would print 3.0.
+
+If one of the operands happens to have a \tt null \rm value (for instance, if a
+variable is \textbf{\emph{uninitialized}}), then the resulting operation will
+cause a run-time \tt NullValueException\rm, and the program will crash.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+
+\hline \textbf{Operator} & \textbf{Arity} & \textbf{Associativity} &
+\textbf{Precedence Level} & \textbf{Behavior} \\ \hline
+\tt + \rm & binary & left & 0 & addition \\ \hline
+\tt - \rm & binary & left & 0 & minus \\ \hline
+\tt * \rm & binary & left & 1 & multiplication \\ \hline
+\tt / \rm & binary & left & 1 & division \\ \hline
+\tt \% \rm & binary & left & 2 & mod$\dagger$
+\\ 
+\hline
+\tt ++ \rm & unary & left & 3 & increment \\ \hline
+\tt -- \rm & unary & left & 3 & decrement \\ \hline
+\tt - \rm & unary & right & 3 & negate \\ \hline
+\end{tabular}
+\end{center}
+
+$\dagger$Follows Java's behavior: a modulus of a negative number is a negative
+number.
+% subsubsection arithmetic_operators (end)
+
+\subsubsection{Logical Operators} % (fold)
+\label{ssub:logical_operators}
+
+The following are the logical operators implemented in Hog. Note that these
+operators only work with two operands of type \tt bool\rm. Attempting to use a
+logical operator with an object of any other type results in a compile-time
+exception (see \S \ref{sub:compile_time_exceptions}).
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+
+\hline \textbf{Operator} & \textbf{Arity} & \textbf{Associativity} &
+\textbf{Precedence Level} & \textbf{Behavior} \\ \hline
+\tt or \rm & binary & left & 0 & logical or \\ \hline
+\tt and \rm & binary & left & 1 & logical and \\ \hline
+\tt not \rm & unary & right & 2 & negation \\ \hline
+\end{tabular}
+\end{center}
+
+% subsubsection logical_operators (end)
+
+\subsubsection{Comparators} % (fold)
+\label{ssub:comparators}
+
+The following are the comparators implemented in Hog (all are binary operations).
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+
+\hline \textbf{Operator} & \textbf{Associativity} &
+\textbf{Precedence Level} & \textbf{Behavior} \\ \hline
+\tt < \rm & none & 0 & less than \\ \hline
+\tt <= \rm & none & 0 & less than or equal to \\ \hline
+\tt > \rm & none & 0 & greater than \\ \hline
+\tt >= \rm & none & 0 & greater than or equal to \\ \hline
+\tt == \rm & none & 0 & equal \\ \hline
+\tt != \rm & none & 0 & not equal \\ \hline
+
+\end{tabular}
+\end{center}
+
+\emph{Note}: All comparators do not work with non-numeric or non-boolean types.
+Comparisons require that the two operands be either both numeric or both
+boolean, and a numeric value cannot be compared to a boolean value. If the two
+operands are numeric but of different types, one of them must be cast so that
+they are of the same type. The only valid comparators that can be used with
+boolean expressions are \tt == \rm and \tt !=\rm. The use of a comparison
+operator in Hog between any two derived types will result in a run-time error.
+
+% subsubsection comparators (end)
+
+\subsubsection{Assignment} % (fold)
+\label{ssub:assignment}
+
+There is one assignment operator, '\tt =\rm'. Expressions involving the
+assignment operator have the following form:
+
+\begin{quotation}
+\emph{identifier}$_1$ \tt = \rm \emph{expression} $|$ \emph{identifier}$_2$
+\end{quotation}
+
+At compile time, the compiler checks that both the result of the \emph{expression}
+(or \emph{identifier}$_2$) and \emph{identifier}$_1$ have the same type. If not, a
+compile-time \tt TypeMismatchException \rm will be thrown.
+
+% subsubsection assignment (end)
+
+% subsection operators (end)
+
+% section expressions (end)
+
+\section{Declarations} % (fold)
+\label{sec:declarations}
+
+A user is only allowed to use variables/functions after they have been
+declared. When declaring a variable, a user must include both a type and an
+identifier for that variable. Otherwise, an exception will be thrown at compile
+time.
+
+\subsection{Type Specifiers} % (fold)
+\label{sub:type_specifiers}
+
+Every variable, whether its type is primitive or derived, must be assigned a
+type upon declaration, for instance,
+
+\begin{verbatim}
+    list<int> myList;
+\end{verbatim}
+
+declares the variable \tt myList \rm to be a \tt list \rm of \tt int\rm s,
+
+\begin{verbatim}
+    list<list<int>> myOtherList;
+\end{verbatim}
+
+declares the variable \tt myOtherList \rm to be a \tt list \rm of \tt list\rm s
+of \tt int \rm s,
+
+and
+
+\begin{verbatim}
+    text myText;
+\end{verbatim}
+
+declares the variable \tt myText \rm to be of type \tt text\rm .
+
+% subsection type_specifiers (end)
+
+\subsection{Declarations} % (fold)
+\label{sub:declarations}
+
+\subsubsection{Null Declarations} % (fold)
+\label{ssub:null_declarations}
+
+If a variable is declared but not initialized, the variable becomes a
+\textbf{\emph{null reference}}, which means it points to nothing and holds no
+data (internally, this means that an entry has been added to Hog's symbol table
+with that variable name).
+
+% subsubsection null_declarations (end)
+
+\subsubsection{Primitive-Type Variable Declarations} % (fold)
+\label{ssub:primitive_type_variable_declarations}
+
+Variables of one of the primitive types, including \tt int\rm, \tt real\rm, \tt
+text\rm, or \tt bool\rm, are declared using the following patterns:
+
+\begin{enumerate}
+  \item \emph{type identifier} \rm $\hfill$ (uninitialized)
+  \item \emph{type identifier = expression } \rm $\hfill$ (initialized)
+\end{enumerate}
+
+When the first pattern is used, we say that the variable is
+\textbf{\emph{uninitialized}}, and has the value \tt null\rm. When the second
+pattern is used, we say that the variable is \textbf{\emph{initialized}}, and has
+the same value as the value of the result of the \emph{expression}. The
+\emph{expression} must return a value of the right type, or the compiler will
+throw a \tt TypeMismatchError\rm. The \emph{expression} may contain an expression
+involving both other variables and unnamed raw primitives (e.g. 1 or 2), an
+expression involving only other variables or unnamed raw primitives, or a single
+variable, or a single unnamed raw primitive.
+
+% subsubsection primitive_type_variable_declarations (end)
+
+\subsubsection{Derived-Type Variable Declarations} % (fold)
+\label{ssub:derived_type_variable_declarations}
+
+Derived-type variables are declared using the following pattern:
+
+\begin{enumerate}
+  \item \emph{type identifier;}
+\end{enumerate}
+
+When the derived type is first declared, we say that the variable is
+\textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user
+attempts to use any type-­specific operations that are not meaningful (for
+instance, \tt myList.size() \rm on an uninitialized variable, the program will
+throw a run­time exception (see \S \ref{sec:exception_handling} for a
+discussion of exceptions)). The example code below initializes a \tt list\rm of
+integers and adds one element to it.
+
+\begin{verbatim}
+    list<int> myList;
+    myList.add(5);
+\end{verbatim}
+
+% subsubsection derived_type_variable_declarations (end)
+
+\subsubsection{Function Declarations} % (fold)
+\label{ssub:function_declarations}
+
+In order to declare a function, use the following notation:
+
+\begin{quotation}
+\emph{type functionName} \tt ( \rm \emph{parameterList} \tt ) \{ \rm \\
+\indent \indent \emph{expressionList} \\
+\indent \tt \}
+\end{quotation}
+
+
+% subsubsection function_declarations (end)
+
+% subsection declarations (end)
+
+% section declarations (end)
+
+\section{Statements} % (fold)
+\label{sec:statements}
+
+\subsection{Expression Statement} % (fold)
+\label{sub:expression_statement}
+
+An \textbf{\emph{expression statement}} is either an individual assignment or a
+function call. All consequences of a given expression take effect before the next
+expression is executed.
+
+% subsection expression_statement (end)
+
+\subsection{Compound Statement (Blocks)} % (fold)
+\label{sub:compound_statement}
+
+\textbf{\emph{Compound statements}} are defined by \{ and \} and are used to
+group a sequence of statements, so that they are syntactically equivalent to a
+single statement.
+
+% subsection compound_statement (end)
+
+\subsection{Flow-Of-Control Statements} % (fold)
+\label{sub:flow_of_control_statements}
+
+The following are the \textbf{\emph{flow-of-control}} statements included in Hog:
+
+\begin{itemize}
+  \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement}
+  \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt else \rm \emph{statement}
+  \item[] \tt if ( \rm \emph{expression} \tt ) \rm \emph{statement} \tt elseif ( \rm \emph{statement} \tt ) $\dots$ else 
+  \rm \emph{statement}
+\end{itemize}
+
+In the above statements, the  $\dots$ signifies an unlimited number of \tt
+elseif \rm statements, since there is no limit on the number of \tt elseif \rm
+statements that can appear before the final \tt else \rm statement. In the
+second statement above, when the expression in the \tt if \rm statement
+evaluates to \tt false\rm, then the \tt else \rm statement will execute. In the
+third statement above with \tt if\rm, \tt elseif \rm and \tt else \rm
+statements, the statement will be executed that follows the first expression
+evaluating to \tt true\rm. If none of these expressions evaluate to \tt
+true\rm, then the \tt else \rm statement is executed.
+
+To increase the expressive power of Hog, flow-of-control statements can also be
+nested within each other.
+
+% subsection flow_of_control_statements (end)
+
+\subsection{Iteration Statements} % (fold)
+\label{sub:iteration_statements}
+
+Iteration statements signify looping and can appear in one of the two following
+forms:
+
+\begin{itemize}
+  \item[] \tt while ( \rm \emph{expression} \tt ) \rm \emph{statement}
+  \item[] \tt for ( \rm \emph{expression}$_1$ \tt ; \rm \emph{expression}$_2$ \tt ; \rm \emph{expression}$_3$ \tt ;) \rm \emph{statement}
+  \item[] \tt foreach \rm \emph{expression} \tt in \rm \emph{iterable-object statement}
+\end{itemize}
+
+In the \tt while \rm pattern, the associated \emph{statements} will be executed
+repeatedly until the \emph{expression} evaluates to \tt false\rm. The
+\emph{expression} is evaluated before every iteration. Please note that in a
+slight syntactical departure from Java, Hog requires a semicolon after the
+third expression (the increment step) in the \tt for\rm loop construct. Thus,
+an example of correct Hog syntax would be \begin{verbatim} for (int i = 0; i <
+10; i++;){...}\end{verbatim}
+
+In the \tt for \rm pattern, \emph{expression}$_1$ is the initialization step,
+\emph{expression}$_2$ is the test or condition and \emph{expression}$_3$ is the
+increment step. At each step through the for loop, \emph{expression}$_2$ is
+evaluated. When \emph{expression}$_2$ evaluates to false, iteration through the
+loop ends.
+
+In the \tt foreach \rm pattern, the iteration starts at the first element in the
+\emph{iterable-object statement} (a statement that evaluates to an object that
+supports the \tt iterator() \rm function). The \emph{statement} executes during
+every iteration. The iteration ends when the \emph{statement} has been executed
+for each item in the iterable object and there are no items left to iterate
+through.
+
+\subsubsection{Example of \tt while \rm} % (fold)
+\label{ssub:example_1}
+
+\begin{verbatim}
+    int i = 0;
+    while (i < 10) {
+      print(i);
+      i++;
+    }
+
+\end{verbatim}
+
+% subsubsection example_1 (end)
+
+\subsubsection{Example of \tt for \rm} % (fold)
+\label{ssub:example_2}
+
+\begin{verbatim}
+    for (int i = 0; i < 10; i++;) {
+      print(i)
+    }
+\end{verbatim}
+
+% subsubsection example_2 (end)
+
+\subsubsection{Example of \tt foreach \rm} % (fold)
+\label{ssub:example_3}
+
+\begin{verbatim}
+    # we first initialize and populate the list as follows: 
+    list<int> iList;
+    for (int i = 0; i < 10; i++;) {
+       iList.add(i);
+    }
+
+    # This is an example of using foreach
+    # Note that the type of the iterable must be declared.    
+
+    foreach int i in iList {
+      print(i);
+    }
+\end{verbatim}
+
+% subsubsection example_3 (end)
+
+% subsection iteration_statements (end)
+
+% section statements (end)
+
+\section{Built-in Functions} % (fold)
+\label{sec:built_in_functions}
+
+Hog includes both \emph{\textbf{system-level}} and \emph{\textbf{object-level}}
+built-in functions. Here \emph{\textbf{built-in}} means functions provided by the
+language itself.
+
+\subsection{System-level Built-ins} % (fold)
+\label{sub:system_level_built_ins}
+
+Hog includes a number of system­level built­in functions that can be called from
+various sections of a Hog program. The functions are:
+
+\begin{itemize} 
+
+\item[] \tt void emit(key, value) \rm \\
+
+This function can be called from the \tt @Map \rm and \tt @Reduce \rm sections in
+order to communicate the results of the map and reduce functions to the Hadoop
+platform. The types of the key/value pairs must match those defined as the output
+types in the header of each section.
+
+\item[] \tt void mapReduce() \rm \\
+
+This function can be called from the \tt @Main \rm section in order to initiate
+the mapreduce job, as definied in the \tt @Map \rm and \tt @Reduce \rm sections.
+Any Hog program that implements mapreduce will need to call this function in \tt
+@Main\rm.
+
+\item[] \tt void print(toPrint) \rm \\
+
+This function can be called from the \tt @Main \rm section in order to print to
+standard output. The argument must be a primitive type.
+
+\end{itemize}
+
+% subsection system_level_built_ins (end)
+
+\subsection{Object-level Built-ins} % (fold)
+\label{sub:object_level_built_ins}
+
+The derived type objects have several built-in functions that provide
+additional functionality. All of these functions are invoked using the
+following pattern:
+
+\begin{quotation}
+\emph{identifier.functionName(parameterList)}
+\end{quotation}
+
+\noindent Where \emph{identifier} is the identifier for the object in question,
+\emph{functionName} is the name of the function, and \emph{parameterList} is a
+(possibly empty) list of parameters used to specify the behavior of the
+invocation.
+
+\emph{Note}: In what follows, if a function has return type T, it means that
+the return type of this function matches the parameterized type of this object
+(i.e. for an \tt iter<int> \rm object, these functions have return type \tt
+int\rm).
+
+\subsubsection{\tt iter \rm} % (fold)
+\label{ssub:iter}
+
+\tt iter \rm is Hog's iteration object, and supports several built-in functions
+that are independent of the particular type of the \tt iter \rm object. The
+built-in functions are as follows:
+
+\begin{itemize}
+
+\item[] \tt bool hasNext() \rm
+
+This function returns \tt true \rm if the iterator object has a next object
+to return, and \tt false \rm otherwise.
+
+\item[] \tt T next() \rm
+
+This function returns the next object (if one exists) for the owning \tt iter \rm
+object. A call to \tt next() \rm differs from a call to \tt peek() \rm in that the
+function call advances the cursor of the iterator.
+
+\item[] \tt T peek() \rm
+
+This function returns the next object (if one exists) for the owning \tt iter
+\rm object. A call to \tt peek() \rm returns the object without advancing the
+iterator's cursor, thus multiple calls to \tt peek() \rm without any
+intermediate function calls will all return the same value.
+
+\end{itemize} 
+
+
+% subsubsection iter (end)
+
+\subsubsection{\tt list \rm} % (fold)
+\label{ssub:list}
+
+\begin{itemize}
+
+\item[] \tt void add(T itemToAdd) \rm
+
+Adds the object passed to the end of the list. The object must be of the same
+type as the list, or the operation will result in a \textbf{compile-time or
+run-time} exception.
+
+\item[] \tt void clear() \rm
+
+Removes all elements in this \tt list\rm.
+
+\item[] \tt T get(int index) \rm
+
+Returns the item from the list at the specified index.
+
+
+\item[] \tt void sort() \rm
+
+Function that sorts the items in the list in lexicographical ascending order.
+
+\item[] \tt int size() \rm
+
+Returns an int with the number of elements in the list.
+
+\end{itemize}
+
+
+% subsubsection list (end)
+
+\subsubsection{\tt set \rm} % (fold)
+\label{ssub:tt_set_rm}
+
+\begin{itemize}
+
+\item[] \tt bool add(T element) \rm
+
+Returns \tt true \rm if the element was successfully added to the \tt set\rm, \tt false \rm otherwise.
+
+\item[] \tt void clear() \rm
+
+Removes all elements from the \tt set \rm such that it is empty afterwards.
+
+\item[] \tt bool contains(T element) \rm
+
+Returns \tt true \rm if the \tt set \rm contains this element, \tt false \rm otherwise.
+
+\item[] \tt bool containsAll(set<T> otherSet) \rm
+
+Returns \tt true \rm if all elements in \tt otherSet \rm are found in this set.
+
+\item[] \tt bool isEmpty() \rm
+
+Returns \tt true \rm if there are no elements in this \tt set\rm, \tt false \rm otherwise.
+
+\item[] \tt iter<T> iterator() \rm
+
+Returns an iterator over the elements in this \tt set\rm.
+
+\item[] \tt bool remove(T element) \rm
+
+Returns \tt true \rm if the element was successfully removed from the \tt set\rm, \tt false \rm otherwise (i.e. the \tt list
+\rm didn't contain \tt element\rm).
+
+\item[] \tt bool removeAll(set<T> otherSet) \rm
+
+Returns \tt true \rm if all the elements in \tt otherSet \rm were successfully removed from this set.
+
+\item[] \tt int size() \rm
+
+Returns the number of elements in the set.
+
+\end{itemize}
+
+% subsubsection tt_set_rm (end)
+
+\subsubsection{text} % (fold)
+\label{ssub:text}
+
+The following function can be called on a \tt text \rm object:
+
+\begin{itemize}
+
+\item[] \tt int length() \rm \\
+
+Returns the length (number of individual characters) of this \tt text\rm.
+
+\item[] \tt text replace(text matchText, text replacementText) \rm \\
+
+Returns a new \tt text \rm object with each sub-\tt text \rm that matches \tt
+matchText \rm replaced by \tt replacementText\rm. This function does \textbf{not}
+alter the original \tt text \rm object.
+
+\item[] \tt list<text> tokenize(text delimiter) \rm \\
+
+\tt tokenize() \rm can be called on a \tt text \rm object to tokenize it into a
+list of \tt text \rm objects based on the delimiter. The delimiter is not included
+in any of the \tt text \rm objects in the returned list.
+
+\end{itemize}
+
+% subsubsection text (end)
+
+% subsection object_level_built_ins (end)
+
+% section built_in_functions (end)
+
+\section{System Configuration} % (fold)
+\label{sec:system_configuration}
+
+The user must set configuration variables in the \tt hog.rb \rm build script to
+allow the Hog compiler to link the Hog program with the necessary jar files to run
+the MapReduce job. The user must also specify the job name within the Hog source
+file.
+
+\begin{itemize}
+
+\item[] \textbf{HADOOP\_HOME} absolute path of hadoop folder
+\item[] \textbf{HADOOP\_VERSION} hadoop version number
+\item[] \textbf{JAVA\_HOME} absolute path of java executable
+\item[] \textbf{JAVAC\_HOME} absolute path of javac executable
+\item[] \textbf{HOST} where to job is rsynced to and run
+\item[] \textbf{LOCALMEM} how much memory for java to use when running in local mode 
+\item[] \textbf{REDUCERS} the number of reduce tasks to run, set to zero for map only jobs
+
+\end{itemize}
+
+% section system_configuration (end)
+
+\section{Compilation Structure} % (fold)
+\label{sec:parsing_tools}
+
+Currently, the Hog compiler is implemented as a translator into the Java
+programming language. The first phase of Hog compilation uses the JFlex as its
+lexical analyzer, which is designed to work with the Look-Ahead Left-to-Right
+(LALR) parser generator CUP. The lexical analyzer creates lexemes, which are
+logically meaningful sequences, and for each lexeme the lexical analyzer sends
+to the LALR parser a token of the form \tt $<$token-name,
+attribute-value$>$\rm. The second phase of Hog compilation uses Java CUP to
+create a syntax tree, which is a tree-like intermediate representation of the
+source program, which depicts the grammatical structure of the Hog source
+program.
+
+In the last phase of compilation, the Hog semantic analyzer generates Java source
+code, which is then compiled into byte code by the Java compiler. Then with the
+Hadoop Java Archives (JARs) the bytecode is executed on the Java Virtual Machine
+(JVM). With the syntax tree and the information from the symbol table, the Hog
+compiler then checks the Hog source program to ensure semantic consistency with
+the language specification. The syntax tree is initially untyped, but after
+semantic analysis Hog types are added to the syntax tree. Hog types are
+represented in two ways, either a translation of a Hog type into a new Java class,
+or by mapping Hog types to the equivalent Java types. Mapping Hog types directly
+to Java types improves performance because a JVM can handle primitive types much
+more efficiently than objects. Also, a JVM implements optimizations for well-known
+types, such as String, and thus Hog is built for optimal performance.
+
+% section parsing_tools (end)
+
+\section{Linkage and I/O} % (fold)
+\label{sec:linkage_and_i_o}
+
+\begin{center}
+\begin{figure}
+  \label{fig:hog_compiler}
+  \includegraphics[width=1.0\textwidth]{img/hog_compiler.pdf}
+  \caption{The overall structure of the Hog compiler.}
+\end{figure}
+\end{center}
+
+\subsection{Usage} % (fold)
+\label{sub:usage}
+
+% subsection usage (end)
+
+To build and run a Hog source file there is an executable script \tt hog
+\rm that automates the compilation and linking steps for the user. \\
+
+Usage: \tt hog [--hdfs|--local] job <job args> \rm
+\begin{itemize}
+  \item[] \tt --hdfs\rm: if job ends in '.hog' or '.java' and the file exists, link it against the hadoop JARFILE and then run it on HOST.
+  \item[] \tt --local\rm: run on local host.
+\end{itemize}
+
+\subsection{Example} % (fold)
+\label{sub:example}
+
+\begin{verbatim}
+hog --local WordCountJob.hog --input someInputFile.txt --output ./someOutputFile.csv
+\end{verbatim}
+
+This runs the \tt wordCount \rm job in \emph{local} mode (i.e. not on a Hadoop
+cluster).
+
+% subsection example (end)
+
+% section linkage_and_i_o (end)
+
+\section{Exception Handling} % (fold)
+\label{sec:exception_handling}
+
+Similar to some other programming languages (such as Java and C++), Hog uses an
+exception model in which an exception is thrown and can be caught by a catch
+block. Code should be surrounded by a try block and then any exceptions
+occurring within the try block will subsequently be caught by the catch block.
+Each try block should be associated with at least one catch block. However,
+there can be multiple catch blocks to handle specific types of exceptions. In
+addition, an optional finally block can be added. The finally block will
+execute in all circumstances, whether or not an exception is thrown. The
+structure of exception handling should be similar to this, although there can
+be multiple catch blocks and the finally block is optional:
+
+\begin{quotation}
+\tt try \{ \rm \\
+\indent \indent \emph{expression;} \\
+\tt \indent \} catch ( \rm \emph{exception} \tt ) \rm \{ \\
+\indent \indent \emph{expression;} \\
+\tt \indent \} finally \rm \{ \\
+\indent \indent \emph{expression;} \\
+\tt \indent \}
+\end{quotation}
+
+The current version of the language does not support the programmer throwing
+exceptions, only catching them.
+
+Because the proper behavior of a Hog program is dependent on resources outside of
+the language (i.e. the proper behavior of the user’s Hadoop software), there are
+more sources exceptions in Hog than most general purpose languages. These sources
+can be divided into two categories: \textbf{\emph{compile­-time exceptions}} and
+\textbf{\emph{internal run­-time exceptions}}.
+
+\subsection{Compile-time Errors} % (fold)
+\label{sub:compile_time_exceptions}
+
+The primary cause of most compile-­time exceptions in Hog are semantic errors. Such
+errors are unrecoverable because it is impossible for the compiler to properly
+interpret the user program. Some compilers for other languages offer a limited
+amount of compile-­time error correction. Because Hog programs are often designed
+to process gigabytes or terabytes of data at a time, the standard Hog compiler
+offers no compile-­time error correction. The assumption is that a user would
+rather re­tool their program than risk the chance of discovering, only after hours
+of processing, that the compilers has incorrectly assumed what the user meant. The
+following are Hog compile-­time exceptions:
+
+\begin{itemize}
+  
+  \item[] \tt FunctionNotDefinedError \rm
+  
+   Thrown when a program attempts to carry out an operations of the sort \tt
+variable.builtInFunction() \rm where \tt variable \rm is some variable and \tt
+builtInFunction \rm is a built-in function, and either \tt builtInFunction \rm
+cannot operate on variables of that type or \tt builtInFunction \rm  is not
+defined as a built-in function.
+  
+  \item[] \tt InvalidFunctionArgumentsError \rm
+   
+    Thrown when a program calls a function with the wrong number or type of
+parameters. For example, if we define the function \tt max(int a, int b) \rm,
+this error will be thrown if the program contains a construct like \tt
+max(2,3,4) \rm or \tt max("hello", 3) \rm.
+
+   \item[] \tt TypeMismatchError \rm  
+
+   Thrown when a program attempts to carry out an operation on a variable of
+the wrong type (like adding a \tt text \rm and an \tt int \rm together).
+  
+   \item[] \tt UnreachableCodeError \rm
+
+   Thrown when code is included in a part of a program that will never be
+executed (e.g. code after a return statement that can never be reached).
+
+\end{itemize}
+
+% subsection compile_time_exceptions (end)
+
+\subsection{Internal Run-time Exceptions} % (fold)
+\label{sub:internal_run_time_exceptions}
+
+Internal run­time exceptions include such problems as I/O exceptions (i.e. a
+specified file is not found on either the user’s local file system or the
+associated Hadoop file system), type mismatch exceptions (i.e. a program
+attempts to place two elements of different types into the same list) and
+parsing exceptions. The following are Hog internal run-­time exceptions:
+
+
+\begin{itemize}
+  \item[] \tt FileNotFoundException \rm
+  
+  Thrown when the the Hog program attempts to open a non-existent file.
+  
+  \item[] \tt FileLoadException \rm
+  
+  Thrown when an error occurs while Hog is attempting to read a file (e.g. the
+file is deleted while reading).
+  
+  \item[] \tt ArrayOutOfBoundsException \rm
+  
+  Thrown when a program tries to access a non-valid index of a \tt list\rm.
+  
+  \item[] \tt IncorrectArgumentException \rm
+  
+  Thrown when a derived-type object is instantiated with invalid parameters, or
+a function is called with invalid parameters.
+  
+  \item[] \tt TypeMismatchException \rm
+  
+  Thrown when a program attempts to carry out an operation on a variable of the
+wrong type (like adding a \tt text \rm and an \tt int \rm together).
+    
+  \item[] \tt NullReferenceException \rm
+  
+  Thrown whenever the value of a variable cannot be \tt null \rm (e.g. in \tt
+myList.get(i)\rm, if \tt i \rm is \tt null\rm, the operation with throw a \tt
+NullPointerException\rm).
+  
+  \item[] \tt ArithmeticException \rm
+  
+  Thrown whenever an arithmetic operation is attempted on non-numeric operands.
+  
+\end{itemize}
+
+% section internal_run_time_exceptions (end)
+
+% section exception_handling (end)
+
+\section{Grammar} % (fold)
+\label{sec:grammar}
+
+\emph{Note}: The presented grammar has one minor ambiguity relating to the
+\textbf{\emph{dangling-else}} problem. If the grammar is run through the parser
+generator \tt yacc\rm, \tt yacc \rm will identify 7 shift/reduce parsing-action
+conflicts. However, the ambiguity is handled by the default behavior of \tt
+yacc\rm, which preferences shift to reduce, associating \tt else \rm and \tt
+elseif \rm clauses with the closest \tt if \rm clause.
+
+
+\begin{verbatim}
+terminal DECR, INCR, RETURN, CONTINUE;
+terminal TIMES, DIVIDE, MOD;
+terminal LESS, GRTR, LESS_EQL, GRTR_EQL, DBL_EQLS, NOT_EQLS, ASSIGN;
+terminal TEXT, BOOL, INT, REAL, VOID;
+terminal MINUS, UMINUS, PLUS;
+terminal ARROW, DOT;
+terminal String TEXT_LITERAL;
+terminal String ID;
+terminal String INT_CONST;
+terminal String REAL_CONST;
+terminal String BOOL_CONST;
+terminal String CASE;
+terminal BREAK, DEFAULT;
+terminal AND, OR, NOT;
+terminal WHILE, FOR, FOREACH, IN, IF, ELSE, ELSEIF, SWITCH;
+terminal FUNCTIONS, MAIN, MAP, REDUCE;
+terminal L_BRACE, R_BRACE, L_BRKT, R_BRKT, L_PAREN, R_PAREN, SEMICOL, COL, COMMA;
+terminal LIST, ITER, SET;
+terminal TRY, CATCH, FINALLY;
+terminal ExceptionTypeNode EXCEPTION;
+
+nonterminal GuardingStatementNode GuardingStatement;
+nonterminal CatchesNode Catches;
+nonterminal IdNode CatchHeader;
+nonterminal StatementListNode Finally;
+nonterminal StatementListNode Block;
+nonterminal StatementListNode ExpressionStatements;
+nonterminal ExpressionNode ForExpr;
+nonterminal StatementListNode ForInit;
+nonterminal StatementListNode ForIncr;
+nonterminal DerivedTypeNode DictType;
+
+nonterminal ProgramNode Program;
+nonterminal SectionNode Functions;
+nonterminal SectionNode Main;
+nonterminal SectionNode Map;
+nonterminal SectionNode Reduce;
+nonterminal SectionTypeNode SectionType;
+nonterminal StatementNode Statement;
+nonterminal ExpressionNode ExpressionStatement;
+nonterminal StatementNode FunctionList;
+nonterminal StatementNode IterationStatement;
+nonterminal StatementNode LabeledStatement;
+nonterminal SelectionStatementNode SelectionStatement;
+nonterminal StatementNode DeclarationStatement;
+nonterminal StatementListNode StatementList;
+nonterminal ElseIfStatementNode ElseIfStatement;
+nonterminal ElseStatementNode ElseStatement;
+nonterminal JumpStatementNode JumpStatement;
+nonterminal ExpressionNode EqualityExpression;
+nonterminal ExpressionNode LogicalExpression;
+nonterminal ExpressionNode LogicalTerm;
+nonterminal ExpressionNode RelationalExpression;
+nonterminal ExpressionNode Expression;
+nonterminal ExpressionNode AdditiveExpression;
+nonterminal ExpressionNode MultiplicativeExpression;
+nonterminal ExpressionNode CastExpression;
+nonterminal ExpressionNode UnaryExpression;
+nonterminal ExpressionNode PostfixExpression;
+nonterminal ExpressionNode PrimaryExpression;
+nonterminal ExpressionNode Constant;
+nonterminal ExpressionNode ArgumentExpressionList;
+nonterminal FunctionNode Function;
+nonterminal ParametersNode ParameterList;
+nonterminal TypeNode Type;
+nonterminal UnOpNode.OpType UnaryOperator;
+nonterminal Types.Derived DerivedType;
+
+precedence left MINUS, PLUS;
+precedence right UMINUS;
+precedence right ELSE;
+precedence right ELSEIF;
+precedence right L_PAREN;
+
+start with Program;
+
+Program::=
+    Functions Map Reduce Main
+  ;
+
+Functions::=
+    FUNCTIONS L_BRACE FunctionList R_BRACE
+  |
+    /* epsilon */
+  ; 
+ 
+FunctionList::=
+    Function
+  |
+    FunctionList Function
+  ;
+
+Function::=
+    Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE
+  ;
+
+ParameterList::=
+    ParameterList COMMA Type ID
+  |
+    Type ID
+  |
+    /* epsilon */
+  ;
+
+Map::=
+    MAP SectionType L_BRACE StatementList R_BRACE
+  ;
+
+Reduce::=
+    REDUCE SectionType L_BRACE StatementList R_BRACE
+  ;
+
+SectionType::=
+    L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN
+  ;
+
+Main::=
+    MAIN L_BRACE StatementList R_BRACE
+  ;
+
+StatementList::=
+    Statement
+  |
+    StatementList Statement
+  ;
+
+Statement::=
+    ExpressionStatement
+  |
+    SelectionStatement
+  |
+    IterationStatement
+  |
+    LabeledStatement
+  |
+    JumpStatement
+  | 
+    DeclarationStatement
+  | 
+    GuardingStatement
+  | 
+    Block
+  ;
+
+GuardingStatement::=
+     TRY Block Finally
+   |
+     TRY Block Catches
+   | 
+     TRY Block Catches Finally
+   ;
+
+Block::=
+    L_BRACE StatementList R_BRACE
+  | 
+    L_BRACE R_BRACE
+  ;
+
+Finally::=
+    FINALLY Block
+  ;
+
+Catches::=
+     CatchHeader Block
+   | 
+     Catches CatchHeader Block
+   ;
+
+CatchHeader::=
+     CATCH L_PAREN EXCEPTION ID R_PAREN
+   ;
+ 
+DeclarationStatement::=
+    Type ID
+  |
+    Type ID ASSIGN Expression
+  ;
+ 
+JumpStatement::=
+    CONTINUE
+  |
+    BREAK
+  |
+    RETURN ExpressionStatement
+  ;
+ 
+ExpressionStatement::=
+    SEMICOL
+  |
+    Expression SEMICOL
+  ;
+
+Expression::=
+    LogicalExpression
+  |
+    UnaryExpression ASSIGN Expression
+  ;
+
+LogicalExpression::=
+    LogicalExpression OR LogicalTerm
+  |
+    LogicalTerm
+  ;
+
+LogicalTerm::=
+    LogicalTerm AND EqualityExpression
+  |
+    EqualityExpression
+  ;
+
+EqualityExpression::=
+    RelationalExpression
+  |
+    EqualityExpression DBL_EQLS RelationalExpression
+  |
+    EqualityExpression NOT_EQLS RelationalExpression
+  ;
+
+RelationalExpression::=
+    AdditiveExpression
+  |
+    RelationalExpression LESS AdditiveExpression
+  |
+    RelationalExpression GRTR AdditiveExpression
+  |
+    RelationalExpression LESS_EQL AdditiveExpression
+  |
+    RelationalExpression GRTR_EQL AdditiveExpression
+  ;
+
+AdditiveExpression::=
+    MultiplicativeExpression
+  |
+    AdditiveExpression PLUS MultiplicativeExpression
+  |
+    AdditiveExpression MINUS MultiplicativeExpression
+  ;
+
+MultiplicativeExpression::=
+    CastExpression
+  |
+    MultiplicativeExpression TIMES CastExpression
+  |
+    MultiplicativeExpression DIVIDE CastExpression
+  |
+    MultiplicativeExpression MOD CastExpression
+  ;
+
+CastExpression::=
+    UnaryExpression
+  |
+    L_PAREN Type R_PAREN CastExpression
+  ;
+
+UnaryExpression::=
+    UnaryOperator CastExpression
+  |
+    PostfixExpression
+  ;
+  
+UnaryOperator::=
+    MINUS 
+    %prec UMINUS
+  |
+    NOT
+  ;
+
+PostfixExpression::=
+    PrimaryExpression
+  |
+    ID DOT ID
+  |
+    ID DOT ID L_PAREN ArgumentExpressionList R_PAREN
+  |
+    ID L_PAREN ArgumentExpressionList R_PAREN
+  |
+    PostfixExpression INCR
+  |
+    PostfixExpression DECR
+  ;
+
+ArgumentExpressionList::=
+    Expression
+  |
+    ArgumentExpressionList COMMA Expression
+  |
+    /* epsilon */
+  ;
+
+PrimaryExpression::=
+    ID
+  |
+    Constant
+  |
+    L_PAREN Expression R_PAREN
+  ;
+
+Constant::=
+    INT_CONST
+  |
+    REAL_CONST
+  |
+    BOOL_CONST
+  |
+    TEXT_LITERAL
+  ;
+
+SelectionStatement::=
+    IF Expression Block ElseIfStatement ElseStatement
+  |
+    SWITCH Expression L_BRACE StatementList R_BRACE
+  ;
+
+ElseIfStatement::=
+    ELSEIF Expression Block ElseIfStatement
+  |
+    /* epsilon */
+  ;
+
+ElseStatement::=
+    ELSE Block
+  |
+    /* epsilon */
+  ;
+
+IterationStatement::=
+    WHILE L_PAREN Expression R_PAREN Block
+  |
+    FOR L_PAREN ForInit ForExpr ForIncr R_PAREN Block
+  |
+    FOR L_PAREN ForInit ForExpr R_PAREN Block
+  |
+    FOREACH Type ID IN Expression Block
+  ;
+
+ForInit::=
+    ExpressionStatements
+  |
+    DeclarationStatement SEMICOL
+  ;
+
+ForExpr::=
+    ExpressionStatement
+  ;
+
+ForIncr::=
+    ExpressionStatements
+  ;
+
+ExpressionStatements::=
+    ExpressionStatement
+  |
+    ExpressionStatements COMMA ExpressionStatement
+  ;
+ 
+LabeledStatement::=
+    CASE LogicalExpression COL Statement
+  |
+    DEFAULT COL Statement
+  ;
+
+Type::=
+    VOID
+  |
+    TEXT
+  |
+    BOOL
+  |
+    INT
+  |
+    REAL
+  |
+    DerivedType:d LESS Type:t GRTR
+  ;
+
+DerivedType::=
+    LIST
+  |
+    ITER
+  |
+    SET
+  ;
+
+\end{verbatim}
+
 \chapter{Project Plan}
 \label{chap:plan}
 
