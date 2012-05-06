@@ -95,13 +95,6 @@ Use your update LRM.
 \chapter{Project Plan}
 \label{chap:plan}
 
-Project plan (to be written by the project manager)
-State what process used was used to develop the language and its translator.
-State the roles and responsibilities of each team member.
-Include the implementation style sheet used by the team.
-Show the timeline of what was done and when.
-Include your project log.
-
 Written by Samuel Messing (sbm2158).
 
 \section{Development Process}
@@ -255,7 +248,7 @@ implementing Hog, a MapReduce language.
 \noindent Worked on the White Paper for our language, developed both the goals of our language
 and the overall ``feel'' (simple, minimal boilerplate code, easy-to-read syntax).
 Started to sketch out overall compiler architecture, and decided on frameworks
-(JFlex for the lexer, CUP for parser, Hadoop framework for executing distributed computation, and Java as target language) and development environments (Eclipse, Git, Github, \LaTeX for documentation). 
+(JFlex for the lexer, CUP for parser, Hadoop framework for executing distributed computation, and Java as target language) and development environments (Eclipse, Git, Github, \LaTeX $\,$ for documentation). 
 \end{quotation}
 \item[] March
 \begin{quotation}
@@ -267,13 +260,121 @@ and developed the fundamental data structures (abstract syntax tree, node classe
 \item[] April
 \begin{quotation}
 \noindent Implemented tree walking algorithms to populate the symbol table, perform
-type checking, perform semantic analysis and generate Java source code.  
+type checking, perform semantic analysis and generate Java source code. Wrote
+tests for the walkers. 
 \end{quotation}
-\item May
+\item[] May
+\begin{quotation}
+\noindent Refactored code and worked on documentation. Developed more tests and
+worked on fixing bugs. 
+\end{quotation}
 \end{itemize}
 
 \section{Project Log}
 
+\begin{itemize}
+\item[] January
+\begin{itemize}
+\item[] Week of January 22nd
+\begin{itemize}
+\item Met to discuss language ideas.
+\end{itemize}
+\item[] Week of January 29th
+\begin{itemize}
+\item Decided on Hog, and Java as implementation language.
+\end{itemize}
+\end{itemize}
+\item[] February
+\begin{itemize}
+\item[] Week of Feburary 5th
+\begin{itemize}
+\item Decided on Hadoop as the framework for executing distributed computation.
+\item Decided on JFlex framework for implementing the lexer.
+\item Decided on CUP framework for implementing the parser. 
+\end{itemize}
+\item[] Week of February 12th
+\begin{itemize}
+\item Discussed and figured out development environment (Java, Ant, Eclipse, Git).
+\item Started working on white paper.
+\end{itemize}
+\item[] Week of February 19th
+\begin{itemize}
+\item Started git repository.
+\item Finished white paper.
+\end{itemize}
+\item[] Week of February 26th 
+\begin{itemize}
+\item Began the language reference manual (LRM). 
+\end{itemize}
+\end{itemize}
+\item[] March
+\begin{itemize}
+\item[] Week of March 4th
+\begin{itemize}
+\item Started Eclipse project.
+\item Worked on LRM and tutorial.
+\end{itemize} % march 4th
+\item[] Week of March 11th
+\begin{itemize}
+\item Began developing the Hog grammar.
+\item Worked on LRM and tutorial.
+\item Started working on wrapper program functionality (program that runs the
+Hog compiler to compile source programs).
+\end{itemize} % march 11th
+\item[] Week of March 18th
+\begin{itemize}
+\item Finished the Hog grammar.
+\item Finished the tutorial and LRM.
+\item Began developing the lexer.
+\end{itemize}
+\item[] Week of March 25th
+\begin{itemize}
+\item Took the week off to study for the midterm.
+\end{itemize}
+\end{itemize} % march
+\item[] April
+\begin{itemize}
+\item[] Week of April 1st
+\begin{itemize}
+\item Worked on the lexer.
+\item Started developing the abstract syntax tree and node classes.
+\item Started developing the parser.
+\item Implemented developer build system.
+\end{itemize} 
+\item[] Week of April 8th
+\begin{itemize}
+\item Developed ConsoleLexer class for development and testing of lexer. 
+\item Developed lexer JUnit tests. 
+\item Finished abstract syntax tree, including iterators for post- and pre-order 
+traversals.
+\item Developed mock classes for testing.
+\end{itemize}
+\item[] Week of April 15th
+\begin{itemize}
+\item Further development/refinement of node classes.
+\item Developed more semantic actions for parser, mainly to construct node classes.
+\item Parsed our first program! 
+\end{itemize}
+\item[] Week of April 22nd
+\begin{itemize}
+\item Developed/implemented basic type functionality.
+\item Further refinement of the grammar.
+\item Implemented logging details. 
+\item Refinement of node classes and ASTs.
+\item Started tree walking algorithms (identified the visitor pattern as our
+common design pattern for tree walks).
+\item Begain developing symbol table class.
+\end{itemize}
+\item[] Week of April 29th
+\begin{itemize}
+\item Finished implementation of symbol table class.
+\item Finished type checking / symbol table population walks.
+\item Implemented java source generator.
+\item Implemented tests for walkers and parser. 
+\item Finished compiler.
+\end{itemize}
+\end{itemize} % april
+\end{itemize} % log
 
 
 \chapter{Language Evolution}

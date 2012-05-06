@@ -477,8 +477,12 @@ public class Types {
 			ArgumentsNode argsNode = (ArgumentsNode) postFixExpressionNode
 					.getArgsList();
 			
-			LOGGER.severe("PRINTTT Function Name: " + postFixExpressionNode.getNameOfFunctionOrMethod() + " Number of params: " + funSym.getParametersNode().getNumParams() + ", number of arguments: " + argsNode
-					.getNumArguments());
+		/*	LOGGER.severe("PRINTTT Function Name: "
+					+ postFixExpressionNode.getNameOfFunctionOrMethod()
+					+ " Number of params: "
+					+ funSym.getParametersNode().getNumParams()
+					+ ", number of arguments: " + argsNode
+					.getNumArguments());*/
 
 			
 			// throw error if not same amount of arguments

@@ -75,13 +75,14 @@ public class Hog {
 			ex.printStackTrace();
 		}
 
-		// root.print();
+		root.print();
 
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
 		System.out.println("Generating symbol tables...");
 		// generate/populate symbol tables
 		SymbolTableVisitor symbolVisitor = new SymbolTableVisitor(tree);
 		symbolVisitor.walk();
+		root.print();
 		System.out.println("Populating types...");
 		// populate/propagate/check types
 		TypeCheckingVisitor typeVisitor = new TypeCheckingVisitor(tree);

@@ -201,6 +201,7 @@ public abstract class Node implements Comparable<Node> {
 	 */
 	@Override
 	public String toString() {
+		//return this.id + "-" + this.getClass();
 		return this.getName();
 	}
 
