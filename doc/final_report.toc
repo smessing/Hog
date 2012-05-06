@@ -84,14 +84,14 @@
 \contentsline {chapter}{\numberline {5}Language Evolution}{51}
 \contentsline {chapter}{\numberline {6}Translator Architecture}{53}
 \contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{55}
-\contentsline {chapter}{\numberline {8}Test Plan}{57}
-\contentsline {chapter}{\numberline {9}Conclusions}{61}
-\contentsline {section}{\numberline {9.1}Lessons Learned}{61}
-\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{61}
-\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{61}
-\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{61}
-\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{61}
-\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{62}
-\contentsline {section}{\numberline {9.2}Advice for Other Teams}{62}
-\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{62}
-\contentsline {chapter}{\numberline {A}Code Listing}{63}
+\contentsline {chapter}{\numberline {8}Test Plan}{59}
+\contentsline {chapter}{\numberline {9}Conclusions}{63}
+\contentsline {section}{\numberline {9.1}Lessons Learned}{63}
+\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{63}
+\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{63}
+\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{63}
+\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{63}
+\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{64}
+\contentsline {section}{\numberline {9.2}Advice for Other Teams}{64}
+\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{64}
+\contentsline {chapter}{\numberline {A}Code Listing}{65}

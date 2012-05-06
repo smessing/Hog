@@ -641,7 +641,6 @@ by the programmer:
 \begin{multicols}{4}
 \tt
 \begin{itemize}
-git 
   \item[] add
   \item[] and
   \item[] bool
@@ -2386,7 +2385,7 @@ command "make compile" which will compile the Hog source program, which will
 create a Hog.java file, which will then be compiled with the Java compiler with the appropriate
 Hadoop libraries being packaged with the job jar which is generated at the end compilation.
 
-
+\begin{verbatim}
 
 ################################################################
 ################################################################
@@ -2460,7 +2459,7 @@ clean:
 	$(HADOOP) $(FS) $(RMR) $(DFSOUTPUTDIRECTORY)
 
 
-
+\end{verbatim}
 
 
 \item Describe the run-time environment for the compiler.
@@ -2634,27 +2633,28 @@ Things we'd like to see more of:
 \begin{enumerate}
 \item \texttt{ConsoleLexer.java}
 \begin{quotation}
-\noindent 
+\noindent A console front-end to the Lexer class for dynamically testing the Lexer,
+ and development. Not intended to be used/accessible by/to users. Written by Samuel Messing
 \end{quotation}
 \item \texttt{Hog.java}
 \begin{quotation}
-\noindent 
+\noindent Driver program for the compiler, handles generating the parser, paring the input file, and performing the tree walks. Written by Samuel Messing and Kurry Tran. 
 \end{quotation}
 \item \texttt{Lexer.java}
 \begin{quotation}
-\noindent 
+\noindent Auto-generated file.
 \end{quotation}
 \item \texttt{Parser.java}
 \begin{quotation}
-\noindent 
+\noindent Auto-generated file. 
 \end{quotation}
 \item \texttt{sym.java}
 \begin{quotation}
-\noindent 
+\noindent Auto-generated file. 
 \end{quotation}
 \item \texttt{Lexer.jflex}
 \begin{quotation}
-\noindent 
+\noindent Lexer specification, written by Samuel Messing. 
 \end{quotation}
 \item \texttt{Parser.cup} 
 \end{enumerate} % end front_end package
