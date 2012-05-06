@@ -52,6 +52,7 @@ public class Hog {
 	protected static boolean hasInput;
 	protected static boolean hasOutput;
 	protected static FileReader source;
+	protected static String sourceName;
 	protected static String input;
 	protected static String output;
 
@@ -61,7 +62,7 @@ public class Hog {
 	public static void main(String[] args) {
 		usage(args);
 
-		System.out.println("Loading source file " + source);
+		System.out.println("Loading source file " + sourceName);
 		System.out.println("Parsing file...");
 		Parser parser = new Parser(new Lexer(source));
 		ProgramNode root = null;
@@ -75,14 +76,12 @@ public class Hog {
 			ex.printStackTrace();
 		}
 
-		root.print();
 
 		AbstractSyntaxTree tree = new AbstractSyntaxTree(root);
 		System.out.println("Generating symbol tables...");
 		// generate/populate symbol tables
 		SymbolTableVisitor symbolVisitor = new SymbolTableVisitor(tree);
 		symbolVisitor.walk();
-		root.print();
 		System.out.println("Populating types...");
 		// populate/propagate/check types
 		TypeCheckingVisitor typeVisitor = new TypeCheckingVisitor(tree);
@@ -91,6 +90,7 @@ public class Hog {
 		// generate source code:
 		CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(tree);
 		codeGenerator.walk();
+		System.out.println("Hog.java written...");
 
 		FileWriter fstream = null;
 		try {
@@ -129,6 +129,7 @@ public class Hog {
 
 		try {
 			source = new FileReader(args[1]);
+			sourceName = args[1];
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

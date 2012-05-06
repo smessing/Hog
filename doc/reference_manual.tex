@@ -592,7 +592,7 @@ iter \rm object is associated with a list, and allows one traversal of the eleme
 \textbf In order to cast a variable to be of a different type, use the following notation:
 
 \begin{quotation}
-      \tt \emph{primitiveType}2\emph{otherPrimitiveType}(  )\rm \emph{variableName}
+      \tt \emph{primitiveType}(2\emph{otherPrimitiveType})\rm \emph{variableName}
 \end{quotation}
 
 Hog supports casting between the primitive types \tt int\rm, \tt real\rm, and \tt text\rm, via the built-in functions \tt int2real\rm, \tt int2text\rm, \tt real2int\rm, \tt real2text\rm, \tt text2int\rm, and \tt text2real\rm. If casting a text to an int or real results in an invalid number (e.g. \tt text2int("1a4") \rm), a run-time exception will be thrown.
@@ -1075,10 +1075,6 @@ Removes all elements in this \tt list\rm.
 \item[] \tt T get(int index) \rm
 
 Returns the item from the list at the specified index.
-
-\item[] \tt iter<T> iterator() \rm
-
-Returns an iterator for the objects in this list.
 
 
 \item[] \tt void sort() \rm
