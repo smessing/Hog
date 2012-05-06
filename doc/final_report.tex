@@ -1873,156 +1873,61 @@ ElseStatement::=
   ;
 
 IterationStatement::=
-    WHILE L_PAREN Expression:e R_PAREN Block:b
-    {:
-      RESULT = new IterationStatementNode(e,b);
-      RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.fine("WHILE L_PAREN Expression R_PAREN L_BRACE " +
-                                      "StatementList R_BRACE -> IterationStatement");
-    :}
+    WHILE L_PAREN Expression R_PAREN Block
   |
-    FOR L_PAREN ForInit:init ForExpr:test ForIncr:incr R_PAREN Block:b
-    {:
-      RESULT = new IterationStatementNode(init, test, incr, b);
-      RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.fine("FOR ForInit ForExpr ForInc L_BRACE StatementList " +
-                                      "R_BRACE -> IterationStatement");
-    :}
+    FOR L_PAREN ForInit ForExpr ForIncr R_PAREN Block
   |
-    FOR L_PAREN ForInit ForExpr R_PAREN Block:b
-    {:
-      //RESULT = new IterationStatementNode(e1,e2,e3,b);
-      //RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.fine("FOR L_BRACEN ForInit ForExpr R_PAREN L_BRACE " +
-                                      "StatementList R_BRACE -> IterationStatement");
-    :}
+    FOR L_PAREN ForInit ForExpr R_PAREN Block
   |
-    FOREACH Type:t ID:i IN Expression:e2 Block:b
-    {:
-      IdNode idNode = new IdNode(t, i);
-      RESULT = new IterationStatementNode(idNode,e2,b);
-      RESULT.setNewScope();
-      CUP$Parser$actions.LOGGER.fine("FOREACH Expression IN Expression L_BRACE StatementList " +
-                                      "R_BRACE -> IterationStatement"); 
-    :}
+    FOREACH Type ID IN Expression Block
   ;
 
 ForInit::=
-    ExpressionStatements:es
-    {:
-      RESULT = es;
-      CUP$Parser$actions.LOGGER.fine("ExpressionStatements -> ForInit");
-    :}
+    ExpressionStatements
   |
-    DeclarationStatement:ds SEMICOL
-    {:
-      RESULT = ds;
-      CUP$Parser$actions.LOGGER.fine("DeclarationStatement SEMICOL -> ForInit");
-    :}
+    DeclarationStatement SEMICOL
   ;
 
 ForExpr::=
-    ExpressionStatement:es
-    {:
-      RESULT = es;
-      CUP$Parser$actions.LOGGER.fine("ExpressionStatement -> ForExpr");
-    :}
+    ExpressionStatement
   ;
 
 ForIncr::=
-    ExpressionStatements:es
-    {:
-      RESULT = es;
-      CUP$Parser$actions.LOGGER.fine("ExpressionStatements -> ForIncr");
-    :}
+    ExpressionStatements
   ;
 
 ExpressionStatements::=
-    ExpressionStatement:es
-    {:
-      RESULT = es;
-      CUP$Parser$actions.LOGGER.fine("ExpressionStatement -> ExpressionStatements");
-    :}
+    ExpressionStatement
   |
-    ExpressionStatements:e COMMA ExpressionStatement:es
-    {:
-      List<Node> children = new ArrayList<Node>();
-      children.add(e);
-      children.add(es);
-      RESULT = new StatementListNode(children);
-      CUP$Parser$actions.LOGGER.fine("ExpressionStatements COMMA ExpressionStatement -> " +
-                                    "ExpressionStatements");
-    :}
+    ExpressionStatements COMMA ExpressionStatement
   ;
  
 LabeledStatement::=
-    CASE LogicalExpression COL Statement:s
-    {:
-      CUP$Parser$actions.LOGGER.fine("CASE LogicalExpression COL Statement -> LabeledStatement");
-    :}
+    CASE LogicalExpression COL Statement
   |
-    DEFAULT:d COL Statement:s
-    {:
-      CUP$Parser$actions.LOGGER.fine("DEFAULT COL Statement");
-    :} 
+    DEFAULT COL Statement
   ;
 
 Type::=
     VOID
-    {:
-      RESULT = new PrimitiveTypeNode(Types.Primitive.VOID);
-      CUP$Parser$actions.LOGGER.fine("VOID -> Type");
-    :}
   |
     TEXT
-    {:
-      RESULT = new PrimitiveTypeNode(Types.Primitive.TEXT);
-      CUP$Parser$actions.LOGGER.fine("TEXT -> Type");
-    :}
   |
     BOOL
-    {:
-      RESULT = new PrimitiveTypeNode(Types.Primitive.BOOL);
-      CUP$Parser$actions.LOGGER.fine("BOOL -> Type");
-    :}
   |
-    INT:i
-    {:
-      RESULT = new PrimitiveTypeNode(Types.Primitive.INT);
-      CUP$Parser$actions.LOGGER.fine("INT -> Type");
-    :}
+    INT
   |
     REAL
-    {:
-      RESULT = new PrimitiveTypeNode(Types.Primitive.REAL);
-      CUP$Parser$actions.LOGGER.fine("REAL -> Type");
-    :}
   |
     DerivedType:d LESS Type:t GRTR
-    {:
-      RESULT = new DerivedTypeNode(d, t);
-      CUP$Parser$actions.LOGGER.fine("DerivedType LESS Type GRTR -> Type");
-    :}
   ;
 
 DerivedType::=
     LIST
-    {:
-      RESULT = Types.Derived.LIST;
-      CUP$Parser$actions.LOGGER.fine("LIST -> DerivedType");
-    :}
   |
     ITER
-    {:
-      RESULT = Types.Derived.ITER;
-      CUP$Parser$actions.LOGGER.fine("ITER -> DerivedType");
-    :}
   |
     SET
-    {:
-      RESULT = Types.Derived.SET;
-      CUP$Parser$actions.LOGGER.fine("SET -> DerivedType");
-    :}
   ;
 
 \end{verbatim}

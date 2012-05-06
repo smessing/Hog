@@ -67,28 +67,28 @@
 \contentsline {subsection}{\numberline {3.13.1}Compile-time Errors}{32}
 \contentsline {subsection}{\numberline {3.13.2}Internal Run-time Exceptions}{33}
 \contentsline {section}{\numberline {3.14}Grammar}{34}
-\contentsline {chapter}{\numberline {4}Project Plan}{51}
-\contentsline {section}{\numberline {4.1}Development Process}{51}
-\contentsline {subsection}{\numberline {4.1.1}Simplicity of Build System}{51}
-\contentsline {subsection}{\numberline {4.1.2}Similarity of Modules}{52}
-\contentsline {subsection}{\numberline {4.1.3}Document Everything}{52}
-\contentsline {subsection}{\numberline {4.1.4}Distributed Version Control}{52}
-\contentsline {subsection}{\numberline {4.1.5}Verbose Logging}{53}
-\contentsline {section}{\numberline {4.2}Roles and Responsibilities}{53}
-\contentsline {section}{\numberline {4.3}Hog's Developer Style Sheet}{54}
-\contentsline {section}{\numberline {4.4}Project Timeline}{54}
-\contentsline {section}{\numberline {4.5}Project Log}{55}
-\contentsline {chapter}{\numberline {5}Language Evolution}{57}
-\contentsline {chapter}{\numberline {6}Translator Architecture}{59}
-\contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{61}
-\contentsline {chapter}{\numberline {8}Test Plan}{63}
-\contentsline {chapter}{\numberline {9}Conclusions}{67}
-\contentsline {section}{\numberline {9.1}Lessons Learned}{67}
-\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{67}
-\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{67}
-\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{67}
-\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{67}
-\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{68}
-\contentsline {section}{\numberline {9.2}Advice for Other Teams}{68}
-\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{68}
-\contentsline {chapter}{\numberline {A}Code Listing}{69}
+\contentsline {chapter}{\numberline {4}Project Plan}{43}
+\contentsline {section}{\numberline {4.1}Development Process}{43}
+\contentsline {subsection}{\numberline {4.1.1}Simplicity of Build System}{43}
+\contentsline {subsection}{\numberline {4.1.2}Similarity of Modules}{44}
+\contentsline {subsection}{\numberline {4.1.3}Document Everything}{44}
+\contentsline {subsection}{\numberline {4.1.4}Distributed Version Control}{44}
+\contentsline {subsection}{\numberline {4.1.5}Verbose Logging}{45}
+\contentsline {section}{\numberline {4.2}Roles and Responsibilities}{45}
+\contentsline {section}{\numberline {4.3}Hog's Developer Style Sheet}{46}
+\contentsline {section}{\numberline {4.4}Project Timeline}{46}
+\contentsline {section}{\numberline {4.5}Project Log}{47}
+\contentsline {chapter}{\numberline {5}Language Evolution}{49}
+\contentsline {chapter}{\numberline {6}Translator Architecture}{51}
+\contentsline {chapter}{\numberline {7}Development and Run-Time Environment}{53}
+\contentsline {chapter}{\numberline {8}Test Plan}{55}
+\contentsline {chapter}{\numberline {9}Conclusions}{59}
+\contentsline {section}{\numberline {9.1}Lessons Learned}{59}
+\contentsline {subsection}{\numberline {9.1.1}Jason's Lessons}{59}
+\contentsline {subsection}{\numberline {9.1.2}Sam's Lessons}{59}
+\contentsline {subsection}{\numberline {9.1.3}Ben's Lessons}{59}
+\contentsline {subsection}{\numberline {9.1.4}Kurry's Lessons}{59}
+\contentsline {subsection}{\numberline {9.1.5}Paul's Lessons}{60}
+\contentsline {section}{\numberline {9.2}Advice for Other Teams}{60}
+\contentsline {section}{\numberline {9.3}Suggestions for Instructor}{60}
+\contentsline {chapter}{\numberline {A}Code Listing}{61}
