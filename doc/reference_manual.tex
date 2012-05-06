@@ -1391,209 +1391,283 @@ elements of different types into the same list) and parsing exceptions. The foll
 
 \emph{Note}: The presented grammar has one minor ambiguity relating to the
 \textbf{\emph{dangling-else}} problem. If the grammar is run through the parser
-generator \tt yacc\rm, \tt yacc \rm will identify 3 shift/reduce parsing-action
+generator \tt yacc\rm, \tt yacc \rm will identify 7 shift/reduce parsing-action
 conflicts. However, the ambiguity is handled by the default behavior of \tt
 yacc\rm, which preferences shift to reduce, associating \tt else \rm and \tt
 elseif \rm clauses with the closest \tt if \rm clause.
 
 \begin{verbatim}
-  %token UMINUS DECR INCR
-  %token MINUS PLUS TIMES DIVIDE MOD
-  %token LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS ASSIGN
-  %token TEXT BOOL INT REAL LIST VOID
-  %token ARROW DOT
-  %token TEXT_LITERAL ID INT_CONST REAL_CONST BOOL_CONST
-  %token BREAK CASE DEFAULT
-  %token IN AND OR NOT
-  %token WHILE FOR FOREACH IF ELSE ELSEIF SWITCH
-  %token FUNCTION MAIN MAP REDUCE
+%token DECR INCR RETURN CONTINUE
+%token TIMES  DIVIDE  MOD
+%token LESS  GRTR  LESS_EQL  GRTR_EQL  DBL_EQLS  NOT_EQLS  ASSIGN
+%token TEXT  BOOL  INT  REAL  VOID
+%token MINUS  UMINUS  PLUS
+%token ARROW  DOT
+%token TEXT_LITERAL
+%token ID
+%token INT_CONST
+%token REAL_CONST
+%token BOOL_CONST
+%token CASE
+%token BREAK DEFAULT
+%token AND OR NOT
+%token WHILE FOR FOREACH IN IF ELSE ELSEIF SWITCH
+%token FUNCTIONS MAIN MAP REDUCE
+%token L_BRACE R_BRACE L_BRKT R_BRKT L_PAREN R_PAREN SEMICOL COL COMMA
+%token LIST ITER SET
+%token TRY CATCH FINALLY
+%token EXCEPTION
 
-  %left OR
-  %left AND
-  %right NOT
+%left MINUS PLUS
+%right UMINUS
+%right ELSE
+%right ELSEIF
+%right L_PAREN
 
-  %left MINUS PLUS
-  %left TIMES DIVIDE
-  %left MOD
-  %right UMINUS
-  %left DECR INCR
+%start Program
 
-  %nonassoc LESS GRTR LESS_EQL GRTR_EQL DBL_EQLS NOT_EQLS
-  %right ASSIGN
+%%
 
-  %start program
-  %%
+Program
+  : Functions Map Reduce Main
+  ;
 
+Functions
+  : FUNCTIONS L_BRACE FunctionList R_BRACE
+  | /* epsilon */
+  ;
+ 
+FunctionList
+  : Function
+  | FunctionList Function
+  ;
 
-  program
-      : functions map reduce main
-      ;
+Function
+  : Type ID L_PAREN ParameterList R_PAREN L_BRACE StatementList R_BRACE
+  ;
 
-  functions
-      : FUNCTION '{' function_list '}'
-      | /* epsilon */
-      ;
+ParameterList
+  : ParameterList COMMA Type ID
+  | Type ID
+  | /* epsilon */
+  ;
 
-  function_list
-      : function
-      | function_list function
-      ;
+Map
+  : MAP SectionType L_BRACE StatementList R_BRACE
+  ;
 
-  function
-      : type ID '(' parameter_list ')' '{' statement_list '}'
-      ;
+Reduce
+  : REDUCE SectionType L_BRACE StatementList R_BRACE
+  ;
 
-  parameter_list
-      : type ID ',' parameter_list
-      | type ID
-      | /* epsilon */
-      ;
+SectionType
+  : L_PAREN Type ID COMMA Type ID R_PAREN ARROW L_PAREN Type COMMA Type R_PAREN
+  ;
 
-  map
-      : MAP section_type '{' statement_list '}'
-      ;
+Main
+  : MAIN L_BRACE StatementList R_BRACE
+  ;
 
-  reduce
-      : REDUCE section_type '{' statement_list '}'
-      ;
+StatementList
+ : Statement
+ | StatementList Statement
+ ;
 
-  section_type
-      : '(' type ID ',' type ID ')' ARROW '(' type ',' type ')'
-      ;
+Statement
+  : ExpressionStatement
+  | SelectionStatement
+  | IterationStatement
+  | LabeledStatement
+  | JumpStatement
+  | DeclarationStatement
+  | GuardingStatement
+  | Block
+  ;
 
-  main
-      : MAIN '{' statement_list '}'
-      ;
+GuardingStatement
+   : TRY Block Finally
+   | TRY Block Catches
+   | TRY Block Catches Finally
+   ;
 
-  statement_list
-      : statement
-      | statement_list statement
-      ;
+Block
+  : L_BRACE StatementList R_BRACE
+  | L_BRACE R_BRACE
+  ;
 
-  statement
-      : expression_statement
-      | selection_statement
-      | iteration_statement
-      | labeled_statement
-      | BREAK
-      ;
+Finally
+ : FINALLY Block
+ ;
 
-  expression_statement
-      : '\n'
-      | expression '\n'
-      ;
+Catches
+  : CatchHeader Block
+  | Catches CatchHeader Block
+  ;
 
-  expression
-      : logical_expression
-      | unary_expression ASSIGN expression
-      ;
+CatchHeader
+  : CATCH L_PAREN EXCEPTION ID R_PAREN
+  ;
+ 
+DeclarationStatement
+  : Type ID
+  | Type ID ASSIGN Expression
+  ;
+ 
+JumpStatement
+  : CONTINUE
+  | BREAK
+  | RETURN ExpressionStatement
+  ;
+ 
+ExpressionStatement
+  : SEMICOL
+  | Expression SEMICOL
+  ;
 
-  logical_expression
-      : logical_expression OR logical_term
-      | logical_term
-      ;
+Expression
+  : LogicalExpression
+  | UnaryExpression ASSIGN Expression
+  ;
 
-  logical_term
-      : logical_term AND equality_expression
-      | equality_expression
-      ;
+LogicalExpression
+  : LogicalExpression OR LogicalTerm
+  | LogicalTerm
+  ;
 
-  equality_expression
-      : relational_expression
-      | equality_expression DBL_EQLS relational_expression
-      | equality_expression NOT_EQLS relational_expression
-      ;
+LogicalTerm
+  : LogicalTerm AND EqualityExpression
+  | EqualityExpression
+  ;
 
-  relational_expression
-      : additive_expression
-      | relational_expression LESS additive_expression
-      | relational_expression GRTR additive_expression
-      | relational_expression LESS_EQL additive_expression
-      | relational_expression GRTR_EQL additive_expression
-      ;
+EqualityExpression
+  : RelationalExpression
+  | EqualityExpression DBL_EQLS RelationalExpression
+  | EqualityExpression NOT_EQLS RelationalExpression
+  ;
 
-  additive_expression
-      : multiplicative_expression
-      | additive_expression PLUS multiplicative_expression
-      | additive_expression MINUS multiplicative_expression
-      ;
+RelationalExpression
+  : AdditiveExpression
+  | RelationalExpression LESS AdditiveExpression
+  | RelationalExpression GRTR AdditiveExpression
+  | RelationalExpression LESS_EQL AdditiveExpression
+  | RelationalExpression GRTR_EQL AdditiveExpression
+  ;
 
-  multiplicative_expression
-      : cast_expression
-      | multiplicative_expression TIMES cast_expression
-      | multiplicative_expression DIVIDE cast_expression
-      | multiplicative_expression MOD cast_expression
-      ;
+AdditiveExpression
+  : MultiplicativeExpression 
+  | AdditiveExpression PLUS MultiplicativeExpression
+  | AdditiveExpression MINUS MultiplicativeExpression
+  ;
 
-  cast_expression
-      : unary_expression
-      | '(' type ')' cast_expression
-      ;
+MultiplicativeExpression
+  : CastExpression
+  | MultiplicativeExpression TIMES CastExpression
+  | MultiplicativeExpression DIVIDE CastExpression
+  | MultiplicativeExpression MOD CastExpression
+  ;
 
-  unary_expression
-      : UMINUS cast_expression
-      | NOT cast_expression
-      | postfix_expression
-      ;
+CastExpression
+  : UnaryExpression
+  | L_PAREN Type R_PAREN CastExpression   
+  ;
 
-  postfix_expression
-      : primary_expression
-      | postfix_expression INCR
-      | postfix_expression DECR
-      ;
+UnaryExpression
+  : UnaryOperator CastExpression
+  | PostfixExpression
+  ;
+  
+UnaryOperator
+  : MINUS %prec UMINUS
+  | NOT
+  ;
 
-  primary_expression
-      : ID
-      | ID DOT ID '(' parameters ')'
-      | constant
-      | TEXT_LITERAL
-      | '(' expression ')'
-      ;
+PostfixExpression
+  : PrimaryExpression
+  | ID DOT ID
+  | ID DOT ID L_PAREN ArgumentExpressionList R_PAREN
+  | ID L_PAREN ArgumentExpressionList R_PAREN
+  | PostfixExpression INCR
+  | PostfixExpression DECR
+  ;
 
-  parameters
-      : ID
-      | ID ',' parameters
-      ;
+ArgumentExpressionList
+  : Expression
+  | ArgumentExpressionList COMMA Expression
+  | /* epsilon */
+  ;
 
-  constant
-     : INT_CONST
-     | REAL_CONST
-     | BOOL_CONST
-     ;
+PrimaryExpression
+  : ID
+  | Constant
+  | L_PAREN Expression R_PAREN
+  ;
 
-  selection_statement
-      : IF '(' expression ')' statement elseif_statement else_statement
-      | SWITCH '(' expression ')' statement
-      ; 
+Constant
+  : INT_CONST
+  | REAL_CONST
+  | BOOL_CONST
+  | TEXT_LITERAL
+  ;
 
-  elseif_statement
-      : ELSEIF '(' expression ')' elseif_statement
-      | /* epsilon */
-      ;
+SelectionStatement
+  : IF Expression Block ElseIfStatement ElseStatement
+  | SWITCH Expression L_BRACE StatementList R_BRACE
+  ;
 
-  else_statement
-      : ELSE statement
-      | /* epsilon */
-      ;
+ElseIfStatement
+  : ELSEIF Expression Block ElseIfStatement
+  | /* epsilon */
+  ;
 
-  iteration_statement 
-      : WHILE '(' expression ')' statement
-      | FOR '(' expression ';' expression ';' expression ')' statement
-      | FOREACH '(' expression IN expression ')' statement
-      ;
+ElseStatement
+  : ELSE Block
+  | /* epsilon */
+  ;
 
-  labeled_statement
-      : CASE ':' statement
-      | DEFAULT ':' statement
-      ;
+IterationStatement
+  : WHILE L_PAREN Expression R_PAREN Block
+  | FOR L_PAREN ForInit ForExpr ForIncr R_PAREN Block
+  | FOR L_PAREN ForInit ForExpr R_PAREN Block
+  | FOREACH Type ID IN Expression Block
+  ;
 
-  type
-      : VOID
-      | TEXT
-      | BOOL
-      | INT
-      | REAL
-      ; 
+ForInit
+  : ExpressionStatements
+  | DeclarationStatement SEMICOL
+  ;
+
+ForExpr
+  : ExpressionStatement
+  ;
+
+ForIncr
+  : ExpressionStatements
+  ;
+
+ExpressionStatements
+  : ExpressionStatement
+  | ExpressionStatements COMMA ExpressionStatement
+  ;
+ 
+LabeledStatement
+  : CASE LogicalExpression COL Statement
+  | DEFAULT COL Statement
+  ;
+
+Type
+  : VOID
+  | TEXT
+  | BOOL
+  | INT
+  | REAL
+  | DerivedType LESS Type GRTR
+  ;
+
+DerivedType
+  : LIST
+  | ITER
+  | SET
+  ;
 
 \end{verbatim}
 
