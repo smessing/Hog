@@ -95,6 +95,15 @@ Use your update LRM.
 \chapter{Project Plan}
 \label{chap:plan}
 
+Project plan (to be written by the project manager)
+State what process used was used to develop the language and its translator.
+State the roles and responsibilities of each team member.
+Include the implementation style sheet used by the team.
+Show the timeline of what was done and when.
+Include your project log.
+
+Written by Samuel Messing (sbm2158).
+
 \section{Development Process}
 
 The scope of the Hog programming language was ambitious from the start. Our
@@ -114,7 +123,6 @@ as simple as possible. The following goals were identified early on:
 Focusing on these goals throughout the development enabled use to work concurrently
 on different aspects of the compiler and maintain a codebase that was both readable
 and easy to understand.  
-
 
 \subsection{Simplicity of Build System}
 
@@ -138,23 +146,131 @@ parent class.
 
 Personally, I also developed our Types class, which was a static class that
 contained several convenience methods for handling types across the entirety
-of the compiler.
+of the compiler. These methods include type checking, type conversion and
+as well as additional functionality required for internal functionality. I
+set out to write the class as early as possible so that both elements of
+the frontend and the backend could make use of it. Simplifying and unifying how
+different modules handled the same information enabled everyone on the team to
+read each other's code qand quickly understand how it functioned.
+
+\subsection{Document Everything}
+
+One of the most undersold parts of Java is it's well thought out documentation
+schema (JavaDocs). Early on I realized that in order for us to be able to work
+semi-independently on different modules we would need to have a robust set of
+documentation. By using JavaDoc instead of regular comments, we were able to
+generate HTML documentation, which more clearly provides an overview of the entire
+architecture of our compiler, and allowed everyone on our team to work quickly and
+respond to updated classes appropriately.
+
+One of the largest challeneges in this project was developing a set of node classes
+for our abstract syntax trees that captured the right granularity of information,
+without beeing too complex that handling corner cases became intractable. Our
+System Architect (Ben) found a great tool that generated UML diagrams for our
+class hierarchies, which in concert with our JavaDocs helped to make development
+as simple and efficient as possible. 
+
+\subsection{Distributed Version Control}
+
+As soon as our team was formed I created a git repository on
+Github.com\footnote{\texttt{http://www.github.com/smessing/Hog}} for use by the
+team. One of the first things we discussed as a team was what workflow pattern
+we wanted to use throughout the course of the project. Very quickly we decided
+on a continuous-build pattern, where the main branch of our git repository 
+(master) was reserved for compiling, tested, and finalized code. Any classes
+that were currently in development existed in separate branches, and were only
+merged into master after sufficient amount of testing. Each programmer maintained
+their own branch for development. If two or more programmers were working on the
+same class, a new, shared branch was created. By being conservative about what
+code was merged into the master branch, we were able to work independently, without
+fear that someone else's work would be interrupted by leaving our individual code
+in an unfinished state. 
+
+\subsection{Verbose Logging}
+
+Another advantage of programming in Java is the robust and sophisticated logging
+libraries available to the programmer. Around the same time that the build system
+was developed, the System Architect (Ben) investigated several different logging
+libraries and wrote a tutorial for the rest of us on how to use it. The logging
+library supported several levels of log statements, FINEST, FINER, FINE, INFO,
+WARNING and SEVERE (from most verbose to least). We decided that FINEST and FINER
+were to be used strictly for debugging, while FINE was to be used to document 
+normal behavior, at a level of detail that was concise enough for all developers
+to look at, but still too verbose for the user. INFO, WARNING and SEVERE were
+reserved for statements that the user would see. By identifying and keeping
+to these log levels early on, we were able to quickly identify bugs and 
+inefficient or errant behavior. 
 
 \section{Roles and Responsibilities}
 
 \begin{itemize}
-\item Ben:
-\item Jason:
-\item Kurry:
-\item Paul:
-\item Sam:
+\item Ben, System Architect 
+\begin{quotation}
+\noindent Ben's major responsibilities included developing the fundamental data structures
+used by the compiler, working out the different elements of the compiler and
+how they interrelate, and developing the symbol table.   
+\end{quotation}
+\item Jason, Testing/Validation
+\begin{quotation}
+\noindent Jason's major responsibilities included testing all of the elements of our compiler,
+and working on the aspects of the compiler related to type checking, and developing
+the symbol table.
+\end{quotation}
+\item Kurry, System Integrator
+\begin{quotation}
+\noindent Kurry's major responsibilties included developing a clean interface between
+Hog and Hadoop and working on the Hog wrapper program that builds, compiles and
+runs Hog source programs.  
+\end{quotation}
+\item Paul, Language Guru
+\begin{quotation}
+\noindent Paul's major responsibility was determining the syntax and semantics of our
+language, and developing the semantic analyzer.
+\end{quotation}
+\item Sam, Project Manager
+\begin{quotation}
+\noindent As project manager, my major responsibilities included setting project deadlines,
+assigning work, and making sure that we met our goals. I was also responsible
+for developing the classes to translate Hog programs into Java programs. 
+\end{quotation}
 \end{itemize}
 
 \section{Hog's Developer Style Sheet}
 
-To keep things as simple as possible, we 
+We made use of the standard Java style guide, including such conventions as camel
+case, verbs for functions and method names, and hierachical object classes. For
+formatting, we used Eclipse's auto-format feature to keep our code looking as
+consistent as possible. 
 
 \section{Project Timeline}
+
+\begin{itemize}
+\item[] January
+\begin{quotation}
+\noindent Developed several potential ideas for languages. Met with Aho and decided on
+implementing Hog, a MapReduce language.   
+\end{quotation}
+\item[] February
+\begin{quotation}
+\noindent Worked on the White Paper for our language, developed both the goals of our language
+and the overall ``feel'' (simple, minimal boilerplate code, easy-to-read syntax).
+Started to sketch out overall compiler architecture, and decided on frameworks
+(JFlex for the lexer, CUP for parser, Hadoop framework for executing distributed computation, and Java as target language) and development environments (Eclipse, Git, Github, \LaTeX for documentation). 
+\end{quotation}
+\item[] March
+\begin{quotation}
+\noindent Wrote the language reference manual and tutorial for our language. 
+Developed the build system (Ant for compiling compiler code, Make for running
+the compiler on Hog source programs), implemented and tested the parser and lexer,
+and developed the fundamental data structures (abstract syntax tree, node classes).
+\end{quotation}
+\item[] April
+\begin{quotation}
+\noindent Implemented tree walking algorithms to populate the symbol table, perform
+type checking, perform semantic analysis and generate Java source code.  
+\end{quotation}
+\item May
+\end{itemize}
 
 \section{Project Log}
 

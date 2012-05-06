@@ -8,6 +8,11 @@
 ##################################################################
 ##################################################################
 
+## Hadoop stuff:
+
+## Program-specific stuff:
+
+
 # Set Up Compiler Directories
 # TODO Fill In Directories
 JFLAGS = -g -classpath
@@ -16,18 +21,18 @@ INPUT_HOG_SOURCE=WordCount.hog
 SOURCENAME=WordCount
 INPUT_JAVA_SOURCE=Hog.java
 JAVAC =javac
-HADOOP_HOME=/usr/local/Cellar/hadoop/0.20.2/libexec
+HADOOP_HOME=/usr/local/Cellar/hadoop/0.20.2/
 HADOOP_VERSION=1.0.1
 JOBNAME=Hog
-CLASSPATH = -classpath $(HADOOP_HOME)hadoop-core-1.0.1.jar
+CLASSPATH = -classpath "/Volumes/Machintosh HD/Users/sam/Downloads/hadoop-1.0.1/hadoop-core-1.0.1.jar"
 JAR=jar
 JARFLAGS=-cf
 HADOOP=$(HADOOP_HOME)bin/hadoop
 FS=dfs
 PUTINTODFS=-put
-INPUTDATA=input/big.txt input/input.txt input/words.txt
-DFSINPUTDIRECTORY=/users/sam/input/
-DFSOUTPUTDIRECTORY=/users/sam/output
+INPUTDATA=input/input.txt 
+DFSINPUTDIRECTORY=/user/sam/input/
+DFSOUTPUTDIRECTORY=/user/sam/output
 
 CLASSFILES=*.class
 CAT=-cat
@@ -42,9 +47,9 @@ makedir:
 	$(HADOOP) $(FS) $(MKDIR) $(DFSINPUTDIRECTORY)
 	
 buildandrun:
-	$(JAVAC) $(CLASSPATH) $(INPUT_JAVA_SOURCE)
-	$(JAR) $(JARFLAGS) $(JOBJAR) $(CLASSFILES) 
-	$(HADOOP) $(FS) $(PUTINTODFS) $(INPUTDATA) $(DFSINPUTDIRECTORY)
+	#$(JAVAC) $(CLASSPATH) $(INPUT_JAVA_SOURCE)
+	#$(JAR) $(JARFLAGS) $(JOBJAR) $(CLASSFILES) 
+	#$(HADOOP) $(FS) $(PUTINTODFS) $(INPUTDATA) $(DFSINPUTDIRECTORY)
 	$(HADOOP) $(JAR) $(JOBJAR) $(JOBNAME) $(DFSINPUTDIRECTORY) $(DFSOUTPUTDIRECTORY)
 	$(HADOOP) $(FS) $(CAT) $(DFSOUTPUTDIRECTORY)/part-00000 > $(SOURCENAME).txt
 
@@ -55,4 +60,3 @@ clean:
 	$(RM) *~  *#
 	$(HADOOP) $(FS) $(RMR) $(DFSINPUTDIRECTORY)
 	$(HADOOP) $(FS) $(RMR) $(DFSOUTPUTDIRECTORY)	
-	
