@@ -446,7 +446,6 @@ During this walk of the AST, we did type checking and decorated the tree with th
 \subsection*{Code Generation Testing (\tt CodeGeneratingTester.java\rm)}
 
 The goal for the code generation tests was to determine whether or not our programs were being correctly mapped to Hadoop programs written in Java. These tests focused on using the code generating visitor walk of the tree to make sure that the structure, meaning and types of our Hog programs were being captured during the transformation to Java. Besides writing tests, this step of the testing involved actually running the Hadoop programs on our local machines and on Amazon Elastic MapReduce to see if the programs would run without errors and if the results in the output files were in line with what we expected.
->>>>>>> 207d9d35bf2891f5ba695ebd8c0d631fbb60164a
 
 In order to prepare us for testing, I set us up on Amazon Web Services to run our programs on Amazon’s Elastic MapReduce platform. We upload the jar of our compiled program and the input files to Amazon’s S3 storage platform, then we launch the Elastic MapReduce job on a small cluster with 2 instances. The output files are stored in S3 after the processing has successfully completed. The instructions for running a Hog program on AWS are detailed in the report.
 
