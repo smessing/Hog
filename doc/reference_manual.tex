@@ -51,29 +51,41 @@ abstracted away many of the low level details from programmers, so they would no
 have to be concerned with how the data is distributed, how the computation is
 parallelized and how all of this is done in a fault tolerant manner.
 
-The MapReduce framework partitions input data across different machines, so that the computations are initially performed on
-smaller sets of data distributed across the cluster. Each cluster has a master node that is responsible for coordinating the
-efforts among the slave nodes. Each slave node sends periodic heartbeats to the master node so it can be aware of progress and
-failure. In the case of failure, the master node can reassign tasks to other nodes in the cluster. In conjunction with the
-underlying MapReduce framework created at Google, the company also had to build the distributed Google File System (GFS). This
-file system ``allows programs to access files efficiently from any computer, so functions can be mapped
-everywhere.''\cite{patterson:2008} GFS was designed with the same goals as other distributed file systems, including
-``performance, scalability, reliability and availability.''\cite{ghemawat:2003} Another key aspect of the GFS design is fault
-tolerance and this is achieved by treating failures as normal and optimizing for ``huge files that are mostly appended to and
-then read.''\cite{ghemawat:2003}
+The MapReduce framework partitions input data across different machines, so
+that the computations are initially performed on smaller sets of data
+distributed across the cluster. Each cluster has a master node that is
+responsible for coordinating the efforts among the slave nodes. Each slave node
+sends periodic heartbeats to the master node so it can be aware of progress and
+failure. In the case of failure, the master node can reassign tasks to other
+nodes in the cluster. In conjunction with the underlying MapReduce framework
+created at Google, the company also had to build the distributed Google File
+System (GFS). This file system ``allows programs to access files efficiently
+from any computer, so functions can be mapped
+everywhere.''\cite{patterson:2008} GFS was designed with the same goals as
+other distributed file systems, including ``performance, scalability,
+reliability and availability.''\cite{ghemawat:2003} Another key aspect of the
+GFS design is fault tolerance and this is achieved by treating failures as
+normal and optimizing for ``huge files that are mostly appended to and then
+read.''\cite{ghemawat:2003}
 
-Within the framework, a programmer is responsible for writing both map and reduce functions. The map function is applied to all
-of the input data ``in order to compute a set of intermediate key/value pairs.''\cite{dean:2004} In the map step, the master
-node partitions the input data into smaller problems and distributes them across the worker nodes in the cluster. This step is
-applied in parallel to all of the input that has been partitioned across the cluster. Then, the reduce step is responsible for
-collecting all the processed data from the slave nodes and formatting the output. The reduce function is carried out over all
-the values that have the same key such that each key has a single value. which is the answer to the problem MapReduce is trying
-to solve. The output is done to files in the distributed file system.
+Within the framework, a programmer is responsible for writing both map and
+reduce functions. The map function is applied to all of the input data ``in
+order to compute a set of intermediate key/value pairs.''\cite{dean:2004} In
+the map step, the master node partitions the input data into smaller problems
+and distributes them across the worker nodes in the cluster. This step is
+applied in parallel to all of the input that has been partitioned across the
+cluster. Then, the reduce step is responsible for collecting all the processed
+data from the slave nodes and formatting the output. The reduce function is
+carried out over all the values that have the same key such that each key has a
+single value. which is the answer to the problem MapReduce is trying to solve.
+The output is done to files in the distributed file system.
 
-The use of ``a functional model with user-specified map and reduce operations allows (Google) to parallelize large computations
-easily and to use re-execution as the primary mechanism for fault tolerance.''\cite{dean:2004} A programmer only has to specify
-the functions described above and the system handles the rest of the details. Figure \ref{fig:map_reduce_overview} illustrates
-the execution flow of a MapReduce program.
+The use of ``a functional model with user-specified map and reduce operations
+allows (Google) to parallelize large computations easily and to use
+re-execution as the primary mechanism for fault tolerance.''\cite{dean:2004} A
+programmer only has to specify the functions described above and the system
+handles the rest of the details. Figure \ref{fig:map_reduce_overview}
+illustrates the execution flow of a MapReduce program.
 
 \begin{center}
 \begin{figure}
@@ -101,9 +113,12 @@ Hog takes care of all the low-level details required to run computations on
 Hadoop’s distributed network. All a user needs to do is tell Hog the location of
 their valid Hadoop instance, and Hog will do the rest.
 
-We intentionally have restricted the scope of Hog to deal with specific problems.
-For example, Hog only supports reading and writing plaintext files. While these limitations
-sacrifice the generality of the language, they promote ease of use.
+We intentionally have restricted the scope of Hog to deal with specific
+problems.  For example, Hog only supports reading and writing plaintext files.
+While these limitations sacrifice the generality of the language, they promote
+ease of use.
+
+% here
 
 \subsubsection{Guiding Principles} % (fold)
 \label{ssub:guiding_principles}
@@ -122,8 +137,14 @@ The guiding principles of Hog are:
 \subsection{The ``Ideal'' Hog User} % (fold)
 \label{sub:the_ideal_hog_user}
 
-Hog was designed with a particular user in mind: one that has already learned the basics of programming in a different
-programming language (such as Java or Python), but is inexperienced with distributed computation and can benefit from a highly structured framework for writing MapReduce programs. The language was designed with the goal of making learning how to write MapReduce programs as easy as possible. However, the user should be adept with programming concepts such as program structure, control flow (iteration and conditional operators), evaluation of boolean expressions, etc.
+Hog was designed with a particular user in mind: one that has already learned
+the basics of programming in a different programming language (such as Java or
+Python), but is inexperienced with distributed computation and can benefit from
+a highly structured framework for writing MapReduce programs. The language was
+designed with the goal of making learning how to write MapReduce programs as
+easy as possible. However, the user should be adept with programming concepts
+such as program structure, control flow (iteration and conditional operators),
+evaluation of boolean expressions, etc.
 
 % subsection the_ideal_hog_user (end)
 
@@ -131,9 +152,10 @@ programming language (such as Java or Python), but is inexperienced with distrib
 \section{Syntax Notation} % (fold)
 \label{sec:syntax_notation}
 
-In the syntax notation used throughout the Hog manual, different syntactic categories are noted by \emph{italic type}, and
-literal words and characters are in \tt typewriter style\rm. When specific terms are introduced, \textbf{\emph{emboldened,
-italicized font}} is used.
+In the syntax notation used throughout the Hog manual, different syntactic
+categories are noted by \emph{italic type}, and literal words and characters
+are in \tt typewriter style\rm. When specific terms are introduced,
+\textbf{\emph{emboldened, italicized font}} is used.
 
 % sec syntax_notation (end)
 
@@ -194,16 +216,15 @@ Function definitions have the form:
 
 where,
 
-\begin{quotation}
-\emph{parameterList} $\rightarrow$ \emph{parameter} \tt , \rm \emph{parameterList} $|$ \emph{parameter}
-\end{quotation}
+\begin{quotation} \emph{parameterList} $\rightarrow$ \emph{parameter} \tt , \rm
+\emph{parameterList} $|$ \emph{parameter} \end{quotation}
 
-The return type can be any valid Hog type. The rules regarding legal function names
-are identical to those regarding legal variable identifiers. Each parameter in the
-parameter list consists of a valid Hog type followed by the name of the parameter,
-which must also follow the naming rules for identifiers. Parameters in the
-parameter list are separated by commas. The \tt @Functions \rm section ends when the next
-Hog section begins.
+The return type can be any valid Hog type. The rules regarding legal function
+names are identical to those regarding legal variable identifiers. Each
+parameter in the parameter list consists of a valid Hog type followed by the
+name of the parameter, which must also follow the naming rules for identifiers.
+Parameters in the parameter list are separated by commas. The \tt @Functions
+\rm section ends when the next Hog section begins.
 
 A complete example of an \tt @Functions \rm section:
 
@@ -227,7 +248,11 @@ A complete example of an \tt @Functions \rm section:
     }
 \end{verbatim}
 
-User-defined functions can make reference to other user-defined functions. However, function names cannot be overloaded (i.e. it is not possible to use the same function name with a parameter list that differs in the number of arguments or argument types). Disallowing function overloading is a design choice consistent with Hog's guiding principle of simplicity.
+User-defined functions can make reference to other user-defined functions.
+However, function names cannot be overloaded (i.e. it is not possible to use
+the same function name with a parameter list that differs in the number of
+arguments or argument types). Disallowing function overloading is a design
+choice consistent with Hog's guiding principle of simplicity.
 
 % section tt_functionsrm (end)
 
@@ -242,19 +267,18 @@ pairs. The \tt @Map \rm section defines the code for the map function.
 The \tt @Map \rm header must be followed by the signature of the map function, and
 then the body of the map function as follows:
 
-\begin{quotation}
-  \tt @Map ( \rm \emph{type identifier, type identifier} \tt ) -> ( \rm \emph{type, type} \tt ) \{ \\
-  \indent \indent . \\
-  \indent \indent . \\
-  \indent \indent . \\
-  \indent \tt \} \rm
-\end{quotation}
+\begin{quotation} \tt @Map ( \rm \emph{type identifier, type identifier} \tt )
+-> ( \rm \emph{type, type} \tt ) \{ \\ \indent \indent . \\ \indent \indent .
+\\ \indent \indent . \\ \indent \tt \} \rm \end{quotation}
 
-The first \emph{type identifier} defines the \emph{\textbf{key}} and the second defines the \emph{\textbf{value}} of the input
-key-value pair to the \tt @Map \rm function. The identifiers specified for the key and value can be made reference to later
-within the \tt @Map \rm block. The \tt @Map \rm signature is followed by an arrow and another key-value pair, defining the
-types of the output of the map function. Notice that identifiers are not specified for the output key and value (said to be
-\emph{\textbf{unnamed}}), as these pairs are only produced at the end of the map function. 
+The first \emph{type identifier} defines the \emph{\textbf{key}} and the second
+defines the \emph{\textbf{value}} of the input key-value pair to the \tt @Map
+\rm function. The identifiers specified for the key and value can be made
+reference to later within the \tt @Map \rm block. The \tt @Map \rm signature is
+followed by an arrow and another key-value pair, defining the types of the
+output of the map function. Notice that identifiers are not specified for the
+output key and value (said to be \emph{\textbf{unnamed}}), as these pairs are
+only produced at the end of the map function. 
 
 The map function can include any number of calls to \tt emit()\rm, which outputs
 the resulting intermediate key-value pairs for use by the function defined in the
@@ -264,11 +288,12 @@ the \tt @Map \rm type signature. All output pairs from the map function are
 subsequently grouped by key by the framework, and passed as input to the \tt
 @Reduce \rm function.
 
-\emph{Note}: In the current version of the language, the only configuration available is for a file to be passed into the map
-function one line at a time, with the line of text being the value, and the
-corresponding line number as the key. This requires that the input key/value pair
-to the map function is of type \tt (int key‐name, text value‐name)\rm. Extending
-this to allow for other input formats is a future goal of the Hog language.
+\emph{Note}: In the current version of the language, the only configuration
+available is for a file to be passed into the map function one line at a time,
+with the line of text being the value, and the corresponding line number as the
+key. This requires that the input key/value pair to the map function is of type
+\tt (int key‐name, text value‐name)\rm. Extending this to allow for other input
+formats is a future goal of the Hog language.
 
 The following is an example of a complete \tt @Map \rm section for a program that
 counts the number of times each word appears in a set of files. The map function
@@ -340,12 +365,15 @@ and follows the \tt @Map \rm sample introduced in the previous section.
 \subsection{\tt @Main \rm} % (fold)
 \label{sec:tt_main_rm}
 
-The \tt @Main \rm section defines the code that is the entry point to a Hog program. In order to run the MapReduce program
-defined by the user in the previous sections, \tt @Main \rm must contain a call to the system-level built-in function \tt
-mapReduce() \rm, which calls the \tt @Map \rm and \tt @Reduce \rm functions. Other arbitrary code can be run from
-the \tt @Main \rm section as well. In the current version of the language, \tt @Main \rm does not have access to the results of the 
-MapReduce program resulting from a call to \tt mapReduce()\rm. Therefore, it is quite common for the \tt @Main \rm section to contain the call to
-\tt mapReduce() \rm and nothing else.
+The \tt @Main \rm section defines the code that is the entry point to a Hog
+program. In order to run the MapReduce program defined by the user in the
+previous sections, \tt @Main \rm must contain a call to the system-level
+built-in function \tt mapReduce() \rm, which calls the \tt @Map \rm and \tt
+@Reduce \rm functions. Other arbitrary code can be run from the \tt @Main \rm
+section as well. In the current version of the language, \tt @Main \rm does not
+have access to the results of the MapReduce program resulting from a call to
+\tt mapReduce()\rm. Therefore, it is quite common for the \tt @Main \rm section
+to contain the call to \tt mapReduce() \rm and nothing else.
 
 Below is a sample \tt @Main \rm section which prints to the standard output and runs a map reduce job.
 
@@ -379,8 +407,9 @@ a token.
 \subsection{Comments} % (fold)
 \label{sub:comments}
 
-Multi-line comments are identified by the enclosing character sequences \tt \#\{ \rm and \tt \}\#\rm. Anything within these
-enclosing characters is considered a comment, and is completely ignored by the compiler. For example,
+Multi-line comments are identified by the enclosing character sequences \tt
+\#\{ \rm and \tt \}\#\rm. Anything within these enclosing characters is
+considered a comment, and is completely ignored by the compiler. For example,
 
 \begin{verbatim}
     int i = 0;
@@ -391,9 +420,10 @@ enclosing characters is considered a comment, and is completely ignored by the c
 
 \end{verbatim}
 
-In the above example, the text \tt these are block comments \textbackslash n comments and are ignored \textbackslash n by the
-complier \rm is completely ignored during compilation. Compilation goes directly from the line \tt int i = 0; \rm to the line
-\tt i++;\rm.
+In the above example, the text \tt these are block comments \textbackslash n
+comments and are ignored \textbackslash n by the complier \rm is completely
+ignored during compilation. Compilation goes directly from the line \tt int i =
+0; \rm to the line \tt i++;\rm.
 
 Single-line comments are defined to be strings of text included between a '\tt
 \#\rm' symbol on the left-hand side and a newline character ('\tt\textbackslash
@@ -405,19 +435,20 @@ n\rm') on the right-hand side.
 \label{sub:identifiers}
 
 A valid identifier in Hog is a sequence of contiguous letters, digits, or
-underscores, which are used to distinguish declared entities, such as 
-methods, parameters, or variables from one another. A valid identifier also
-provide a means of determining scope of an entity, and helps to determine whether
-the same valid identifier in another scope refers to the same entity. The first
-character of an identifier must not be a digit. Valid identifiers are case sensitive,
-so \tt foo \rm is not the same identifier as \tt Foo\rm.
+underscores, which are used to distinguish declared entities, such as methods,
+parameters, or variables from one another. A valid identifier also provide a
+means of determining scope of an entity, and helps to determine whether the
+same valid identifier in another scope refers to the same entity. The first
+character of an identifier must not be a digit. Valid identifiers are case
+sensitive, so \tt foo \rm is not the same identifier as \tt Foo\rm.
 
 % section identifiers (end)
 
 \subsection{Keywords} % (fold)
 \label{sub:keywords}
 
-The following words are reserved for use as keywords, and may not be redefined by the programmer:
+The following words are reserved for use as keywords, and may not be redefined
+by the programmer:
 
 \begin{multicols}{4}
 \tt
@@ -487,15 +518,18 @@ The following words are reserved for use as keywords, and may not be redefined b
 \subsection{Constants} % (fold)
 \label{sub:constants}
 
-The word \textbf{\emph{constant}} has two different meanings in Hog. It can refer to either a variable that is \emph{fixed},
-that is, once it is initialized cannot be changed, or can refer to an \textbf{\emph{unnamed value}}, such as "1.0". To declare
-a constant variable, use the following pattern,
+The word \textbf{\emph{constant}} has two different meanings in Hog. It can
+refer to either a variable that is \emph{fixed}, that is, once it is
+initialized cannot be changed, or can refer to an \textbf{\emph{unnamed
+value}}, such as "1.0". To declare a constant variable, use the following
+pattern,
 
 \begin{quotation}
    \tt final \rm \emph{type variableName} = \emph{value};
 \end{quotation}
 
-The following are a list of examples of unnamed values and their corresponding types:
+The following are a list of examples of unnamed values and their corresponding
+types:
 
 \begin{itemize}
   \item[] \tt -1\rm, \tt 0\rm, \tt 1\rm, \tt 2\rm $\hfill$ (all of type \tt int\rm)
@@ -507,15 +541,21 @@ The following are a list of examples of unnamed values and their corresponding t
 
 \subsection{Text Literals} % (fold) \label{sub:string_literals} 
 
-A text literal consists of a sequence of zero of more contiguous characters enclosed in double quotes, such as \tt
-"hello"\rm. A text literal can also contain escape characters such as \tt "\textbackslash n" \rm for the new line character
-or \tt "\textbackslash t" \rm for the tab character. A text literal has many of the same built-in functions
-as the String class in Java. String literals are constant and their values cannot be changed after they are created. String
-literals can be concatenated with adjacent text literals by use of the \tt + \rm operator and are then converted into a
-single \tt text \rm variable. Hog implements concatenation by use of the Java \tt StringBuilder \rm (or \tt StringBuffer\rm) class and its
-append method. All text literals in Hog programs are implemented as instances of the \tt text \rm class, and then are mapped
-directly to the equivalent \tt String \rm class in Java.\footnote{Technically, \tt text \rm objects are implemented as
-instances of Hadoop's \tt Text \rm class, which is closely related to the Java \tt String \rm class.}
+A text literal consists of a sequence of zero of more contiguous characters
+enclosed in double quotes, such as \tt "hello"\rm. A text literal can also
+contain escape characters such as \tt "\textbackslash n" \rm for the new line
+character or \tt "\textbackslash t" \rm for the tab character. A text literal
+has many of the same built-in functions as the String class in Java. String
+literals are constant and their values cannot be changed after they are
+created. String literals can be concatenated with adjacent text literals by use
+of the \tt + \rm operator and are then converted into a single \tt text \rm
+variable. Hog implements concatenation by use of the Java \tt StringBuilder \rm
+(or \tt StringBuffer\rm) class and its append method. All text literals in Hog
+programs are implemented as instances of the \tt text \rm class, and then are
+mapped directly to the equivalent \tt String \rm class in
+Java.\footnote{Technically, \tt text \rm objects are implemented as instances
+of Hadoop's \tt Text \rm class, which is closely related to the Java \tt String
+\rm class.}
 
 % subsection string_literals (end)
 
@@ -532,7 +572,9 @@ any block nested within its enclosing block.
 \subsection{Argument Passing}
 \label{sub:argument_passing}
 
-Since Hog is compiled into Java, it passes arguments using call-by-value. However, similarly to Java, it is possible to imitate call-by-reference behavior. 
+Since Hog is compiled into Java, it passes arguments using call-by-value.
+However, similarly to Java, it is possible to imitate call-by-reference
+behavior. 
 
 \subsection{Evaluation Order}
 \label{sub:evaluation_order}
@@ -547,11 +589,11 @@ Hog uses applicative order (eager) evaluation, similarly to Java.
 \subsection{Basic Types} % (fold)
 \label{sub:basic_types}
 
-The basic types of Hog include \tt int \rm (integer numbers in base 10, 64 bytes
-in size), \tt real \rm (floating point numbers, 64 bytes in size), \tt bool
-\rm(boolean values, \tt true \rm or \tt false \rm) and \tt text \rm (Strings, variable in size).
-Unlike some languages, Hog includes no basic character type. Instead, a programmer
-makes use of \tt text\rm s of size 1.
+The basic types of Hog include \tt int \rm (integer numbers in base 10, 64
+bytes in size), \tt real \rm (floating point numbers, 64 bytes in size), \tt
+bool \rm(boolean values, \tt true \rm or \tt false \rm) and \tt text \rm
+(Strings, variable in size).  Unlike some languages, Hog includes no basic
+character type. Instead, a programmer makes use of \tt text\rm s of size 1.
 
 \emph{Implementation details}: Hog’s primitive types are not so primitive. They are
 in fact wrappers around Hadoop classes. For instance, Hog’s \tt int \rm type is a
@@ -575,27 +617,37 @@ of:
 \subsection{Derived Types (Collections)} % (fold)
 \label{sub:derived_types_collections_}
 
-There are two derived types that can be created by the programmer: \tt list<T>\rm and \tt set<T>\rm. 
-Future versions of Hog are expected to implement other derived types, including dictionaries/hash maps, user-defined iterators, 
-and multisets. The \tt list<T> \rm type is an ordered
-collection of objects of the same type. The \tt set<T> \rm is an unordered
-collection of unique objects of the same type. Hog supports arbitrarily nested derived types, so it is possible, for example, to have a \tt list\rm  of \tt list\rm s of \tt list\rm s of \tt int\rm s.
+There are two derived types that can be created by the programmer: \tt
+list<T>\rm and \tt set<T>\rm.  Future versions of Hog are expected to implement
+other derived types, including dictionaries/hash maps, user-defined iterators,
+and multisets. The \tt list<T> \rm type is an ordered collection of objects of
+the same type. The \tt set<T> \rm is an unordered collection of unique objects
+of the same type. Hog supports arbitrarily nested derived types, so it is
+possible, for example, to have a \tt list\rm  of \tt list\rm s of \tt list\rm s
+of \tt int\rm s.
 
-A special derived type is \tt iter<T>\rm, which is Hog's iterator object. An \tt
-iter \rm object is associated with a list, and allows one traversal of the elements in the list; this is used by Hog in the \tt @Reduce \rm section of a Hog program.
+A special derived type is \tt iter<T>\rm, which is Hog's iterator object. An
+\tt iter \rm object is associated with a list, and allows one traversal of the
+elements in the list; this is used by Hog in the \tt @Reduce \rm section of a
+Hog program.
 
 % subsection derived_types_collections_ (end)
 
 \subsection{Type Conversions} % (fold)
 \label{sub:conversions}
 
-\textbf In order to cast a variable to be of a different type, use the following notation:
+\textbf In order to cast a variable to be of a different type, use the
+following notation:
 
 \begin{quotation}
       \tt \emph{primitiveType}(2\emph{otherPrimitiveType})\rm \emph{variableName}
 \end{quotation}
 
-Hog supports casting between the primitive types \tt int\rm, \tt real\rm, and \tt text\rm, via the built-in functions \tt int2real\rm, \tt int2text\rm, \tt real2int\rm, \tt real2text\rm, \tt text2int\rm, and \tt text2real\rm. If casting a text to an int or real results in an invalid number (e.g. \tt text2int("1a4") \rm), a run-time exception will be thrown.
+Hog supports casting between the primitive types \tt int\rm, \tt real\rm, and
+\tt text\rm, via the built-in functions \tt int2real\rm, \tt int2text\rm, \tt
+real2int\rm, \tt real2text\rm, \tt text2int\rm, and \tt text2real\rm. If
+casting a text to an int or real results in an invalid number (e.g. \tt
+text2int("1a4") \rm), a run-time exception will be thrown.
 
 % subsection conversions (end)
 
@@ -610,9 +662,11 @@ Hog supports casting between the primitive types \tt int\rm, \tt real\rm, and \t
 \subsubsection{Arithmetic Operators} % (fold)
 \label{ssub:arithmetic_operators}
 
-Hog implements all of the standard arithmetic operators. All arithmetic operators are only defined for use between variables of
-numeric type (\tt int\rm, \tt real\rm) with the exception that the \tt + \rm operator is also defined for use between two \tt
-text \rm variables. In such instances, \tt + \rm is defined as concatenation. Thus, in the following,
+Hog implements all of the standard arithmetic operators. All arithmetic
+operators are only defined for use between variables of numeric type (\tt
+int\rm, \tt real\rm) with the exception that the \tt + \rm operator is also
+defined for use between two \tt text \rm variables. In such instances, \tt +
+\rm is defined as concatenation. Thus, in the following,
 
 \begin{verbatim}
     text face = "face";
@@ -620,11 +674,14 @@ text \rm variables. In such instances, \tt + \rm is defined as concatenation. Th
     text facebook = face + book;
 \end{verbatim}
 
-After execution, the variable \tt facebook \rm will have the value ``facebook''. No other arithmetic operators are defined for
-use with \tt text \rm variables, and \tt + \rm is only valid if both variables are of type \tt text \rm. Otherwise, the program
-will result in a compile-time \tt TypeMismatchException\rm. 
+After execution, the variable \tt facebook \rm will have the value
+``facebook''. No other arithmetic operators are defined for use with \tt text
+\rm variables, and \tt + \rm is only valid if both variables are of type \tt
+text \rm. Otherwise, the program will result in a compile-time \tt
+TypeMismatchException\rm. 
 
-When an arithmetic operator is used between two numeric variables of different type, as in,
+When an arithmetic operator is used between two numeric variables of different
+type, as in,
 
 \begin{verbatim}
     int a = 1;
@@ -647,8 +704,9 @@ would throw an error, while
 
 would print 3.0.
 
-If one of the operands happens to have a \tt null \rm value (for instance, if a variable is \textbf{\emph{uninitialized}}),
-then the resulting operation will cause a run-time \tt NullValueException\rm, and the program will crash.
+If one of the operands happens to have a \tt null \rm value (for instance, if a
+variable is \textbf{\emph{uninitialized}}), then the resulting operation will
+cause a run-time \tt NullValueException\rm, and the program will crash.
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
@@ -668,7 +726,8 @@ then the resulting operation will cause a run-time \tt NullValueException\rm, an
 \end{tabular}
 \end{center}
 
-$\dagger$Follows Java's behavior: a modulus of a negative number is a negative number.
+$\dagger$Follows Java's behavior: a modulus of a negative number is a negative
+number.
 % subsubsection arithmetic_operators (end)
 
 \subsubsection{Logical Operators} % (fold)
@@ -713,10 +772,12 @@ The following are the comparators implemented in Hog (all are binary operations)
 \end{center}
 
 \emph{Note}: All comparators do not work with non-numeric or non-boolean types.
-Comparisons require that the two operands be either both numeric
-or both boolean, and a numeric value cannot be compared to a boolean value. If the two operands are numeric but of different types, one of them must be cast so that they are of the same type. The
-only valid comparators that can be used with boolean expressions are \tt == \rm
-and \tt !=\rm. The use of a comparison operator in Hog between any two derived types will result in a run-time error.
+Comparisons require that the two operands be either both numeric or both
+boolean, and a numeric value cannot be compared to a boolean value. If the two
+operands are numeric but of different types, one of them must be cast so that
+they are of the same type. The only valid comparators that can be used with
+boolean expressions are \tt == \rm and \tt !=\rm. The use of a comparison
+operator in Hog between any two derived types will result in a run-time error.
 
 % subsubsection comparators (end)
 
@@ -751,7 +812,8 @@ time.
 \subsection{Type Specifiers} % (fold)
 \label{sub:type_specifiers}
 
-Every variable, whether its type is primitive or derived, must be assigned a type upon declaration, for instance,
+Every variable, whether its type is primitive or derived, must be assigned a
+type upon declaration, for instance,
 
 \begin{verbatim}
     list<int> myList;
@@ -763,7 +825,8 @@ declares the variable \tt myList \rm to be a \tt list \rm of \tt int\rm s,
     list<list<int>> myOtherList;
 \end{verbatim}
 
-declares the variable \tt myOtherList \rm to be a \tt list \rm of \tt list\rm s of \tt int \rm s,
+declares the variable \tt myOtherList \rm to be a \tt list \rm of \tt list\rm s
+of \tt int \rm s,
 
 and
 
@@ -782,7 +845,9 @@ declares the variable \tt myText \rm to be of type \tt text\rm .
 \label{ssub:null_declarations}
 
 If a variable is declared but not initialized, the variable becomes a
-\textbf{\emph{null reference}}, which means it points to nothing and holds no data (internally, this means that an entry has been added to Hog's symbol table with that variable name).
+\textbf{\emph{null reference}}, which means it points to nothing and holds no
+data (internally, this means that an entry has been added to Hog's symbol table
+with that variable name).
 
 % subsubsection null_declarations (end)
 
@@ -819,10 +884,12 @@ Derived-type variables are declared using the following pattern:
 \end{enumerate}
 
 When the derived type is first declared, we say that the variable is
-\textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user attempts
-to use any type-­specific operations that are not meaningful (for instance, \tt myList.size() \rm on an
-uninitialized variable, the program will throw a run­time exception (see \S
-\ref{sec:exception_handling} for a discussion of exceptions)). The example code below initializes a \tt list\rm of integers and adds one element to it.
+\textbf{\emph{uninitialized}}, and has the value \tt null\rm. If a user
+attempts to use any type-­specific operations that are not meaningful (for
+instance, \tt myList.size() \rm on an uninitialized variable, the program will
+throw a run­time exception (see \S \ref{sec:exception_handling} for a
+discussion of exceptions)). The example code below initializes a \tt list\rm of
+integers and adds one element to it.
 
 \begin{verbatim}
     list<int> myList;
@@ -864,8 +931,9 @@ expression is executed.
 \subsection{Compound Statement (Blocks)} % (fold)
 \label{sub:compound_statement}
 
-\textbf{\emph{Compound statements}} are defined by \{ and \} and are used to group a sequence of
-statements, so that they are syntactically equivalent to a single statement.
+\textbf{\emph{Compound statements}} are defined by \{ and \} and are used to
+group a sequence of statements, so that they are syntactically equivalent to a
+single statement.
 
 % subsection compound_statement (end)
 
@@ -881,14 +949,15 @@ The following are the \textbf{\emph{flow-of-control}} statements included in Hog
   \rm \emph{statement}
 \end{itemize}
 
-In the above statements, the  $\dots$ signifies an unlimited number of \tt elseif \rm
-statements, since there is no limit on the number of \tt elseif \rm statements
-that can appear before the final \tt else \rm statement. In the second statement above, when the
-expression in the \tt if \rm statement evaluates to \tt false\rm, then the \tt
-else \rm statement will execute. In the third statement above with \tt if\rm, \tt
-elseif \rm and \tt else \rm statements, the statement will be executed that
-follows the first expression evaluating to \tt true\rm. If none of these
-expressions evaluate to \tt true\rm, then the \tt else \rm statement is executed.
+In the above statements, the  $\dots$ signifies an unlimited number of \tt
+elseif \rm statements, since there is no limit on the number of \tt elseif \rm
+statements that can appear before the final \tt else \rm statement. In the
+second statement above, when the expression in the \tt if \rm statement
+evaluates to \tt false\rm, then the \tt else \rm statement will execute. In the
+third statement above with \tt if\rm, \tt elseif \rm and \tt else \rm
+statements, the statement will be executed that follows the first expression
+evaluating to \tt true\rm. If none of these expressions evaluate to \tt
+true\rm, then the \tt else \rm statement is executed.
 
 To increase the expressive power of Hog, flow-of-control statements can also be nested within each other.
 
