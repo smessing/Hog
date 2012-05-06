@@ -58,7 +58,7 @@ public class Hog {
                 System.out.println(Integer.toString(myList.get(i)));
              }
          }
-        catch (ArrayIndexOutOfBoundsException exception) {
+        catch (IndexOutOfBoundsException exception) {
             System.out.println("we caught an exception");
          }
     }
