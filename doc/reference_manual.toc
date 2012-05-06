@@ -60,5 +60,4 @@
 \contentsline {section}{\numberline {13}Exception Handling}{26}
 \contentsline {subsection}{\numberline {13.1}Compile-time Errors}{27}
 \contentsline {subsection}{\numberline {13.2}Internal Run-time Exceptions}{28}
-\contentsline {subsection}{\numberline {13.3}External Run-time Exceptions}{29}
 \contentsline {section}{\numberline {14}Grammar}{29}

@@ -218,7 +218,7 @@ A complete example of an \tt @Functions \rm section:
       }
 
       list<int> reverseList(list<int> oldList) {
-        list<int> newList;
+        list<int> newList();
         for (int i = oldList.size() - 1; i >= 0; i--;) {
           newList.add(oldList.get(i));
         }
@@ -281,7 +281,7 @@ reduce function for every word.
 
   @Map (int lineNum, text line)  ->  (text, int) {
     foreach word in line.tokenize(" ") {
-      emit(word, 1);
+      emit(word, 1)
     }
   }
 
@@ -322,11 +322,11 @@ and follows the \tt @Map \rm sample introduced in the previous section.
 \begin{verbatim} 
 
     @Reduce (text word, iter<int> values) -> (text, int) {
-      int count = 0;
+      int count = 0
       while (values.hasNext()) {
-        count = count + values.next();
+        count = count + values.next()
       }
-      emit(word, count);
+      emit(word, count)
     }
 
 \end{verbatim} 
@@ -336,20 +336,20 @@ and follows the \tt @Map \rm sample introduced in the previous section.
 \subsection{\tt @Main \rm} % (fold)
 \label{sec:tt_main_rm}
 
-The \tt @Main \rm section defines the code that is the entry point to a Hog program. In order to run the MapReduce program
+The \tt @Main \rm section defines the code that is the entry point to a Hog program. In order to run the map reduce program
 defined by the user in the previous sections, \tt @Main \rm must contain a call to the system-level built-in function \tt
-mapReduce() \rm, which calls the \tt @Map \rm and \tt @Reduce \rm functions. Other arbitrary code can be run from
-the \tt @Main \rm section as well. In the current version of the language, \tt @Main \rm does not have access to the results of the 
-MapReduce program resulting from a call to \tt mapReduce()\rm. Therefore, it is quite common for the \tt @Main \rm section to contain the call to
+mapReduce() \rm in order for the \tt @Map \rm and \tt @Reduce \rm functions to be used. Other arbitrary code can be run from
+the \tt @Main \rm section as well. Currently, \tt @Main \rm does not have access to the results of the MapReduce program
+resulting from a call to \tt mapReduce()\rm. Therefore, it is quite common for the \tt @Main \rm section to contain the call to
 \tt mapReduce() \rm and nothing else.
 
 Below is a sample \tt @Main \rm section which prints to the standard output and runs a map reduce job.
 
 \begin{verbatim}
     @Main {
-          print("Starting mapReduce job.\n");
-          mapReduce();
-          print("mapReduce complete.\n");
+          print("Starting mapReduce job.\n")
+          mapReduce()
+          print("mapReduce complete.\n")
     }
 \end{verbatim}
 
@@ -365,7 +365,7 @@ Below is a sample \tt @Main \rm section which prints to the standard output and 
 \label{sub:tokens}
 
 The classes of tokens include the following: identifiers, keywords,
-constants, string literals, operators, and separators. Blanks, tabs, newlines and
+constants, string literals, operators and separators. Blanks, tabs, newlines and
 comments are ignored. If the input is separated into tokens up to a given
 character, the next token is the longest string of characters that could represent
 a token.
@@ -379,16 +379,16 @@ Multi-line comments are identified by the enclosing character sequences \tt \#\{
 enclosing characters is considered a comment, and is completely ignored by the compiler. For example,
 
 \begin{verbatim}
-    int i = 0;
+    int i = 0
     #{ these are block
         comments and are ignored
          by the compiler }#
-    i++;
+    i++
 \end{verbatim}
 
 In the above example, the text \tt these are block comments \textbackslash n comments and are ignored \textbackslash n by the
-complier \rm is completely ignored during compilation. Compilation goes directly from the line \tt int i = 0; \rm to the line
-\tt i++;\rm.
+complier \rm is completely ignored during compilation. Compilation goes directly from the line \tt int i = 0 \rm to the line
+\tt i++\rm.
 
 Single-line comments are defined to be strings of text included between a '\tt
 \#\rm' symbol on the left-hand side and a newline character ('\tt\textbackslash
@@ -423,8 +423,10 @@ The following words are reserved for use as keywords, and may not be redefined b
   \item[] and
   \item[] bool
   \item[] break
+  \item[] case
   \item[] catch
   \item[] default
+  \item[] dict
   \item[] else
   \item[] elseif
   \item[] emit
@@ -443,6 +445,7 @@ The following words are reserved for use as keywords, and may not be redefined b
   \item[] or
   \item[] real
   \item[] return
+  \item[] switch
   \item[] text
   \item[] throw
   \item[] try
@@ -460,6 +463,7 @@ The following words are reserved for use as keywords, and may not be redefined b
 The word \textbf{\emph{constant}} has two different meanings in Hog. It can refer to either a variable that is \emph{fixed},
 that is, once it is initialized cannot be changed, or can refer to an \textbf{\emph{unnamed value}}, such as "1.0". To declare
 a constant variable, use the following pattern,
+
 
 \begin{quotation}
    \tt final \rm \emph{type variableName} = \emph{value}
@@ -493,7 +497,7 @@ instances of Hadoop's \tt Text \rm class, which is closely related to the Java \
 \label{sub:variable_scope}
 
 Hog implements what is generally referred to as lexical scoping or block scope. An
-identifier is valid within its enclosing block. The identifier is also valid for
+identifier is valid within its enclosing block. The identifier is also value for
 any block nested within its enclosing block.
 
 % subsection variable_scope (end)
@@ -942,12 +946,11 @@ through.
 \label{ssub:example_1}
 
 \begin{verbatim}
-    int i = 0;
+    int i = 0
     while (i < 10) {
-      print(i);
-      i++;
+      print(i)
+      i++
     }
-
 \end{verbatim}
 
 % subsubsection example_1 (end)
@@ -1409,7 +1412,7 @@ more sources exceptions in Hog than most general purpose languages. These source
 can be divided into two categories: \textbf{\emph{compile­-time exceptions}} and
 \textbf{\emph{internal run­-time exceptions}}.
 
-To throw an exception, a programmer uses the following pattern,
+To throw an exception, a programmer uses the following pattern, 
 
 \begin{quotation}
 \tt throw \rm \emph{exceptionType} \emph{exceptionMessage}
