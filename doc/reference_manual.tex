@@ -568,7 +568,7 @@ There are two derived types that can be created by the programmer: \tt list<T>\r
 Future versions of Hog are expected to implement other derived types, including dictionaries/hash maps, user-defined iterators, 
 and multisets. The \tt list<T> \rm type is an ordered
 collection of objects of the same type. The \tt set<T> \rm is an unordered
-collection of unique objects of the same type.
+collection of unique objects of the same type. Hog supports arbitrarily nested derived types, so it is possible, for example, to have a \tt list\rm  of \tt list\rm s of \tt list\rm s of \tt int\rm s.
 
 A special derived type is \tt iter<T>\rm, which is Hog's iterator object. An \tt
 iter \rm object is associated with a list, and allows one traversal of the elements in the list; this is used by Hog in the \tt @Reduce \rm section of a Hog program.
@@ -1255,7 +1255,7 @@ cluster).
 \section{Exception Handling} % (fold)
 \label{sec:exception_handling}
 
-Similar to other programming languages (Java, C++), Hog uses an exception model in
+Similar to some other programming languages (such as Java and C++), Hog uses an exception model in
 which an exception is thrown and can be caught by a catch block. Code should be
 surrounded by a try block and then any exceptions occurring within the try block
 will subsequently be caught by the catch block. Each try block should be
@@ -1268,33 +1268,21 @@ is optional:
 
 \begin{quotation}
 \tt try \{ \rm \\
-\indent \indent \emph{expression} \\
+\indent \indent \emph{expression;} \\
 \tt \indent \} catch ( \rm \emph{exception} \tt ) \rm \{ \\
-\indent \indent \emph{expression} \\
+\indent \indent \emph{expression;} \\
 \tt \indent \} finally \rm \{ \\
-\indent \indent \emph{expression} \\
+\indent \indent \emph{expression;} \\
 \tt \indent \}
 \end{quotation}
+
+The current version of the language does not support the programmer throwing exceptions, only catching them.
 
 Because the proper behavior of a Hog program is dependent on resources outside of
 the language (i.e. the proper behavior of the user’s Hadoop software), there are
 more sources exceptions in Hog than most general purpose languages. These sources
 can be divided into two categories: \textbf{\emph{compile­-time exceptions}} and
 \textbf{\emph{internal run­-time exceptions}}.
-
-To throw an exception, a programmer uses the following pattern,
-
-\begin{quotation}
-\tt throw \rm \emph{exceptionType} \emph{exceptionMessage}
-\end{quotation}
-
-\noindent For example,
-
-\begin{verbatim}
-    if (a instanceof text and b instanceof int) {
-      throw TypeMismatchException "Cannot add a text and an int!"
-    }
-\end{verbatim}
 
 \subsection{Compile-time Errors} % (fold)
 \label{sub:compile_time_exceptions}
