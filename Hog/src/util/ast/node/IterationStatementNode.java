@@ -9,7 +9,7 @@ import back_end.Visitor;
  * Which of these constructs can be determined by the num of children the node
  * has 2 children: 'while' 3 children: 'for' 4 children: 'foreach'
  * 
- * @author ben
+ * @author Benjamin Rapaport
  * 
  */
 public class IterationStatementNode extends StatementNode {

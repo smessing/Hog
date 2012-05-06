@@ -3,7 +3,8 @@ package util.ast.node;
 import back_end.Visitor;
 
 /**
- * @author paul
+ * @author Paul Tylkin
+ * @author Samuel Messing
  *
  */
 

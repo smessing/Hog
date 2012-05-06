@@ -10,7 +10,7 @@ import util.type.Types;
 /**
  * A node representing a primitive constant in a parse tree.
  * 
- * @author sam
+ * @author Samuel Messing
  */
 public class ConstantNode extends ExpressionNode {
 

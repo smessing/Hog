@@ -40,7 +40,10 @@ lib/jFlex/*
 Hog/bin/*
 
 # Hog test files
-WordCount.Hog
+WordCount.hog
 
 # Logging
 logging.properties
+
+# Java
+*.class

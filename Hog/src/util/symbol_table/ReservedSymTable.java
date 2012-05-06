@@ -1,5 +1,10 @@
 package util.symbol_table;
 
+/**
+ * [deprecated]
+ * Jason Halpern
+ * 
+ */
 import java.util.ArrayList;
 import java.util.Hashtable;
 

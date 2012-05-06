@@ -3,6 +3,12 @@
  */
 package back_end;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import util.type.Types;
+
 import util.ast.AbstractSyntaxTree;
 import util.ast.node.ArgumentsNode;
 import util.ast.node.BiOpNode;
@@ -19,6 +25,7 @@ import util.ast.node.IdNode;
 import util.ast.node.IfElseStatementNode;
 import util.ast.node.IterationStatementNode;
 import util.ast.node.JumpStatementNode;
+import util.ast.node.JumpStatementNode.JumpType;
 import util.ast.node.MockExpressionNode;
 import util.ast.node.MockNode;
 import util.ast.node.Node;
@@ -37,321 +44,308 @@ import util.ast.node.StatementNode;
 import util.ast.node.SwitchStatementNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
+import util.error.MissingReturnError;
 
 /**
  * Visitor class for error checking.
  * 
  * This is the second walk performed after construction of the AST from source.
  * 
- * Performs the following validations:
- * - no dead code (statements after a return statement in the same basic block)
- * - no break/continue statements outside of iteration loops
- * - non-void functions have adequate number of return statements
- * - no case/default statements outside of immediate switch statement
+ * Performs the following validations: - no dead code (statements after a return
+ * statement in the same basic block) - no break/continue statements outside of
+ * iteration loops - non-void functions have adequate number of return
+ * statements - no case/default statements outside of immediate switch statement
+ * - can't catch same exception type more than once
  * 
- * @author sam
- *
+ * 
+ * @author Paul Tylkin
+ * 
  */
+
 public class ErrorCheckingVisitor implements Visitor {
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.ArgumentsNode)
-	 */
+	protected AbstractSyntaxTree tree;
+
+	protected final static Logger LOGGER = Logger
+			.getLogger(ErrorCheckingVisitor.class.getName());
+
+	private static List<Boolean> returnFlagStack = new ArrayList<Boolean>();
+
+	private static void pushReturnStack() {
+		returnFlagStack.add(returnFlagStack.get(returnFlagStack.size() - 1));
+	}
+
+	private static void popReturnStack() {
+		returnFlagStack.remove(returnFlagStack.size() - 1);
+	}
+
+	public ErrorCheckingVisitor(AbstractSyntaxTree tree) {
+		this.tree = tree;
+	}
+
+	public void walk() {
+		returnFlagStack.add(false);
+		ProgramNode treeRoot = (ProgramNode) this.tree.getRoot();
+		visitReturnChildren(treeRoot);
+		visitFunctionReturns(treeRoot);
+	}
+
+	private void visitReturnChildren(Node node) {
+		/*
+		 * Constructs of the form
+		 * 
+		 * int doubleint (int x){ return 2*x;a x = 2*x; }
+		 * 
+		 * will not compile into Java, and so if a Hog program has this
+		 * construct, Hog will throw an unreachable code exception. Similarly,
+		 * 
+		 * int max(int a, int b){ if (a > b){ return a; } else{ return b; }
+		 * return 0; }
+		 * 
+		 * will also throw an error in Java.
+		 * 
+		 * This pass through the program will check that there is no unreachable
+		 * code in a Hog program.
+		 */
+		if (node.isNewScope()) {
+			LOGGER.finer("We are in a new scope now in node " + node);
+			this.pushReturnStack();
+		}
+		if (returnFlagStack.get(returnFlagStack.size() - 1)) {
+			// throw new UnreachableCodeError(
+			// "The following statement is unreachable: "+ node.toSource());
+		}
+		if (node instanceof JumpStatementNode
+				&& ((JumpStatementNode) node).getJumpType() == JumpType.RETURN) { // TODO
+			// check
+			// that
+			// is
+			// a
+			// return
+			// node
+			if (returnFlagStack.get(returnFlagStack.size() - 1)) {
+				// throw new UnreachableCodeError(
+				// "The following statement is unreachable: "+ node.toSource());
+			} else {
+				returnFlagStack.set(returnFlagStack.size() - 1, true);
+			}
+		} else {
+			List<Node> children = node.getChildren();
+			for (Node n : children) {
+				visitReturnChildren(n);
+			}
+		}
+
+		if (node.isNewScope()) {
+			this.popReturnStack();
+		}
+	}
+
+	private boolean nonVoidFunctionFlag;
+
+	private void visitFunctionReturns(Node node) {
+		/*
+		 * Constructs of the form int max(int a, int b){ if (a > b){ return a; }
+		 * if (b >= a){ return b; } } will not compile into Java, saying that
+		 * there is an error in the return type, even though the function does
+		 * return the correct value. This pass through the Hog program will
+		 * throw Hog errors on this type of input.
+		 */
+		if (node instanceof FunctionNode) {
+			List<Node> children = node.getChildren();
+
+			// if return type is not void
+			if (!Types.isVoidType(((FunctionNode) node).getType())) {
+				this.nonVoidFunctionFlag = true;
+				for (Node n : children) {
+					if (n instanceof JumpStatementNode
+							&& ((JumpStatementNode) n).getJumpType() == JumpType.RETURN) {
+						this.nonVoidFunctionFlag = false;
+					}
+				}
+
+				/*if (this.nonVoidFunctionFlag) { // 
+					throw new MissingReturnError(
+							"The following function is missing a return statement: "
+									+ node.toSource());
+				}*/
+			}
+
+		}
+		// System.out.println(nonVoidFunctionFlag);
+		List<Node> children = node.getChildren();
+
+		for (Node n : children) {
+			visitFunctionReturns(n);
+		}
+	}
+
 	@Override
 	public void visit(ArgumentsNode node) {
-		// TODO Auto-generated method stub
+		LOGGER.finer("visit(ArgumentsNode node) called on " + node);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.BiOpNode)
-	 */
 	@Override
 	public void visit(BiOpNode node) {
-		// TODO Auto-generated method stub
+		LOGGER.finer("visit(BiOpNode node) called on " + node);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.CatchesNode)
-	 */
 	@Override
 	public void visit(CatchesNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(CatchesNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.ConstantNode)
-	 */
 	@Override
 	public void visit(ConstantNode node) {
-		// TODO Auto-generated method stub
+		LOGGER.finer("visit(ConstantNode node) called on " + node);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.DerivedTypeNode)
-	 */
 	@Override
 	public void visit(DerivedTypeNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(DerivedTypeNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.ElseIfStatementNode)
-	 */
 	@Override
 	public void visit(ElseIfStatementNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(ElseIfStatementNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.ElseStatementNode)
-	 */
 	@Override
 	public void visit(ElseStatementNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(ElseStatementNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.ExceptionTypeNode)
-	 */
 	@Override
 	public void visit(ExceptionTypeNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(ExceptionTypeNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.ExpressionNode)
-	 */
-	@Override
 	public void visit(ExpressionNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(ExpressionNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.FunctionNode)
-	 */
-	@Override
 	public void visit(FunctionNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(FunctionNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.GuardingStatementNode)
-	 */
 	@Override
 	public void visit(GuardingStatementNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(GuardingStatementNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.IdNode)
-	 */
 	@Override
 	public void visit(IdNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(IdNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.IfElseStatementNode)
-	 */
 	@Override
 	public void visit(IfElseStatementNode node) {
-		// TODO Auto-generated method stub
+		LOGGER.finer("visit(IfElseStatementNode node) called on " + node);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.IterationStatementNode)
-	 */
 	@Override
 	public void visit(IterationStatementNode node) {
-		// TODO Auto-generated method stub
+		LOGGER.finer("visit(IterationStatementNode node) called on " + node);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.JumpStatementNode)
-	 */
 	@Override
 	public void visit(JumpStatementNode node) {
-		// TODO Auto-generated method stub
+		LOGGER.finer("visit(JumpStatementNode node) called on " + node);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.MockExpressionNode)
-	 */
 	@Override
 	public void visit(MockExpressionNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(MockExpressionNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.MockNode)
-	 */
 	@Override
 	public void visit(MockNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(MockNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.Node)
-	 */
 	@Override
 	public void visit(Node node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(Node node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.ParametersNode)
-	 */
 	@Override
 	public void visit(ParametersNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(ParametersNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.PostfixExpressionNode)
-	 */
 	@Override
 	public void visit(PostfixExpressionNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(PostfixExpressionNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.PrimaryExpressionNode)
-	 */
 	@Override
 	public void visit(PrimaryExpressionNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(PrimaryExpressionNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.PrimitiveTypeNode)
-	 */
 	@Override
 	public void visit(PrimitiveTypeNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(PrimitiveTypeNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.ProgramNode)
-	 */
 	@Override
 	public void visit(ProgramNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(ProgramNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.RelationalExpressionNode)
-	 */
 	@Override
 	public void visit(RelationalExpressionNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(RelationalExpressionNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.SectionNode)
-	 */
 	@Override
 	public void visit(SectionNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(SectionNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.SectionTypeNode)
-	 */
 	@Override
 	public void visit(SectionTypeNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(SectionTypeNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.SelectionStatementNode)
-	 */
 	@Override
 	public void visit(SelectionStatementNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(SelectionStatementNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.StatementListNode)
-	 */
 	@Override
 	public void visit(StatementListNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(StatementListNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.StatementNode)
-	 */
 	@Override
 	public void visit(StatementNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(StatementNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.SwitchStatementNode)
-	 */
 	@Override
 	public void visit(SwitchStatementNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(SwitchStatementNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.TypeNode)
-	 */
 	@Override
 	public void visit(TypeNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(TypeNode node) called on " + node);
 	}
 
-	/* (non-Javadoc)
-	 * @see back_end.Visitor#visit(util.ast.node.UnOpNode)
-	 */
 	@Override
 	public void visit(UnOpNode node) {
-		// TODO Auto-generated method stub
-
+		LOGGER.finer("visit(UnOpNode node) called on " + node);
 	}
 
 	@Override
 	public void visit(ReservedWordTypeNode node) {
-		// TODO Auto-generated method stub
-		
+		LOGGER.finer("visit(ReservedWordTypeNode node) called on " + node);
 	}
-
-	@Override
-	public void walk() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

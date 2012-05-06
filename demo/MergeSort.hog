@@ -1,0 +1,13 @@
+@Map (int lineNum, text line) -> (text, text) {
+  foreach text number in line.tokenize(" ") {
+    emit(number, number);
+  }
+}
+
+@Reduce (text number, text garbage) -> (text, text) {
+  emit(number, "");
+}
+    
+@Main {
+  mapReduce();
+}

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import back_end.Visitor;
 
+/**
+ * 
+ * @author Benjamin Rapaport
+ * @author Samuel Messing
+ *
+ */
 public class ProgramNode extends Node {
 
 	/** functions field of type SectionNode */

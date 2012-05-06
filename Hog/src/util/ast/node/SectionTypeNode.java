@@ -3,6 +3,12 @@ package util.ast.node;
 import util.type.Types;
 import back_end.Visitor;
 
+/**
+ * 
+ * @author Benjamin Rapaport
+ * @author Samuel Messing
+ *
+ */
 public class SectionTypeNode extends Node {
 
 	protected IdNode inputKeyIdNode;

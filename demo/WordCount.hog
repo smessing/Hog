@@ -1,0 +1,22 @@
+@Map (int lineNum, text line) -> (text, int) {
+  # for every word on this line, emit that word and the number 1
+  foreach text word in line.tokenize(" ") {
+    emit(word, 1);
+  }
+}
+
+@Reduce (text word, iter<int> values) -> (text, int) {
+  # initialize count to zero
+  int count = 0;
+  while( values.hasNext() ) {
+    # for every instance of '1' for this word, add to count.
+    count = count + values.next();
+  }
+  # emit the count for this particular word
+  emit(word, count);
+}
+
+@Main {
+  # call map reduce
+  mapReduce();
+}

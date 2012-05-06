@@ -5,7 +5,8 @@ import back_end.Visitor;
 /**
  * A FunctionNode.
  * 
- * @author ben, sam
+ * @author Benjamin Rapaport
+ * @author Samuel Messing
  * 
  */
 public class FunctionNode extends ExpressionNode {

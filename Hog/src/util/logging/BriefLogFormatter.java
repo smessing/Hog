@@ -10,7 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @author ben
+ * @author Benjamin Rapaport
+ * 
  * Code adapted from http://www.javalobby.org/java/forums/t18515.html
  *
  */
