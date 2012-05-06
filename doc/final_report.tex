@@ -523,7 +523,7 @@ by the programmer:
 \begin{multicols}{4}
 \tt
 \begin{itemize}
- 
+git 
   \item[] add
   \item[] and
   \item[] bool
@@ -966,11 +966,114 @@ To be written by Ben.
 \label{chap:environ}
 
 To be written by Kurry.
+@Kurry wrote this section. 
 
 \begin{itemize}
 \item Describe the software development environment used to create the compiler.
+	The Hog team used the Eclipse integrated development environment (IDE) that consisted of a
+source code editor, build automation tool, debugger, and a  JUnit automated testing suite. The source
+code editor provided syntax highlighting in Java, as well as automatically formatted source code, and automatically generated HTML Java documentation, which made language reference very easy. The 
+build automation tool that was used was Apache Ant. Apache Ant is a Java library and command-line tool
+that has built-in tasks allowing a number of routine tasks such as compiling, assembling, testing, and running Java applications, to be conifigured by an XML file that is standardized across the team. With the build standardized across the team, we were able to track what parts of the source code failed after merging,
+which allowed for quick debugging and resolutation. The Java Development Tools (JDT) project in Eclipse featured a built-in Java debugger that provided us the ability to perform step execution, to set breakpoints and values, and to inspect variables and values, and allowed the ability to suspend and resume threads. The debugger allowed us to track and eliminate the bugs in our source code early on, which made for a smoother
+development process. The JUnit testing framework is the standard unit testing Application Programming Interface (API) for Java development. Our Ant build configuration was integrated with JUnit to allow executing 
+out test suites as part of the build process, and printed the results to the console, which prompted us if there
+were any test failures. 
+
+
 \item Show the makefile used to create and test the compiler during development.
+
+	The Hog compiler contains both a makefile and a shell script for compilation. 
+The shell script provides a simple interface for working with the makefile. If the user
+does not have a working Hadoop configuration on there computer, they can run the
+command "make compile" which will compile the Hog source program, which will 
+create a Hog.java file, which will then be compiled with the Java compiler with the appropriate
+Hadoop libraries being packaged with the job jar which is generated at the end compilation.
+
+
+
+################################################################
+################################################################
+## Makefile for Hog Compilation										##
+## Programming Languages and Translator								##
+## Version 1.0														##
+##  Kurry Tran														##
+## 04 May 2012													##
+##																##
+##																##
+################################################################
+################################################################
+
+# Set Up Compiler Directories
+# TODO Fill In Directories
+JFLAGS = -g -classpath
+HOGCOMPILER=compiler/Hog.jar
+
+# Input Hog Source Name
+INPUT_HOG_SOURCE=WordCount.hog
+SOURCENAME=WordCount
+
+# DO NOT CHANGE
+INPUT_JAVA_SOURCE=Hog.java
+
+# Java Compiler
+JAVAC =javac
+# Hadoop Home
+HADOOP_HOME=/Users/ktran/hadoop-1.0.1/
+HADOOP_VERSION=1.0.1
+JOBNAME=Hog
+CLASSPATH = -classpath $(HADOOP_HOME)hadoop-core-$(HADOOP_VERSION).jar
+JAR=jar
+JARFLAGS=-cf
+HADOOP=$(HADOOP_HOME)bin/hadoop
+FS=dfs
+PUTINTODFS=-put
+INPUTDATA=input/big.txt input/input.txt input/words.txt
+
+# HDFS Input/Output Directories
+DFSINPUTDIRECTORY=/users/ktran/input/
+DFSOUTPUTDIRECTORY=/users/ktran/output
+
+CLASSFILES=*.class
+CAT=-cat
+RMR=-rmr
+JOBJAR=hog.jar
+JOBNAME=Hog
+USERNAME=ktran
+MKDIR=-mkdir
+
+default: buildandrun
+
+makedir:
+	$(HADOOP) $(FS) $(MKDIR) $(DFSINPUTDIRECTORY)
+
+buildandrun:
+	$(JAVAC) $(CLASSPATH) $(INPUT_JAVA_SOURCE)
+	$(JAR) $(JARFLAGS) $(JOBJAR) $(CLASSFILES) 
+	$(HADOOP) $(FS) $(PUTINTODFS) $(INPUTDATA) $(DFSINPUTDIRECTORY)
+	$(HADOOP) $(JAR) $(JOBJAR) $(JOBNAME) $(DFSINPUTDIRECTORY) $(DFSOUTPUTDIRECTORY)
+	$(HADOOP) $(FS) $(CAT) $(DFSOUTPUTDIRECTORY)/part-00000 > $(SOURCENAME).txt
+
+compile:
+	java -jar $(HOGCOMPILER) --local $(INPUT_HOG_SOURCE)
+	$(JAVAC) $(CLASSPATH) $(INPUT_JAVA_SOURCE)
+
+clean:
+	$(RM) *~  *#
+	$(HADOOP) $(FS) $(RMR) $(DFSINPUTDIRECTORY)
+	$(HADOOP) $(FS) $(RMR) $(DFSOUTPUTDIRECTORY)
+
+
+
+
+
 \item Describe the run-time environment for the compiler.
+	The Hog compiler runs on the Java Virtual Machine (JVM) which requires programs to be in a standardized portable binary format which are typically .class files. For distribution of large programs,
+multiple class files may be packaged together in a .jar file (short for Java archive), which is how the Hog
+compiler is transported, as a single java archive.  The JVM executes the Hog compiler, Hog.jar, and emulates
+the JVM instruction set by interpretting it, and linking the appropriate libraries from Java and Hadoop, and running the parser and lexer that were generated on Java Cup, and prints any errors to the console. Once the 
+Hog source program is compiled, the resulting jar can be uploaded to the Amazon ElasticMapReduce cloud to be run. 
+
 \end{itemize}
 
 \chapter{Test Plan}
@@ -1082,10 +1185,8 @@ implement them.
 From a project planning standpoint, I think that the team should have all worked 
 together on building the abstract syntax tree and node classes, instead of making
 that work modular in the beginning. This is due to the fact that all parts of the team
-rely at using a working abstract syntax tree, and if the AST is not complete early on
+rely on using a working abstract syntax tree, and if the AST is not complete early on
 in the project, it make creating the other parts of the compiler very difficult. 
-
-
 
 \subsection{Paul's Lessons}
 \label{sub:pauls-lessons}
