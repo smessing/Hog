@@ -2,6 +2,13 @@ package util.ast.node;
 
 import back_end.Visitor;
 
+/**
+ * 
+ * @author Benjamin Rapaport
+ * @author Samuel Messing
+ *
+ */
+
 public class IfElseStatementNode extends SelectionStatementNode {
 
 	protected StatementListNode ifCondTrue;

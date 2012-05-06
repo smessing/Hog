@@ -10,7 +10,9 @@ import util.type.Types;
 import back_end.Visitor;
 
 /**
- * @author ben, paul, sam
+ * @author Benjamin Rapaport
+ * @author Paul Tylkin
+ * @author Samuel Messing
  *
  */
 public abstract class TypeNode extends Node {

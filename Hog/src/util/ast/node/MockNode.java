@@ -9,7 +9,7 @@ import back_end.Visitor;
  * MockNode class, a stripped down implementation of the Node class used for
  * testing.
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public class MockNode extends Node {

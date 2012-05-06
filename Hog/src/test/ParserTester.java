@@ -19,7 +19,7 @@ import util.ast.node.ProgramNode;
  * Tests basic functionality of Parser.java.
  * 
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public class ParserTester {

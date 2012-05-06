@@ -5,13 +5,8 @@ import back_end.Visitor;
 /**
  * A node representing the Binary Operator terminals in a parse tree.
  * 
- * Note: while not prescribed here, it is assumed that all classes that inherit
- * from BiOpNode have a method evaluate() that returns the evaluation of the
- * expression node. The type of this method should be determined by the type of
- * the node (i.e. multiplicativeExpressionNodes return a number type, and
- * booleanExpressionNodes return a boolean type).
- * 
- * @author sam
+ *  
+ * @author Samuel Messing
  * 
  */
 public class BiOpNode extends ExpressionNode {

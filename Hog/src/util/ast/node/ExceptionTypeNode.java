@@ -6,7 +6,8 @@ import util.type.Types;
 /**
  * 
  * 
- * @author ben, sam
+ * @author Benjamin Rapaport
+ * @author Samuel Messing
  *
  */
 public class ExceptionTypeNode extends TypeNode {

@@ -10,7 +10,7 @@ import back_end.Visitor;
  * 
  * try { ... } catch (NumberFormateException nfe) { catchStatements; }
  * 
- * @author sam
+ * @author Samuel Messing
  * 
  */
 public class CatchesNode extends StatementListNode {

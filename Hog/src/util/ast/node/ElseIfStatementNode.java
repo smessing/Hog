@@ -5,7 +5,7 @@ package util.ast.node;
  * and contains the statement if the condition is true, and
  * the statement if the condition is true.
  * 
- * @author sam
+ * @author Samuel Messing
  *
  */
 

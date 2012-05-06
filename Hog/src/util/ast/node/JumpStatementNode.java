@@ -7,7 +7,7 @@ import back_end.Visitor;
  * and returns have expression statements.
  * 
  * 
- * @author ben
+ * @author Benjamin Rapaport
  * 
  */
 public class JumpStatementNode extends StatementNode {

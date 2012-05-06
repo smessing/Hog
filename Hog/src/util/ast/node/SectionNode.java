@@ -9,7 +9,8 @@ import back_end.Visitor;
 /**
  * This node is for the @Functions, @Map, @Reduce and @Main sections
  * 
- * @author sam (commented by ben)
+ * @author Samuel Messing 
+ * @author comments by Benjamin Rapaport
  *
  */
 public class SectionNode extends Node {

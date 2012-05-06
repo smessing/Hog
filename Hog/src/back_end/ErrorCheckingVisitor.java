@@ -57,8 +57,13 @@ import util.ast.node.UnOpNode;
  * - can't catch same exception type more than once
  * 
  * 
+<<<<<<< HEAD
  * @author paul
  * 
+=======
+ * @author Paul Tylkin
+ *
+>>>>>>> 5830584145c1e2457307f8f8e3b27274720c49c3
  */
 
 public class ErrorCheckingVisitor implements Visitor {

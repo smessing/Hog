@@ -4,7 +4,9 @@ import back_end.Visitor;
 import util.type.Types;
 
 /**
- * @author ben, paul, sam
+ * @author Benjamin Rapaport
+ * @author Paul Tylkin
+ * @author Samuel Messing
  * 
  */
 public class PrimitiveTypeNode extends TypeNode {

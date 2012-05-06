@@ -11,7 +11,8 @@ import util.type.Types;
  * type is the "outermost" type (in this example, set) and the inner type
  * is everything but the outermost type (in this example, list<int>).
  * 
- * @author ben, sam
+ * @author Benjamin Rapaport
+ * @author Sam Messing
  *
  */
 public class DerivedTypeNode extends TypeNode {
