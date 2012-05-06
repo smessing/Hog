@@ -1,5 +1,5 @@
 \documentclass{report}
-\usepackage{fancyhdr, graphicx, multicol}
+\usepackage{fancyhdr, graphicx, multicol, subfigure}
 
 \title{\huge \textbf{The Hog Programming Language}}
 \author{Jason Halpern \\ jrh2170 \\ Testing/Validation
@@ -1259,8 +1259,8 @@ types in the header of each section.
 \item[] \tt void mapReduce() \rm \\
 
 This function can be called from the \tt @Main \rm section in order to initiate
-the mapreduce job, as definied in the \tt @Map \rm and \tt @Reduce \rm sections.
-Any Hog program that implements mapreduce will need to call this function in \tt
+the MapReduce job, as defined in the \tt @Map \rm and \tt @Reduce \rm sections.
+Any Hog program that implements MapReduce will need to call this function in \tt
 @Main\rm.
 
 \item[] \tt void print(toPrint) \rm \\
@@ -1474,7 +1474,7 @@ program.
 In the last phase of compilation, the Hog semantic analyzer generates Java source
 code, which is then compiled into byte code by the Java compiler. Then with the
 Hadoop Java Archives (JARs) the bytecode is executed on the Java Virtual Machine
-(JVM). With the syntax tree and the information from the symbol table, the Hog
+(JVM). With the syntax tree and the information from the sh the syntax tree and the information from the symbol table, the Hog
 compiler then checks the Hog source program to ensure semantic consistency with
 the language specification. The syntax tree is initially untyped, but after
 semantic analysis Hog types are added to the syntax tree. Hog types are
@@ -2346,16 +2346,83 @@ common design pattern for tree walks).
 
 The initial intent was to make Hog stylistically and aesthetically resemble Python. In our first discussions about the language, we had envisioned statements being separated by line breaks and dynamic typing.
 
+
 \chapter{Translator Architecture}
 \label{chap:trans}
 
-To be written by Ben.
+\section{Architecture}
+At the highest level, the Hog architecture has three main phases (Figure ~\ref{fig:architecture}a). It begins with the Hog compilation phase, which puts a Hog source program through the Hog compiler, and translates it into an equivalent valid Java Hadoop source program. This Java program is then compiled into a jar file by the Java compiler. Finally, the jar file is sent to a valid Hadoop instance (the cluster), along with the input to the program, to perform the a distributed computation and output the results.
 
+The Hog compilation phase is further broken down into several key stages (Figure ~\ref{fig:compiler}b). We begin by using the lexer JFlex to provide our parser Cup with a stream of tokens. Cup parses these tokens to output an abstract syntax tree. The Symbol Table Visitor uses this abstract syntax tree to populate the symbol table with any functions and variables defined in the program. It also ensures that all variables are declared before they are used and partially decorates the tree with some type information. The Type Checking Visitor checks for any type conflicts, and fully decorates the tree with type information for every expression. The Semantic Analyzer uses the decorated AST to check for semantic errors, such as dead code blocks, or non-void functions that do contain return statements. Finally, the Java Generating Visitor walks the AST, and generates the Java Hadoop source program.
+
+All communication between these modules occurred through the Symbol Table and the Abstract Syntax Tree. The interfaces used to pass information between the phases were defined entirely by the Node classes making up the tree, and the SymbolTable and its contained Symbol classes. In this way, once the node and symbol classes were completed, the separate phases of the compiler could be written without explicitly integrating each phase.
+
+\pagebreak
+\begin{figure}
+\hfill
+\subfigure[Hog Platform]{\includegraphics[width=.28\linewidth]{diagram/hog_architecture.pdf}}
+\label{fig:platform}
+\hfill
+\subfigure[Hog Compiler]{\includegraphics[width=.5\linewidth]{diagram/compiler_architecture.pdf}}
+\label{fig:compiler}
+\hfill
+\caption{Hog Architecture}
+\label{fig:architecture}
+\end{figure}
+
+\section{Module Authors}
 \begin{itemize}
-\item Show the architectural block diagram of translator.
-\item Describe the interfaces between the modules.
-\item State which modules were written by which team members.
+  \item Lexer
+    \begin{itemize}
+      \item Samuel Messing
+    \end{itemize}
+    
+    \item Parser
+    \begin{itemize}
+      \item Samuel Messing
+      \item Benjamin Rapaport
+      \item Paul Tylkin
+    \end{itemize}
+    
+     \item Abstract Syntax Tree
+    \begin{itemize}
+      \item Samuel Messing
+      \item Benjamin Rapaport
+    \end{itemize}
+    
+     \item Symbol Table
+    \begin{itemize}
+      \item Jason Halpern
+      \item Benjamin Rapaport
+      \item Kurry Tran
+    \end{itemize}
+    
+     \item Symbol Table Visitor
+    \begin{itemize}
+      \item Benjamin Rapaport
+      \item Jason Halpern
+    \end{itemize}
+    
+    \item Type Checking Visitor
+    \begin{itemize}
+      \item Benjamin Rapaport
+      \item Jason Halpern
+      \item Samuel Messing
+    \end{itemize}
+    
+    \item Semantic Analyzer
+    \begin{itemize}
+      \item Paul Tylkin
+    \end{itemize}
+    
+    \item Java Generating Visitor
+    \begin{itemize}
+      \item Paul Tylkin
+    \end{itemize}
+    
+    
 \end{itemize}
+
 
 \chapter{Development and Run-Time Environment}
 \label{chap:environ}
@@ -2387,13 +2454,11 @@ Hadoop libraries being packaged with the job jar which is generated at the end c
 
 ################################################################
 ################################################################
-## Makefile for Hog Compilation										##
-## Programming Languages and Translator								##
-## Version 1.0														##
-##  Kurry Tran														##
-## 04 May 2012													##
-##																##
-##																##
+Makefile for Hog Compilation									
+Programming Languages and Translator								
+Version 1.0														
+Kurry Tran														
+04 May 2012													
 ################################################################
 ################################################################
 
