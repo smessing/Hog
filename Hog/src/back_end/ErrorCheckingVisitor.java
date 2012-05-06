@@ -46,6 +46,7 @@ import util.ast.node.SwitchStatementNode;
 import util.ast.node.TypeNode;
 import util.ast.node.UnOpNode;
 import util.error.UnreachableCodeError;
+import util.error.MissingReturnError;
 
 /**
  * Visitor class for error checking.
@@ -101,16 +102,27 @@ public class ErrorCheckingVisitor implements Visitor {
 		 *   x = 2*x;
 		 * }
 		 * 
-		 * will not compile into Java, and so if a Hog program 
+		 * will not compile into Java, and so if a Hog program has this construct,
+		 * Hog will throw an unreachable code exception. Similarly,
 		 * 
-		 * This pass through the program will check that there is no code after return statements
-		 * (unreachable code) in a Hog program.
+		 *   int max(int a, int b){
+  		 *			if (a > b){
+  	   	 *				return a;
+  		 * 			} else{
+  	   	 *				return b;
+  		 *			}
+  		 *			return 0;
+  		 * 	 }
+		 * 
+		 * will also throw an error in Java.
+		 * 
+		 * This pass through the program will check that there is no unreachable code in a Hog program.
 		 * 
 		 */
 		if (node.isNewScope()) {
 			LOGGER.finer("We are in a new scope now in node " + node);
 			this.pushReturnStack();
-		}
+		}	
 		if(returnFlagStack.get(returnFlagStack.size() - 1)) {
 			throw new UnreachableCodeError(
 					"The following statement is unreachable: "+ node.toSource());
@@ -152,16 +164,26 @@ public class ErrorCheckingVisitor implements Visitor {
     	*/
 		if (node instanceof FunctionNode){
 			List<Node> children = node.getChildren();
-			
-			if (Types.isVoidType(((FunctionNode)node).getType())){
+			if (!Types.isVoidType(((FunctionNode)node).getType())){ //if return type is not void
 		    	this.nonVoidFunctionFlag = true;
 		    	for (Node n : children) {
-				
+		    		if(n instanceof JumpStatementNode && ((JumpStatementNode) n).getJumpType() == JumpType.RETURN){
+		    			this.nonVoidFunctionFlag = false;
+		    		}
 		    	}
+			
+			
+			if (this.nonVoidFunctionFlag){
+			//	throw new MissingReturnError("The following function is missing a return statement: "+ node.toSource());
 			}
-		   
+			}
 		}
+		//System.out.println(nonVoidFunctionFlag);
+		List<Node> children = node.getChildren();
 		
+		for (Node n : children) {
+			visitFunctionReturns(n);
+		}
 	}
 	
 	@Override
