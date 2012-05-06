@@ -6632,23 +6632,3242 @@ DerivedType::=
 
 \subsection{\texttt{AbstractSyntaxTreeTester.java}}
 
+\begin{verbatim}
+package test;
 
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import back_end.TypeCheckingVisitor;
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.BiOpNode;
+import util.ast.node.ConstantNode;
+import util.ast.node.ExpressionNode;
+import util.ast.node.IdNode;
+import util.ast.node.MockExpressionNode;
+import util.ast.node.MockNode;
+import util.ast.node.Node;
+import util.ast.node.RelationalExpressionNode;
+import util.ast.node.UnOpNode;
+import util.type.Types;
+
+
+/**
+ * 
+ * Tests for the functionality provided by the AbstractSyntaxTree class.
+ * 
+ * @author Samuel Messing
+ * @author Jason Halpern
+ * 
+ */
+public class AbstractSyntaxTreeTester {
+
+	private ExpressionNode A;
+	private ExpressionNode B;
+	private ExpressionNode C;
+	private ExpressionNode D;
+	private ExpressionNode E;
+	private ExpressionNode F;
+	private ExpressionNode G;
+	private ExpressionNode H;
+	private ExpressionNode I;
+	private ExpressionNode J;
+	private AbstractSyntaxTree tree;
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() {
+		// A is root of tree, with children B, C
+		// B has children D, E
+		// C has children F, G
+		D = new MockExpressionNode();
+		E = new MockExpressionNode();
+		F = new MockExpressionNode();
+		G = new MockExpressionNode();
+		J = new MockExpressionNode();
+		H = new UnOpNode(UnOpNode.OpType.UMINUS, G);
+		I = new RelationalExpressionNode(BiOpNode.OpType.LESS, E, J);
+		B = new BiOpNode(BiOpNode.OpType.PLUS, D, I);
+		C = new BiOpNode(BiOpNode.OpType.MINUS, F, H);
+		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
+		tree = new AbstractSyntaxTree(A);
+	}
+
+	@After
+	public void tearDown() {
+	}
+
+	/**
+	 * Tests for correct ordering of nodes when generating preOrderTraversal
+	 * iterators.
+	 */
+	@Test
+	public void preOrderTraversalTest() {
+
+		List<Node> correctPreOrderTraversal = new ArrayList<Node>();
+
+		correctPreOrderTraversal.add(A);
+		correctPreOrderTraversal.add(B);
+		correctPreOrderTraversal.add(D);
+		correctPreOrderTraversal.add(I);
+		correctPreOrderTraversal.add(E);
+		correctPreOrderTraversal.add(J);
+		correctPreOrderTraversal.add(C);
+		correctPreOrderTraversal.add(F);
+		correctPreOrderTraversal.add(H);
+		correctPreOrderTraversal.add(G);
+
+		Iterator<Node> preOrderTraversal = tree.preOrderTraversal();
+ 
+		int index = 0;
+		while (preOrderTraversal.hasNext()) {
+			Node nextNode = preOrderTraversal.next();
+			Node correctNextNode = correctPreOrderTraversal.get(index);
+			assertEquals(
+					"It should compute the preOrderTraversal in the correct order.",
+					nextNode, correctNextNode);
+			index++;
+		}
+
+	}
+
+	/**
+	 * Tests for correct ordering of nodes when generating postOrderTraversal
+	 * iterators.
+	 */
+	@Test
+	public void postOrderTraversalTest() {
+
+		List<Node> correctPostOrderTraversal = new ArrayList<Node>();
+
+		correctPostOrderTraversal.add(D);
+		correctPostOrderTraversal.add(E);
+		correctPostOrderTraversal.add(J);
+		correctPostOrderTraversal.add(I);
+		correctPostOrderTraversal.add(B);
+		correctPostOrderTraversal.add(F);
+		correctPostOrderTraversal.add(G);
+		correctPostOrderTraversal.add(H);
+		correctPostOrderTraversal.add(C);
+		correctPostOrderTraversal.add(A);
+
+		Iterator<Node> postOrderTraversal = tree.postOrderTraversal();
+
+		int index = 0;
+		while (postOrderTraversal.hasNext()) {
+			Node nextNode = postOrderTraversal.next();
+			Node correctNextNode = correctPostOrderTraversal.get(index);
+			assertEquals(
+					"It should compute the postOrderTraversal in the correct order.",
+					nextNode, correctNextNode);
+			index++;
+		}
+
+	}
+	
+
+
+
+}
+
+\end{verbatim}
 
 \subsection{\texttt{CodeGeneratingTester.java}}
 
+\begin{verbatim}
+package test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.StringReader;
+import java.util.Iterator;
+
+import org.junit.Test;
+
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.IdNode;
+import util.ast.node.Node;
+import util.ast.node.ProgramNode;
+import util.symbol_table.Symbol;
+import util.symbol_table.SymbolTable;
+import back_end.CodeGeneratingVisitor;
+import back_end.SymbolTableVisitor;
+import back_end.TypeCheckingVisitor;
+import front_end.Lexer;
+import front_end.Parser;
+
+/**
+ * 
+ * @author Jason Halpern
+ *
+ */
+public class CodeGeneratingTester {
+
+	
+	@Test
+	public void codeGeneratingTest() {
+		String filename = "src/test/WordCount.hog";
+		ProgramNode root = null;
+		FileReader fileReader;
+	    try {
+	    	fileReader = new FileReader(new File(filename));
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    SymbolTable.printSymbolTable();
+	    System.out.println("\n\n\n");
+	    SymbolTable.print();
+	    
+	    TypeCheckingVisitor typeCheckVisitor = new TypeCheckingVisitor(ast);
+	    typeCheckVisitor.walk();
+	 
+	    CodeGeneratingVisitor codeGenVisitor = new CodeGeneratingVisitor(ast);
+	    codeGenVisitor.walk();
+	    String temp = codeGenVisitor.getCode();
+	    	    
+		System.out.println(temp);
+
+	}
+	
+	@Test
+	public void codeGeneratingTestTwo() {
+		String filename = "src/test/Factorial.hog";
+		ProgramNode root = null;
+		FileReader fileReader;
+	    try {
+	    	fileReader = new FileReader(new File(filename));
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    SymbolTable.printSymbolTable();
+	    System.out.println("\n\n\n");
+	    SymbolTable.print();
+	    
+	    TypeCheckingVisitor typeCheckVisitor = new TypeCheckingVisitor(ast);
+	    typeCheckVisitor.walk();
+	 
+	    CodeGeneratingVisitor codeGenVisitor = new CodeGeneratingVisitor(ast);
+	    codeGenVisitor.walk();
+	    String temp = codeGenVisitor.getCode();
+	    	    
+		System.out.println(temp);
+
+	}
+	
+	@Test
+	public void codeGeneratingTestThree() {
+		String filename = "src/test/MergeSort.hog";
+		ProgramNode root = null;
+		FileReader fileReader;
+	    try {
+	    	fileReader = new FileReader(new File(filename));
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    SymbolTable.printSymbolTable();
+	    System.out.println("\n\n\n");
+	    SymbolTable.print();
+	    
+	    TypeCheckingVisitor typeCheckVisitor = new TypeCheckingVisitor(ast);
+	    typeCheckVisitor.walk();
+	 
+	    CodeGeneratingVisitor codeGenVisitor = new CodeGeneratingVisitor(ast);
+	    codeGenVisitor.walk();
+	    String temp = codeGenVisitor.getCode();
+	    	    
+		System.out.println(temp);
+
+	}
+}
+
+\end{verbatim}
+
 \subsection{\texttt{LexerTester.java}}
+
+\begin{verbatim}
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import front_end.Lexer;
+import front_end.sym;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import java_cup.runtime.Symbol;
+
+/**
+ * Tests Lexer's performance on decomposing different inputs into the correct
+ * sequence of tokens.
+ * 
+ * @author Jason Halpern
+ * @author Samuel Messing
+ * 
+ */
+public class LexerTester {
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() {
+
+	}
+
+	@After
+	public void tearDown() {
+	}
+
+	/**
+	 * Tests for correct parsing of addition operator and its operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID PLUS ID for
+	 * strings like "a + b" and INT_CONST PLUS INT_CONST for strings like
+	 * "1 + 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void additionSymbolTest1() throws IOException {
+
+		String text = "2 + 5";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a PLUS", sym.PLUS, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of addition operator and its operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID PLUS ID for
+	 * strings like "a + b" and INT_CONST PLUS INT_CONST for strings like
+	 * "1 + 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void additionSymbolTest2() throws IOException {
+
+		String text = "a + b";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an ID", sym.ID, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a PLUS", sym.PLUS, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be an ID", sym.ID, tokenList
+				.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of subtraction operator and its operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID MINUS ID
+	 * for strings like "a - b" and INT_CONST MINUS INT_CONST for strings like
+	 * "1 - 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void subtractionSymbolTest1() throws IOException {
+
+		String text = "a - b";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an ID", sym.ID, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a MINUS", sym.MINUS, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be an ID", sym.ID, tokenList
+				.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of subtraction operator and its operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID MINUS ID
+	 * for strings like "a - b" and INT_CONST MINUS INT_CONST for strings like
+	 * "1 - 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void subtractionSymbolTest2() throws IOException {
+
+		String text = "1 - 2";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a MINUS", sym.MINUS, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of division operator and its operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID DIVIDE ID
+	 * for strings like "a / b" and INT_CONST DIVIDE INT_CONST for strings like
+	 * "1 / 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void divisionSymbolTest1() throws IOException {
+
+		String text = "1 / 2";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a DIVIDE", sym.DIVIDE,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of division operator and its operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID DIVIDE ID
+	 * for strings like "a / b" and INT_CONST DIVIDE INT_CONST for strings like
+	 * "1 / 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void divisionSymbolTest2() throws IOException {
+
+		String text = "a / b";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an ID", sym.ID, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a DIVIDE", sym.DIVIDE,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be an ID", sym.ID, tokenList
+				.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of multiplication operator and its operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID TIMES ID
+	 * for strings like "a * b" and INT_CONST TIMES INT_CONST for strings like
+	 * "1 * 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void multiplicationSymbolTest1() throws IOException {
+
+		String text = "1 * 2";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a TIMES", sym.TIMES, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of multiplication operator and its operands.
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of ID TIMES ID
+	 * for strings like "a * b" and INT_CONST TIMES INT_CONST for strings like
+	 * "1 * 2".
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void multiplicationSymbolTest2() throws IOException {
+
+		String text = "a * b";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an ID", sym.ID, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a TIMES", sym.TIMES, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be an ID", sym.ID, tokenList
+				.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of a parenthesized expression.
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of L_PAREN ID
+	 * R_PAREN for strings like "(a)"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void parenthesesSymbolTest() throws IOException {
+
+		String text = "(a)";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an L_PAREN", sym.L_PAREN,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a ID", sym.ID, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be an R_PAREN", sym.R_PAREN,
+				tokenList.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of the postfix increment operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of ID INCR for
+	 * strings like "a++"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void incrementSymbolTest() throws IOException {
+
+		String text = "a++";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 2 tokens for the string '" + text + "'", 2,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a INCR", sym.INCR, tokenList
+				.get(1).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the postfix decrement operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of ID DECR for
+	 * strings like "a--"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void decrementSymbolTest() throws IOException {
+
+		String text = "a--";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 2 tokens for the string '" + text + "'", 2,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a DECR", sym.DECR, tokenList
+				.get(1).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the logical 'and'
+	 * operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of BOOL_CONST
+	 * AND BOOL_CONST for strings like "true and false" and a token stream of ID
+	 * AND ID for strings like "variable and variable"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void andSymbolTest1() throws IOException {
+
+		String text = "true and false";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a BOOL_CONST", sym.BOOL_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a AND", sym.AND, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a BOOL_CONST", sym.BOOL_CONST,
+				tokenList.get(2).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the logical 'and'
+	 * operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of BOOL_CONST
+	 * AND BOOL_CONST for strings like "true and false" and a token stream of ID
+	 * AND ID for strings like "variable and variable"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void andSymbolTest2() throws IOException {
+
+		String text = "variable and variable";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a AND", sym.AND, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the logical 'or'
+	 * operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of BOOL_CONST OR
+	 * BOOL_CONST for strings like "true or false" and a token stream of ID OR
+	 * ID for strings like "variable or variable"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void orSymbolTest1() throws IOException {
+
+		String text = "true or false";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a BOOL_CONST", sym.BOOL_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a OR", sym.OR, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a BOOL_CONST", sym.BOOL_CONST,
+				tokenList.get(2).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the logical 'or'
+	 * operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of BOOL_CONST OR
+	 * BOOL_CONST for strings like "true or false" and a token stream of BOOL OR
+	 * BOOL for strings like "bool or bool"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void orSymbolTest2() throws IOException {
+
+		String text = "variable or variable";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a OR", sym.OR, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the logical 'not'
+	 * operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of NOT
+	 * BOOL_CONST for strings like "not true"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void notSymbolTest() throws IOException {
+
+		String text = "not true";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 2 tokens for the string '" + text + "'", 2,
+				tokenList.size());
+		assertEquals("The first token should be a NOT", sym.NOT,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a BOOL", sym.BOOL_CONST,
+				tokenList.get(1).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'greater than'
+	 * comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * GRTR INT_CONST for strings like "2 > 1" and a token stream of ID GRTR ID
+	 * for strings like "number > number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void greaterThanSymbolTest1() throws IOException {
+
+		String text = "2 > 1";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a GRTR", sym.GRTR, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'greater than'
+	 * comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * GRTR INT_CONST for strings like "2 > 1" and a token stream of ID GRTR ID
+	 * for strings like "number > number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void greaterThanSymbolTest2() throws IOException {
+
+		String text = "number > number";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a GRTR", sym.GRTR, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'greater than or
+	 * equal to' comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * GRTR_EQL INT_CONST for strings like "2 >= 1" and a token stream of ID
+	 * GRTR_EQL ID for strings like "number >= number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void greaterThanOrEqualSymbolTest1() throws IOException {
+
+		String text = "2 >= 1";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a GRTR_EQL", sym.GRTR_EQL,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'greater than or
+	 * equal to' comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * GRTR_EQL INT_CONST for strings like "2 >= 1" and a token stream of ID
+	 * GRTR_EQL ID for strings like "number >= number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void greaterThanOrEqualSymbolTest2() throws IOException {
+
+		String text = "number >= number";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a GRTR_EQL", sym.GRTR_EQL,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'less than'
+	 * comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * LESS INT_CONST for strings like "2 < 1" and a token stream of ID LESS ID
+	 * for strings like "number < number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void lessThanSymbolTest1() throws IOException {
+
+		String text = "2 < 1";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a LESS", sym.LESS, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'less than'
+	 * comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * LESS INT_CONST for strings like "2 < 1" and a token stream of ID LESS ID
+	 * for strings like "number < number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void lessThanSymbolTest2() throws IOException {
+
+		String text = "number < number";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a LESS", sym.LESS, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'less than or equal
+	 * to' comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * LESS_EQL INT_CONST for strings like "2 <= 1" and a token stream of ID
+	 * LESS_EQL ID for strings like "number <= number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void lessThanOrEqualSymbolTest1() throws IOException {
+
+		String text = "2 <= 1";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a LESS_EQL", sym.LESS_EQL,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'less than or equal
+	 * to' comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * LESS_EQL INT_CONST for strings like "2 <= 1" and a token stream of ID
+	 * LESS_EQL ID for strings like "number <= number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void lessThanOrEqualSymbolTest2() throws IOException {
+
+		String text = "number <= number";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a LESS_EQL", sym.LESS_EQL,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'not equal to'
+	 * comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * NOT_EQLS INT_CONST for strings like "2 != 1" and a token stream of ID
+	 * NOT_EQLS ID for strings like "number != number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void notEqualSymbolTest1() throws IOException {
+
+		String text = "2 != 1";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a NOT_EQLS", sym.NOT_EQLS,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'not equal to'
+	 * comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * NOT_EQLS INT_CONST for strings like "2 != 1" and a token stream of ID
+	 * NOT_EQLS ID for strings like "number != number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void notEqualSymbolTest2() throws IOException {
+
+		String text = "number != number";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a NOT_EQLS", sym.NOT_EQLS,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'equal to'
+	 * comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * DBL_EQLS INT_CONST for strings like "2 == 1" and a token stream of ID
+	 * DBL_EQLS ID for strings like "number == number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void equalSymbolTest1() throws IOException {
+
+		String text = "2 == 1";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a DBL_EQLS", sym.DBL_EQLS,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'equal to'
+	 * comparison operator
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT_CONST
+	 * DBL_EQLS INT_CONST for strings like "2 == 1" and a token stream of ID
+	 * DBL_EQLS ID for strings like "number == number"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void equalSymbolTest2() throws IOException {
+
+		String text = "number == number";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a DBL_EQLS", sym.DBL_EQLS,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with 'if'
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of IF L_PAREN ID
+	 * GRTR ID R_PAREN for strings like "if(number > number)"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void ifSymbolTest() throws IOException {
+
+		String text = "if(number > number)";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 6 tokens for the string '" + text + "'", 6,
+				tokenList.size());
+		assertEquals("The first token should be a IF", sym.IF, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+		assertEquals("The fourth token should be a GRTR", sym.GRTR, tokenList
+				.get(3).intValue());
+		assertEquals("The fifth token should be a ID", sym.ID, tokenList.get(4)
+				.intValue());
+		assertEquals("The sixth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(5).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements surrounded by braces '{' and
+	 * '}'
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of L_BRACE INT
+	 * ID R_BRACE for strings like "{  int variable }"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void braceSymbolTest() throws IOException {
+
+		String text = "{  int variable }";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 4 tokens for the string '" + text + "'", 4,
+				tokenList.size());
+		assertEquals("The first token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a INT", sym.INT, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+		assertEquals("The fourth token should be a R_BRACE", sym.R_BRACE,
+				tokenList.get(3).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with an 'else' clause
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of IF L_PAREN ID
+	 * GRTR ID R_PAREN L_BRACE INT ID R_BRACE ELSE L_BRACE INT ID R_BRACE for
+	 * strings like
+	 * "if(number > numberTwo){  int variable } else {  int other }"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void elseSymbolTest() throws IOException {
+
+		String text = "if(number > numberTwo){  int variable } else {  int other }";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals("It should produce 15 tokens for the string '" + text
+				+ "'", 15, tokenList.size());
+		assertEquals("The first token should be a IF", sym.IF, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+		assertEquals("The fourth token should be a GRTR", sym.GRTR, tokenList
+				.get(3).intValue());
+		assertEquals("The fifth token should be a ID", sym.ID, tokenList.get(4)
+				.intValue());
+		assertEquals("The sixth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(5).intValue());
+		assertEquals("The seventh token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(6).intValue());
+		assertEquals("The eighth token should be a INT", sym.INT, tokenList
+				.get(7).intValue());
+		assertEquals("The ninth token should be a ID", sym.ID, tokenList.get(8)
+				.intValue());
+		assertEquals("The tenth token should be a R_BRACE", sym.R_BRACE,
+				tokenList.get(9).intValue());
+		assertEquals("The eleventh token should be a ELSE", sym.ELSE, tokenList
+				.get(10).intValue());
+		assertEquals("The twelfth token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(11).intValue());
+		assertEquals("The thirteenth token should be a INT", sym.INT, tokenList
+				.get(12).intValue());
+		assertEquals("The fourteenth token should be a ID", sym.ID, tokenList
+				.get(13).intValue());
+		assertEquals("The fifteenth token should be a R_BRACE", sym.R_BRACE,
+				tokenList.get(14).intValue());
+	}
+	
+		@Test
+		public void lexerTextTest() throws IOException {
+
+			String text = "\"friend\", \"time\", \"now\"";
+			StringReader stringReader = new StringReader(text);
+			Lexer lexer = new Lexer(stringReader);
+			List<Integer> tokenList = new ArrayList<Integer>();
+			Symbol token = lexer.next_token();
+
+			while (token.sym != sym.EOF) {
+				tokenList.add(token.sym);
+				token = lexer.next_token();
+			}
+
+			assertEquals("It should produce 5 tokens for the string '" + text
+					+ "'", 5, tokenList.size());
+			assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+					.intValue());
+			assertEquals("The second token should be a COMMA", sym.COMMA,
+					tokenList.get(1).intValue());
+			assertEquals("The second token should be a ID", sym.ID,
+					tokenList.get(2).intValue());
+			assertEquals("The second token should be a COMMA", sym.COMMA,
+					tokenList.get(3).intValue());
+			assertEquals("The second token should be a ID", sym.ID,
+					tokenList.get(4).intValue());
+	 }
+
+
+	/**
+	 * Tests for correct parsing of the statements with an 'elseif' clause
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of IF L_PAREN ID
+	 * GRTR ID R_PAREN L_BRACE INT ID SEMICOL R_BRACE ELSEIF L_PAREN ID DBL_EQLS
+	 * ID R_PAREN L_BRACE INT ID SEMICOL R_BRACE ELSE L_BRACE INT ID SEMICOL
+	 * R_BRACE for strings like "if(number > numberTwo){ int variable; }
+	 * elseif(number == numberTwo) { int next; } else { int other; }"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void elseIfSymbolTest() throws IOException {
+
+		String text = "if(number > numberTwo){  int variable; } elseif (number == numberTwo)"
+				+ "{  int next; } else {  int other; }";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals("It should produce 28 tokens for the string '" + text
+				+ "'", 28, tokenList.size());
+		assertEquals("The first token should be a IF", sym.IF, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+		assertEquals("The fourth token should be a GRTR", sym.GRTR, tokenList
+				.get(3).intValue());
+		assertEquals("The fifth token should be a ID", sym.ID, tokenList.get(4)
+				.intValue());
+		assertEquals("The sixth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(5).intValue());
+		assertEquals("The seventh token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(6).intValue());
+		assertEquals("The eighth token should be a INT", sym.INT, tokenList
+				.get(7).intValue());
+		assertEquals("The ninth token should be a ID", sym.ID, tokenList.get(8)
+				.intValue());
+		assertEquals("The tenth token should be a SEMICOL", sym.SEMICOL,
+				tokenList.get(9).intValue());
+		assertEquals("The eleventh token should be a R_BRACE", sym.R_BRACE,
+				tokenList.get(10).intValue());
+		assertEquals("The twelfth token should be a ELSEIF", sym.ELSEIF,
+				tokenList.get(11).intValue());
+		assertEquals("The thirteenth token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(12).intValue());
+		assertEquals("The fourteenth token should be a ID", sym.ID, tokenList
+				.get(13).intValue());
+		assertEquals("The fifteenth token should be a DBL_EQLS", sym.DBL_EQLS,
+				tokenList.get(14).intValue());
+		assertEquals("The sixteenth token should be a ID", sym.ID, tokenList
+				.get(15).intValue());
+		assertEquals("The seventeenth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(16).intValue());
+		assertEquals("The eighteenth token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(17).intValue());
+		assertEquals("The nineteenth token should be a INT", sym.INT, tokenList
+				.get(18).intValue());
+		assertEquals("The twentieth token should be a ID", sym.ID, tokenList
+				.get(19).intValue());
+		assertEquals("The twenty first token should be a SEMICOL", sym.SEMICOL,
+				tokenList.get(20).intValue());
+		assertEquals("The twenty second token should be a R_BRACE",
+				sym.R_BRACE, tokenList.get(21).intValue());
+		assertEquals("The twenty third token should be a ELSE", sym.ELSE,
+				tokenList.get(22).intValue());
+		assertEquals("The twenth fourth token should be a L_BRACE",
+				sym.L_BRACE, tokenList.get(23).intValue());
+		assertEquals("The twenty fifth token should be a INT", sym.INT,
+				tokenList.get(24).intValue());
+		assertEquals("The twenty sixth token should be a ID", sym.ID, tokenList
+				.get(25).intValue());
+		assertEquals("The twenty seventh token should be a SEMICOL",
+				sym.SEMICOL, tokenList.get(26).intValue());
+		assertEquals("The twenty eighth token should be a R_BRACE",
+				sym.R_BRACE, tokenList.get(27).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'assignment' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of INT ID ASSIGN
+	 * INT_CONST for strings like "int variable = 1"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void assignmentSymbolTest1() throws IOException {
+
+		String text = "int variable = 1";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 4 tokens for the string '" + text + "'", 4,
+				tokenList.size());
+		assertEquals("The first token should be a INT", sym.INT,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a ID", sym.ID, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a ASSIGN", sym.ASSIGN,
+				tokenList.get(2).intValue());
+		assertEquals("The fourth token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(3).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'assignment' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of BOOL ID
+	 * ASSIGN BOOL_CONST for strings like "bool variable = true"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void assignmentSymbolTest2() throws IOException {
+
+		String text = "bool variable = true";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 4 tokens for the string '" + text + "'", 4,
+				tokenList.size());
+		assertEquals("The first token should be a BOOL", sym.BOOL, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a ID", sym.ID, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a ASSIGN", sym.ASSIGN,
+				tokenList.get(2).intValue());
+		assertEquals("The fourth token should be a BOOL_CONST", sym.BOOL_CONST,
+				tokenList.get(3).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'assignment' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of REAL ID
+	 * ASSIGN REAL_CONST for strings like "bool variable = true"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void assignmentSymbolTest3() throws IOException {
+
+		String text = "real variable = 1.3";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 4 tokens for the string '" + text + "'", 4,
+				tokenList.size());
+		assertEquals("The first token should be a REAL", sym.REAL, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a ID", sym.ID, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a ASSIGN", sym.ASSIGN,
+				tokenList.get(2).intValue());
+		assertEquals("The fourth token should be a REAL_CONST", sym.REAL_CONST,
+				tokenList.get(3).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'assignment' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of TEXT ID
+	 * ASSIGN TEXT_LITERAL for strings like "TEXT variable = friend"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void assignmentSymbolTest4() throws IOException {
+
+		String text = "text variable = \"friend\"";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 4 tokens for the string '" + text + "'", 4,
+				tokenList.size());
+		assertEquals("The first token should be a TEXT", sym.TEXT, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a ID", sym.ID, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a ASSIGN", sym.ASSIGN,
+				tokenList.get(2).intValue());
+		assertEquals("The fourth token should be a TEXT_LITERAL",
+				sym.TEXT_LITERAL, tokenList.get(3).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with 'while'
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of WHILE L_PAREN
+	 * ID LESS INT_CONST R_PAREN for strings like "while(count < 10)"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void whileSymbolTest() throws IOException {
+
+		String text = "while(count < 10)";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 6 tokens for the string '" + text + "'", 6,
+				tokenList.size());
+		assertEquals("The first token should be a WHILE", sym.WHILE, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+		assertEquals("The fourth token should be a LESS", sym.LESS, tokenList
+				.get(3).intValue());
+		assertEquals("The fifth token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(4).intValue());
+		assertEquals("The sixth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(5).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with the 'return' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of RETURN ID for
+	 * strings like "return variable"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void returnSymbolTest() throws IOException {
+
+		String text = "return variable";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 2 tokens for the string '" + text + "'", 2,
+				tokenList.size());
+		assertEquals("The first token should be a RETURN", sym.RETURN,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a ID", sym.ID, tokenList
+				.get(1).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with brackets '[' and ']'
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of ID L_BRKT
+	 * INT_CONST R_BRKT for strings like "a[2]"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void bracketSymbolTest() throws IOException {
+
+		String text = "a[2]";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 4 tokens for the string '" + text + "'", 4,
+				tokenList.size());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(0)
+				.intValue());
+		assertEquals("The second token should be a L_BRKT", sym.L_BRKT,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(2).intValue());
+		assertEquals("The fourth token should be a R_BRKT", sym.R_BRKT,
+				tokenList.get(3).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the statements with 'switch' statements Also
+	 * tests for the correct parsing of 'case' and 'default' since they are
+	 * inherent to switch statements
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of SWITCH
+	 * L_PAREN ID R_PAREN CASE INT_CONST COL ID ASSIGN INT_CONST CASE INT_CONST
+	 * COL ID ASSIGN INT_CONST DEFAULT COL ID ASSIGN INT_CONST for strings like
+	 * "switch(test) case 1: variable=1 case 2: variable=2 default: variable=10"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void switchSymbolTest() throws IOException {
+
+		String text = "switch(test) case 1: variable=1 case 2: variable=2 default: variable=10";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals("It should produce 21 tokens for the string '" + text
+				+ "'", 21, tokenList.size());
+		assertEquals("The first token should be a SWITCH", sym.SWITCH,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be a ID", sym.ID, tokenList.get(2)
+				.intValue());
+		assertEquals("The fourth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(3).intValue());
+		assertEquals("The fifth token should be a CASE", sym.CASE, tokenList
+				.get(4).intValue());
+		assertEquals("The sixth token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(5).intValue());
+		assertEquals("The seventh token should be a COL", sym.COL, tokenList
+				.get(6).intValue());
+		assertEquals("The eighth token should be a ID", sym.ID, tokenList
+				.get(7).intValue());
+		assertEquals("The ninth token should be a ASSIGN", sym.ASSIGN,
+				tokenList.get(8).intValue());
+		assertEquals("The tenth token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(9).intValue());
+		assertEquals("The eleventh token should be a CASE", sym.CASE, tokenList
+				.get(10).intValue());
+		assertEquals("The twelfth token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(11).intValue());
+		assertEquals("The thirteenth token should be a COL", sym.COL, tokenList
+				.get(12).intValue());
+		assertEquals("The fourteenth token should be a ID", sym.ID, tokenList
+				.get(13).intValue());
+		assertEquals("The fifteenth token should be a ASSIGN", sym.ASSIGN,
+				tokenList.get(14).intValue());
+		assertEquals("The sixteenth token should be a INT_CONST",
+				sym.INT_CONST, tokenList.get(15).intValue());
+		assertEquals("The seventeenth token should be a DEFAULT", sym.DEFAULT,
+				tokenList.get(16).intValue());
+		assertEquals("The eighteenth token should be a COL", sym.COL, tokenList
+				.get(17).intValue());
+		assertEquals("The nineteenth token should be a ID", sym.ID, tokenList
+				.get(18).intValue());
+		assertEquals("The twentieth token should be a ASSIGN", sym.ASSIGN,
+				tokenList.get(19).intValue());
+		assertEquals("The twenty first token should be a INT_CONST",
+				sym.INT_CONST, tokenList.get(20).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of the 'list' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces a token stream of LIST LESS INT
+	 * GRTR ID L_PAREN INT_CONST R_PAREN for strings like "list<int> myList(5)"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void listSymbolTest() throws IOException {
+
+		String text = "list<int> myList(5)";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 8 tokens for the string '" + text + "'", 8,
+				tokenList.size());
+		assertEquals("The first token should be a LIST", sym.LIST, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a LESS", sym.LESS, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be a INT", sym.INT,
+				tokenList.get(2).intValue());
+		assertEquals("The fourth token should be a GRTR", sym.GRTR, tokenList
+				.get(3).intValue());
+		assertEquals("The first token should be a ID", sym.ID, tokenList.get(4)
+				.intValue());
+		assertEquals("The second token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(5).intValue());
+		assertEquals("The third token should be a INT_CONST", sym.INT_CONST,
+				tokenList.get(6).intValue());
+		assertEquals("The fourth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(7).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the '@Main' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of MAIN L_BRACE
+	 * R_BRACE for strings like "@Main{}"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void mainSymbolTest() throws IOException {
+
+		String text = "@Main{}";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an MAIN", sym.MAIN, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be an R_BRACE", sym.R_BRACE,
+				tokenList.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of the '@Functions' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of FUNCTIONS
+	 * L_BRACE R_BRACE for strings like "@Functions{}"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void functionsSymbolTest() throws IOException {
+
+		String text = "@Functions{}";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an FUNCTIONS", sym.FUNCTIONS,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be an R_BRACE", sym.R_BRACE,
+				tokenList.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of the '@Map' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of MAP L_BRACE
+	 * R_BRACE for strings like "@Map{}"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void mapSymbolTest() throws IOException {
+
+		String text = "@Map{}";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an MAP", sym.MAP, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be an R_BRACE", sym.R_BRACE,
+				tokenList.get(2).intValue());
+
+	}
+	
+	/**
+	 * Tests for correct parsing of  Text
+	 *
+	 * @throws IOException
+	 */
+	@Test
+	public void textTest() throws IOException {
+
+		String text = "text face";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 2 tokens for the string '" + text + "'", 2,
+				tokenList.size());
+		assertEquals("The first token should be TEXT", sym.TEXT, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a ID", sym.ID,
+				tokenList.get(1).intValue());
+	}
+
+	/**
+	 * Tests for correct parsing of the '@Reduce' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of REDUCE L_BRACE
+	 * R_BRACE for strings like "@Reduce{}"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void reduceSymbolTest() throws IOException {
+
+		String text = "@Reduce{}";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 3 tokens for the string '" + text + "'", 3,
+				tokenList.size());
+		assertEquals("The first token should be an REDUCE", sym.REDUCE,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be an R_BRACE", sym.R_BRACE,
+				tokenList.get(2).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of the 'arrow' symbol
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of MAP L_PAREN
+	 * INT ID COMMA REAL ID R_PAREN ARROW L_PAREN INT COMMA INT R_PAREN L_BRACE
+	 * R_BRACE for strings like "@Map(int num, real numTwo) -> (int, int){}"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void arrowSymbolTest() throws IOException {
+
+		String text = "@Map(int num, real numTwo) -> (int, int){}";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals("It should produce 16 tokens for the string '" + text
+				+ "'", 16, tokenList.size());
+		assertEquals("The first token should be an MAP", sym.MAP, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be an INT", sym.INT, tokenList
+				.get(2).intValue());
+		assertEquals("The fourth token should be an ID", sym.ID,
+				tokenList.get(3).intValue());
+		assertEquals("The fifth token should be a COMMA", sym.COMMA, tokenList
+				.get(4).intValue());
+		assertEquals("The sixth token should be an REAL", sym.REAL, tokenList
+				.get(5).intValue());
+		assertEquals("The seventh token should be an ID", sym.ID, tokenList
+				.get(6).intValue());
+		assertEquals("The eighth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(7).intValue());
+		assertEquals("The ninth token should be an ARROW", sym.ARROW, tokenList
+				.get(8).intValue());
+		assertEquals("The tenth token should be an L_PAREN", sym.L_PAREN,
+				tokenList.get(9).intValue());
+		assertEquals("The eleventh token should be a INT", sym.INT, tokenList
+				.get(10).intValue());
+		assertEquals("The twelfth token should be an COMMA", sym.COMMA,
+				tokenList.get(11).intValue());
+		assertEquals("The thirteenth token should be an INT", sym.INT,
+				tokenList.get(12).intValue());
+		assertEquals("The fourteenth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(13).intValue());
+		assertEquals("The fifteenth token should be an L_BRACE", sym.L_BRACE,
+				tokenList.get(14).intValue());
+		assertEquals("The sixteenth token should be an R_BRACE", sym.R_BRACE,
+				tokenList.get(15).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of the 'foreach' and 'in' symbols
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of FOREACH ID IN
+	 * ID for strings like "foreach variable in myList"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void foreachSymbolTest() throws IOException {
+
+		String text = "foreach variable in myList";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals(
+				"It should produce 4 tokens for the string '" + text + "'", 4,
+				tokenList.size());
+		assertEquals("The first token should be an FOREACH", sym.FOREACH,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a ID", sym.ID, tokenList
+				.get(1).intValue());
+		assertEquals("The third token should be an IN", sym.IN, tokenList
+				.get(2).intValue());
+		assertEquals("The third token should be an ID", sym.ID, tokenList
+				.get(3).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of the 'for' statements
+	 * 
+	 * Specifically, ensures that Lexer produces token streams of FOR L_PAREN
+	 * INT ID ASSIGN INT_CONST SEMICOL ID LESS INT_CONST SEMICOL ID INCR R_PAREN
+	 * for strings like "for (int i = 0; i < 10; i++)"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void forSymbolTest() throws IOException {
+
+		String text = "for (int i = 0; i < 10; i++)";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals("It should produce 14 tokens for the string '" + text
+				+ "'", 14, tokenList.size());
+		assertEquals("The first token should be an FOR", sym.FOR, tokenList
+				.get(0).intValue());
+		assertEquals("The second token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be an INT", sym.INT, tokenList
+				.get(2).intValue());
+		assertEquals("The fourth token should be an ID", sym.ID,
+				tokenList.get(3).intValue());
+		assertEquals("The fifth token should be an ASSIGN", sym.ASSIGN,
+				tokenList.get(4).intValue());
+		assertEquals("The sixth token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(5).intValue());
+		assertEquals("The seventh token should be an SEMICOL", sym.SEMICOL,
+				tokenList.get(6).intValue());
+		assertEquals("The eighth token should be an ID", sym.ID,
+				tokenList.get(7).intValue());
+		assertEquals("The ninth token should be an LESS", sym.LESS, tokenList
+				.get(8).intValue());
+		assertEquals("The tenth token should be an INT_CONST", sym.INT_CONST,
+				tokenList.get(9).intValue());
+		assertEquals("The eleventh token should be an SEMICOL", sym.SEMICOL,
+				tokenList.get(10).intValue());
+		assertEquals("The twelfth token should be an ID", sym.ID, tokenList
+				.get(11).intValue());
+		assertEquals("The thirteenth token should be an INCR", sym.INCR,
+				tokenList.get(12).intValue());
+		assertEquals("The fourteenth token should be an R_PAREN", sym.R_PAREN,
+				tokenList.get(13).intValue());
+
+	}
+
+	/**
+	 * Tests for correct parsing of a program with the
+	 * 
+	 * @Main, @Map, @Reduce and @Functions sections
+	 * 
+	 *        Specifically, ensures that Lexer produces token streams of
+	 *        FUNCTIONS L_BRACE R_BRACE MAP L_PAREN INT ID COMMA REAL ID R_PAREN
+	 *        ARROW L_PAREN INT COMMA INT R_PAREN L_BRACE R_BRACE REDUCE L_PAREN
+	 *        INT ID COMMA REAL ID R_PAREN ARROW L_PAREN INT COMMA INT R_PAREN
+	 *        L_BRACE R_BRACE MAIN L_BRACE R_BRACE for strings like
+	 *        "@Functions{}@Map(int num, real numTwo) -> (int, int){}
+	 * @Reduce(int num, real numTwo) -> (int, int){}@Main{}"
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void programStructureTest() throws IOException {
+
+		String text = "@Functions{}@Map(int num, real numTwo) -> (int, int){}"
+				+ "@Reduce(int num, real numTwo) -> (int, int){}@Main{}";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		List<Integer> tokenList = new ArrayList<Integer>();
+		Symbol token = lexer.next_token();
+
+		while (token.sym != sym.EOF) {
+			tokenList.add(token.sym);
+			token = lexer.next_token();
+		}
+
+		assertEquals("It should produce 38 tokens for the string '" + text
+				+ "'", 38, tokenList.size());
+		assertEquals("The first token should be an FUNCTIONS", sym.FUNCTIONS,
+				tokenList.get(0).intValue());
+		assertEquals("The second token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(1).intValue());
+		assertEquals("The third token should be an R_BRACE", sym.R_BRACE,
+				tokenList.get(2).intValue());
+		assertEquals("The fourth token should be an MAP", sym.MAP, tokenList
+				.get(3).intValue());
+		assertEquals("The fifth token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(4).intValue());
+		assertEquals("The sixth token should be an INT", sym.INT, tokenList
+				.get(5).intValue());
+		assertEquals("The seventh token should be an ID", sym.ID, tokenList
+				.get(6).intValue());
+		assertEquals("The eighth token should be a COMMA", sym.COMMA, tokenList
+				.get(7).intValue());
+		assertEquals("The ninth token should be an REAL", sym.REAL, tokenList
+				.get(8).intValue());
+		assertEquals("The tenth token should be an ID", sym.ID, tokenList
+				.get(9).intValue());
+		assertEquals("The eleventh token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(10).intValue());
+		assertEquals("The twelfth token should be an ARROW", sym.ARROW,
+				tokenList.get(11).intValue());
+		assertEquals("The thirteenth token should be an L_PAREN", sym.L_PAREN,
+				tokenList.get(12).intValue());
+		assertEquals("The fourteenth token should be a INT", sym.INT, tokenList
+				.get(13).intValue());
+		assertEquals("The fifteenth token should be an COMMA", sym.COMMA,
+				tokenList.get(14).intValue());
+		assertEquals("The sixteenth token should be an INT", sym.INT, tokenList
+				.get(15).intValue());
+		assertEquals("The seventeenth token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(16).intValue());
+		assertEquals("The eighteenth token should be a L_BRACE", sym.L_BRACE,
+				tokenList.get(17).intValue());
+		assertEquals("The nineteenth token should be an R_BRACE", sym.R_BRACE,
+				tokenList.get(18).intValue());
+		assertEquals("The twentieth token should be an REDUCE", sym.REDUCE,
+				tokenList.get(19).intValue());
+		assertEquals("The twenty first token should be a L_PAREN", sym.L_PAREN,
+				tokenList.get(20).intValue());
+		assertEquals("The twenty second token should be an INT", sym.INT,
+				tokenList.get(21).intValue());
+		assertEquals("The twenty third token should be an ID", sym.ID,
+				tokenList.get(22).intValue());
+		assertEquals("The twenty fourth token should be a COMMA", sym.COMMA,
+				tokenList.get(23).intValue());
+		assertEquals("The twenty fifth token should be an REAL", sym.REAL,
+				tokenList.get(24).intValue());
+		assertEquals("The twenty sixth token should be an ID", sym.ID,
+				tokenList.get(25).intValue());
+		assertEquals("The twenty seventh token should be a R_PAREN",
+				sym.R_PAREN, tokenList.get(26).intValue());
+		assertEquals("The twenty eighth token should be an ARROW", sym.ARROW,
+				tokenList.get(27).intValue());
+		assertEquals("The twenty ninth token should be an L_PAREN",
+				sym.L_PAREN, tokenList.get(28).intValue());
+		assertEquals("The thirtieth token should be a INT", sym.INT, tokenList
+				.get(29).intValue());
+		assertEquals("The thirty first token should be an COMMA", sym.COMMA,
+				tokenList.get(30).intValue());
+		assertEquals("The thirty second token should be an INT", sym.INT,
+				tokenList.get(31).intValue());
+		assertEquals("The thirty third token should be a R_PAREN", sym.R_PAREN,
+				tokenList.get(32).intValue());
+		assertEquals("The thirty fourth token should be a L_BRACE",
+				sym.L_BRACE, tokenList.get(33).intValue());
+		assertEquals("The thirty fifth token should be an R_BRACE",
+				sym.R_BRACE, tokenList.get(34).intValue());
+		assertEquals("The thirty sixth token should be an MAIN", sym.MAIN,
+				tokenList.get(35).intValue());
+		assertEquals("The thirty seventh token should be a L_BRACE",
+				sym.L_BRACE, tokenList.get(36).intValue());
+		assertEquals("The thirty eighth token should be an R_BRACE",
+				sym.R_BRACE, tokenList.get(37).intValue());
+
+	}
+
+	@Test
+	public void exceptionTypesTest() throws IOException {
+
+		String catchStart = "catch (";
+		String catchEnd = ")";
+		List<String> exceptionNameList = new ArrayList<String>(Arrays.asList(
+				"FileNotFoundException", "FileLoadException",
+				"ArrayOutOfBoundsException", "IncorrectArgumentException",
+				"TypeMismatchException", "NullReferenceException",
+				"ArithmeticException"));
+		
+		for (String s : exceptionNameList) {
+			String text = catchStart + s + catchEnd;
+			StringReader stringReader = new StringReader(text);
+			Lexer lexer = new Lexer(stringReader);
+			List<Integer> tokenList = new ArrayList<Integer>();
+			Symbol token = lexer.next_token();
+
+			while (token.sym != sym.EOF) {
+				tokenList.add(token.sym);
+				token = lexer.next_token();
+			}
+
+			assertEquals("It should produce 4 tokens for the string '" + text
+					+ "'", 4, tokenList.size());
+			assertEquals("The first token should be sym.CATCH",
+					sym.CATCH, tokenList.get(0).intValue());
+			assertEquals("The second token should be a L_PAREN", sym.L_PAREN,
+					tokenList.get(1).intValue());
+			//assertEquals("The third token should be an EXCEPTION", sym.EXCEPTION, tokenList.get(2).intValue());
+			assertEquals("The fourth token should be an R_PAREN", sym.R_PAREN,
+					tokenList.get(3).intValue());
+
+		}
+	}
+}
+
+\end{verbatim}
 
 \subsection{\texttt{NodeTester.java}}
 
+\begin{verbatim}
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.List;
+import java.util.ArrayList;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import util.ast.node.*;
+import util.ast.node.PostfixExpressionNode.PostfixType;
+import util.ast.node.BiOpNode.OpType;
+import util.ast.node.SectionNode.SectionName;
+
+import util.type.Types;
+
+/**
+ * 
+ * Tests for the functionality provided by the AbstractSyntaxTree class.
+ * 
+ * @author Samuel Messing
+ * @author Kurry Tran
+ * 
+ */
+public class NodeTester {
+
+	private ExpressionNode A;
+	private ExpressionNode B;
+	private ExpressionNode C;
+	private ExpressionNode D;
+	private ExpressionNode E;
+	private ExpressionNode F;
+	private ExpressionNode G;
+	
+	private ArgumentsNode __argumentsNode;
+	private BiOpNode __biOpNode;
+	private CatchesNode __catchesNode;
+	private ConstantNode __constantNode;
+	private DerivedTypeNode __derivedTypeNode;
+	private ElseIfStatementNode __elseIfStatementNode;
+	private ExceptionTypeNode __exceptionTypeNode;
+	private ExpressionNode __expressionNode;
+	private FunctionNode __functionNode;
+	private GuardingStatementNode __guardingStatementNode;
+	private IdNode __idNode;
+	private IfElseStatementNode __ifElseStatementNode;
+	private IterationStatementNode __iterationStatementNode;
+	private JumpStatementNode __jumpStatementNode;
+	private MockExpressionNode __mockExpressionNode;
+	private MockNode __mockNode;
+	private ParametersNode __parametersNode;
+	private PostfixExpressionNode __postfixExpressionNode;
+	private PrimaryExpressionNode __primaryExpressionNode;
+	private PrimitiveTypeNode __primitiveTypeNode;
+	private ProgramNode __programNode;
+	private RelationalExpressionNode __relationalExpressionNode;
+	private SectionNode __sectionNode;
+	private SectionTypeNode __sectionTypeNode;
+	private SelectionStatementNode __selectionStatementNode;
+	private StatementListNode __statementListNode;
+	private StatementNode __statementNode;
+	private SwitchStatementNode __switchStatementNode;
+	private TypeNode __typeNode;
+	private UnOpNode __unOpNode;
+
+	public static final BiOpNode.OpType OPTYPE_ASSIGN = BiOpNode.OpType.ASSIGN;
+	public static final String ERROR_MESSAGE_TO_STRING = "Nodes should return the proper name when toString() is called.";
+	public static final String ERROR_MESSAGE_GET_NAME = "Nodes should return the proper name when getName() is called.";
+
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() {
+		// A (MultExprNode) -> B (MultExprNode) * C (idNode)
+		// B -> D * E
+		C = new IdNode("C");
+		D = new UnOpNode(UnOpNode.OpType.CAST, new MockExpressionNode());
+		E = new UnOpNode(UnOpNode.OpType.CAST, new MockExpressionNode());
+		B = new BiOpNode(BiOpNode.OpType.TIMES, D, E);
+		A = new BiOpNode(BiOpNode.OpType.TIMES, B, C);
+		
+		/* FUNCTION_CALL<unknown>
+		 * |-- IdNode<unknown,emit> 
+		 * L__ ArgumentsNode
+		 * 		|-- IdNode<unknown,count>
+		 * 		L__ IdNode<unknown,word>
+		 * 
+		 */	
+		__argumentsNode = new ArgumentsNode(new IdNode("values"),new IdNode("next"));
+		__postfixExpressionNode = new PostfixExpressionNode(PostfixType.METHOD_WITH_PARAMS,  new IdNode("UNKNOWN"), new IdNode("emit"));
+		
+		/* StatementListNode
+		 * BiOpNode<ASSIGN>
+		 * IdNode<Primitive Type: INT, count>
+		 * ConstantNode<Primitive Type: INT>
+		 * 
+		 */
+		__statementListNode = new StatementListNode(new BiOpNode(BiOpNode.OpType.ASSIGN,new IdNode("count"),new ConstantNode(Types.Primitive.INT,"constant")));
+		__sectionNode = new SectionNode(__statementListNode, SectionNode.SectionName.MAIN);
+		__biOpNode = new BiOpNode(BiOpNode.OpType.ASSIGN, A, B);
+		__catchesNode = new CatchesNode(__idNode, __statementListNode);
+		__constantNode = new ConstantNode(null, null);
+		__derivedTypeNode = new DerivedTypeNode(Types.Derived.LIST, null);
+		__elseIfStatementNode = new ElseIfStatementNode(A, __statementListNode, __elseIfStatementNode);
+		__exceptionTypeNode = new ExceptionTypeNode(null);
+		__functionNode = new FunctionNode(null, null, __parametersNode, __statementListNode);
+		__guardingStatementNode = new GuardingStatementNode(__statementListNode, __catchesNode);
+		__idNode = new IdNode("foo");
+		__ifElseStatementNode = new IfElseStatementNode(A, __statementListNode, __elseIfStatementNode, null);
+		__iterationStatementNode = new IterationStatementNode(A, A, __statementListNode) ;
+		__jumpStatementNode = new JumpStatementNode(null);
+		__mockExpressionNode = new MockExpressionNode();	
+		__mockNode= new MockNode();
+		__parametersNode = new ParametersNode(null, null);
+		__primaryExpressionNode = new PrimaryExpressionNode();
+		__primitiveTypeNode = new PrimitiveTypeNode(null);
+		__programNode = new ProgramNode(__sectionNode, __sectionNode, __sectionNode, __sectionNode);
+		__relationalExpressionNode = new RelationalExpressionNode(null, A, A);
+		__sectionTypeNode = new SectionTypeNode(__idNode, __idNode, __typeNode, __typeNode);
+		 __switchStatementNode = new SwitchStatementNode(A, __statementListNode);
+		__selectionStatementNode = new SelectionStatementNode(A);
+		__statementNode = new StatementNode();
+		__unOpNode = new UnOpNode(null, A);
+	
+	}
+
+	@After
+	public void tearDown() {
+	}
+
+	@Test
+	public void getNameTest1(){
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ArgumentsNode", __argumentsNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "BiOpNode", __biOpNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "CatchesNode", __catchesNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ConstantNode", __constantNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "DerivedTypeNode", __derivedTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ElseIfStatementNode", __elseIfStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ExceptionTypeNode", __exceptionTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ExpressionNode", __expressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "FunctionNode", __functionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "GuardingStatementNode", __guardingStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IdNode", __idNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IfElseStatementNode", __ifElseStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IterationStatementNode", __iterationStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "JumpStatementNode", __jumpStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "MockExpressionNode", __mockExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "MockNode", __mockNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ParametersNode", __parametersNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PostFixExpressionNode", __postfixExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PrimaryExpressionNode", __primaryExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PrimitiveTypeNode", __primitiveTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ProgramNode", __programNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "RelationalExpressionNode", __relationalExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "SectionNode", __sectionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementListNode", __statementListNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementNode", __statementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "SwitchStatementNode", __switchStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "UnOpNode", __unOpNode.getName());		
+	}
+	
+	@Test
+	public void getNameTest2(){
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ArgumentsNode", __argumentsNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "BiOpNode", __biOpNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "CatchesNode", __catchesNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ConstantNode", __constantNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "DerivedTypeNode", __derivedTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ElseIfStatementNode", __elseIfStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ExceptionTypeNode", __exceptionTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ExpressionNode", __expressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "FunctionNode", __functionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "GuardingStatementNode", __guardingStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IdNode", __idNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IfElseStatementNode", __ifElseStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "IterationStatementNode", __iterationStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "JumpStatementNode", __jumpStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "MockExpressionNode", __mockExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "MockNode", __mockNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ParametersNode", __parametersNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PostFixExpressionNode", __postfixExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PrimaryExpressionNode", __primaryExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "PrimitiveTypeNode", __primitiveTypeNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "ProgramNode", __programNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "RelationalExpressionNode", __relationalExpressionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "SectionNode", __sectionNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementListNode", __statementListNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "StatementNode", __statementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "SwitchStatementNode", __switchStatementNode.getName());
+		assertEquals( ERROR_MESSAGE_GET_NAME, "UnOpNode", __unOpNode.getName());		
+	}
+	
+	@Test
+	public void toStringTest1() {
+
+		String properName = "BiOpNode<TIMES>";
+
+		assertEquals("Nodes should return the proper name when toString() is called.", properName, A.toString());
+
+	}
+
+	@Test
+	public void toStringTest2() {
+
+		String properName = "BiOpNode<TIMES>";
+
+		assertEquals(
+				"Nodes should return the proper name when toString() is called.",
+				properName, A.toString());
+
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void doubleAddParentTest() {
+		// note that this.addChild(that) implicitly sets that's parent to be
+		// this. In this case, D already has it's parent set to B.
+		B.setParent(D);
+	}
+
+	@Test
+	public void addChildTest() {
+		MockNode parent = new MockNode();
+		MockNode childOne = new MockNode();
+		MockNode childTwo = new MockNode();
+		parent.addChild(childOne);
+		parent.addChild(childTwo);
+		assertEquals("addChild should properly add children", 2, parent
+				.getChildren().size());
+		assertEquals(
+				"addChild should always add a new child as rightmost child",
+				childTwo, parent.getChildren().get(1));
+		assertEquals(
+				"addChild should always add a new child as rightmost child",
+				childOne, parent.getChildren().get(0));
+		parent.addChild(null);
+		assertEquals("adding a null child should do nothing", 2, parent
+				.getChildren().size());
+	}
+
+	@Test
+	public void removeChildTest() {
+		A.removeChild(C);
+		assertEquals("removeChild should properly remove a child", 1, A
+				.getChildren().size());
+		assertEquals("removeChild should properly remove a child", false, A
+				.hasChild(C));
+		assertEquals("removeChild should properly unset childs parent", null, C
+				.getParent());
+	}
+
+	@Test
+	public void setUnsetParentTest() {
+		MockNode parent = new MockNode();
+		MockNode child = new MockNode();
+		assertEquals("Nodes should have null parents by default", null, child
+				.getParent());
+		parent.addChild(child);
+		assertEquals(
+				"Adding a child to a parent should set parent to be child's parent.",
+				parent, child.getParent());
+		child.unsetParent();
+		assertEquals("Unsetting a child's parent should set parent to null",
+				null, child.getParent());
+		assertEquals(
+				"Unsetting a child's parent removes the child from the parent's children list.",
+				false, parent.getChildren().contains(child));
+	}
+}
+
+\end{verbatim}
+
 \subsection{\texttt{ParserTester.java}}
+
+\begin{verbatim}
+package test;
+
+import static org.junit.Assert.*;
+
+import java.io.StringReader;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import front_end.Lexer;
+import front_end.Parser;
+
+import util.ast.node.ProgramNode;
+
+/**
+ * Tests basic functionality of Parser.java.
+ * 
+ * 
+ * @author Samuel Messing
+ * 
+ */
+public class ParserTester {
+
+	@Test
+	public void firstTest() throws Exception {
+		String text = "@Map (int lineNum, text line) -> (text, int) {   #{ this is a        block comment }#   int count = 1;  real face = 1.0;   foreach word in line.tokenize(\\\" \\\") {     emit(word, 1);   }   if (count == 2) {     print('count equals 2!');   } elseif (count == 3) {     print('count equals 3!');   } else {     int face = 0;     int x = face + 1;     face++;     print('count equals something else');   }     list<int> face;   try {     face.get(0);   } catch (FileNotFoundException  exception) {     print(exception);   } catch (ArrayOutOfBoundsException exception) {     print (exception);   }   for (int i = 0; i < 4; i++;) {     print(i);   } } @Reduce (text word, iter<int> values) -> (text, int) {   int count = 0;   while ( values.hasNext() ) {     count = count + values.next();   }   emit(count, word); } @Main {   mapReduce(); }";
+		StringReader stringReader = new StringReader(text);
+		Lexer lexer = new Lexer(stringReader);
+		Parser parser = new Parser(lexer);
+		ProgramNode root = (ProgramNode) parser.parse().value;
+	}
+
+}
+
+\end{verbatim}
 
 \subsection{\texttt{SymbolTableTexter.java}}
 
+\begin{verbatim}
+package test;
+
+import static org.junit.Assert.*;
+
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import java.util.Set;
+
+import org.junit.Test;
+
+import back_end.SymbolTableVisitor;
+import front_end.Lexer;
+import front_end.Parser;
+
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.ProgramNode;
+import util.symbol_table.SymbolTable;
+
+/**
+ * 
+ * @author Jason Helpern
+ *
+ */
+public class SymbolTableTester {
+
+	@Test
+	public void reservedSymbolTableTest() {
+		/* 
+		 * create a new symbol table, this should be root 
+		 * and should be populated with all reserved words and functions
+		 */
+		SymbolTable sym = new SymbolTable(null);
+		Set<String> reservedSet = sym.table.keySet();
+		for(String s : reservedSet){
+			System.out.println("KEY: "+ s + " VALUE: " + sym.get(s).type);
+		}
+	}
+
+	
+	@Test
+	public void symbolTableTest() {
+		/* 
+		 * create a new symbol table, this should be root 
+		 * and should be populated with all reserved words and functions
+		 */
+		String filename = "src/test/Factorial.hog";
+		ProgramNode root = null;
+		FileReader fileReader;
+	    try {
+			fileReader = new FileReader(new File(filename));
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    //write tests
+	    SymbolTable.print();
+	    System.out.println("\n\n\n");
+	    SymbolTable.printSymbolTable();
+	}
+
+	
+	@Test
+	public void WordCountTest() {
+		/* 
+		 * create a new symbol table, this should be root 
+		 * and should be populated with all reserved words and functions
+		 */
+		String filename = "src/test/WordCount.hog";
+		ProgramNode root = null;
+		FileReader fileReader;
+	    try {
+			fileReader = new FileReader(new File(filename));
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    System.out.println("\n\n\n");
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    //write tests
+	    SymbolTable.print();
+	    System.out.println("\n\n\n");
+	    SymbolTable.printSymbolTable();
+
+	}
+
+}
+
+\end{verbatim}
+
 \subsection{\texttt{TypesCheckingTester.java}}
+
+\begin{verbatim}
+package test;
+
+import static org.junit.Assert.assertEquals;
+
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Iterator;
+
+import org.junit.Test;
+
+import util.ast.AbstractSyntaxTree;
+import util.ast.node.IdNode;
+import util.ast.node.Node;
+import util.ast.node.PostfixExpressionNode;
+import util.ast.node.ProgramNode;
+import util.symbol_table.Symbol;
+import util.symbol_table.SymbolTable;
+import back_end.SymbolTableVisitor;
+import back_end.TypeCheckingVisitor;
+import front_end.Lexer;
+import front_end.Parser;
+
+/**
+ * 
+ * @author Jason Halpern
+ *
+ */
+
+public class TypeCheckingTester {
+
+	@Test
+	public void typeCheckingTest() {
+		String filename = "src/test/TypeDecoratorTest.hog";
+		ProgramNode root = null;
+		FileReader fileReader;
+	    try {
+			fileReader = new FileReader(new File(filename));
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    SymbolTable.printSymbolTable();
+	    System.out.println("\n\n\n");
+	    SymbolTable.print();
+	    
+	    root.print();
+	    
+	    TypeCheckingVisitor typeCheckVisitor = new TypeCheckingVisitor(ast);
+	    typeCheckVisitor.walk();
+	    
+	    root.print();
+	    
+		Iterator<Node> postOrderTraversal = ast.postOrderTraversal();
+		Node nextNode;
+		Symbol tempSymbol;
+		PostfixExpressionNode n;
+		while (postOrderTraversal.hasNext()) {
+			nextNode = postOrderTraversal.next(); 
+			if(nextNode instanceof IdNode){
+				tempSymbol = SymbolTable.getSymbolForIdNode((IdNode)nextNode);
+				System.out.println("Identifier: " + ((IdNode) nextNode).getIdentifier() + " " + tempSymbol.getType().toString());
+			}
+			if(nextNode instanceof PostfixExpressionNode){
+				n = (PostfixExpressionNode)nextNode;
+				//tempSymbol = SymbolTable.getSymbolForIdNode((IdNode)nextNode);
+				System.out.println("Function Name : " + n.getNameOfFunctionOrMethod() + " " + n.getTypeName().toString());
+			}
+		}
+
+	}
+	
+	@Test
+	public void typeCheckingTestTwo() {
+		String filename = "src/test/TypeDecoratorTestTwo.hog";
+		ProgramNode root = null;
+		FileReader fileReader;
+	    try {
+			fileReader = new FileReader(new File(filename));
+	        // Parser p = new Parser(new Lexer(System.in));
+	    	Parser p = new Parser(new Lexer(fileReader));
+	    	root = (ProgramNode) p.parse().value;
+	    	
+	      }
+	      catch (FileNotFoundException e) {
+	    	  System.out.println("file not found.");
+	      }
+	      catch (Exception ex) {
+	    	  ex.printStackTrace();
+	      }
+	    
+	    AbstractSyntaxTree ast = new AbstractSyntaxTree(root);
+	    root.print();
+	    
+	    SymbolTableVisitor symTabVisitor = new SymbolTableVisitor(ast);
+	    symTabVisitor.walk();
+	    SymbolTable.printSymbolTable();
+	    System.out.println("\n\n\n");
+	    SymbolTable.print();
+	    
+	    root.print();
+	    
+	    TypeCheckingVisitor typeCheckVisitor = new TypeCheckingVisitor(ast);
+	    typeCheckVisitor.walk();
+	    
+	    root.print();
+	    
+		Iterator<Node> postOrderTraversal = ast.postOrderTraversal();
+		Node nextNode;
+		Symbol tempSymbol;
+		PostfixExpressionNode n;
+		while (postOrderTraversal.hasNext()) {
+			nextNode = postOrderTraversal.next(); 
+			if(nextNode instanceof IdNode){
+				tempSymbol = SymbolTable.getSymbolForIdNode((IdNode)nextNode);
+				System.out.println("Identifier: " + ((IdNode) nextNode).getIdentifier() + " " + tempSymbol.getType().toString());
+			}
+			if(nextNode instanceof PostfixExpressionNode){
+				n = (PostfixExpressionNode)nextNode;
+				//tempSymbol = SymbolTable.getSymbolForIdNode((IdNode)nextNode);
+				System.out.println("Function Name : " + n.getNameOfFunctionOrMethod() + " " + n.getTypeName().toString());
+			}
+		}
+
+	}
+}
+
+\end{verbatim}
 
 \subsection{\texttt{TypesTester.java}}
 
+\begin{verbatim}
+package test;
 
+import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import util.ast.node.BiOpNode;
+import util.ast.node.DerivedTypeNode;
+import util.ast.node.ExceptionTypeNode;
+import util.ast.node.PrimitiveTypeNode;
+import util.ast.node.TypeNode;
+import util.ast.node.UnOpNode;
+import util.error.TypeMismatchError;
+import util.symbol_table.SymbolTable;
+import util.type.Types;
+
+/**
+ * A method to test the convenience class for the Types convenience class.
+ * 
+ * @author Samuel Messing
+ * @author Jason Halpern
+ * 
+ */
+public class TypesTester {
+
+	private TypeNode boolNode;
+	private TypeNode intNode;
+	private TypeNode realNode;
+	private TypeNode textNode;
+	private TypeNode listInt;
+	private TypeNode exceptionFileNotFound;
+	private TypeNode dict_Text_ListInt;
+	private TypeNode setBool;
+	private TypeNode listSetBool;
+	private TypeNode listListSetBool;
+	private TypeNode setListListSetBool;
+	private TypeNode iterNode;
+
+	@Before
+	public void setUp() {
+
+		boolNode = new PrimitiveTypeNode(Types.Primitive.BOOL);
+		intNode = new PrimitiveTypeNode(Types.Primitive.INT);
+		realNode = new PrimitiveTypeNode(Types.Primitive.REAL);
+		textNode = new PrimitiveTypeNode(Types.Primitive.TEXT);
+		listInt = new DerivedTypeNode(Types.Derived.LIST, intNode);
+		exceptionFileNotFound = new ExceptionTypeNode(
+				Types.Exception.FILE_NOT_FOUND);
+		setBool = new DerivedTypeNode(Types.Derived.SET, boolNode);
+		iterNode = new DerivedTypeNode(Types.Derived.ITER, intNode);
+		listSetBool = new DerivedTypeNode(Types.Derived.LIST, setBool);
+		listListSetBool = new DerivedTypeNode(Types.Derived.LIST, listSetBool);
+		setListListSetBool = new DerivedTypeNode(Types.Derived.SET,
+				listListSetBool);
+
+	}
+
+	@Test
+	public void testTypeEquvilance() {
+
+		assertFalse(Types.isSameType(boolNode, intNode));
+		assertTrue(Types.isSameType(dict_Text_ListInt, dict_Text_ListInt));
+		TypeNode secondIntNode = new PrimitiveTypeNode(Types.Primitive.INT);
+		assertTrue(Types.isSameType(secondIntNode, intNode));
+		TypeNode secondListInt = new DerivedTypeNode(Types.Derived.LIST,
+				secondIntNode);
+		assertTrue(Types.isSameType(secondListInt, listInt));
+		assertFalse(Types.isSameType(listListSetBool, listSetBool));
+		TypeNode secondExceptionFileNotFound = new ExceptionTypeNode(
+				Types.Exception.FILE_NOT_FOUND);
+		assertTrue(Types.isSameType(exceptionFileNotFound,
+				secondExceptionFileNotFound));
+
+	}
+
+	@Test
+	public void testGetHigherNumericType() throws TypeMismatchError {
+		assertTrue(Types.isSameType(intNode, Types.getHigherNumericType(
+				intNode, intNode)));
+		assertTrue(Types.isSameType(realNode, Types.getHigherNumericType(
+				realNode, intNode)));
+		assertFalse(Types.isSameType(boolNode, Types.getHigherNumericType(
+				realNode, realNode)));
+		assertFalse(Types.isSameType(boolNode, Types.getHigherNumericType(
+				intNode, intNode)));
+		assertFalse(Types.isSameType(textNode, Types.getHigherNumericType(
+				intNode, intNode)));
+		assertFalse(Types.isSameType(textNode, Types.getHigherNumericType(
+				realNode, realNode)));
+		assertFalse(Types.isSameType(textNode, realNode));
+		assertFalse(Types.isSameType(textNode, intNode));
+		assertFalse(Types.isSameType(textNode, boolNode));
+		assertFalse(Types.isSameType(boolNode, intNode));
+		assertFalse(Types.isSameType(boolNode, realNode));
+		assertTrue(Types.isSameType(boolNode, boolNode));
+	}
+	
+	@Test
+	public void testUnOpIsCompatible() throws TypeMismatchError {
+		assertTrue(Types.isCompatible(UnOpNode.OpType.DECR, intNode));
+		assertTrue(Types.isCompatible(UnOpNode.OpType.DECR, realNode));
+		assertFalse(Types.isCompatible(UnOpNode.OpType.DECR, boolNode));
+		assertFalse(Types.isCompatible(UnOpNode.OpType.DECR, textNode));
+		
+		assertTrue(Types.isCompatible(UnOpNode.OpType.INCR, intNode));
+		assertTrue(Types.isCompatible(UnOpNode.OpType.INCR, realNode));
+		assertFalse(Types.isCompatible(UnOpNode.OpType.INCR, boolNode));
+		assertFalse(Types.isCompatible(UnOpNode.OpType.INCR, textNode));
+		
+		assertFalse(Types.isCompatible(UnOpNode.OpType.NOT, intNode));
+		assertFalse(Types.isCompatible(UnOpNode.OpType.NOT, realNode));
+		assertTrue(Types.isCompatible(UnOpNode.OpType.NOT, boolNode));
+		assertFalse(Types.isCompatible(UnOpNode.OpType.NOT, textNode));
+		
+		assertTrue(Types.isCompatible(UnOpNode.OpType.UMINUS, intNode));
+		assertTrue(Types.isCompatible(UnOpNode.OpType.UMINUS, realNode));
+		assertFalse(Types.isCompatible(UnOpNode.OpType.UMINUS, boolNode));
+		assertFalse(Types.isCompatible(UnOpNode.OpType.UMINUS, textNode));
+		
+	}
+	
+	@Test
+	public void testBiOpIsCompatible() throws TypeMismatchError {
+		assertTrue(Types.isCompatible(BiOpNode.OpType.AND, boolNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.AND, textNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.AND, intNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.AND, textNode, textNode));
+		
+		assertTrue(Types.isCompatible(BiOpNode.OpType.OR, boolNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.OR, textNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.OR, intNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.OR, textNode, textNode));
+		
+		assertFalse(Types.isCompatible(BiOpNode.OpType.LESS, boolNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.LESS, textNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.LESS, intNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.LESS, textNode, textNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.LESS, intNode, intNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.LESS, realNode, realNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.LESS, setBool, setBool));
+		
+		assertFalse(Types.isCompatible(BiOpNode.OpType.GRTR, boolNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.GRTR, textNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.GRTR, intNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.GRTR, textNode, textNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.GRTR, intNode, intNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.GRTR, realNode, realNode));
+		
+		assertFalse(Types.isCompatible(BiOpNode.OpType.GRTR_EQL, boolNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.GRTR_EQL, textNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.GRTR_EQL, intNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.GRTR_EQL, textNode, textNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.GRTR_EQL, intNode, intNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.GRTR_EQL, realNode, realNode));
+	
+		assertFalse(Types.isCompatible(BiOpNode.OpType.LESS_EQL, boolNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.LESS_EQL, textNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.LESS_EQL, intNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.LESS_EQL, textNode, textNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.LESS_EQL, intNode, intNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.LESS_EQL, realNode, realNode));
+		
+		assertTrue(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, boolNode, boolNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, textNode, textNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, intNode, intNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, intNode, realNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, textNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, intNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, textNode, boolNode));
+		
+		assertTrue(Types.isCompatible(BiOpNode.OpType.NOT_EQLS, boolNode, boolNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.NOT_EQLS, textNode, textNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.NOT_EQLS, intNode, intNode));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.NOT_EQLS, intNode, realNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.NOT_EQLS, textNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.NOT_EQLS, intNode, boolNode));
+		assertFalse(Types.isCompatible(BiOpNode.OpType.NOT_EQLS, textNode, boolNode));
+		
+		assertFalse(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, listInt, setBool));
+		assertTrue(Types.isCompatible(BiOpNode.OpType.DBL_EQLS, listInt, listInt));
+
+	}
+	
+	@Test
+	public void checkTypeHasMethodTest() {		
+		assertTrue(Types.checkTypeHasMethod(setBool, "add"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "clear"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "contains"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "containsAll"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "isEmpty"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "iterator"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "remove"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "removeAll"));
+		assertTrue(Types.checkTypeHasMethod(setBool, "size"));
+		assertFalse(Types.checkTypeHasMethod(setBool, "length"));
+		assertFalse(Types.checkTypeHasMethod(setBool, "replace"));
+		assertFalse(Types.checkTypeHasMethod(setBool, "hasNext"));
+		assertFalse(Types.checkTypeHasMethod(setBool, "next"));
+		
+		assertTrue(Types.checkTypeHasMethod(listInt, "add"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "clear"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "get"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "iterator"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "size"));
+		assertTrue(Types.checkTypeHasMethod(listInt, "sort"));
+		assertFalse(Types.checkTypeHasMethod(listInt, "next"));
+		assertFalse(Types.checkTypeHasMethod(listInt, "isEmpty"));
+		assertFalse(Types.checkTypeHasMethod(listInt, "containsAll"));
+		
+		assertTrue(Types.checkTypeHasMethod(textNode, "length"));
+		assertTrue(Types.checkTypeHasMethod(textNode, "replace"));
+		assertTrue(Types.checkTypeHasMethod(textNode, "tokenize"));
+		assertFalse(Types.checkTypeHasMethod(textNode, "isEmpty"));
+		assertFalse(Types.checkTypeHasMethod(textNode, "peek"));
+		assertFalse(Types.checkTypeHasMethod(textNode, "size"));
+		assertFalse(Types.checkTypeHasMethod(textNode, "add"));
+		
+		assertTrue(Types.checkTypeHasMethod(iterNode, "next"));
+		assertTrue(Types.checkTypeHasMethod(iterNode, "hasNext"));
+		assertTrue(Types.checkTypeHasMethod(iterNode, "peek"));
+		assertFalse(Types.checkTypeHasMethod(iterNode, "replace"));
+		assertFalse(Types.checkTypeHasMethod(iterNode, "size"));
+		assertFalse(Types.checkTypeHasMethod(iterNode, "clear"));
+	}
+	
+	@Test(expected = TypeMismatchError.class)
+	public void testGetHigherNumericType2() throws TypeMismatchError {
+		Types.getHigherNumericType(boolNode, setBool);
+	}
+
+}
+
+\end{verbatim}
 
 \nocite{*}
 \bibliographystyle{acm}
