@@ -5,7 +5,7 @@ import java.util.Iterator;
 import util.ast.node.Node;
 
 /**
- * Abstract class for specifying common behavior for ASTs.
+ * Class for specifying common behavior for ASTs.
  * 
  * @author Samuel Messing
  * 
