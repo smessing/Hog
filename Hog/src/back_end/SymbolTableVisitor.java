@@ -16,6 +16,10 @@ import util.type.Types;
 
 
 /**
+ * This visitor does a pre-order traversal of the tree to create the symbol table tree, and populate it 
+ * with variable declarations and function definitions.
+ * 
+ * It also checks to ensure all variables are declared before they are used and will throw an error if they are not.
  * 
  * @author Benjamin Rapaport
  * @author Jason Halpern

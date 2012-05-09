@@ -13,14 +13,14 @@ import util.type.Types;
 /**
  * Visitor class for type checking. 
  * 
- * This is the first walk performed after construction of the AST from source.
+ * This is the second walk performed after construction of the AST from source.
+ * This walk happens after the Symbol Table Visitor.
  * 
  * Performs the following actions:
  * - populates & propagate types through AST.
  * 
  * Performs the following validations:
  * - all operands are of right type for given operator.
- * - variables are declared before they are used.
  * - return statements of functions have right type.
  * - section types of map/reduce are appropriate.
  * - actual parameters to a procedure match formal parameters.
