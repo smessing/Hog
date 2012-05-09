@@ -451,7 +451,7 @@ public class Types {
 	 */
 	public static boolean checkValidFunctionCall(
 			PostfixExpressionNode postFixExpressionNode) {
-		LOGGER.severe("check valid function call"
+		LOGGER.finer("check valid function call"
 				+ postFixExpressionNode.getNameOfFunctionOrMethod());
 
 		// get the postfix type
@@ -481,13 +481,13 @@ public class Types {
 					.getArgsList();
 
 			/*
-			 * LOGGER.severe("PRINTTT Function Name: " +
+			 * LOGGER.finer("PRINTTT Function Name: " +
 			 * postFixExpressionNode.getNameOfFunctionOrMethod() +
 			 * " Number of params: " + funSym.getParametersNode().getNumParams()
 			 * + ", number of arguments: " + argsNode .getNumArguments());
 			 */
 
-			// LOGGER.severe(Integer.toargsNode.getNumArguments());
+			// LOGGER.finer(Integer.toargsNode.getNumArguments());
 			// throw error if not same amount of arguments
 			if (funSym.getParametersNode().getNumParams() != argsNode
 					.getNumArguments()) {
